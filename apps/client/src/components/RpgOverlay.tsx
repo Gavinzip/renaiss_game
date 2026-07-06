@@ -9,6 +9,8 @@ import {
   getRpgCurrentTurnActor,
   getRpgMoveById,
   getRpgReachableEnemyTargets,
+  assignRpgWalletCardElements,
+  getRpgWalletCardElement,
   getStarterPetById,
   type RpgAiDifficulty,
   type RpgBattlePetState,
@@ -274,6 +276,7 @@ function ProfilePanel() {
   const [cardReveal, setCardReveal] = useState<CardRevealState | null>(null);
   const [draftName, setDraftName] = useState(playerName);
   const [activeWalletTier, setActiveWalletTier] = useState<WalletTier>("high");
+  const [bulkDrawProgress, setBulkDrawProgress] = useState<{ done: number; total: number } | null>(null);
   const skillEditorRef = useRef<HTMLElement | null>(null);
   useEffect(() => setDraftName(playerName), [playerName]);
   useEffect(() => {
@@ -290,9 +293,11 @@ function ProfilePanel() {
         .sort((a, b) => ELEMENT_ORDER.indexOf(a.move.element) - ELEMENT_ORDER.indexOf(b.move.element) || a.move.tierIndex - b.move.tierIndex || a.move.slot - b.move.slot || a.card.name.localeCompare(b.card.name)),
     [cardSkillBindings, walletCards]
   );
+  const walletCardElements = useMemo(() => assignRpgWalletCardElements(walletCards), [walletCards]);
   const visibleCards = element === "any" ? ownedCards : ownedCards.filter(({ move }) => move.element === element);
   const ownedCardTotal = ownedCards.length;
-  const visibleWalletCards = element === "any" ? walletCards : walletCards.filter((card) => walletCardElement(card) === element);
+  const visibleWalletCards = element === "any" ? walletCards : walletCards.filter((card) => walletCardElement(card, walletCardElements) === element);
+  const unboundWalletCardCount = walletCards.reduce((count, card) => count + (cardSkillBindings[walletCardKey(card)] ? 0 : 1), 0);
   const walletTierGroups = WALLET_TIER_ORDER.map((tier) => {
     const cards = visibleWalletCards
       .filter((card) => walletCardTier(card) === tier)
@@ -318,6 +323,19 @@ function ProfilePanel() {
     const move = entry.moves[0];
     const hasOpeningVideo = Boolean(move && SKILL_OPENING_VIDEO_BY_ELEMENT[move.element]);
     setCardReveal({ cardId, entry, phase: hasOpeningVideo ? "intro" : "reveal" });
+  };
+  const handleDrawAllWalletCards = async () => {
+    if (bulkDrawProgress || walletCardsStatus === "loading") return;
+    const cardsToDraw = walletCards.filter((card) => !cardSkillBindings[walletCardKey(card)]);
+    if (cardsToDraw.length === 0) return;
+    setSelectedCardId(null);
+    setCardReveal(null);
+    setBulkDrawProgress({ done: 0, total: cardsToDraw.length });
+    for (let index = 0; index < cardsToDraw.length; index += 1) {
+      await drawWalletCardSkill(walletCardKey(cardsToDraw[index]!));
+      setBulkDrawProgress({ done: index + 1, total: cardsToDraw.length });
+    }
+    window.setTimeout(() => setBulkDrawProgress(null), 650);
   };
   const openPetSkillEditor = (petId: string) => {
     setEquipPetId(petId);
@@ -388,10 +406,16 @@ function ProfilePanel() {
                 ? walletCardsError
                 : `${visibleWalletCards.length}/${walletCards.length} 張 · ${walletCardsStale ? "快取" : walletSyncedLabel}`}
           </span>
-          <button type="button" onClick={() => void fetchWalletCards(true)} disabled={walletCardsStatus === "loading"}>
-            <ArrowClockwise size={15} weight="bold" />
-            <span>刷新</span>
-          </button>
+          <div className="rpg-wallet-header-actions">
+            <button type="button" onClick={() => void handleDrawAllWalletCards()} disabled={walletCardsStatus !== "ready" || unboundWalletCardCount === 0 || Boolean(bulkDrawProgress)}>
+              <Sparkle size={15} weight="fill" />
+              <span>{bulkDrawProgress ? `抽獎中 ${bulkDrawProgress.done}/${bulkDrawProgress.total}` : unboundWalletCardCount > 0 ? `一鍵抽獎 ${unboundWalletCardCount}` : "已全抽"}</span>
+            </button>
+            <button type="button" onClick={() => void fetchWalletCards(true)} disabled={walletCardsStatus === "loading" || Boolean(bulkDrawProgress)}>
+              <ArrowClockwise size={15} weight="bold" />
+              <span>重載</span>
+            </button>
+          </div>
         </header>
         {walletCardsStatus === "loading" ? (
           <div className="rpg-wallet-state">
@@ -441,7 +465,7 @@ function ProfilePanel() {
                 <div className="rpg-wallet-card-grid">
                   {selectedWalletTierGroup.cards.map((card) => {
                     const tier = walletCardTier(card);
-                    const cardElement = walletCardElement(card);
+                    const cardElement = walletCardElement(card, walletCardElements);
                     const cardId = walletCardKey(card);
                     const boundMove = getRpgMoveById(cardSkillBindings[cardId]);
                     const expanded = selectedCardId === cardId;
@@ -479,6 +503,7 @@ function ProfilePanel() {
                         {expanded ? (
                           <WalletCardSkillDetail
                             card={card}
+                            cardElement={cardElement}
                             boundMove={boundMove}
                             reveal={reveal}
                             onDraw={handleDrawSelectedCard}
@@ -625,30 +650,26 @@ function walletTierRangeLabel(tier: WalletTier) {
   return "$0-99";
 }
 
-function walletCardElement(card: RpgWalletCard): RpgElement {
-  const text = `${card.name} ${card.pokemonName} ${card.setName} ${card.attributeCandidates.category ?? ""} ${card.attributeCandidates.genre ?? ""}`.toLowerCase();
-  if (/(charizard|fire|burn|flame|volcan|flare|phoenix|blaze|red)/i.test(text)) return "fire";
-  if (/(bulbasaur|ivysaur|venusaur|grass|leaf|forest|seed|green|exeggutor)/i.test(text)) return "grass";
-  if (/(squirtle|wartortle|blastoise|water|wave|aqua|blue|lapras|magikarp|gyarados)/i.test(text)) return "water";
-  if (/(dark|ghost|gengar|umbreon|mewtwo|moon|shadow|black)/i.test(text)) return "dark";
-  return "light";
+function walletCardElement(card: RpgWalletCard, assignments?: Record<string, RpgElement>): RpgElement {
+  return assignments?.[walletCardKey(card)] ?? getRpgWalletCardElement(card);
 }
 
 function WalletCardSkillDetail({
   card,
+  cardElement,
   boundMove,
   reveal,
   onDraw,
   onIntroDone
 }: {
   card: RpgWalletCard;
+  cardElement: RpgElement;
   boundMove: RpgMove | null;
   reveal: CardRevealState | null;
   onDraw: () => Promise<void>;
   onIntroDone: () => void;
 }) {
   const cardId = walletCardKey(card);
-  const cardElement = walletCardElement(card);
   const cardMeta = RPG_ELEMENT_META[cardElement];
   const move = reveal?.entry.moves[0] ?? boundMove;
   const moveMeta = move ? RPG_ELEMENT_META[move.element] : cardMeta;

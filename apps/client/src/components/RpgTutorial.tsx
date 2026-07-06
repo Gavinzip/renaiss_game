@@ -1,4 +1,4 @@
-import { Cards, FlagBanner, MagnifyingGlass, Sword, Trophy, X } from "@phosphor-icons/react";
+import { Cards, FlagBanner, MagnifyingGlass, Sparkle, Sword, Trophy, X } from "@phosphor-icons/react";
 import {
   CLASS_META,
   CLASS_ORDER,
@@ -32,6 +32,7 @@ const ARENA_SCOREBOARD: readonly { rank: number; name: string; classId: ClassId;
   { rank: 4, name: "ARROW", classId: "archer", score: 71 }
 ];
 const TUTORIAL_ARENA_REWARD_INDEX = 2;
+const TUTORIAL_CARD_IMAGE = "https://8nothtoc5ds7a0x3.public.blob.vercel-storage.com/graded-cards-renders/PSA130073298/nft_image_golden.jpg";
 
 export function useFirstRunTutorial(id: TutorialId) {
   const [open, setOpen] = useState(false);
@@ -160,8 +161,10 @@ export function GymTutorialModal({ open, onClose }: { open: boolean; onClose: ()
   const previewMoves = useMemo(() => tutorialMoves(["fire_basic_03", "light_basic_05", "water_basic_04"]), []);
   const firePet = RPG_STARTER_PETS.find((pet) => pet.element === "fire") ?? RPG_STARTER_PETS[0];
   const lightPet = RPG_STARTER_PETS.find((pet) => pet.element === "light") ?? RPG_STARTER_PETS[0];
+  const waterPet = RPG_STARTER_PETS.find((pet) => pet.element === "water") ?? RPG_STARTER_PETS[0];
   const fireMove = previewMoves[0] ?? getRpgMovesByElement("fire")[0];
   const lightMove = previewMoves[1] ?? getRpgMovesByElement("light")[0];
+  const waterMove = previewMoves[2] ?? getRpgMovesByElement("water")[0];
 
   return (
     <TutorialDialog
@@ -179,56 +182,63 @@ export function GymTutorialModal({ open, onClose }: { open: boolean; onClose: ()
         disableStepIndicators
       >
         <Step>
-          <TutorialStepHeader icon={<Cards size={21} weight="fill" />} eyebrow="STEP 1" title="去收藏櫃查看卡牌" />
-          <div className="tutorial-card-inspect">
-            <div className="tutorial-nav-hint">
-              <Cards size={22} weight="fill" />
-              <span>上方卡片按鈕</span>
-              <strong>收藏櫃 / 展示櫃</strong>
-            </div>
-            <article className="tutorial-wallet-card is-open" style={elementStyle(firePet.element)}>
-              <div className="tutorial-wallet-card-art">
-                <RpgPetSprite element={firePet.element} pose="idle" animate />
-              </div>
-              <div>
-                <small>{RPG_ELEMENT_META[firePet.element].label}屬性 · 示意卡牌</small>
-                <strong>Vinci Fire Card</strong>
-                <span>點開卡片後會顯示價格、屬性與可抽技能。</span>
-              </div>
+          <TutorialStepHeader icon={<Cards size={21} weight="fill" />} eyebrow="STEP 1" title="先把卡片全部抽成技能" />
+          <div className="tutorial-gym-flow">
+            <figure className="tutorial-gym-card-shot">
+              <img src={TUTORIAL_CARD_IMAGE} alt="固定錢包卡片示意" />
+              <figcaption>
+                <span>固定錢包卡池</span>
+                <strong>卡片與價格已記錄</strong>
+              </figcaption>
+            </figure>
+            <article className="tutorial-gym-action-shot">
+              <Sparkle size={34} weight="fill" />
+              <span>收藏櫃 / 展示櫃</span>
+              <strong>按「一鍵抽獎」</strong>
+              <em>把尚未綁定的卡片逐張抽出技能。</em>
             </article>
           </div>
+          <p className="tutorial-note">目前每位玩家先綁預設錢包。進收藏櫃後先一鍵抽獎，讓所有卡片都變成可插到寵物身上的技能卡。</p>
         </Step>
 
         <Step>
-          <TutorialStepHeader icon={<MagnifyingGlass size={21} weight="fill" />} eyebrow="STEP 2" title="搜尋卡牌的技能" />
+          <TutorialStepHeader icon={<MagnifyingGlass size={21} weight="fill" />} eyebrow="STEP 2" title="查看已綁定技能卡" />
           <div className="tutorial-skill-search">
             <label>
-              <span>技能搜尋</span>
-              <input value={`${RPG_ELEMENT_META[firePet.element].label} / 爆發`} readOnly />
+              <span>技能搜尋 / 屬性篩選</span>
+              <input value="火、水、草、暗、光" readOnly />
             </label>
-            <div className="tutorial-chip-row">
-              {previewMoves.map((move) => (
-                <TutorialMoveChip key={move.id} move={move} />
-              ))}
+            <div className="tutorial-bound-preview">
+              {fireMove ? <TutorialMoveCard move={fireMove} label="火屬性卡" /> : null}
+              {lightMove ? <TutorialMoveCard move={lightMove} label="光屬性卡" /> : null}
+              {waterMove ? <TutorialMoveCard move={waterMove} label="水屬性卡" /> : null}
             </div>
-            <p>卡片綁定技能後，可以依屬性與技能名稱檢查它適合哪一隻寵物。</p>
+            <p>抽完後會出現在「已綁定技能卡」。你可以用屬性篩選，確認哪些技能能裝到同屬性的寵物。</p>
           </div>
         </Step>
 
         <Step>
-          <TutorialStepHeader icon={<FlagBanner size={21} weight="fill" />} eyebrow="STEP 3" title="更換寵物的技能" />
+          <TutorialStepHeader icon={<FlagBanner size={21} weight="fill" />} eyebrow="STEP 3" title="點隊伍寵物更換技能" />
           <div className="tutorial-equip-step">
             <article className="tutorial-pet-loadout" style={elementStyle(lightPet.element)}>
               <RpgPetSprite element={lightPet.element} pose="idle" animate />
               <div>
-                <span>{RPG_ELEMENT_META[lightPet.element].label}屬性寵物</span>
+                <span>隊伍裡點這隻寵物</span>
                 <strong>{lightPet.name}</strong>
-                <em>保留天賦技能，再插入卡片技能。</em>
+                <em>右側會列出可用的{RPG_ELEMENT_META[lightPet.element].label}屬性卡片技能。</em>
               </div>
             </article>
             <div className="tutorial-equip-slots">
-              {lightMove ? <TutorialMoveCard move={lightMove} label="已插入" /> : null}
-              {fireMove ? <TutorialMoveCard move={fireMove} label="不相容示意" muted /> : null}
+              {lightMove ? <TutorialMoveCard move={lightMove} label="可插入" /> : null}
+              {fireMove ? <TutorialMoveCard move={fireMove} label="不同屬性" muted /> : null}
+              <article className="tutorial-pet-loadout is-compact" style={elementStyle(waterPet.element)}>
+                <RpgPetSprite element={waterPet.element} pose="idle" animate />
+                <div>
+                  <span>{RPG_ELEMENT_META[waterPet.element].label}屬性寵物</span>
+                  <strong>{waterPet.name}</strong>
+                  <em>只能裝{RPG_ELEMENT_META[waterPet.element].label}屬性卡片技能。</em>
+                </div>
+              </article>
             </div>
           </div>
           <p className="tutorial-note">道館支援 AI 對戰，也支援建立房間或輸入房間碼讓玩家加入真人對戰。</p>

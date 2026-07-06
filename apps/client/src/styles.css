@@ -13256,3 +13256,229 @@ button.rpg-field-pet {
     white-space: normal;
   }
 }
+
+/* Final wallet tutorial and cabinet clarity pass. */
+.rpg-layer .rpg-wallet-card-section > header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.rpg-layer .rpg-wallet-card-section > header > strong,
+.rpg-layer .rpg-wallet-card-section > header > span {
+  grid-column: 1;
+}
+
+.rpg-wallet-header-actions {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.rpg-layer .rpg-wallet-header-actions button {
+  min-height: 34px;
+  padding: 0 10px;
+  color: #fff8df;
+  background: #51301c;
+  border: 3px solid #241107;
+  border-image: none;
+  box-shadow: none;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 10px;
+}
+
+.rpg-layer .rpg-wallet-header-actions button:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+.rpg-layer .rpg-card-vault {
+  background: #fff8e9;
+}
+
+.rpg-layer .rpg-owned-skill-card {
+  color: #241107;
+  background: #fffaf0;
+  border: 4px solid #241107;
+  border-image: none;
+  box-shadow:
+    inset 7px 0 0 var(--element, #d69f47),
+    0 5px 0 rgba(36, 17, 7, 0.16);
+}
+
+.rpg-layer .rpg-owned-skill-card header span,
+.rpg-layer .rpg-owned-skill-card header em {
+  color: #241107;
+  background: var(--element-soft, #ffe39d);
+  border: 2px solid #241107;
+  text-shadow: none;
+}
+
+.rpg-layer .rpg-owned-skill-card > strong {
+  color: #241107;
+  text-shadow: 1px 1px 0 #fff5cf;
+}
+
+.rpg-layer .rpg-owned-skill-card p {
+  color: #5b3520;
+}
+
+.rpg-layer .rpg-owned-skill-stats span,
+.rpg-layer .rpg-owned-skill-effects span {
+  color: #fff8df;
+  background: #51301c;
+  border: 2px solid #241107;
+}
+
+.rpg-layer .rpg-panel-close,
+.rpg-layer .rpg-profile-card-panel .rpg-panel-close,
+.tutorial-close-button {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  color: #fff8df;
+  background: #51301c;
+  border: 3px solid #241107;
+  border-image: none;
+  box-shadow: none;
+}
+
+.rpg-layer .rpg-panel-close::before,
+.rpg-layer .rpg-panel-close::after,
+.tutorial-close-button::before,
+.tutorial-close-button::after {
+  display: none;
+}
+
+.rpg-layer .rpg-panel-close:hover,
+.tutorial-close-button:hover {
+  background: #6a4026;
+}
+
+.tutorial-gym-flow {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.84fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.tutorial-gym-card-shot,
+.tutorial-gym-action-shot {
+  min-width: 0;
+  margin: 0;
+  color: #ffe39d;
+  background: #1a0d07;
+  border: 3px solid #0c0503;
+  box-shadow: inset 0 0 0 2px rgba(214, 159, 71, 0.14);
+}
+
+.tutorial-gym-card-shot {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.tutorial-gym-card-shot img {
+  width: 96px;
+  height: 128px;
+  object-fit: cover;
+  background: #120804;
+  border: 3px solid #d69f47;
+  box-shadow: 5px 5px 0 rgba(10, 4, 2, 0.36);
+}
+
+.tutorial-gym-card-shot figcaption,
+.tutorial-gym-action-shot {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+}
+
+.tutorial-gym-card-shot span,
+.tutorial-gym-card-shot strong,
+.tutorial-gym-action-shot span,
+.tutorial-gym-action-shot strong,
+.tutorial-gym-action-shot em {
+  font-family: "Arial Black", Arial, sans-serif;
+  font-style: normal;
+}
+
+.tutorial-gym-card-shot span,
+.tutorial-gym-action-shot span,
+.tutorial-gym-action-shot em {
+  color: #c79a62;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.tutorial-gym-card-shot strong,
+.tutorial-gym-action-shot strong {
+  color: #ffe39d;
+  font-size: 18px;
+  line-height: 1.12;
+}
+
+.tutorial-gym-action-shot {
+  justify-items: start;
+  padding: 18px;
+}
+
+.tutorial-gym-action-shot svg {
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  color: #1b0d07;
+  background: #d69f47;
+  border: 3px solid #0c0503;
+}
+
+.tutorial-bound-preview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tutorial-pet-loadout.is-compact {
+  min-height: 150px;
+}
+
+.tutorial-pet-loadout.is-compact .rpg-pet-sprite-frame {
+  width: 58px;
+  height: 58px;
+}
+
+@media (max-width: 760px) {
+  .rpg-layer .rpg-wallet-card-section > header {
+    grid-template-columns: 1fr;
+  }
+
+  .rpg-wallet-header-actions {
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: stretch;
+  }
+
+  .rpg-wallet-header-actions button {
+    flex: 1 1 120px;
+  }
+
+  .tutorial-gym-flow,
+  .tutorial-bound-preview {
+    grid-template-columns: 1fr;
+  }
+
+  .tutorial-gym-card-shot {
+    grid-template-columns: 86px minmax(0, 1fr);
+  }
+
+  .tutorial-gym-card-shot img {
+    width: 78px;
+    height: 104px;
+  }
+}

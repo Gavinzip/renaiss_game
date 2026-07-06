@@ -2,11 +2,12 @@ import cors from "cors";
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { CLASS_ORDER, MAP_PROP_TYPES, RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, drawRpgSkillTicket, getRpgMoveById, type ClassId, type Collider, type ClassSwitchRequest, type JoinRequest, type MapProp, type PlayerInput, type RpgElement, type RpgVersusJoinRequest, type RpgVersusRematchRequest, type RpgVersusSubmitActions } from "@renaiss-game/shared";
+import { CLASS_ORDER, MAP_PROP_TYPES, RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, drawRpgSkillTicket, getRpgMoveById, getRpgWalletCardElement, type ClassId, type Collider, type ClassSwitchRequest, type JoinRequest, type MapProp, type PlayerInput, type RpgVersusJoinRequest, type RpgVersusRematchRequest, type RpgVersusSubmitActions } from "@renaiss-game/shared";
 import { loadServerEnv } from "./env";
 import { GameRoom } from "./game/GameRoom";
 import { RpgBattleRoomManager } from "./rpg/RpgBattleRoom";
 import { fetchWalletCollectibles, type RpgWalletCollectible } from "./rpg/walletCards";
+import { DEFAULT_RPG_WALLET_ADDRESS, DEFAULT_RPG_WALLET_CARDS } from "./rpg/defaultWalletCards";
 import { installXAuthRoutes } from "./auth/xAuth";
 import {
   bindRpgWalletCardSkill,
@@ -34,6 +35,7 @@ const VALID_PROP_TYPES = new Set<string>(MAP_PROP_TYPES);
 const MAX_PREVIEW_PROPS = 220;
 const RPG_ROOM_SWEEP_MS = 30_000;
 const preferSqliteWalletCards = process.env.RENAISS_RPG_WALLET_SQLITE_FIRST === "1";
+const allowDefaultWalletRefresh = process.env.RENAISS_RPG_REFRESH_DEFAULT_WALLET === "1";
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
@@ -54,6 +56,31 @@ app.get("/health", (_req, res) => {
 
 app.get("/api/rpg/wallet-cards/:walletAddress", async (req, res) => {
   const wallet = normalizeRpgWalletAddress(req.params.walletAddress);
+  if (isDefaultRpgWallet(wallet) && (!allowDefaultWalletRefresh || req.query.refresh !== "1")) {
+    persistRpgWalletCards(wallet, DEFAULT_RPG_WALLET_CARDS);
+    const stored = getStoredRpgWalletCards(wallet);
+    const cards = stored.cards.length > 0 ? stored.cards : [...DEFAULT_RPG_WALLET_CARDS];
+    res.json({
+      success: true,
+      reason: "default_wallet_fixture_pinned",
+      stale: false,
+      staleReason: null,
+      walletAddress: wallet,
+      source: "default_wallet_fixture",
+      fallbackUsed: false,
+      cached: true,
+      collectibleCount: cards.length,
+      totalFMV: totalWalletFmv(cards),
+      scannedRows: cards.length,
+      collectibles: cards,
+      profileDb: rpgProfileDbPath(),
+      cachedAt: stored.lastSeenAt || Date.now(),
+      cardSkillBindings: getRpgCardSkillBindings(wallet),
+      petCardLoadouts: getRpgPetCardLoadouts(wallet)
+    });
+    return;
+  }
+
   if (preferSqliteWalletCards) {
     const stored = getStoredRpgWalletCards(wallet);
     if (stored.cards.length > 0) {
@@ -122,6 +149,10 @@ app.get("/api/rpg/wallet-cards/:walletAddress", async (req, res) => {
 
 app.post("/api/rpg/wallet-cards/:walletAddress/draw", (req, res) => {
   const wallet = normalizeRpgWalletAddress(req.params.walletAddress);
+  if (isDefaultRpgWallet(wallet)) {
+    persistRpgWalletCards(wallet, DEFAULT_RPG_WALLET_CARDS);
+  }
+
   const cardId = typeof req.body?.cardId === "string" ? req.body.cardId.trim() : "";
   if (!cardId) {
     res.status(400).json({ success: false, reason: "missing_card_id" });
@@ -152,7 +183,8 @@ app.post("/api/rpg/wallet-cards/:walletAddress/draw", (req, res) => {
     return;
   }
 
-  const result = drawRpgSkillTicket(walletCardTicketId(card), { preferredElement: walletCardElement(card) });
+  const storedCards = getStoredRpgWalletCards(wallet).cards;
+  const result = drawRpgSkillTicket(walletCardTicketId(card), { preferredElement: getRpgWalletCardElement(card, storedCards) });
   const move = result.moves[0];
   if (!move) {
     res.status(500).json({ success: false, reason: "empty_draw_result" });
@@ -233,13 +265,12 @@ function walletCardTierLabel(card: RpgWalletCollectible) {
   return "初階技能卡券";
 }
 
-function walletCardElement(card: RpgWalletCollectible): RpgElement {
-  const text = `${card.name} ${card.pokemonName} ${card.setName} ${card.attributeCandidates.category ?? ""} ${card.attributeCandidates.genre ?? ""}`.toLowerCase();
-  if (/(charizard|fire|burn|flame|volcan|flare|phoenix|blaze|red)/i.test(text)) return "fire";
-  if (/(bulbasaur|ivysaur|venusaur|grass|leaf|forest|seed|green|exeggutor)/i.test(text)) return "grass";
-  if (/(squirtle|wartortle|blastoise|water|wave|aqua|blue|lapras|magikarp|gyarados)/i.test(text)) return "water";
-  if (/(dark|ghost|gengar|umbreon|mewtwo|moon|shadow|black)/i.test(text)) return "dark";
-  return "light";
+function isDefaultRpgWallet(walletAddress: string) {
+  return normalizeRpgWalletAddress(walletAddress) === DEFAULT_RPG_WALLET_ADDRESS;
+}
+
+function totalWalletFmv(cards: readonly RpgWalletCollectible[]) {
+  return Number(cards.reduce((sum, card) => sum + card.fmvUSD, 0).toFixed(2));
 }
 
 const io = new Server(httpServer, {

@@ -9,4 +9,5 @@ export * from "./rpgAi";
 export * from "./rpgTypes";
 export * from "./rpgVfx";
 export * from "./rpgVfxProduction";
+export * from "./rpgWalletElements";
 export * from "./types";
