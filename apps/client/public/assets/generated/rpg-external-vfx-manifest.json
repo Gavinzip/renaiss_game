@@ -1,0 +1,1134 @@
+{
+  "schemaVersion": 1,
+  "assetVersion": "2026-07-04-rpg-status-five-core-v1",
+  "license": {
+    "status": "commercial-proof-confirmed",
+    "notes": "Project owner confirmed in the Codex thread on 2026-07-03 that both external RPG VFX packs were paid for and can be used commercially.",
+    "proof": {
+      "source": "Project owner purchase confirmation in Codex thread",
+      "reference": "User message on 2026-07-03: both RPG VFX packs are paid and approved for commercial use",
+      "checkedAt": "2026-07-03"
+    },
+    "impactPack": {
+      "displayName": "750 Effect and FX Pixel All",
+      "localDefault": "/Users/gavin/Downloads/Effect and FX Pixel All Free.zip",
+      "usedAs": "64x64 impact sprites normalized into 160x112 RPG skill rows",
+      "licenseStatus": "commercial-proof-confirmed",
+      "licenseReference": {
+        "source": "BDragon1727 itch.io asset page",
+        "reference": "https://bdragon1727.itch.io/750-effect-and-fx-pixel-all",
+        "checkedAt": "2026-07-03",
+        "notes": "The page says commercial games require a contribution. Project owner confirmed payment on 2026-07-03."
+      },
+      "proof": {
+        "source": "Project owner purchase confirmation in Codex thread",
+        "reference": "User message on 2026-07-03: both RPG VFX packs are paid and approved for commercial use",
+        "checkedAt": "2026-07-03"
+      }
+    },
+    "projectilePack": {
+      "displayName": "Fire Pixel Bullet 16x16",
+      "localDefault": "/Users/gavin/Downloads/New_All_Fire_Bullet_Pixel_16x16.rar",
+      "usedAs": "16x16 bullet sprites normalized into 96x56 RPG projectile rows",
+      "licenseStatus": "commercial-proof-confirmed",
+      "licenseReference": {
+        "source": "BDragon1727 itch.io asset and purchase pages",
+        "reference": "https://bdragon1727.itch.io/fire-pixel-bullet-16x16",
+        "purchaseReference": "https://bdragon1727.itch.io/fire-pixel-bullet-16x16/purchase",
+        "checkedAt": "2026-07-03",
+        "notes": "The page says commercial games require a contribution. Project owner confirmed payment on 2026-07-03."
+      },
+      "proof": {
+        "source": "Project owner purchase confirmation in Codex thread",
+        "reference": "User message on 2026-07-03: both RPG VFX packs are paid and approved for commercial use",
+        "checkedAt": "2026-07-03"
+      }
+    },
+    "spellPack": {
+      "displayName": "SpellsFX 2.0",
+      "localDefault": "/Users/gavin/Downloads/SpellsFX2.0.zip",
+      "usedAs": "64x64 spell spritesheet frames normalized as complete single-sequence RPG skill rows",
+      "licenseStatus": "commercial-proof-confirmed",
+      "licenseReference": {
+        "source": "SpellsFX2.0.zip public-license.txt",
+        "reference": "Creative Commons Attribution v4.0 International in local archive",
+        "checkedAt": "2026-07-03",
+        "notes": "The included license permits free and commercial projects with attribution to Raphael Hatencia / RagnaPixel Studio."
+      },
+      "proof": {
+        "source": "SpellsFX2.0.zip public-license.txt",
+        "reference": "CC BY 4.0; commercial use allowed with Raphael Hatencia / RagnaPixel Studio credit",
+        "checkedAt": "2026-07-03"
+      }
+    },
+    "gigapackPack": {
+      "displayName": "Super Pixel Effects Gigapack Free Version",
+      "localDefault": "/Users/gavin/Desktop/game_pixel/world/Super Pixel Effects Gigapack (Free Version) v2.5.0.zip",
+      "usedAs": "Selected 15 FPS PNG-frame effects normalized into curated group, support, status, intermediate, ultimate, and persistent status RPG VFX rows",
+      "licenseStatus": "commercial-proof-confirmed",
+      "licenseReference": {
+        "source": "Super Pixel Effects Gigapack Free Version license.txt",
+        "reference": "http://untiedgames.com/files/license.txt",
+        "checkedAt": "2026-07-03",
+        "notes": "Included license summary says commercial and non-commercial use are both OK with attribution."
+      },
+      "proof": {
+        "source": "Super Pixel Effects Gigapack Free Version license.txt",
+        "reference": "Commercial use OK; credit Will Tice / unTied Games",
+        "checkedAt": "2026-07-03"
+      }
+    }
+  },
+  "runtimeSheets": {
+    "skillImpact": {
+      "files": [
+        "rpg-skill-vfx-water.png",
+        "rpg-skill-vfx-fire.png",
+        "rpg-skill-vfx-grass.png",
+        "rpg-skill-vfx-dark.png",
+        "rpg-skill-vfx-light.png"
+      ],
+      "columns": 16,
+      "rows": 25,
+      "frameWidth": 160,
+      "frameHeight": 112
+    },
+    "projectiles": {
+      "file": "rpg-skill-projectiles.png",
+      "columns": 10,
+      "rows": 5,
+      "frameWidth": 96,
+      "frameHeight": 56
+    }
+  },
+  "impactSources": [
+    "Explosions/epic_explosion_001/epic_explosion_001_large_orange",
+    "Explosions/epic_explosion_002/epic_explosion_002_large_yellow",
+    "Explosions/stylized_explosion_001/stylized_explosion_001_small_yellow",
+    "Explosions/stylized_explosion_002/stylized_explosion_002_large_violet",
+    "Explosions/stylized_explosion_002/stylized_explosion_002_small_violet",
+    "Explosions/stylized_explosion_003/stylized_explosion_003_large_yellow",
+    "Explosions/symmetrical_explosion_004/symmetrical_explosion_004_small_orange",
+    "Fantasy Spells/spell_absorb_001/spell_absorb_001_large_violet",
+    "Fantasy Spells/spell_absorb_001/spell_absorb_001_small_violet",
+    "Fantasy Spells/spell_attack_up_001/spell_attack_up_001_small_red",
+    "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue",
+    "Fantasy Spells/spell_haste_001/spell_haste_001_small_green",
+    "Fantasy Spells/spell_poison_001/spell_poison_001_large_green",
+    "Fantasy Spells/spell_poison_001/spell_poison_001_small_green",
+    "Fantasy Spells/status_poison_001/status_poison_001_small_green",
+    "Fantasy Spells/status_sparkling_001/status_sparkling_001_small_yellow",
+    "Impacts/directional_impact_001/directional_impact_001_small_blue",
+    "Impacts/directional_impact_002/directional_impact_002_small_white",
+    "Impacts/directional_impact_003/directional_impact_003_small_violet",
+    "Impacts/directional_impact_004/directional_impact_004_small_yellow",
+    "Impacts/symmetrical_impact_002/symmetrical_impact_002_small_blue",
+    "Impacts/symmetrical_impact_004/symmetrical_impact_004_small_yellow",
+    "Impacts/symmetrical_impact_006/symmetrical_impact_006_small_yellow",
+    "Lightning/lightning_burst_002/lightning_burst_002_small_violet",
+    "Lightning/lightning_burst_003/lightning_burst_003_small_violet",
+    "Lightning/lightning_strike_001/lightning_strike_001_small_violet",
+    "Magic Bursts/directional_bubble_burst_001/directional_bubble_burst_001_small_green",
+    "Magic Bursts/round_light_burst_001/round_light_burst_001_small_yellow",
+    "Magic Bursts/round_sparkle_burst_001/round_sparkle_burst_001_small_blue",
+    "Magic Bursts/round_sparkle_burst_002/round_sparkle_burst_002_small_green",
+    "Magic Bursts/round_sparkle_burst_003/round_sparkle_burst_003_small_red",
+    "Sci-fi/scifi_spark_burst_001/scifi_spark_burst_001_small_yellow",
+    "Sci-fi/scifi_warp_003/scifi_warp_003_small_blue",
+    "Smoke Bursts/stylized_skull_smoke_burst_001/stylized_skull_smoke_burst_001_large_white",
+    "Smoke Bursts/stylized_skull_smoke_burst_001/stylized_skull_smoke_burst_001_small_white",
+    "Smoke Bursts/symmetrical_smoke_burst_001/symmetrical_smoke_burst_001_small_brown",
+    "Splatters/burst_splatter_003/burst_splatter_003_small_green",
+    "Spritesheet/Arcane Orb.png",
+    "Spritesheet/Arcane Rift.png",
+    "Spritesheet/Black Hole.png",
+    "Spritesheet/Blue Flame.png",
+    "Spritesheet/Blue Orb.png",
+    "Spritesheet/Celestial Beam.png",
+    "Spritesheet/Celestial Impact.png",
+    "Spritesheet/Dark Orb.png",
+    "Spritesheet/Divine Sigil.png",
+    "Spritesheet/Energy Current.png",
+    "Spritesheet/Energy Pillar.png",
+    "Spritesheet/Fire Ball.png",
+    "Spritesheet/Fire Burst.png",
+    "Spritesheet/Fire Hit.png",
+    "Spritesheet/Flameburst.png",
+    "Spritesheet/Glacial Core.png",
+    "Spritesheet/Green Energy Ball.png",
+    "Spritesheet/Green Thunder.png",
+    "Spritesheet/Ice Lance.png",
+    "Spritesheet/Ice Spykes.png",
+    "Spritesheet/Infernal Strike.png",
+    "Spritesheet/Ion Strike.png",
+    "Spritesheet/Judgment Ray.png",
+    "Spritesheet/Laser.png",
+    "Spritesheet/Leaf Flow.png",
+    "Spritesheet/Magic Vortex.png",
+    "Spritesheet/Neon Slash.png",
+    "Spritesheet/Nova Pulse.png",
+    "Spritesheet/Phantom Arc.png",
+    "Spritesheet/Phantom Wave.png",
+    "Spritesheet/Poison Smoke.png",
+    "Spritesheet/Poison Spores.png",
+    "Spritesheet/Power Burst.png",
+    "Spritesheet/Protection Field.png",
+    "Spritesheet/Quake Surge.png",
+    "Spritesheet/Rising Energy.png",
+    "Spritesheet/Solar Spear.png",
+    "Spritesheet/Soul Ember.png",
+    "Spritesheet/Spark.png",
+    "Spritesheet/Spell Mist.png",
+    "Spritesheet/Spiral Spark.png",
+    "Spritesheet/Star Flow.png",
+    "Spritesheet/Storm Current.png",
+    "Spritesheet/Thunder Charge.png",
+    "Spritesheet/Thunder Strike 2.png",
+    "Spritesheet/Toxic Orb.png",
+    "Spritesheet/Toxic Wave.png",
+    "Spritesheet/Venom Pilar.png",
+    "Spritesheet/Water Ball.png",
+    "Spritesheet/Water Dragon.png",
+    "Spritesheet/Wave.png"
+  ],
+  "compositionMode": "single-sequence-per-row",
+  "selectionContract": {
+    "runtimeComposition": "one-primary-sequence-per-skill-row",
+    "allowsPackLayering": false,
+    "moveRowsExposeOnlySelectedSources": true,
+    "statusRowsArePersistentOverlays": true
+  },
+  "spellSources": [
+    "Spritesheet/Arcane Orb.png",
+    "Spritesheet/Arcane Rift.png",
+    "Spritesheet/Black Hole.png",
+    "Spritesheet/Blue Flame.png",
+    "Spritesheet/Blue Orb.png",
+    "Spritesheet/Celestial Beam.png",
+    "Spritesheet/Celestial Impact.png",
+    "Spritesheet/Dark Orb.png",
+    "Spritesheet/Divine Sigil.png",
+    "Spritesheet/Energy Current.png",
+    "Spritesheet/Energy Pillar.png",
+    "Spritesheet/Fire Ball.png",
+    "Spritesheet/Fire Burst.png",
+    "Spritesheet/Fire Hit.png",
+    "Spritesheet/Flameburst.png",
+    "Spritesheet/Glacial Core.png",
+    "Spritesheet/Green Energy Ball.png",
+    "Spritesheet/Green Thunder.png",
+    "Spritesheet/Ice Lance.png",
+    "Spritesheet/Ice Spykes.png",
+    "Spritesheet/Infernal Strike.png",
+    "Spritesheet/Ion Strike.png",
+    "Spritesheet/Judgment Ray.png",
+    "Spritesheet/Laser.png",
+    "Spritesheet/Leaf Flow.png",
+    "Spritesheet/Magic Vortex.png",
+    "Spritesheet/Neon Slash.png",
+    "Spritesheet/Nova Pulse.png",
+    "Spritesheet/Phantom Arc.png",
+    "Spritesheet/Phantom Wave.png",
+    "Spritesheet/Poison Smoke.png",
+    "Spritesheet/Poison Spores.png",
+    "Spritesheet/Power Burst.png",
+    "Spritesheet/Protection Field.png",
+    "Spritesheet/Quake Surge.png",
+    "Spritesheet/Rising Energy.png",
+    "Spritesheet/Solar Spear.png",
+    "Spritesheet/Soul Ember.png",
+    "Spritesheet/Spark.png",
+    "Spritesheet/Spell Mist.png",
+    "Spritesheet/Spiral Spark.png",
+    "Spritesheet/Star Flow.png",
+    "Spritesheet/Storm Current.png",
+    "Spritesheet/Thunder Charge.png",
+    "Spritesheet/Thunder Strike 2.png",
+    "Spritesheet/Toxic Orb.png",
+    "Spritesheet/Toxic Wave.png",
+    "Spritesheet/Venom Pilar.png",
+    "Spritesheet/Water Ball.png",
+    "Spritesheet/Water Dragon.png",
+    "Spritesheet/Wave.png"
+  ],
+  "gigapackSources": [
+    "Explosions/epic_explosion_001/epic_explosion_001_large_orange",
+    "Explosions/epic_explosion_002/epic_explosion_002_large_yellow",
+    "Explosions/stylized_explosion_001/stylized_explosion_001_small_yellow",
+    "Explosions/stylized_explosion_002/stylized_explosion_002_large_violet",
+    "Explosions/stylized_explosion_002/stylized_explosion_002_small_violet",
+    "Explosions/stylized_explosion_003/stylized_explosion_003_large_yellow",
+    "Explosions/symmetrical_explosion_004/symmetrical_explosion_004_small_orange",
+    "Fantasy Spells/spell_absorb_001/spell_absorb_001_large_violet",
+    "Fantasy Spells/spell_absorb_001/spell_absorb_001_small_violet",
+    "Fantasy Spells/spell_attack_up_001/spell_attack_up_001_small_red",
+    "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue",
+    "Fantasy Spells/spell_haste_001/spell_haste_001_small_green",
+    "Fantasy Spells/spell_poison_001/spell_poison_001_large_green",
+    "Fantasy Spells/spell_poison_001/spell_poison_001_small_green",
+    "Fantasy Spells/status_poison_001/status_poison_001_small_green",
+    "Fantasy Spells/status_sparkling_001/status_sparkling_001_small_yellow",
+    "Impacts/directional_impact_001/directional_impact_001_small_blue",
+    "Impacts/directional_impact_002/directional_impact_002_small_white",
+    "Impacts/directional_impact_003/directional_impact_003_small_violet",
+    "Impacts/directional_impact_004/directional_impact_004_small_yellow",
+    "Impacts/symmetrical_impact_002/symmetrical_impact_002_small_blue",
+    "Impacts/symmetrical_impact_004/symmetrical_impact_004_small_yellow",
+    "Impacts/symmetrical_impact_006/symmetrical_impact_006_small_yellow",
+    "Lightning/lightning_burst_002/lightning_burst_002_small_violet",
+    "Lightning/lightning_burst_003/lightning_burst_003_small_violet",
+    "Lightning/lightning_strike_001/lightning_strike_001_small_violet",
+    "Magic Bursts/directional_bubble_burst_001/directional_bubble_burst_001_small_green",
+    "Magic Bursts/round_light_burst_001/round_light_burst_001_small_yellow",
+    "Magic Bursts/round_sparkle_burst_001/round_sparkle_burst_001_small_blue",
+    "Magic Bursts/round_sparkle_burst_002/round_sparkle_burst_002_small_green",
+    "Magic Bursts/round_sparkle_burst_003/round_sparkle_burst_003_small_red",
+    "Sci-fi/scifi_spark_burst_001/scifi_spark_burst_001_small_yellow",
+    "Sci-fi/scifi_warp_003/scifi_warp_003_small_blue",
+    "Smoke Bursts/stylized_skull_smoke_burst_001/stylized_skull_smoke_burst_001_large_white",
+    "Smoke Bursts/stylized_skull_smoke_burst_001/stylized_skull_smoke_burst_001_small_white",
+    "Smoke Bursts/symmetrical_smoke_burst_001/symmetrical_smoke_burst_001_small_brown",
+    "Splatters/burst_splatter_003/burst_splatter_003_small_green"
+  ],
+  "statusGigapackSources": [
+    "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue",
+    "Fantasy Spells/spell_poison_001/spell_poison_001_small_green",
+    "Fantasy Spells/status_poison_001/status_poison_001_small_green",
+    "Impacts/symmetrical_impact_002/symmetrical_impact_002_small_blue",
+    "Magic Bursts/round_sparkle_burst_001/round_sparkle_burst_001_small_blue",
+    "Splatters/burst_splatter_003/burst_splatter_003_small_green"
+  ],
+  "elementRows": {
+    "water": {
+      "impactColorRow": 2,
+      "projectileSource": "All_Fire_Bullet_Pixel_16x16_02.png",
+      "projectileRow": 0
+    },
+    "fire": {
+      "impactColorRow": 0,
+      "projectileSource": "All_Fire_Bullet_Pixel_16x16_00.png",
+      "projectileRow": 1
+    },
+    "grass": {
+      "impactColorRow": 3,
+      "projectileSource": "All_Fire_Bullet_Pixel_16x16_03.png",
+      "projectileRow": 2
+    },
+    "dark": {
+      "impactColorRow": 1,
+      "projectileSource": "All_Fire_Bullet_Pixel_16x16_05.png",
+      "projectileRow": 3
+    },
+    "light": {
+      "impactColorRow": 5,
+      "projectileSource": "All_Fire_Bullet_Pixel_16x16_04.png",
+      "projectileRow": 4
+    }
+  },
+  "moveRows": [
+    {
+      "row": 0,
+      "tier": "basic",
+      "slot": 1,
+      "style": "strike",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Ice Spykes.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Neon Slash.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Leaf Flow.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Phantom Arc.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Neon Slash.png"
+        }
+      }
+    },
+    {
+      "row": 1,
+      "tier": "basic",
+      "slot": 2,
+      "style": "projectile",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Water Ball.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Soul Ember.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Green Energy Ball.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Dark Orb.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Arcane Orb.png"
+        }
+      }
+    },
+    {
+      "row": 2,
+      "tier": "basic",
+      "slot": 3,
+      "style": "projectile",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Ice Lance.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Spark.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Poison Spores.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Toxic Orb.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Spark.png"
+        }
+      }
+    },
+    {
+      "row": 3,
+      "tier": "basic",
+      "slot": 4,
+      "style": "aura",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Glacial Core.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Fire Burst.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Green Thunder.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Black Hole.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Divine Sigil.png"
+        }
+      }
+    },
+    {
+      "row": 4,
+      "tier": "basic",
+      "slot": 5,
+      "style": "aura",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Energy Current.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Rising Energy.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Leaf Flow.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Spell Mist.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Star Flow.png"
+        }
+      }
+    },
+    {
+      "row": 5,
+      "tier": "basic",
+      "slot": 6,
+      "style": "burst",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_001/directional_impact_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/symmetrical_explosion_004/symmetrical_explosion_004_small_orange"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_poison_001/spell_poison_001_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_003/directional_impact_003_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Sci-fi/scifi_spark_burst_001/scifi_spark_burst_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 6,
+      "tier": "basic",
+      "slot": 7,
+      "style": "wave",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Ice Lance.png"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_004/directional_impact_004_small_yellow"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/directional_bubble_burst_001/directional_bubble_burst_001_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_003/directional_impact_003_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_002/directional_impact_002_small_white"
+        }
+      }
+    },
+    {
+      "row": 7,
+      "tier": "basic",
+      "slot": 8,
+      "style": "beam",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_001/directional_impact_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_003/round_sparkle_burst_003_small_red"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/directional_bubble_burst_001/directional_bubble_burst_001_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Lightning/lightning_strike_001/lightning_strike_001_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_light_burst_001/round_light_burst_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 8,
+      "tier": "basic",
+      "slot": 9,
+      "style": "field",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_attack_up_001/spell_attack_up_001_small_red"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_haste_001/spell_haste_001_small_green"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Magic Vortex.png"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/status_sparkling_001/status_sparkling_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 9,
+      "tier": "basic",
+      "slot": 10,
+      "style": "strike",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Ion Strike.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Fire Hit.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Neon Slash.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Phantom Arc.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Judgment Ray.png"
+        }
+      }
+    },
+    {
+      "row": 10,
+      "tier": "intermediate",
+      "slot": 1,
+      "style": "strike",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Ice Spykes.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Infernal Strike.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Neon Slash.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Phantom Wave.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Neon Slash.png"
+        }
+      }
+    },
+    {
+      "row": 11,
+      "tier": "intermediate",
+      "slot": 2,
+      "style": "rain",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Sci-fi/scifi_warp_003/scifi_warp_003_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_003/round_sparkle_burst_003_small_red"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_002/round_sparkle_burst_002_small_green"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Black Hole.png"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Sci-fi/scifi_spark_burst_001/scifi_spark_burst_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 12,
+      "tier": "intermediate",
+      "slot": 3,
+      "style": "burst",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Sci-fi/scifi_warp_003/scifi_warp_003_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/symmetrical_explosion_004/symmetrical_explosion_004_small_orange"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Splatters/burst_splatter_003/burst_splatter_003_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/stylized_explosion_002/stylized_explosion_002_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/symmetrical_impact_006/symmetrical_impact_006_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 13,
+      "tier": "intermediate",
+      "slot": 4,
+      "style": "field",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_attack_up_001/spell_attack_up_001_small_red"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_haste_001/spell_haste_001_small_green"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Magic Vortex.png"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/status_sparkling_001/status_sparkling_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 14,
+      "tier": "intermediate",
+      "slot": 5,
+      "style": "aura",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_001/round_sparkle_burst_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_003/round_sparkle_burst_003_small_red"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_002/round_sparkle_burst_002_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Lightning/lightning_burst_002/lightning_burst_002_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_light_burst_001/round_light_burst_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 15,
+      "tier": "intermediate",
+      "slot": 6,
+      "style": "beam",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_sparkle_burst_001/round_sparkle_burst_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/symmetrical_explosion_004/symmetrical_explosion_004_small_orange"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_poison_001/spell_poison_001_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_003/directional_impact_003_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_002/directional_impact_002_small_white"
+        }
+      }
+    },
+    {
+      "row": 16,
+      "tier": "intermediate",
+      "slot": 7,
+      "style": "field",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_attack_up_001/spell_attack_up_001_small_red"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_haste_001/spell_haste_001_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_absorb_001/spell_absorb_001_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue"
+        }
+      }
+    },
+    {
+      "row": 17,
+      "tier": "intermediate",
+      "slot": 8,
+      "style": "aura",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/symmetrical_impact_002/symmetrical_impact_002_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/symmetrical_impact_004/symmetrical_impact_004_small_yellow"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Green Thunder.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Magic Vortex.png"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/directional_impact_002/directional_impact_002_small_white"
+        }
+      }
+    },
+    {
+      "row": 18,
+      "tier": "intermediate",
+      "slot": 9,
+      "style": "strike",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Ion Strike.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Infernal Strike.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Leaf Flow.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Phantom Arc.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Celestial Impact.png"
+        }
+      }
+    },
+    {
+      "row": 19,
+      "tier": "intermediate",
+      "slot": 10,
+      "style": "field",
+      "selectedSources": {
+        "water": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/symmetrical_impact_002/symmetrical_impact_002_small_blue"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Impacts/symmetrical_impact_004/symmetrical_impact_004_small_yellow"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/status_poison_001/status_poison_001_small_green"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Lightning/lightning_burst_002/lightning_burst_002_small_violet"
+        },
+        "light": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Magic Bursts/round_light_burst_001/round_light_burst_001_small_yellow"
+        }
+      }
+    },
+    {
+      "row": 20,
+      "tier": "ultimate",
+      "slot": 1,
+      "style": "beam",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Water Dragon.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Fire Burst.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Venom Pilar.png"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Arcane Rift.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Solar Spear.png"
+        }
+      }
+    },
+    {
+      "row": 21,
+      "tier": "ultimate",
+      "slot": 2,
+      "style": "rain",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Storm Current.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Fire Ball.png"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Poison Smoke.png"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Smoke Bursts/stylized_skull_smoke_burst_001/stylized_skull_smoke_burst_001_large_white"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Celestial Beam.png"
+        }
+      }
+    },
+    {
+      "row": 22,
+      "tier": "ultimate",
+      "slot": 3,
+      "style": "field",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Blue Orb.png"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/stylized_explosion_003/stylized_explosion_003_large_yellow"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Protection Field.png"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_absorb_001/spell_absorb_001_large_violet"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Energy Pillar.png"
+        }
+      }
+    },
+    {
+      "row": 23,
+      "tier": "ultimate",
+      "slot": 4,
+      "style": "burst",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Blue Flame.png"
+        },
+        "fire": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Power Burst.png"
+        },
+        "grass": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Fantasy Spells/spell_poison_001/spell_poison_001_large_green"
+        },
+        "dark": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Laser.png"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Thunder Strike 2.png"
+        }
+      }
+    },
+    {
+      "row": 24,
+      "tier": "ultimate",
+      "slot": 5,
+      "style": "summon",
+      "selectedSources": {
+        "water": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Wave.png"
+        },
+        "fire": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/epic_explosion_002/epic_explosion_002_large_yellow"
+        },
+        "grass": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Toxic Wave.png"
+        },
+        "dark": {
+          "pack": "external-super-pixel-gigapack",
+          "source": "Explosions/stylized_explosion_002/stylized_explosion_002_large_violet"
+        },
+        "light": {
+          "pack": "external-spellsfx-2",
+          "source": "Spritesheet/Spiral Spark.png"
+        }
+      }
+    }
+  ],
+  "statusRows": [
+    {
+      "row": 0,
+      "status": "burn",
+      "pack": "external-spellsfx-2",
+      "source": "Spritesheet/Flameburst.png"
+    },
+    {
+      "row": 1,
+      "status": "poison",
+      "pack": "external-super-pixel-gigapack",
+      "source": "Fantasy Spells/status_poison_001/status_poison_001_small_green"
+    },
+    {
+      "row": 2,
+      "status": "stun",
+      "pack": "external-spellsfx-2",
+      "source": "Spritesheet/Thunder Charge.png"
+    },
+    {
+      "row": 3,
+      "status": "guard",
+      "pack": "external-super-pixel-gigapack",
+      "source": "Fantasy Spells/spell_defense_up_001/spell_defense_up_001_small_blue"
+    },
+    {
+      "row": 4,
+      "status": "regen",
+      "pack": "external-spellsfx-2",
+      "source": "Spritesheet/Poison Spores.png"
+    }
+  ],
+  "projectileFrames": [
+    {
+      "column": 0,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 15,
+      "sourceColumn": 0
+    },
+    {
+      "column": 1,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 15,
+      "sourceColumn": 1
+    },
+    {
+      "column": 2,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 15,
+      "sourceColumn": 2
+    },
+    {
+      "column": 3,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 15,
+      "sourceColumn": 3
+    },
+    {
+      "column": 4,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 15,
+      "sourceColumn": 4
+    },
+    {
+      "column": 5,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 17,
+      "sourceColumn": 0
+    },
+    {
+      "column": 6,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 17,
+      "sourceColumn": 1
+    },
+    {
+      "column": 7,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 17,
+      "sourceColumn": 2
+    },
+    {
+      "column": 8,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 17,
+      "sourceColumn": 3
+    },
+    {
+      "column": 9,
+      "sourceFrameWidth": 16,
+      "sourceFrameHeight": 16,
+      "sourceRow": 17,
+      "sourceColumn": 4
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+.rb-stepper {
+  width: 100%;
+}
+
+.rb-stepper-shell {
+  width: 100%;
+}
+
+.rb-stepper-indicator-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 18px 20px 14px;
+}
+
+.rb-stepper-content {
+  position: relative;
+  overflow: hidden;
+}
+
+.rb-stepper-step {
+  min-width: 0;
+  padding: 0 20px;
+}
+
+.rb-stepper-footer {
+  padding: 18px 20px 20px;
+}
+
+.rb-stepper-footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rb-stepper-footer-nav.spread {
+  justify-content: space-between;
+}
+
+.rb-stepper-footer-nav.end {
+  justify-content: flex-end;
+}
+
+.rb-stepper-back-button,
+.rb-stepper-next-button {
+  min-height: 40px;
+  padding: 0 14px;
+  color: #24150d;
+  background: #d6a55e;
+  border: 3px solid #20120b;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 238, 180, 0.36),
+    4px 5px 0 rgba(10, 4, 2, 0.42);
+  cursor: pointer;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 12px;
+}
+
+.rb-stepper-back-button:hover,
+.rb-stepper-next-button:hover {
+  filter: brightness(1.08);
+  transform: translate(-1px, -2px);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 238, 180, 0.42),
+    5px 7px 0 rgba(10, 4, 2, 0.48);
+}
+
+.rb-stepper-indicator {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.rb-stepper-indicator-inner {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #20120b;
+  box-shadow: inset 0 2px 0 rgba(255, 238, 180, 0.26);
+}
+
+.rb-stepper-step-number {
+  color: inherit;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 12px;
+}
+
+.rb-stepper-active-dot {
+  width: 9px;
+  height: 9px;
+  background: #24150d;
+  border: 2px solid #20120b;
+}
+
+.rb-stepper-check-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.rb-stepper-connector {
+  position: relative;
+  flex: 1;
+  height: 4px;
+  margin: 0 8px;
+  overflow: hidden;
+  background: rgba(34, 18, 10, 0.82);
+  border: 2px solid #20120b;
+}
+
+.rb-stepper-connector-inner {
+  height: 100%;
+}
+
+@media (max-width: 560px) {
+  .rb-stepper-indicator-row {
+    padding: 14px 14px 10px;
+  }
+
+  .rb-stepper-step {
+    padding: 0 14px;
+  }
+
+  .rb-stepper-footer {
+    padding: 14px;
+  }
+}
