@@ -4,6 +4,7 @@ import {
   CLASS_ORDER,
   RPG_ELEMENT_META,
   RPG_STARTER_PETS,
+  getRpgBattleEnergyForTurn,
   getRpgMoveById,
   getRpgMovesByElement,
   type ClassId,
@@ -170,7 +171,7 @@ export function GymTutorialModal({ open, onClose }: { open: boolean; onClose: ()
     <TutorialDialog
       open={open}
       title="道館教學"
-      subtitle="卡牌看法、技能搜尋、寵物換招一次講完。"
+      subtitle="卡牌抽技能、配裝、第一場能量規則一次講完。"
       onClose={onClose}
     >
       <Stepper
@@ -198,7 +199,8 @@ export function GymTutorialModal({ open, onClose }: { open: boolean; onClose: ()
               <em>把尚未綁定的卡片逐張抽出技能。</em>
             </article>
           </div>
-          <p className="tutorial-note">目前每位玩家先綁預設錢包。進收藏櫃後先一鍵抽獎，讓所有卡片都變成可插到寵物身上的技能卡。</p>
+          <p className="tutorial-note is-warning">目前幫玩家綁定的是體驗用暫時錢包。這是我們提供的大戶錢包，只是讓大家先玩完整流程，不是玩家自己的正式錢包資產。</p>
+          <p className="tutorial-note">進收藏櫃後可使用五屬性一鍵抽：水、火、草、暗、光各有自己的批次抽取；也可以展開單張卡片後單抽。新手至少先完成 5 次技能抽取。</p>
         </Step>
 
         <Step>
@@ -242,6 +244,31 @@ export function GymTutorialModal({ open, onClose }: { open: boolean; onClose: ()
             </div>
           </div>
           <p className="tutorial-note">道館支援 AI 對戰，也支援建立房間或輸入房間碼讓玩家加入真人對戰。</p>
+        </Step>
+
+        <Step>
+          <TutorialStepHeader icon={<Trophy size={21} weight="fill" />} eyebrow="STEP 4" title="第一場道館看能量選招" />
+          <div className="tutorial-energy-step">
+            <TutorialEnergyTrack />
+            <div className="tutorial-battle-instructions">
+              <article>
+                <span>1</span>
+                <strong>點目前行動的寵物</strong>
+                <em>招式列會展開，能量不足的技能會變暗。</em>
+              </article>
+              <article>
+                <span>2</span>
+                <strong>選目標與技能</strong>
+                <em>單體技能要先確認敵方目標，全體技能會直接作用。</em>
+              </article>
+              <article>
+                <span>3</span>
+                <strong>按執行</strong>
+                <em>第 1 回合 1 能量，第 2 回合 2 能量，最高 10。</em>
+              </article>
+            </div>
+          </div>
+          <p className="tutorial-note">第一場先用普通 AI 道館熟悉節奏；之後再挑戰更高難度或真人道館。</p>
         </Step>
       </Stepper>
     </TutorialDialog>
@@ -323,6 +350,35 @@ function TutorialMoveChip({ move }: { move: RpgMove }) {
       <strong>{move.name}</strong>
       <em>{tierLabel(move)}</em>
     </span>
+  );
+}
+
+function TutorialEnergyTrack() {
+  const turns = [1, 2, 3, 4, 5];
+  const maxPreviewEnergy = getRpgBattleEnergyForTurn(turns[turns.length - 1] ?? 5);
+  return (
+    <section className="tutorial-energy-track" aria-label="道館能量成長">
+      <header>
+        <span>ENERGY FLOW</span>
+        <strong>每回合 +1</strong>
+      </header>
+      <div className="tutorial-energy-turns">
+        {turns.map((turn) => {
+          const energy = getRpgBattleEnergyForTurn(turn);
+          return (
+            <article key={turn}>
+              <span>回合 {turn}</span>
+              <div>
+                {Array.from({ length: maxPreviewEnergy }).map((_, index) => (
+                  <b key={index} className={index < energy ? "is-filled" : ""} />
+                ))}
+              </div>
+              <strong>{energy} EN</strong>
+            </article>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 

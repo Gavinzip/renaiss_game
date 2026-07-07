@@ -295,15 +295,12 @@ function cardMoveIdsForPet(definitionId: string, cardSkillBindings: Record<strin
 function moveIdsForPet(definitionId: string, loadouts: Record<string, string[]>, cardSkillBindings?: Record<string, string>, petCardLoadouts?: Record<string, string[]>) {
   const definition = RPG_STARTER_PETS.find((pet) => pet.id === definitionId);
   if (!definition) return [];
+  const baseMoveIds = loadouts[definitionId] && loadouts[definitionId].length > 0 ? loadouts[definitionId] : [...definition.startingMoveIds];
+  const baseMoves = baseMoveIds.filter((moveId) => getRpgMoveById(moveId)?.element === definition.element).slice(0, RPG_MAX_EQUIPPED_MOVES);
   if (cardSkillBindings && petCardLoadouts) {
-    const baseMoves = definition.startingMoveIds.filter((moveId) => getRpgMoveById(moveId)?.element === definition.element);
     return [...new Set([...baseMoves, ...cardMoveIdsForPet(definitionId, cardSkillBindings, petCardLoadouts)])];
   }
-  const moveIds = loadouts[definitionId] && loadouts[definitionId].length > 0 ? loadouts[definitionId] : [...definition.startingMoveIds];
-  return moveIds.filter((moveId) => {
-    const move = getRpgMoveById(moveId);
-    return move?.element === definition.element;
-  }).slice(0, RPG_MAX_EQUIPPED_MOVES);
+  return baseMoves;
 }
 
 function isStarterMove(definitionId: string, moveId: string) {

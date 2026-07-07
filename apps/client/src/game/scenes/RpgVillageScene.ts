@@ -41,6 +41,8 @@ interface VillageFollowerDebugState {
   player: TrailPoint;
   facing: "left" | "right";
   moving: boolean;
+  playerMoving: boolean;
+  followersMoving: boolean;
   minDistanceFromPlayer: number;
   maxDistanceFromPlayer: number;
 }
@@ -228,7 +230,7 @@ export class RpgVillageScene extends Phaser.Scene {
     });
     this.player.setDepth(this.player.y);
     this.playerLabel.setDepth(this.player.y + 1);
-    this.publishFollowerDebugState(moving || anyFollowerMoving);
+    this.publishFollowerDebugState(moving, anyFollowerMoving);
   }
 
   private updateNearbyPlace(inputBlocked: boolean) {
@@ -336,7 +338,7 @@ export class RpgVillageScene extends Phaser.Scene {
     follower.sprite.setDisplaySize(PET_DISPLAY, PET_DISPLAY);
   }
 
-  private publishFollowerDebugState(moving: boolean) {
+  private publishFollowerDebugState(playerMoving: boolean, followersMoving = false) {
     const positions = this.followers.map((follower) => ({
       x: Math.round(follower.sprite.x),
       y: Math.round(follower.sprite.y)
@@ -354,7 +356,9 @@ export class RpgVillageScene extends Phaser.Scene {
         y: Math.round(this.player.y)
       },
       facing: this.lastFacing,
-      moving,
+      moving: playerMoving || followersMoving,
+      playerMoving,
+      followersMoving,
       minDistanceFromPlayer: Math.round(Math.min(...distances)),
       maxDistanceFromPlayer: Math.round(Math.max(...distances))
     };

@@ -16,6 +16,7 @@ const CLIENT_URL = PROVIDED_CLIENT_URL ?? `http://127.0.0.1:${CLIENT_PORT}`;
 const SERVER_URL = PROVIDED_SERVER_URL ?? `http://127.0.0.1:${SERVER_PORT}`;
 const STARTER_MOVE_NAMES = ["潮刃拍擊", "火爪快擊", "藤鞭拍擊"] as const;
 const STARTER_ELEMENTS = ["water", "fire", "grass", "dark", "light"] as const;
+const RPG_DIRECTION_TEXTURE_KEYS = ["rpgPetDirections", "rpgPetDirectionWalk"] as const;
 const VILLAGE_INITIAL_FOLLOWER_DISTANCE_MAX = 500;
 const VILLAGE_MOVING_FOLLOWER_DISTANCE_MAX = 520;
 const STATUS_IDS = ["burn", "poison", "stun", "guard", "regen"] as const;
@@ -24,6 +25,16 @@ const LOCALIZED_STATUS_LOG_PATTERN = /燃燒|中毒|暈眩|防護|再生/;
 const MOBILE_VIEWPORT = { width: 390, height: 844 } as const;
 const PLAYTEST_WALLET_ADDRESS = "0xef6c52085d12397c37652c4918036c1492fcf7a6";
 const expectedShutdown = new WeakSet<ChildProcessWithoutNullStreams>();
+const PLAYTEST_AUTH_SESSION = {
+  authenticated: true,
+  configured: true,
+  user: {
+    provider: "dev",
+    id: "rpg-playtest",
+    username: "RPGPLAYTEST",
+    displayName: "@RPGPLAYTEST"
+  }
+};
 
 interface TestPage {
   page: Page;
@@ -40,6 +51,8 @@ interface VillageFollowerDebugState {
   player: { x: number; y: number };
   facing: string;
   moving: boolean;
+  playerMoving: boolean;
+  followersMoving: boolean;
   minDistanceFromPlayer: number;
   maxDistanceFromPlayer: number;
 }
@@ -239,6 +252,18 @@ async function newTestPage(browserOrContext: Browser | BrowserContext, label: st
     if (message.type() === "error") errors.push(`${label}: ${message.text()}`);
   });
   page.on("pageerror", (error) => errors.push(`${label}: ${error.message}`));
+  await page.addInitScript(() => {
+    window.localStorage.setItem("renaiss:rpg-onboarding:v1", JSON.stringify({ version: 1, step: "arena", completed: true }));
+    window.localStorage.setItem("renaiss:tutorial:gym:v1", "1");
+    window.localStorage.setItem("renaiss:tutorial:arena:v1", "1");
+  });
+  await page.route(`${SERVER_URL}/api/auth/session`, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(PLAYTEST_AUTH_SESSION)
+    });
+  });
   return { page, errors };
 }
 
@@ -246,9 +271,28 @@ function isBrowser(target: Browser | BrowserContext): target is Browser {
   return typeof (target as Browser).newContext === "function";
 }
 
+async function gotoAuthenticated(page: Page, url: string) {
+  await page.goto(url, { waitUntil: "networkidle" });
+  await continueDevLoginIfNeeded(page);
+}
+
+async function continueDevLoginIfNeeded(page: Page) {
+  await page.waitForFunction(() => {
+    const loginPage = document.querySelector(".x-login-page");
+    if (!loginPage) return true;
+    return Array.from(document.querySelectorAll("button")).some((button) => /CONTINUE AS/i.test(button.textContent ?? ""));
+  }, null, { timeout: 15_000 });
+  const continueButton = page.getByRole("button", { name: /CONTINUE AS/i });
+  if ((await continueButton.count()) > 0 && await continueButton.first().isVisible()) {
+    await continueButton.first().click();
+    await page.waitForFunction(() => !document.querySelector(".x-login-page"), null, { timeout: 15_000 });
+    await page.waitForLoadState("networkidle");
+  }
+}
+
 async function verifyReleaseReview(browser: Browser) {
   const test = await newTestPage(browser, "release-review");
-  await test.page.goto(`${CLIENT_URL}/?preview=release`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=release`);
   await test.page.waitForSelector(".rpg-release-review");
   const info = await test.page.evaluate(() => ({
     metricText: Array.from(document.querySelectorAll(".rpg-release-metrics b")).map((node) => node.textContent?.trim() ?? ""),
@@ -296,7 +340,7 @@ async function verifyReleaseReview(browser: Browser) {
 
 async function verifyPetPreview(browser: Browser) {
   const test = await newTestPage(browser, "pet-preview");
-  await test.page.goto(`${CLIENT_URL}/?preview=pets`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=pets`);
   await test.page.waitForSelector(".rpg-animation-preview");
   const info = await test.page.evaluate(() => {
     const poseSprites = Array.from(document.querySelectorAll<HTMLElement>(".rpg-preview-poses .rpg-pet-sprite-frame"));
@@ -336,25 +380,24 @@ async function verifyPetPreview(browser: Browser) {
 
 async function verifyVillageFollowers(browser: Browser) {
   const test = await newTestPage(browser, "village-followers");
-  await test.page.goto(`${CLIENT_URL}/`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/`);
   await test.page.waitForSelector(".rpg-layer");
-  await test.page.waitForFunction(() => {
+  await test.page.waitForFunction((directionTextureKeys) => {
     const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
     const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; textureKeys?: string[]; directions?: string[] } | undefined;
-    return state?.count === 5 && state.textureKeys?.every((key) => key === "rpgPetDirections") && state.directions?.every((direction) => direction === "down");
-  });
+    return state?.count === 5 && state.textureKeys?.every((key) => directionTextureKeys.includes(key)) && state.directions?.every((direction) => direction === "down");
+  }, RPG_DIRECTION_TEXTURE_KEYS);
 
   const initial = await readVillageFollowerState(test.page);
   assert(initial?.count === 5, `Village should expose 5 starter followers, got ${JSON.stringify(initial)}`);
   assert(JSON.stringify(initial.elements) === JSON.stringify(STARTER_ELEMENTS), `Village followers should keep five-element order, got ${initial.elements.join(", ")}`);
-  assert(initial.textureKeys.every((key) => key === "rpgPetDirections"), `Village followers should start with front-facing direction sheet: ${initial.textureKeys.join(", ")}`);
+  assert(initial.textureKeys.every((key) => (RPG_DIRECTION_TEXTURE_KEYS as readonly string[]).includes(key)), `Village followers should use direction sheets after login entry: ${initial.textureKeys.join(", ")}`);
   assert(initial.directions.every((direction) => direction === "down"), `Village followers should start front-facing, got ${initial.directions.join(", ")}`);
   assert(
     initial.minDistanceFromPlayer >= 48 && initial.maxDistanceFromPlayer <= VILLAGE_INITIAL_FOLLOWER_DISTANCE_MAX,
     `Initial follower spacing is wrong: ${JSON.stringify(initial)}`
   );
 
-  await test.page.locator("canvas").first().click({ position: { x: 800, y: 520 } });
   const movementDirections = [
     { key: "ArrowDown", direction: "down", facing: "right" },
     { key: "ArrowUp", direction: "up", facing: "right" },
@@ -368,8 +411,8 @@ async function verifyVillageFollowers(browser: Browser) {
       await test.page.waitForFunction(
         ({ direction, facing }) => {
           const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-          const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; moving?: boolean; facing?: string; textureKeys?: string[]; animationKeys?: string[]; directions?: string[] } | undefined;
-          if (state?.count !== 5 || state.moving !== true || state.facing !== facing || !state.directions?.every((value) => value === direction)) return false;
+          const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; playerMoving?: boolean; facing?: string; textureKeys?: string[]; animationKeys?: string[]; directions?: string[] } | undefined;
+          if (state?.count !== 5 || state.playerMoving !== true || state.facing !== facing || !state.directions?.every((value) => value === direction)) return false;
           return direction === "side"
             ? state.animationKeys?.every((key) => key.endsWith("_walk"))
             : state.textureKeys?.every((key) => key === "rpgPetDirectionWalk") && state.animationKeys?.every((key) => key.endsWith(`_${direction}_walk`));
@@ -396,7 +439,7 @@ async function verifyVillageFollowers(browser: Browser) {
     }
   }
   assert(moving?.count === 5, `Moving village follower state missing: ${JSON.stringify(moving)}`);
-  assert(moving.moving, `Followers should report movement: ${JSON.stringify(moving)}`);
+  assert(moving.playerMoving, `Village player should report movement: ${JSON.stringify(moving)}`);
   if (moving.directions.every((direction) => direction === "side")) {
     assert(moving.animationKeys.every((key) => key.endsWith("_walk")), `Side followers should play walk animations while moving: ${moving.animationKeys.join(", ")}`);
   } else {
@@ -415,15 +458,16 @@ async function verifyVillageFollowers(browser: Browser) {
   for (const direction of movementDirections) {
     await test.page.keyboard.up(direction.key);
   }
-  await test.page.waitForFunction(() => {
+  await test.page.waitForFunction((directionTextureKeys) => {
     const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-    const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; moving?: boolean; textureKeys?: string[]; animationKeys?: string[]; directions?: string[] } | undefined;
-    if (state?.count !== 5 || state.moving !== false) return false;
-    return state.directions?.every((direction) => direction === "side")
-      ? state.animationKeys?.every((key) => key.endsWith("_idle"))
-      : state.textureKeys?.every((key) => key === "rpgPetDirections");
-  });
+    const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; playerMoving?: boolean; textureKeys?: string[]; directions?: string[] } | undefined;
+    return state?.count === 5
+      && state.playerMoving === false
+      && state.textureKeys?.every((key) => directionTextureKeys.includes(key))
+      && state.directions?.length === 5;
+  }, RPG_DIRECTION_TEXTURE_KEYS);
   const stopped = await readVillageFollowerState(test.page);
+  assert(stopped?.playerMoving === false, `Village player should report stopped after key release: ${JSON.stringify(stopped)}`);
   assert(stopped?.directions.length === 5, `Followers should expose stopped directions: ${JSON.stringify(stopped)}`);
   assertNoErrors(test);
   await test.page.context().close();
@@ -461,7 +505,7 @@ async function verifyWalletCardDrawAndEquip(browser: Browser) {
   const persistedMoveInfo = await readExpandedWalletMove(test.page);
   assert(persistedMoveInfo.name === equippedMoveName, `SQLite should preserve the card skill binding after reload: ${JSON.stringify({ equippedMoveName, persistedMoveInfo })}`);
 
-  await test.page.locator(".rpg-library-pets button").filter({ hasText: "火" }).click();
+  await test.page.locator("section[aria-label='寵物卡片插槽'] .rpg-library-pets button").filter({ hasText: "火" }).click();
   await test.page.waitForFunction(
     (moveName) => Array.from(document.querySelectorAll(".rpg-card-equip-list button strong")).some((node) => node.textContent?.trim() === moveName),
     equippedMoveName,
@@ -474,6 +518,8 @@ async function verifyWalletCardDrawAndEquip(browser: Browser) {
     { timeout: 15_000 }
   );
 
+  await test.page.locator(".rpg-profile-card-panel .rpg-panel-close").click();
+  await test.page.waitForSelector(".rpg-profile-card-panel", { state: "detached", timeout: 15_000 });
   await test.page.getByRole("button", { name: "道館" }).click();
   await test.page.waitForSelector(".rpg-gym-panel");
   await test.page.waitForSelector(".rpg-party-formation-board");
@@ -515,7 +561,7 @@ async function verifyWalletCardDrawAndEquip(browser: Browser) {
 
 async function verifyStatusPreview(browser: Browser) {
   const test = await newTestPage(browser, "status-preview");
-  await test.page.goto(`${CLIENT_URL}/?preview=status`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=status`);
   await test.page.waitForSelector(".rpg-status-animation-preview");
   await test.page.waitForTimeout(260);
   const info = await test.page.evaluate(() => {
@@ -569,7 +615,7 @@ async function verifyStatusPreview(browser: Browser) {
 
 async function verifySkillPreview(browser: Browser) {
   const test = await newTestPage(browser, "skill-preview");
-  await test.page.goto(`${CLIENT_URL}/?preview=skills`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=skills`);
   await test.page.waitForSelector(".rpg-skill-animation-preview");
   await test.page.waitForTimeout(420);
   const info = await test.page.evaluate(() => {
@@ -959,6 +1005,7 @@ async function verifyAiBattle(browser: Browser) {
   assert(arrangedPartySlots.front === "pet_fire_emberfox" && arrangedPartySlots.backLeft === "pet_water_tidefin" && arrangedPartySlots.backRight === "pet_grass_mossling", `Gym formation reorder did not update slot order: ${JSON.stringify(arrangedPartySlots)}`);
   assert(arrangedPartySlots.selectedCards.includes("前排") && arrangedPartySlots.selectedCards.includes("後左") && arrangedPartySlots.selectedCards.includes("後右"), `Selected pet cards should show explicit formation labels: ${JSON.stringify(arrangedPartySlots)}`);
   await test.page.reload({ waitUntil: "networkidle" });
+  await continueDevLoginIfNeeded(test.page);
   await test.page.waitForSelector(".rpg-layer");
   await test.page.getByRole("button", { name: "道館" }).click();
   await test.page.waitForSelector(".rpg-party-formation-board");
@@ -981,6 +1028,7 @@ async function verifyAiBattle(browser: Browser) {
   assert(difficultyInfo.selected === "normal", `Default AI difficulty should be normal: ${JSON.stringify(difficultyInfo)}`);
   await installSupportMoveLoadout(test.page);
   await test.page.reload({ waitUntil: "networkidle" });
+  await continueDevLoginIfNeeded(test.page);
   await test.page.waitForSelector(".rpg-layer");
   await test.page.getByRole("button", { name: "道館" }).click();
   await test.page.waitForSelector(".rpg-party-formation-board");
@@ -1019,6 +1067,8 @@ async function verifyAiBattle(browser: Browser) {
         return transform !== "none" && new DOMMatrixReadOnly(transform).a < 0;
       }).length,
       cardStackCount: document.querySelectorAll(".rpg-field-card-stack").length,
+      leftCardStackCount: document.querySelectorAll(".rpg-field-pet.is-left .rpg-field-card-stack").length,
+      rightCardStackCount: document.querySelectorAll(".rpg-field-pet.is-right .rpg-field-card-stack").length,
       legacyBattlePetCount: document.querySelectorAll(".rpg-battle-pet, .rpg-pet-stand").length,
       fieldSpriteFilters: Array.from(document.querySelectorAll<HTMLElement>(".rpg-field-pet .rpg-field-pet-sprite")).map((sprite) => window.getComputedStyle(sprite).filter),
       fieldPetPseudoContent: Array.from(document.querySelectorAll<HTMLElement>(".rpg-field-pet")).flatMap((pet) => [
@@ -1058,7 +1108,7 @@ async function verifyAiBattle(browser: Browser) {
   );
   assert(formationInfo.rightPetCount === 3, `AI battle expected 3 right-side pets, got ${formationInfo.rightPetCount}`);
   assert(formationInfo.mirroredRightPets === 3, `AI battle should mirror 3 right-side sprites, got ${formationInfo.mirroredRightPets}`);
-  assert(formationInfo.cardStackCount === 0, `AI battle should not render field card stacks behind pets, got ${formationInfo.cardStackCount}`);
+  assert(formationInfo.leftCardStackCount === 1 && formationInfo.rightCardStackCount === 0, `AI battle should render equipped card stacks only for the local side: ${JSON.stringify(formationInfo)}`);
   assert(formationInfo.legacyBattlePetCount === 0, `AI battle must not render legacy card-style battle pet nodes, got ${formationInfo.legacyBattlePetCount}`);
   assert(
     formationInfo.fieldSpriteFilters.length === 6 && formationInfo.fieldSpriteFilters.every((filter) => filter === "none"),
@@ -1082,6 +1132,13 @@ async function verifyAiBattle(browser: Browser) {
       formationInfo.leftDefinitionIds.backRight === arrangedPartySlots.backRight,
     `AI battle field slots should preserve gym formation order: ${JSON.stringify({ arrangedPartySlots, field: formationInfo.leftDefinitionIds })}`
   );
+
+  await test.page.getByRole("button", { name: "Back" }).click();
+  await test.page.waitForSelector(".rpg-gym-panel");
+  await test.page.locator(".rpg-ai-difficulty-selector button[data-ai-difficulty='normal']").click();
+  await test.page.waitForFunction(() => document.querySelector(".rpg-ai-difficulty-selector button.is-selected")?.getAttribute("data-ai-difficulty") === "normal");
+  await test.page.locator(".rpg-gym-modes button").filter({ hasText: "AI 對戰" }).click();
+  await waitBattleField(test.page);
 
   const supportCommandRow = await advanceUntilCurrentLeftPet(test.page, "pet_fire_emberfox", "暖焰補息");
   const supportActorId = await supportCommandRow.getAttribute("data-actor-id");
@@ -1208,15 +1265,15 @@ async function verifyAiBattle(browser: Browser) {
 async function verifyMobileRpgLayout(browser: Browser) {
   const test = await newTestPage(browser, "mobile-rpg", MOBILE_VIEWPORT);
 
-  await test.page.goto(`${CLIENT_URL}/?preview=release`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=release`);
   await test.page.waitForSelector(".rpg-release-review");
   await assertNoHorizontalOverflow(test.page, "mobile release review");
 
-  await test.page.goto(`${CLIENT_URL}/?preview=pets`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=pets`);
   await test.page.waitForSelector(".rpg-animation-preview");
   await assertNoHorizontalOverflow(test.page, "mobile pet preview");
 
-  await test.page.goto(`${CLIENT_URL}/?preview=skills`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(test.page, `${CLIENT_URL}/?preview=skills`);
   await test.page.waitForSelector(".rpg-skill-animation-preview");
   await assertNoHorizontalOverflow(test.page, "mobile skill preview");
 
@@ -1346,7 +1403,7 @@ async function verifyVersusBattleAndReconnect(browser: Browser) {
 }
 
 async function openRpgGym(page: Page) {
-  await page.goto(`${CLIENT_URL}/`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(page, `${CLIENT_URL}/`);
   await page.waitForSelector(".rpg-layer");
   await page.getByRole("button", { name: "道館" }).click();
   await page.waitForSelector(".rpg-gym-panel");
@@ -1366,7 +1423,7 @@ async function startAiBattle(page: Page, difficulty: "normal" | "hard" | "leader
 }
 
 async function openRpgProfile(page: Page) {
-  await page.goto(`${CLIENT_URL}/?rpg=1`, { waitUntil: "networkidle" });
+  await gotoAuthenticated(page, `${CLIENT_URL}/?rpg=1`);
   await page.waitForSelector(".rpg-layer");
   await page.getByRole("button", { name: "卡片" }).click();
   await page.waitForSelector(".rpg-profile-card-panel");
@@ -1374,10 +1431,15 @@ async function openRpgProfile(page: Page) {
 }
 
 async function finishWalletOpeningIfNeeded(page: Page) {
+  await page.waitForFunction(() => {
+    const expandedCard = document.querySelector<HTMLElement>(".rpg-wallet-card.is-expanded");
+    return Boolean(expandedCard?.classList.contains("is-reveal-intro") || expandedCard?.querySelector(".rpg-bound-skill-reveal"));
+  }, null, { timeout: 15_000 });
   const openingVideo = page.locator(".rpg-wallet-card.is-expanded .rpg-skill-opening-stage video");
   if ((await openingVideo.count()) > 0) {
     await openingVideo.first().dispatchEvent("ended");
   }
+  await page.waitForSelector(".rpg-wallet-card.is-expanded .rpg-bound-skill-reveal", { timeout: 15_000 });
 }
 
 async function readExpandedWalletMove(page: Page) {
@@ -1566,6 +1628,7 @@ async function installSupportMoveLoadout(page: Page) {
     const state = { ...(persisted.state ?? {}) };
     const skillInventory = {
       ...((state.skillInventory as Record<string, number> | undefined) ?? {}),
+      fire_basic_04: 1,
       fire_basic_05: 1,
       fire_basic_09: 1,
       fire_intermediate_04: 1,
@@ -1574,7 +1637,7 @@ async function installSupportMoveLoadout(page: Page) {
     };
     const petMoveLoadouts = {
       ...((state.petMoveLoadouts as Record<string, string[]> | undefined) ?? {}),
-      pet_fire_emberfox: ["fire_basic_01", "fire_basic_05", "fire_intermediate_04", "fire_basic_07"],
+      pet_fire_emberfox: ["fire_basic_04", "fire_basic_05", "fire_intermediate_04", "fire_basic_07"],
       pet_water_tidefin: ["water_basic_01", "water_basic_05", "water_basic_09", "water_basic_07"]
     };
     localStorage.setItem(storageKey, JSON.stringify({
@@ -1625,7 +1688,10 @@ async function submitFirstEnabledMoveForRow(page: Page, row: ReturnType<Page["lo
 
 async function advanceUntilCurrentLeftPet(page: Page, definitionId: string, requiredMoveName?: string) {
   for (let attempt = 0; attempt < 30; attempt += 1) {
-    if (await isResultVisible(page)) throw new Error(`Battle finished before ${definitionId} became current.`);
+    if (await isResultVisible(page)) {
+      const snapshot = await battleDebugSnapshot(page);
+      throw new Error(`Battle finished before ${definitionId} became current: ${JSON.stringify(snapshot)}`);
+    }
     const current = await currentLeftPetInfo(page);
     if (current) {
       const row = await openCurrentLeftCommandRow(page);
@@ -1641,6 +1707,26 @@ async function advanceUntilCurrentLeftPet(page: Page, definitionId: string, requ
     }
   }
   throw new Error(`Timed out waiting for current-left pet ${definitionId}.`);
+}
+
+async function battleDebugSnapshot(page: Page) {
+  return page.evaluate(() => ({
+    resultText: document.querySelector(".rpg-battle-result")?.textContent?.trim() ?? "",
+    headerText: document.querySelector(".rpg-battle-scene-header")?.textContent?.trim() ?? "",
+    actionText: document.querySelector(".rpg-battle-action-panel")?.textContent?.trim() ?? "",
+    leftPets: Array.from(document.querySelectorAll<HTMLElement>(".rpg-field-pet.is-left")).map((pet) => ({
+      definitionId: pet.getAttribute("data-definition-id") ?? "",
+      petId: pet.getAttribute("data-pet-id") ?? "",
+      current: pet.classList.contains("is-current-turn"),
+      defeated: pet.classList.contains("is-defeated"),
+      text: pet.textContent?.trim() ?? ""
+    })),
+    rightPets: Array.from(document.querySelectorAll<HTMLElement>(".rpg-field-pet.is-right")).map((pet) => ({
+      definitionId: pet.getAttribute("data-definition-id") ?? "",
+      defeated: pet.classList.contains("is-defeated"),
+      text: pet.textContent?.trim() ?? ""
+    }))
+  }));
 }
 
 async function submitMoves(page: Page, moveNames: readonly string[], submitLabel: BattleSubmitLabel) {

@@ -6,6 +6,7 @@ import {
   RPG_AI_DIFFICULTY_CONFIGS,
   RPG_SKILL_TICKETS,
   RPG_STARTER_PETS,
+  getRpgBattleEnergyForTurn,
   getRpgCurrentTurnActor,
   getRpgMoveById,
   getRpgReachableEnemyTargets,
@@ -14,6 +15,7 @@ import {
   getStarterPetById,
   type RpgAiDifficulty,
   type RpgBattlePetState,
+  type RpgBattleState,
   type RpgElement,
   type RpgMove,
   type RpgSkillTicket
@@ -27,7 +29,8 @@ import { RpgPixelCardImage } from "./RpgPixelCardImage";
 import { RpgSkillVfxSprite } from "./RpgSkillVfxSprite";
 import { BattleStatusEffects, statusShortLabel } from "./RpgStatusEffects";
 import { GymTutorialModal, useFirstRunTutorial } from "./RpgTutorial";
-import type { RpgWalletCard } from "../api/rpgWalletCards";
+import { RpgOnboardingGuide } from "./RpgOnboardingGuide";
+import { RPG_DEFAULT_WALLET_ADDRESS, type RpgWalletCard } from "../api/rpgWalletCards";
 import { staticAssetUrl } from "../game/assets/staticAssets";
 import { RPG_MAX_EQUIPPED_MOVES, useRpgStore, type RpgDrawHistoryEntry, type RpgVersusConnection, type RpgVersusRoomStatus } from "../state/rpgStore";
 
@@ -99,7 +102,7 @@ export function RpgOverlay() {
             <button type="button" className={screen === "gym" ? "is-active" : ""} title="道館" aria-label="道館" onClick={openGym}>
               <FlagBanner size={24} weight="fill" />
             </button>
-            <button type="button" title="競技場" aria-label="競技場" onClick={openArena}>
+            <button type="button" title="競技場" aria-label="競技場" data-rpg-guide-target="arena-nav" onClick={openArena}>
               <Sword size={24} weight="fill" />
             </button>
           </nav>
@@ -125,6 +128,7 @@ export function RpgOverlay() {
       {screen === "profile" || screen === "bag" || screen === "shop" ? <ProfilePanel /> : null}
       {screen === "gym" ? <GymPanel /> : null}
       {screen === "battle" ? <BattlePanel /> : null}
+      <RpgOnboardingGuide />
     </div>
   );
 }
@@ -303,6 +307,12 @@ function ProfilePanel() {
   const ownedCardTotal = ownedCards.length;
   const visibleWalletCards = element === "any" ? walletCards : walletCards.filter((card) => walletCardElement(card, walletCardElements) === element);
   const unboundWalletCardCount = walletCards.reduce((count, card) => count + (cardSkillBindings[walletCardKey(card)] ? 0 : 1), 0);
+  const unboundWalletCardCountByElement = Object.fromEntries(
+    ELEMENT_ORDER.map((targetElement) => [
+      targetElement,
+      walletCards.reduce((count, card) => count + (!cardSkillBindings[walletCardKey(card)] && walletCardElement(card, walletCardElements) === targetElement ? 1 : 0), 0)
+    ])
+  ) as Record<RpgElement, number>;
   const walletTierGroups = WALLET_TIER_ORDER.map((tier) => {
     const cards = visibleWalletCards
       .filter((card) => walletCardTier(card) === tier)
@@ -318,6 +328,7 @@ function ProfilePanel() {
   const selectedWalletTierGroup = walletTierGroups.find((group) => group.tier === selectedWalletTier) ?? walletTierGroups[0];
   const selectedWalletCard = selectedCardId ? walletCards.find((card) => walletCardKey(card) === selectedCardId) ?? null : null;
   const freeSkillTotal = RPG_STARTER_PETS.reduce((sum, pet) => sum + pet.startingMoveIds.length, 0);
+  const isExperienceWallet = walletAddress.toLowerCase() === RPG_DEFAULT_WALLET_ADDRESS;
   const saveProfile = () => setPlayerName(draftName);
   const walletSyncedLabel = walletCardsFetchedAt ? `更新 ${new Date(walletCardsFetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "尚未同步";
   const handleDrawSelectedCard = async () => {
@@ -335,6 +346,20 @@ function ProfilePanel() {
     if (cardsToDraw.length === 0) return;
     setSelectedCardId(null);
     setCardReveal(null);
+    setBulkDrawProgress({ done: 0, total: cardsToDraw.length });
+    for (let index = 0; index < cardsToDraw.length; index += 1) {
+      await drawWalletCardSkill(walletCardKey(cardsToDraw[index]!));
+      setBulkDrawProgress({ done: index + 1, total: cardsToDraw.length });
+    }
+    window.setTimeout(() => setBulkDrawProgress(null), 650);
+  };
+  const handleDrawWalletCardsByElement = async (targetElement: RpgElement) => {
+    if (bulkDrawProgress || walletCardsStatus === "loading") return;
+    const cardsToDraw = walletCards.filter((card) => !cardSkillBindings[walletCardKey(card)] && walletCardElement(card, walletCardElements) === targetElement);
+    if (cardsToDraw.length === 0) return;
+    setSelectedCardId(null);
+    setCardReveal(null);
+    setElement(targetElement);
     setBulkDrawProgress({ done: 0, total: cardsToDraw.length });
     for (let index = 0; index < cardsToDraw.length; index += 1) {
       await drawWalletCardSkill(walletCardKey(cardsToDraw[index]!));
@@ -360,7 +385,7 @@ function ProfilePanel() {
         <PanelCloseButton />
       </header>
 
-      <section className="rpg-profile-editor" aria-label="個人資料">
+      <section className="rpg-profile-editor" aria-label="個人資料" data-rpg-guide-target="profile-name">
         <ClassPortrait classId="engineer" frame={0} />
         <div className="rpg-profile-fields">
           <label>
@@ -422,7 +447,7 @@ function ProfilePanel() {
                     : `${visibleWalletCards.length}/${walletCards.length} 張 · ${walletCardsStale ? "快取" : walletSyncedLabel}`}
               </span>
               <div className="rpg-wallet-header-actions">
-                <button type="button" onClick={() => void handleDrawAllWalletCards()} disabled={walletCardsStatus !== "ready" || unboundWalletCardCount === 0 || Boolean(bulkDrawProgress)}>
+                <button type="button" data-rpg-guide-target="draw-all" onClick={() => void handleDrawAllWalletCards()} disabled={walletCardsStatus !== "ready" || unboundWalletCardCount === 0 || Boolean(bulkDrawProgress)}>
                   <Sparkle size={15} weight="fill" />
                   <span>{bulkDrawProgress ? `抽獎中 ${bulkDrawProgress.done}/${bulkDrawProgress.total}` : unboundWalletCardCount > 0 ? `一鍵抽獎 ${unboundWalletCardCount}` : "已全抽"}</span>
                 </button>
@@ -432,6 +457,37 @@ function ProfilePanel() {
                 </button>
               </div>
             </header>
+            {isExperienceWallet ? (
+              <section className="rpg-wallet-experience-notice" data-rpg-guide-target="wallet-notice">
+                <strong>體驗用暫時錢包</strong>
+                <span>目前幫玩家綁定的是我們提供的大戶錢包，只是為了讓大家先體驗抽技能、配裝、道館與競技場流程；這不是玩家自己的正式錢包資產。</span>
+              </section>
+            ) : null}
+            <section className="rpg-wallet-element-draws" aria-label="五屬性一鍵抽" data-rpg-guide-target="element-bulk-draw">
+              <header>
+                <strong>五屬性一鍵抽</strong>
+                <span>新手至少完成 5 次；也可以展開單張卡片後單抽。</span>
+              </header>
+              <div>
+                {ELEMENT_ORDER.map((targetElement) => {
+                  const meta = RPG_ELEMENT_META[targetElement];
+                  const count = unboundWalletCardCountByElement[targetElement] ?? 0;
+                  return (
+                    <button
+                      key={targetElement}
+                      type="button"
+                      style={{ "--element": meta.color, "--element-soft": meta.accent } as CSSProperties}
+                      disabled={walletCardsStatus !== "ready" || count === 0 || Boolean(bulkDrawProgress)}
+                      onClick={() => void handleDrawWalletCardsByElement(targetElement)}
+                    >
+                      <b>{meta.shortLabel}</b>
+                      <span>一鍵抽{meta.label}</span>
+                      <em>{count > 0 ? `${count} 張` : "已完成"}</em>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
             {walletCardsStatus === "loading" ? (
               <div className="rpg-wallet-state">
                 <Sparkle size={22} weight="fill" />
@@ -491,6 +547,7 @@ function ProfilePanel() {
                             key={cardId}
                             className={["rpg-wallet-card", `is-${tier}`, boundMove ? "is-bound" : "", expanded ? "is-expanded" : "", expandedMode].filter(Boolean).join(" ")}
                             data-token-id={card.tokenId}
+                            data-rpg-guide-target={boundMove ? undefined : "single-card-draw"}
                           >
                             <button
                               type="button"
@@ -729,7 +786,7 @@ function WalletCardSkillDetail({
               <strong>點擊抽獎後，這張卡會永久綁定一個{cardMeta.label}屬性技能。</strong>
               <span>{openingVideo ? "抽獎會先播放屬性開場影片，再揭露技能。" : `${cardMeta.label}屬性開場影片待補，會直接揭露技能。`}</span>
             </div>
-            <button type="button" onClick={() => void onDraw()}>
+            <button type="button" data-rpg-guide-target="single-card-draw" onClick={() => void onDraw()}>
               <Sparkle size={18} weight="fill" />
               <span>抽取技能</span>
             </button>
@@ -829,7 +886,7 @@ function CardEquipPanel({
     .sort((a, b) => a.move.tierIndex - b.move.tierIndex || a.move.energyCost - b.move.energyCost || a.card.name.localeCompare(b.card.name));
 
   return (
-    <section ref={panelRef} className="rpg-card-equip-panel rpg-skill-library" aria-label="寵物卡片插槽">
+    <section ref={panelRef} className="rpg-card-equip-panel rpg-skill-library" aria-label="寵物卡片插槽" data-rpg-guide-target="card-equip">
       <header>
         <div>
           <strong>卡片插槽：{pet.name}</strong>
@@ -1203,7 +1260,7 @@ function GymPanel() {
           </div>
         </section>
         <div className="rpg-gym-modes">
-          <button type="button" disabled={!partyReady} onClick={() => startAiBattle(selectedAiDifficulty)}>
+          <button type="button" data-rpg-guide-target="gym-ai" disabled={!partyReady} onClick={() => startAiBattle(selectedAiDifficulty)}>
             <Robot size={25} weight="fill" />
             <span>AI 對戰</span>
             <strong>AI 配對 / {selectedAiConfig.label}</strong>
@@ -1242,7 +1299,7 @@ function PartySelection({
   const togglePartyPet = useRpgStore((state) => state.togglePartyPet);
 
   return (
-    <section className="rpg-gym-party" aria-label="上場隊伍">
+    <section className="rpg-gym-party" aria-label="上場隊伍" data-rpg-guide-target="gym-party">
       <header>
         <strong>上場隊伍</strong>
         <span>{selectedPartyPetIds.length}/3</span>
@@ -1526,6 +1583,8 @@ function BattlePanel() {
         />
       ) : null}
 
+      <BattleEnergyRail battle={battle} currentActor={currentActor} />
+
       <div className="rpg-battle-field">
         {battle.left.map((pet, index) => (
           <BattleFieldPet
@@ -1607,6 +1666,7 @@ function BattlePanel() {
                   className="rpg-command-row"
                   data-actor-id={pet.id}
                   data-pending-target-id={pendingActions[pet.id]?.targetId ?? ""}
+                  data-rpg-guide-target="battle-current-pet"
                 >
                   <header>
                     <strong>{pet.name}</strong>
@@ -1617,7 +1677,7 @@ function BattlePanel() {
                       </button>
                     ) : null}
                   </header>
-                  <div className="rpg-move-list">
+                  <div className="rpg-move-list" data-rpg-guide-target="battle-moves">
                     {pet.moveIds.map((moveId) => {
                       const move = getRpgMoveById(moveId);
                       if (!move) return null;
@@ -1643,7 +1703,7 @@ function BattlePanel() {
               ))}
             </div>
 
-            <footer className="rpg-battle-actions">
+            <footer className="rpg-battle-actions" data-rpg-guide-target="battle-action">
               <div>
                 <span>指令狀態</span>
                 <strong>{actionStatus}</strong>
@@ -1755,6 +1815,32 @@ function VersusStatusRail({
         <strong>{progressValue}</strong>
         <em>{progressDetail}</em>
       </div>
+    </section>
+  );
+}
+
+function BattleEnergyRail({ battle, currentActor }: { battle: RpgBattleState; currentActor: RpgBattlePetState | null }) {
+  const turnEnergy = getRpgBattleEnergyForTurn(battle.turn);
+  const actorEnergy = currentActor ? currentActor.energy : turnEnergy;
+  const actorSideLabel = currentActor?.side === "left" ? "我方" : currentActor?.side === "right" ? "敵方" : "";
+
+  return (
+    <section className="rpg-battle-energy-rail" data-rpg-guide-target="battle-energy" aria-label="道館能量">
+      <header>
+        <div>
+          <span>本回合能量</span>
+          <strong>{turnEnergy} EN</strong>
+        </div>
+        <em>第 1 回合 1，之後每回合 +1，最高 10</em>
+      </header>
+      <div className="rpg-energy-pips" aria-label={`目前能量 ${actorEnergy}/${currentActor?.maxEnergy ?? 10}`}>
+        {Array.from({ length: currentActor?.maxEnergy ?? 10 }).map((_, index) => (
+          <span key={index} className={index < actorEnergy ? "is-filled" : ""}>
+            {index + 1}
+          </span>
+        ))}
+      </div>
+      <small>{currentActor ? `${actorSideLabel} ${currentActor.name} 可用 ${actorEnergy}/${currentActor.maxEnergy} EN` : "等待行動者"}</small>
     </section>
   );
 }

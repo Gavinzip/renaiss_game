@@ -93,7 +93,10 @@ function RpgApp({ authUser }: { authUser: XAuthUser }) {
   const [rpgReady, setRpgReady] = useState(false);
 
   useEffect(() => {
-    useRpgStore.getState().setPlayerName(xPlayerName(authUser));
+    const currentName = useRpgStore.getState().playerName;
+    if (!currentName || currentName === "GUEST_2AC1") {
+      useRpgStore.getState().setPlayerName(xPlayerName(authUser));
+    }
   }, [authUser.id, authUser.username]);
 
   useEffect(() => {
