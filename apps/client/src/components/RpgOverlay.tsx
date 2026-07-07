@@ -28,6 +28,7 @@ import { RpgSkillVfxSprite } from "./RpgSkillVfxSprite";
 import { BattleStatusEffects, statusShortLabel } from "./RpgStatusEffects";
 import { GymTutorialModal, useFirstRunTutorial } from "./RpgTutorial";
 import type { RpgWalletCard } from "../api/rpgWalletCards";
+import { staticAssetUrl } from "../game/assets/staticAssets";
 import { RPG_MAX_EQUIPPED_MOVES, useRpgStore, type RpgDrawHistoryEntry, type RpgVersusConnection, type RpgVersusRoomStatus } from "../state/rpgStore";
 
 const ELEMENT_ORDER = RPG_ELEMENTS;
@@ -38,11 +39,11 @@ const PARTY_FORMATION_SLOTS = [
   { label: "後右", shortLabel: "右" }
 ] as const;
 const SKILL_OPENING_VIDEO_BY_ELEMENT: Partial<Record<RpgElement, string>> = {
-  water: "/assets/skill-openings/water.mp4",
-  fire: "/assets/skill-openings/fire.mp4",
-  grass: "/assets/skill-openings/grass.mp4",
-  dark: "/assets/skill-openings/dark.mp4",
-  light: "/assets/skill-openings/light.mp4"
+  water: staticAssetUrl("/assets/skill-openings/water.mp4"),
+  fire: staticAssetUrl("/assets/skill-openings/fire.mp4"),
+  grass: staticAssetUrl("/assets/skill-openings/grass.mp4"),
+  dark: staticAssetUrl("/assets/skill-openings/dark.mp4"),
+  light: staticAssetUrl("/assets/skill-openings/light.mp4")
 };
 
 type CardRevealState = {

@@ -1,11 +1,12 @@
 import type { ClassId, GameSnapshot, JoinAccepted, JoinRequest, PlayerInput } from "@renaiss-game/shared";
 import { io, type Socket } from "socket.io-client";
+import { gameServerUrl } from "../../api/gameServer";
 
 export class GameSocket {
   private socket: Socket | null = null;
 
   connect(request: JoinRequest, onSnapshot: (snapshot: GameSnapshot) => void): Promise<JoinAccepted> {
-    const serverUrl = import.meta.env.VITE_GAME_SERVER_URL ?? "http://localhost:8787";
+    const serverUrl = gameServerUrl();
     this.socket = io(serverUrl, {
       transports: ["websocket"],
       reconnection: true,

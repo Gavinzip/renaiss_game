@@ -1,5 +1,6 @@
 import type { RpgBattleAction, RpgVersusJoinAccepted, RpgVersusJoinRequest, RpgVersusRematchRequest, RpgVersusSnapshot, RpgVersusSubmitActions } from "@renaiss-game/shared";
 import { io, type Socket } from "socket.io-client";
+import { gameServerUrl } from "../../api/gameServer";
 
 const RPG_VERSUS_SESSION_KEY = "renaiss:rpg-versus-session-id";
 type RpgVersusJoinDraft = Omit<RpgVersusJoinRequest, "sessionId">;
@@ -15,7 +16,7 @@ export class RpgBattleSocket {
     onError: (message: string) => void,
     onStatus?: (status: "connecting" | "reconnecting" | "connected", message: string) => void
   ): Promise<void> {
-    const serverUrl = import.meta.env.VITE_GAME_SERVER_URL ?? "http://localhost:8787";
+    const serverUrl = gameServerUrl();
     this.manualDisconnect = false;
     this.socket = io(serverUrl, {
       transports: ["websocket"],

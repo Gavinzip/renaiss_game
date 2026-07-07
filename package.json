@@ -35,6 +35,8 @@
     "rpg:visual-review": "tsx tools/render_rpg_visual_review.ts",
     "arena:audit": "tsx tools/audit_arena_combat.ts",
     "arena:gameplay-audit": "tsx tools/audit_arena_gameplay.ts",
+    "deploy:asset-audit": "node tools/audit_static_assets.mjs",
+    "deploy:r2-assets": "node tools/upload_r2_assets.mjs",
     "map:editor-playtest": "tsx tools/playtest_map_editor.ts",
     "visual:movement": "tsx tools/render_arena_movement_review.ts",
     "visual:warrior-fx": "tsx tools/render_warrior_action_fx_review.ts",

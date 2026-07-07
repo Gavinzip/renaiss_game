@@ -8,7 +8,8 @@ from PIL import Image, ImageDraw, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / "apps" / "client" / "public" / "assets" / "generated"
-CLASS_SPRITES_SOURCE = ASSET_DIR / "class-sprites-source.png"
+SOURCE_ASSET_DIR = ROOT / "tools" / "assets" / "generated-sources"
+CLASS_SPRITES_SOURCE = SOURCE_ASSET_DIR / "class-sprites-source.png"
 CLASS_SPRITES = ASSET_DIR / "class-sprites.png"
 OUTPUT = ASSET_DIR / "warrior-attack-sprites.png"
 

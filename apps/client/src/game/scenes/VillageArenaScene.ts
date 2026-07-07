@@ -58,6 +58,7 @@ import { useHudStore } from "../../state/hudStore";
 import { buildRuntimeTextures } from "../assets/runtimeTextures";
 import { getHealthPackVariant } from "../assets/healthPackVariants";
 import { generatedAssetPath } from "../assets/generatedAssets";
+import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
 
 interface PlayerView {
   container: Phaser.GameObjects.Container;
@@ -228,6 +229,7 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   preload() {
+    if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
     this.load.image("gameConcept", generatedAssetPath("game-concept"));
     this.load.image("classSprites", generatedAssetPath("class-sprites"));
     this.load.image("villageAssets", generatedAssetPath("village-assets"));

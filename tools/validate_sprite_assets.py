@@ -474,7 +474,7 @@ def validate_class_sprites() -> list[str]:
 
 
 def validate_mage_source_crop_coverage() -> list[str]:
-    path = ASSET_DIR / "class-sprites-source.png"
+    path = ROOT / "tools" / "assets" / "generated-sources" / "class-sprites-source.png"
     if not path.exists():
         return [f"class-sprites-source: missing required source {path}"]
 

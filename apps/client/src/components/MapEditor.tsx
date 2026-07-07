@@ -552,6 +552,7 @@ async function loadEditorTextures(): Promise<TextureCache> {
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
+    image.crossOrigin = "anonymous";
     image.onload = () => resolve(image);
     image.onerror = () => reject(new Error(`Failed to load ${src}`));
     image.src = src;

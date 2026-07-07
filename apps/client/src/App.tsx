@@ -23,6 +23,7 @@ import { XLoginGate } from "./components/XLoginGate";
 import type { XAuthUser } from "./api/auth";
 import { getSkillIconPosition, type SkillIconSlot } from "./game/assets/crops";
 import { generatedAssetPath } from "./game/assets/generatedAssets";
+import { installStaticAssetCssVariables, staticAssetUrl } from "./game/assets/staticAssets";
 import { createGame } from "./game/createGame";
 import { createRpgGame } from "./game/createRpgGame";
 import { isMapPreviewMode, loadStoredMapDraftProps } from "./game/mapDraft";
@@ -36,6 +37,10 @@ import { ArenaI18nProvider, ARENA_LANGUAGES, useArenaI18n } from "./i18n/arena";
 const SKILL_ICON_SHEET = `url("${generatedAssetPath("skill-icons")}")`;
 
 export function App() {
+  useEffect(() => {
+    installStaticAssetCssVariables();
+  }, []);
+
   return (
     <ArenaI18nProvider>
       <XLoginGate>{(session) => <GameApp authUser={session.user} />}</XLoginGate>
@@ -172,7 +177,7 @@ function StartPanel({ authUser }: { authUser: XAuthUser }) {
     <section className="start-panel" aria-label={t.ui.enterArena}>
       <div className="start-copy">
         <div className="start-brand-row">
-          <img className="start-brand-logo" src="/assets/generated/vinci-favicon.png" alt="" />
+          <img className="start-brand-logo" src={staticAssetUrl("/assets/generated/vinci-favicon.png")} alt="" />
           <div>
             <span>{t.ui.arenaEyebrow}</span>
             <h1>{t.ui.title}</h1>

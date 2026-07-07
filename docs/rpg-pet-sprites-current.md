@@ -15,7 +15,7 @@ Expected SHA-256:
 
 Important notes:
 
-- `rpg-pet-source-v2.png` is not the current approved pet art direction.
+- `tools/assets/generated-sources/rpg-pet-source-v2.png` is not the current approved pet art direction.
 - Do not replace the approved roundbird sheet with the legacy generated source-v2 pets.
 - `pnpm assets:pets` is intentionally wired to copy the approved v15 roundbird sheet into the runtime asset path.
 - If feet or lower body look cropped, do not patch feet onto a clipped body. Rebuild from the raw full-body source and preserve bottom-center anchoring.

@@ -1,11 +1,12 @@
 import type { RoundState } from "@renaiss-game/shared";
+import { staticAssetUrl } from "../game/assets/staticAssets";
 import { useArenaI18n } from "../i18n/arena";
 
 export const ROUND_REWARDS = [
-  { id: "round-reward-1", src: "/assets/rewards/round-reward-1.webp" },
-  { id: "round-reward-2", src: "/assets/rewards/round-reward-2.webp" },
-  { id: "round-reward-3", src: "/assets/rewards/round-reward-3.webp" },
-  { id: "round-reward-4", src: "/assets/rewards/round-reward-4.webp" }
+  { id: "round-reward-1", src: staticAssetUrl("/assets/rewards/round-reward-1.webp") },
+  { id: "round-reward-2", src: staticAssetUrl("/assets/rewards/round-reward-2.webp") },
+  { id: "round-reward-3", src: staticAssetUrl("/assets/rewards/round-reward-3.webp") },
+  { id: "round-reward-4", src: staticAssetUrl("/assets/rewards/round-reward-4.webp") }
 ] as const;
 
 interface RoundRewardsProps {

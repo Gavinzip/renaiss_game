@@ -291,6 +291,9 @@ function checkTurretGroundingContract(): ArenaAuditCheck {
   const vfxSource = readFileSync(resolve(ROOT, "apps/client/src/game/assets/vfxManifest.ts"), "utf8");
   const errors: string[] = [];
 
+  if (!objectPipelineSource.includes('SOURCE_DIR = ROOT / "tools" / "assets" / "generated-sources" / "source"')) {
+    errors.push("Turret source art must stay outside public/dist under tools/assets/generated-sources/source.");
+  }
   if (!objectPipelineSource.includes('TURRET_BASE_SOURCE = SOURCE_DIR / "turret-base-alpha-v2.png"')) {
     errors.push("Turret base must come from a complete standalone base source, not a hard crop from the combined turret.");
   }
@@ -580,8 +583,14 @@ function checkPixelHudSkinContract(): ArenaAuditCheck {
   if (!cssSource.includes(".start-copy") || !cssSource.includes(".class-stage") || !cssSource.includes(".class-command")) {
     errors.push("Start/class selection UI should share the pixel panel treatment with in-game HUD.");
   }
-  if (!appSource.includes('src="/assets/generated/vinci-favicon.png"') || !indexSource.includes('/assets/generated/vinci-favicon.png')) {
-    errors.push("Start panel brand mark and app favicon should use the Vinci World favicon asset.");
+  const appUsesVinciFavicon =
+    appSource.includes('src="/assets/generated/vinci-favicon.png"') ||
+    appSource.includes('staticAssetUrl("/assets/generated/vinci-favicon.png")');
+  const loginUsesVinciFavicon =
+    indexSource.includes('/assets/generated/vinci-favicon.png') ||
+    indexSource.includes('staticAssetUrl("/assets/generated/vinci-favicon.png")');
+  if (!appUsesVinciFavicon || !loginUsesVinciFavicon) {
+    errors.push("Start panel brand mark and login favicon should use the Vinci World favicon asset through the static asset helper.");
   }
   if (!cssSource.includes("@media (min-width: 761px) and (max-width: 1120px)") || !cssSource.includes("grid-template-columns: minmax(230px, 0.82fr)")) {
     errors.push("Desktop/tablet-width start panel should stay as a multi-column game menu instead of collapsing into a tall scrollable panel.");

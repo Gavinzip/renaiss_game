@@ -9,10 +9,11 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / "apps" / "client" / "public" / "assets" / "generated"
-SOURCE = ASSET_DIR / "class-sprites-source.png"
+SOURCE_ASSET_DIR = ROOT / "tools" / "assets" / "generated-sources"
+SOURCE = SOURCE_ASSET_DIR / "class-sprites-source.png"
 OUTPUT = ASSET_DIR / "class-sprites.png"
-MAGE_FRONT_REPAIR_SOURCE = ASSET_DIR / "mage-front-repair-source.png"
-MAGE_SIDE_WALK_GENERATED_SOURCE = ASSET_DIR / "source" / "mage-side-walk-generated-source.png"
+MAGE_FRONT_REPAIR_SOURCE = SOURCE_ASSET_DIR / "mage-front-repair-source.png"
+MAGE_SIDE_WALK_GENERATED_SOURCE = SOURCE_ASSET_DIR / "source" / "mage-side-walk-generated-source.png"
 
 CLASS_ROWS = {
     "warrior": 36,

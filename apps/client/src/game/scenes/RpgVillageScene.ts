@@ -4,6 +4,7 @@ import { copyTexture, makeMatteTransparent } from "../assets/chromaKey";
 import { ENV_CROPS, ENV_TEXTURES } from "../assets/crops";
 import { buildRuntimeTextures } from "../assets/runtimeTextures";
 import { generatedAssetPath } from "../assets/generatedAssets";
+import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
 import { RPG_PET_SPRITE_FRAME, RPG_PET_SPRITE_ROW, rpgPetAnimationFrameIndexes } from "../assets/rpgPetSprites";
 import { renderVillageMap } from "../render/villageMap";
 import {
@@ -76,6 +77,7 @@ export class RpgVillageScene extends Phaser.Scene {
   }
 
   preload() {
+    if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
     this.load.image("classSprites", generatedAssetPath("class-sprites"));
     this.load.image("villageAssets", generatedAssetPath("village-assets"));
     this.load.image("arenaDecals", generatedAssetPath("arena-decals"));

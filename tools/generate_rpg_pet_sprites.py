@@ -12,9 +12,10 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / "apps" / "client" / "public" / "assets" / "generated"
+SOURCE_ASSET_DIR = ROOT / "tools" / "assets" / "generated-sources"
 PET_OUT = ASSET_DIR / "rpg-pet-sprites.png"
 ARENA_OUT = ASSET_DIR / "rpg-battle-arena.png"
-PET_SOURCE = ASSET_DIR / "rpg-pet-source-v2.png"
+PET_SOURCE = SOURCE_ASSET_DIR / "rpg-pet-source-v2.png"
 APPROVED_ROUNDBIRD_PET_SHEET = ROOT / "tools" / "assets" / "pets" / "rpg-pet-sprites-roundbird-v15-side-fullbody.png"
 
 CELL = 128

@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { getClassFrameCrop } from "../assets/crops";
 import { generatedAssetPath } from "../assets/generatedAssets";
+import { shouldLoadStaticAssetsWithCors, staticAssetUrl } from "../assets/staticAssets";
 import {
   getVillagePlayerAnimationFrame,
   getVillagePlayerStepPose,
@@ -36,9 +37,10 @@ export class RpgHouseScene extends Phaser.Scene {
   }
 
   preload() {
+    if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
     this.load.image("classSprites", generatedAssetPath("class-sprites"));
-    this.load.image("vinciShowroomEntity", "/assets/vinci-world/showroom/standard/standard_entity.webp");
-    this.load.image("vinciShowroomProps", "/assets/vinci-world/showroom/standard/standard_props.webp");
+    this.load.image("vinciShowroomEntity", staticAssetUrl("/assets/vinci-world/showroom/standard/standard_entity.webp"));
+    this.load.image("vinciShowroomProps", staticAssetUrl("/assets/vinci-world/showroom/standard/standard_props.webp"));
   }
 
   create() {

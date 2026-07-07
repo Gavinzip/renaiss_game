@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { fetchXAuthSession, logoutXSession, xLoginStartUrl, type XAuthSession } from "../api/auth";
+import { staticAssetUrl } from "../game/assets/staticAssets";
 
 interface XLoginGateProps {
   children: ReactNode | ((session: XAuthSession & { authenticated: true; user: NonNullable<XAuthSession["user"]> }) => ReactNode);
@@ -99,7 +100,7 @@ function XLoginScreen({
   return (
     <main className="x-login-page" aria-label="Vinci World X login">
       <div className="x-login-brand">
-        <img src="/assets/generated/vinci-favicon.png" alt="" />
+        <img src={staticAssetUrl("/assets/generated/vinci-favicon.png")} alt="" />
         <div>
           <span>incubated by renaiss</span>
           <h1>VINCI WORLD</h1>

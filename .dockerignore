@@ -1,0 +1,17 @@
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+apps/client/dist
+apps/server/dist
+dist
+.vite
+.git
+.gitignore
+.DS_Store
+*.log
+*.tsbuildinfo
+__pycache__
+*.pyc
+.env
+.env.*
+!.env.example

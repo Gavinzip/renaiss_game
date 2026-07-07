@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageEnhance
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / "apps" / "client" / "public" / "assets" / "generated"
-SOURCE_DIR = ASSET_DIR / "source"
+SOURCE_DIR = ROOT / "tools" / "assets" / "generated-sources" / "source"
 SHEET = ASSET_DIR / "combat-objects.png"
 TURRET_BASE_SOURCE = SOURCE_DIR / "turret-base-alpha-v2.png"
 TURRET_HEAD_SOURCE = SOURCE_DIR / "turret-head-alpha-v2.png"

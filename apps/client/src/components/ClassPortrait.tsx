@@ -24,6 +24,7 @@ export function ClassPortrait({ classId, frame = 0 }: ClassPortraitProps) {
 
     let disposed = false;
     const image = new Image();
+    image.crossOrigin = "anonymous";
     image.decoding = "async";
     image.onload = () => {
       if (disposed) {
