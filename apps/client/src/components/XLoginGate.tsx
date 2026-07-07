@@ -102,7 +102,7 @@ function XLoginScreen({
       <div className="x-login-brand">
         <img src={staticAssetUrl("/assets/generated/vinci-favicon.png")} alt="" />
         <div>
-          <span>incubated by renaiss</span>
+          <span>renaiss</span>
           <h1>VINCI WORLD</h1>
         </div>
       </div>

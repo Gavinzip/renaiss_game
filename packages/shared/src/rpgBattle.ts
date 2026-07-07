@@ -9,6 +9,7 @@ export interface RpgRosterPet {
 }
 
 const MAX_ENERGY = 10;
+type BattleSide = "left" | "right";
 
 export function getRpgBattleEnergyForTurn(turn: number) {
   return Math.min(MAX_ENERGY, Math.max(1, Math.floor(turn)));
@@ -36,7 +37,7 @@ function findPetDefinition(definitionId: string) {
   return definition;
 }
 
-function createBattlePet(definition: RpgPetDefinition, rosterPet: RpgRosterPet, side: "left" | "right", slot: 0 | 1 | 2): RpgBattlePetState {
+function createBattlePet(definition: RpgPetDefinition, rosterPet: RpgRosterPet, side: BattleSide, slot: 0 | 1 | 2): RpgBattlePetState {
   const moveIds = rosterPet.moveIds && rosterPet.moveIds.length > 0 ? rosterPet.moveIds : definition.startingMoveIds;
   return {
     id: `${side}_${slot}_${definition.id}`,
@@ -67,6 +68,7 @@ export function createRpgBattleState(id: string, leftRoster: readonly RpgRosterP
   return {
     id,
     turn: 1,
+    activeSide: "left",
     phase: "selecting",
     left: leftRoster.slice(0, 3).map((pet, index) => createBattlePet(findPetDefinition(pet.definitionId), pet, "left", index as 0 | 1 | 2)),
     right: rightRoster.slice(0, 3).map((pet, index) => createBattlePet(findPetDefinition(pet.definitionId), pet, "right", index as 0 | 1 | 2)),
@@ -83,9 +85,13 @@ function allPets(state: RpgBattleState) {
   return [...state.left, ...state.right];
 }
 
-export function getRpgBattleTurnOrder(state: RpgBattleState) {
+export function getRpgBattleActiveSide(state: RpgBattleState): BattleSide {
+  return state.activeSide ?? "left";
+}
+
+export function getRpgBattleTurnOrder(state: RpgBattleState, side?: BattleSide) {
   return allPets(state)
-    .filter((pet) => !pet.defeated && pet.hp > 0)
+    .filter((pet) => !pet.defeated && pet.hp > 0 && (!side || pet.side === side))
     .sort((a, b) => {
       if (b.speed !== a.speed) return b.speed - a.speed;
       // The right-seat versus view swaps display sides, so tie breaks must not depend on presentation side.
@@ -94,16 +100,16 @@ export function getRpgBattleTurnOrder(state: RpgBattleState) {
 }
 
 export function getRpgCurrentTurnActor(state: RpgBattleState) {
-  const order = getRpgBattleTurnOrder(state);
+  const order = getRpgBattleTurnOrder(state, getRpgBattleActiveSide(state));
   if (order.length === 0) return null;
-  return order[(state.turn - 1) % order.length] ?? order[0];
+  return order[0] ?? null;
 }
 
-function teamFor(state: RpgBattleState, side: "left" | "right") {
+function teamFor(state: RpgBattleState, side: BattleSide) {
   return side === "left" ? state.left : state.right;
 }
 
-function opponentsFor(state: RpgBattleState, side: "left" | "right") {
+function opponentsFor(state: RpgBattleState, side: BattleSide) {
   return side === "left" ? state.right : state.left;
 }
 
@@ -173,6 +179,14 @@ function endTurnPetUpdate(pet: RpgBattlePetState) {
 function refreshEnergyForTurn(state: RpgBattleState) {
   const energy = getRpgBattleEnergyForTurn(state.turn);
   for (const pet of allPets(state)) pet.energy = pet.defeated ? 0 : energy;
+}
+
+function setTeamEnergy(state: RpgBattleState, side: BattleSide, energy: number) {
+  for (const pet of teamFor(state, side)) pet.energy = pet.defeated || pet.hp <= 0 ? 0 : energy;
+}
+
+function appendPhaseLogs(state: RpgBattleState, side: BattleSide, entries: readonly RpgBattleLogEntry[]) {
+  state.log.push(...entries.map((entry) => ({ ...entry, phaseSide: entry.phaseSide ?? side })));
 }
 
 function applyStatus(target: RpgBattlePetState, effect: RpgMoveEffect, sourceMove: RpgMove, turn: number): RpgBattleLogEntry[] {
@@ -310,36 +324,69 @@ function resolveWinner(state: RpgBattleState) {
 }
 
 export function resolveRpgBattleTurn(state: RpgBattleState, actions: readonly RpgBattleAction[]): RpgBattleState {
+  const activeSide = getRpgBattleActiveSide(state);
+  const roundEnergy = getRpgBattleEnergyForTurn(state.turn);
   const next: RpgBattleState = {
     ...state,
+    activeSide,
     phase: "resolving",
     left: state.left.map((pet) => ({ ...pet, statuses: cloneStatuses(pet.statuses) })),
     right: state.right.map((pet) => ({ ...pet, statuses: cloneStatuses(pet.statuses) })),
-    log: [...state.log, log(state.turn, { type: "turnStart", message: `第 ${state.turn} 回合開始。` })]
+    log: [...state.log]
   };
 
-  for (const pet of allPets(next)) next.log.push(...tickStartStatuses(pet, next.turn));
-
-  const currentActor = getRpgCurrentTurnActor(next);
-  const sortedActions = currentActor
-    ? actions.filter((action) => action.actorId === currentActor.id).slice(0, 1).sort((a, b) => actionSortValue(next, b) - actionSortValue(next, a))
-    : [];
-  for (const action of sortedActions) {
-    if (resolveWinner(next)) break;
-    next.log.push(...executeAction(next, action));
+  if (activeSide === "left") {
+    appendPhaseLogs(next, activeSide, [log(state.turn, { type: "turnStart", message: `第 ${state.turn} 回合開始。` })]);
+    for (const pet of allPets(next)) appendPhaseLogs(next, activeSide, tickStartStatuses(pet, next.turn));
   }
 
-  for (const pet of allPets(next)) endTurnPetUpdate(pet);
+  let remainingEnergy = roundEnergy;
+  setTeamEnergy(next, activeSide, remainingEnergy);
+  const usedActors = new Set<string>();
+  const sortedActions = actions
+    .filter((action) => {
+      const actor = allPets(next).find((pet) => pet.id === action.actorId);
+      if (!actor || actor.side !== activeSide || actor.defeated || actor.hp <= 0 || usedActors.has(actor.id)) return false;
+      usedActors.add(actor.id);
+      return true;
+    })
+    .sort((a, b) => actionSortValue(next, b) - actionSortValue(next, a));
+
+  for (const action of sortedActions) {
+    if (resolveWinner(next)) break;
+    const actor = allPets(next).find((pet) => pet.id === action.actorId);
+    const move = getRpgMoveById(action.moveId);
+    if (!actor || !move) {
+      appendPhaseLogs(next, activeSide, [log(next.turn, { type: "invalid", actorId: action.actorId, moveId: action.moveId, message: "選招資料不完整。" })]);
+      continue;
+    }
+    if (move.energyCost > remainingEnergy) {
+      appendPhaseLogs(next, activeSide, [log(next.turn, { type: "invalid", actorId: actor.id, moveId: move.id, message: `${actor.name} 的 ${move.name} 超出本回合剩餘能量。` })]);
+      continue;
+    }
+    setTeamEnergy(next, activeSide, remainingEnergy);
+    const energyBeforeAction = actor.energy;
+    appendPhaseLogs(next, activeSide, executeAction(next, action));
+    remainingEnergy = Math.max(0, remainingEnergy - Math.max(0, energyBeforeAction - actor.energy));
+    setTeamEnergy(next, activeSide, remainingEnergy);
+  }
 
   const winner = resolveWinner(next);
   if (winner) {
     next.winner = winner;
     next.phase = "finished";
-    next.log.push(log(next.turn, { type: "victory", message: winner === "draw" ? "雙方同時失去戰力。" : `${winner === "left" ? "左方" : "右方"}獲勝。` }));
+    appendPhaseLogs(next, activeSide, [log(next.turn, { type: "victory", message: winner === "draw" ? "雙方同時失去戰力。" : `${winner === "left" ? "左方" : "右方"}獲勝。` })]);
   } else {
     next.phase = "selecting";
-    next.turn += 1;
-    refreshEnergyForTurn(next);
+    if (activeSide === "left") {
+      next.activeSide = "right";
+      setTeamEnergy(next, "right", roundEnergy);
+    } else {
+      for (const pet of allPets(next)) endTurnPetUpdate(pet);
+      next.turn += 1;
+      next.activeSide = "left";
+      refreshEnergyForTurn(next);
+    }
   }
   return next;
 }
@@ -355,7 +402,7 @@ function scoreMoveForTarget(actor: RpgBattlePetState, target: RpgBattlePetState,
   return damage + statusValue + (target.hp <= damage ? 24 : 0);
 }
 
-export function createAiRpgActionForActor(state: RpgBattleState, actorId: string): RpgBattleAction | null {
+export function createAiRpgActionForActor(state: RpgBattleState, actorId: string, maxEnergy?: number): RpgBattleAction | null {
   const actor = allPets(state).find((pet) => pet.id === actorId);
   if (!actor || actor.defeated || actor.hp <= 0) return null;
   const enemies = living(opponentsFor(state, actor.side));
@@ -363,7 +410,7 @@ export function createAiRpgActionForActor(state: RpgBattleState, actorId: string
   let best: { move: RpgMove; targetId?: string; score: number } | null = null;
   for (const moveId of actor.moveIds) {
     const move = getRpgMoveById(moveId);
-    if (!move || actor.energy < move.energyCost) continue;
+    if (!move || actor.energy < move.energyCost || (maxEnergy !== undefined && move.energyCost > maxEnergy)) continue;
     if (move.target === "singleAlly") {
       const target = allies.slice().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
       const healScore = target ? (1 - target.hp / target.maxHp) * 42 : 0;
@@ -381,12 +428,16 @@ export function createAiRpgActionForActor(state: RpgBattleState, actorId: string
   return best ? { actorId: actor.id, moveId: best.move.id, targetId: best.targetId } : null;
 }
 
-export function createAiRpgActions(state: RpgBattleState, side: "left" | "right"): RpgBattleAction[] {
-  const actors = living(teamFor(state, side));
+export function createAiRpgActions(state: RpgBattleState, side: BattleSide, energyBudget = getRpgBattleEnergyForTurn(state.turn)): RpgBattleAction[] {
+  const actors = living(teamFor(state, side)).sort((a, b) => b.speed - a.speed);
   const actions: RpgBattleAction[] = [];
+  let remainingEnergy = energyBudget;
   for (const actor of actors) {
-    const action = createAiRpgActionForActor(state, actor.id);
+    const action = createAiRpgActionForActor(state, actor.id, remainingEnergy);
     if (action) actions.push(action);
+    const move = action ? getRpgMoveById(action.moveId) : null;
+    if (move) remainingEnergy = Math.max(0, remainingEnergy - move.energyCost);
+    if (remainingEnergy <= 0) break;
   }
   return actions;
 }

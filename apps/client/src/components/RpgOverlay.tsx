@@ -21,7 +21,7 @@ import {
   type RpgSkillTicket
 } from "@renaiss-game/shared";
 import type { CSSProperties, RefObject } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ClassPortrait } from "./ClassPortrait";
 import { RpgBattleVfx, buildBattleReplaySequence, floatingEntriesForPet, type RpgBattleFloatingEntry, type RpgBattleReplay } from "./RpgBattleVfx";
 import { RpgPetSprite } from "./RpgPetSprite";
@@ -57,7 +57,32 @@ type CardRevealState = {
 type WalletTier = (typeof WALLET_TIER_ORDER)[number];
 
 function replayStepDuration(replay: RpgBattleReplay) {
-  return Math.max(880, Math.min(1320, replay.move.animation.frameCount * 78));
+  return Math.max(1180, Math.min(1880, replay.move.animation.frameCount * 112));
+}
+
+type BattleActionMotion = "idle" | "melee" | "ranged" | "cast" | "support";
+
+function clampNumber(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function actionMotionForMove(move: RpgMove): BattleActionMotion {
+  if (move.target === "self" || move.target === "singleAlly" || move.target === "allAllies" || move.power <= 0) return "support";
+  if (move.animation.style === "strike") return "melee";
+  if (move.animation.style === "projectile" || move.animation.style === "beam" || move.animation.style === "rain" || move.animation.style === "wave") return "ranged";
+  return "cast";
+}
+
+function attackMotionStyle(replay: RpgBattleReplay | null, petId: string): CSSProperties {
+  if (!replay || replay.actorId !== petId || actionMotionForMove(replay.move) !== "melee") return {};
+  const targetPoint = replay.targetPoints.find((point) => point.id !== petId) ?? replay.targetPoints[0];
+  if (!targetPoint) return {};
+  const lungeX = clampNumber((targetPoint.x - replay.actorPoint.x) * 7.6, -350, 350);
+  const lungeY = clampNumber((targetPoint.y - replay.actorPoint.y) * 3.2, -120, 120);
+  return {
+    "--attack-lunge-x": `${lungeX}px`,
+    "--attack-lunge-y": `${lungeY}px`
+  } as CSSProperties;
 }
 
 export function RpgOverlay() {
@@ -166,14 +191,9 @@ function ElementFilter({ value, onChange }: { value: RpgElement | "any"; onChang
 function ShopPanel() {
   const [element, setElement] = useState<RpgElement | "any">("any");
   const [activeDraw, setActiveDraw] = useState<RpgDrawHistoryEntry | null>(null);
-  const [equipPetId, setEquipPetId] = useState(RPG_STARTER_PETS[0]?.id ?? "");
   const drawSkill = useRpgStore((state) => state.drawSkill);
   const ticketInventory = useRpgStore((state) => state.ticketInventory);
   const drawHistory = useRpgStore((state) => state.drawHistory);
-  const skillInventory = useRpgStore((state) => state.skillInventory);
-  const petMoveLoadouts = useRpgStore((state) => state.petMoveLoadouts);
-  const equipMoveToPet = useRpgStore((state) => state.equipMoveToPet);
-  const unequipMoveFromPet = useRpgStore((state) => state.unequipMoveFromPet);
   const battleNotice = useRpgStore((state) => state.battleNotice);
   const preferredElement = element === "any" ? undefined : element;
   const currentDraw = activeDraw ?? drawHistory[0] ?? null;
@@ -220,15 +240,6 @@ function ShopPanel() {
         })}
       </div>
 
-      <SkillLibraryPanel
-        equipPetId={equipPetId}
-        setEquipPetId={setEquipPetId}
-        skillInventory={skillInventory}
-        petMoveLoadouts={petMoveLoadouts}
-        equipMoveToPet={equipMoveToPet}
-        unequipMoveFromPet={unequipMoveFromPet}
-      />
-
       {battleNotice ? <p className="rpg-room-message rpg-shop-message">{battleNotice}</p> : null}
 
       <div className="rpg-draw-results" aria-live="polite">
@@ -270,23 +281,14 @@ function ProfilePanel() {
   const walletCardsStale = useRpgStore((state) => state.walletCardsStale);
   const walletCardsStaleReason = useRpgStore((state) => state.walletCardsStaleReason);
   const fetchWalletCards = useRpgStore((state) => state.fetchWalletCards);
-  const skillInventory = useRpgStore((state) => state.skillInventory);
-  const petMoveLoadouts = useRpgStore((state) => state.petMoveLoadouts);
-  const equipMoveToPet = useRpgStore((state) => state.equipMoveToPet);
-  const unequipMoveFromPet = useRpgStore((state) => state.unequipMoveFromPet);
   const cardSkillBindings = useRpgStore((state) => state.cardSkillBindings);
-  const petCardLoadouts = useRpgStore((state) => state.petCardLoadouts);
   const drawWalletCardSkill = useRpgStore((state) => state.drawWalletCardSkill);
-  const equipCardToPet = useRpgStore((state) => state.equipCardToPet);
-  const unequipCardFromPet = useRpgStore((state) => state.unequipCardFromPet);
   const battleNotice = useRpgStore((state) => state.battleNotice);
-  const [equipPetId, setEquipPetId] = useState(RPG_STARTER_PETS[0]?.id ?? "");
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [cardReveal, setCardReveal] = useState<CardRevealState | null>(null);
   const [draftName, setDraftName] = useState(playerName);
   const [activeWalletTier, setActiveWalletTier] = useState<WalletTier>("high");
   const [bulkDrawProgress, setBulkDrawProgress] = useState<{ done: number; total: number } | null>(null);
-  const skillEditorRef = useRef<HTMLElement | null>(null);
   useEffect(() => setDraftName(playerName), [playerName]);
   useEffect(() => {
     void fetchWalletCards();
@@ -367,20 +369,13 @@ function ProfilePanel() {
     }
     window.setTimeout(() => setBulkDrawProgress(null), 650);
   };
-  const openPetSkillEditor = (petId: string) => {
-    setEquipPetId(petId);
-    window.setTimeout(() => {
-      skillEditorRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }, 0);
-  };
-
   return (
     <aside className="rpg-panel rpg-profile-card-panel rpg-backpack-panel" aria-label="個人資料與錢包卡片">
       <header>
         <Cards size={24} weight="fill" />
         <div>
           <strong>收藏櫃</strong>
-          <span>卡牌、技能、寵物插卡</span>
+          <span>卡片展示、技能抽取與效果查看</span>
         </div>
         <PanelCloseButton />
       </header>
@@ -423,7 +418,7 @@ function ProfilePanel() {
           <em>已綁定</em>
         </article>
         <article>
-          <span>天賦</span>
+          <span>預設</span>
           <strong>{freeSkillTotal}</strong>
           <em>寵物自帶</em>
         </article>
@@ -508,6 +503,7 @@ function ProfilePanel() {
               </div>
             ) : (
               <div className="rpg-wallet-cabinet-shell">
+                <div className="rpg-wallet-shelf-toolbar">
                 <nav className="rpg-wallet-tier-tabs" aria-label="卡牌階級">
                   {walletTierGroups.map((group) => (
                     <button
@@ -524,16 +520,16 @@ function ProfilePanel() {
                     </button>
                   ))}
                 </nav>
-                {selectedWalletTierGroup ? (
-                  <section className={`rpg-wallet-tier-section rpg-wallet-shelf is-${selectedWalletTierGroup.tier}`}>
-                    <header>
-                      <div>
-                        <strong>{walletTierLabel(selectedWalletTierGroup.tier)}</strong>
-                        <span>{selectedWalletTierGroup.cards.length} 張 / {formatUsd(selectedWalletTierGroup.totalFMV)}</span>
-                      </div>
+                  {selectedWalletTierGroup ? (
+                    <div className={`rpg-wallet-shelf-summary is-${selectedWalletTierGroup.tier}`}>
+                      <strong>{walletTierLabel(selectedWalletTierGroup.tier)}</strong>
+                      <span>{selectedWalletTierGroup.cards.length} 張 / {formatUsd(selectedWalletTierGroup.totalFMV)}</span>
                       <em>{walletTierRangeLabel(selectedWalletTierGroup.tier)}</em>
-                    </header>
-                    <div className="rpg-wallet-card-grid">
+                    </div>
+                  ) : null}
+                </div>
+                {selectedWalletTierGroup ? (
+                    <div className={`rpg-wallet-card-grid rpg-wallet-shelf-grid is-${selectedWalletTierGroup.tier}`}>
                       {selectedWalletTierGroup.cards.map((card) => {
                         const tier = walletCardTier(card);
                         const cardElement = walletCardElement(card, walletCardElements);
@@ -586,7 +582,6 @@ function ProfilePanel() {
                         );
                       })}
                     </div>
-                  </section>
                 ) : null}
               </div>
             )}
@@ -637,65 +632,6 @@ function ProfilePanel() {
               </div>
             )}
           </section>
-        </div>
-
-        <div className="rpg-cabinet-side-column">
-          <section className="rpg-free-skill-section" aria-label="基礎技能槽">
-        <header>
-          <strong>基礎技能槽</strong>
-          <span>自帶技能可替換，和卡片插槽分開</span>
-        </header>
-        <div className="rpg-free-skill-grid">
-          {RPG_STARTER_PETS.map((pet) => {
-            const meta = RPG_ELEMENT_META[pet.element];
-            const equippedBaseMoveIds = (petMoveLoadouts[pet.id] && petMoveLoadouts[pet.id].length > 0 ? petMoveLoadouts[pet.id] : pet.startingMoveIds).slice(0, RPG_MAX_EQUIPPED_MOVES);
-            return (
-              <button
-                key={pet.id}
-                type="button"
-                className={["rpg-pet-free-card", equipPetId === pet.id ? "is-selected" : ""].filter(Boolean).join(" ")}
-                style={{ "--element": meta.color, "--element-soft": meta.accent } as CSSProperties}
-                onClick={() => openPetSkillEditor(pet.id)}
-                aria-label={`編輯 ${pet.name} 技能`}
-              >
-                <RpgPetSprite element={pet.element} pose="idle" animate />
-                <div className="rpg-pet-free-title">
-                  <span>{meta.label} / 基礎槽</span>
-                  <strong>{pet.name}</strong>
-                  <em>{equipPetId === pet.id ? "正在編輯基礎" : "點擊編輯基礎"}</em>
-                </div>
-                <div className="rpg-pet-free-moves">
-                  {equippedBaseMoveIds.map((moveId) => {
-                    const move = getRpgMoveById(moveId);
-                    return move ? <SkillChip key={`${pet.id}-${move.id}`} move={move} /> : null;
-                  })}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <SkillLibraryPanel
-        title="基礎技能編輯"
-        description="免費天賦可直接換；抽到的同屬技能會列在候選區，不等於插卡。"
-        equipPetId={equipPetId}
-        setEquipPetId={setEquipPetId}
-        skillInventory={skillInventory}
-        petMoveLoadouts={petMoveLoadouts}
-        equipMoveToPet={equipMoveToPet}
-        unequipMoveFromPet={unequipMoveFromPet}
-      />
-
-      <CardEquipPanel
-        panelRef={skillEditorRef}
-        equipPetId={equipPetId}
-        setEquipPetId={setEquipPetId}
-        boundCards={ownedCards}
-        petCardLoadouts={petCardLoadouts}
-        equipCardToPet={equipCardToPet}
-        unequipCardFromPet={unequipCardFromPet}
-      />
         </div>
       </div>
     </aside>
@@ -873,6 +809,12 @@ function CardEquipPanel({
   unequipCardFromPet: (definitionId: string, cardId: string) => Promise<void>;
 }) {
   const pet = RPG_STARTER_PETS.find((candidate) => candidate.id === equipPetId) ?? RPG_STARTER_PETS[0];
+  const [selectedEquipCardId, setSelectedEquipCardId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSelectedEquipCardId(null);
+  }, [pet?.id]);
+
   if (!pet) return null;
 
   const petMeta = RPG_ELEMENT_META[pet.element];
@@ -884,13 +826,14 @@ function CardEquipPanel({
   const availableCards = boundCards
     .filter(({ move }) => move.element === pet.element)
     .sort((a, b) => a.move.tierIndex - b.move.tierIndex || a.move.energyCost - b.move.energyCost || a.card.name.localeCompare(b.card.name));
+  const selectedEquipCard = (selectedEquipCardId ? availableCards.find((candidate) => candidate.cardId === selectedEquipCardId) : null) ?? equippedCards[0] ?? availableCards[0] ?? null;
 
   return (
     <section ref={panelRef} className="rpg-card-equip-panel rpg-skill-library" aria-label="寵物卡片插槽" data-rpg-guide-target="card-equip">
       <header>
         <div>
           <strong>卡片插槽：{pet.name}</strong>
-          <span>{petMeta.label}屬性，這裡只放已綁定卡片技能；基礎技能在上方替換</span>
+          <span>{petMeta.label}屬性，點卡片看效果，右側按鈕負責插入或卸下</span>
         </div>
         <div className="rpg-library-pets" role="list" aria-label="選擇寵物">
           {RPG_STARTER_PETS.map((candidate) => (
@@ -911,13 +854,18 @@ function CardEquipPanel({
         {Array.from({ length: RPG_MAX_EQUIPPED_MOVES }).map((_, index) => {
           const equipped = equippedCards[index];
           return equipped ? (
-            <button key={equipped.cardId} type="button" className="rpg-equipped-card-slot is-filled" onClick={() => void unequipCardFromPet(pet.id, equipped.cardId)} title="卸下卡片">
-              {equipped.card.imageUrl ? <RpgPixelCardImage src={equipped.card.imageUrl} alt={equipped.card.name} /> : null}
-              <span>
-                <strong>{equipped.move.name}</strong>
-                <em>{equipped.card.pokemonName || equipped.card.name}</em>
-              </span>
-            </button>
+            <article key={equipped.cardId} className={["rpg-equipped-card-slot", "is-filled", selectedEquipCard?.cardId === equipped.cardId ? "is-selected" : ""].filter(Boolean).join(" ")}>
+              <button type="button" className="rpg-card-slot-preview" onClick={() => setSelectedEquipCardId(equipped.cardId)} title="查看卡片效果">
+                {equipped.card.imageUrl ? <RpgPixelCardImage src={equipped.card.imageUrl} alt={equipped.card.name} /> : null}
+                <span>
+                  <strong>{equipped.move.name}</strong>
+                  <em>{equipped.card.pokemonName || equipped.card.name}</em>
+                </span>
+              </button>
+              <button type="button" className="rpg-card-slot-action" onClick={() => void unequipCardFromPet(pet.id, equipped.cardId)}>
+                卸下
+              </button>
+            </article>
           ) : (
             <div key={`empty-${pet.id}-${index}`} className="rpg-equipped-card-slot is-empty">
               <b>{index + 1}</b>
@@ -937,18 +885,37 @@ function CardEquipPanel({
           availableCards.map(({ card, cardId, move }) => {
             const equipped = equippedCardIds.includes(cardId);
             return (
-              <button key={cardId} type="button" className={equipped ? "is-equipped" : ""} onClick={() => void (equipped ? unequipCardFromPet(pet.id, cardId) : equipCardToPet(pet.id, cardId))}>
-                {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : null}
-                <span>
-                  <strong>{move.name}</strong>
-                  <em>{card.pokemonName || card.name}</em>
-                </span>
-                <b>{equipped ? "已插" : "插入"}</b>
-              </button>
+              <article key={cardId} className={["rpg-card-equip-row", equipped ? "is-equipped" : "", selectedEquipCard?.cardId === cardId ? "is-selected" : ""].filter(Boolean).join(" ")}>
+                <button type="button" className="rpg-card-equip-preview" onClick={() => setSelectedEquipCardId(cardId)}>
+                  {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : null}
+                  <span>
+                    <strong>{move.name}</strong>
+                    <em>{card.pokemonName || card.name}</em>
+                  </span>
+                </button>
+                <button type="button" className="rpg-card-equip-action" onClick={() => void (equipped ? unequipCardFromPet(pet.id, cardId) : equipCardToPet(pet.id, cardId))}>
+                  {equipped ? "卸下" : "插入"}
+                </button>
+              </article>
             );
           })
         )}
       </div>
+      {selectedEquipCard ? (
+        <WalletCardSkillDetail
+          card={selectedEquipCard.card}
+          cardElement={selectedEquipCard.move.element}
+          boundMove={selectedEquipCard.move}
+          reveal={null}
+          onDraw={async () => undefined}
+          onIntroDone={() => undefined}
+        />
+      ) : (
+        <div className="rpg-card-equip-detail-empty">
+          <Cards size={20} weight="fill" />
+          <span>先在收藏櫃抽出技能，再回到這裡插入卡片。</span>
+        </div>
+      )}
     </section>
   );
 }
@@ -997,7 +964,7 @@ function SkillLibraryPanel({
       <header>
         <div>
           <strong>{title}</strong>
-          <span>{description ?? `${petMeta.label}屬性，天賦免費 / 卡片來自背包`}</span>
+          <span>{description ?? `${petMeta.label}屬性，預設技能免費 / 抽取技能來自背包`}</span>
         </div>
         <div className="rpg-library-pets" role="list" aria-label="選擇寵物">
           {RPG_STARTER_PETS.map((candidate) => (
@@ -1020,9 +987,9 @@ function SkillLibraryPanel({
           {equippedMoveIds.map((moveId) => {
             const move = getRpgMoveById(moveId);
             if (!move) return null;
-            const source = pet.startingMoveIds.includes(move.id) ? "天賦" : "卡片";
+            const source = pet.startingMoveIds.includes(move.id) ? "預設" : "卡片";
             return (
-              <button key={`${pet.id}-${move.id}`} type="button" className={source === "天賦" ? "is-free-skill" : "is-card-skill"} onClick={() => unequipMoveFromPet(pet.id, move.id)} title="卸下招式">
+              <button key={`${pet.id}-${move.id}`} type="button" className={source === "預設" ? "is-free-skill" : "is-card-skill"} onClick={() => unequipMoveFromPet(pet.id, move.id)} title="卸下招式">
                 <SkillChip move={move} />
                 <span className="rpg-move-source-tag">{source}</span>
               </button>
@@ -1043,7 +1010,7 @@ function SkillLibraryPanel({
             return (
               <button key={move.id} type="button" className={[equipped ? "is-equipped" : "", source === "free" ? "is-free-skill" : "is-card-skill"].filter(Boolean).join(" ")} onClick={() => equipMoveToPet(pet.id, move.id)} disabled={equipped}>
                 <SkillChip move={move} />
-                <em>{source === "free" ? "免費" : `x${count}`}</em>
+                <em>{source === "free" ? "預設" : `x${count}`}</em>
               </button>
             );
           })
@@ -1171,7 +1138,11 @@ function GymPanel() {
   const walletCards = useRpgStore((state) => state.walletCards);
   const cardSkillBindings = useRpgStore((state) => state.cardSkillBindings);
   const petCardLoadouts = useRpgStore((state) => state.petCardLoadouts);
+  const skillInventory = useRpgStore((state) => state.skillInventory);
+  const petMoveLoadouts = useRpgStore((state) => state.petMoveLoadouts);
   const fetchWalletCards = useRpgStore((state) => state.fetchWalletCards);
+  const equipMoveToPet = useRpgStore((state) => state.equipMoveToPet);
+  const unequipMoveFromPet = useRpgStore((state) => state.unequipMoveFromPet);
   const equipCardToPet = useRpgStore((state) => state.equipCardToPet);
   const unequipCardFromPet = useRpgStore((state) => state.unequipCardFromPet);
   const battleNotice = useRpgStore((state) => state.battleNotice);
@@ -1226,14 +1197,26 @@ function GymPanel() {
         </div>
         <PartySelection editingPetId={showSkillEditor ? equipPetId : null} onEditPet={openPartySkillEditor} />
         {showSkillEditor ? (
-          <CardEquipPanel
-            equipPetId={equipPetId}
-            setEquipPetId={setEquipPetId}
-            boundCards={boundCards}
-            petCardLoadouts={petCardLoadouts}
-            equipCardToPet={equipCardToPet}
-            unequipCardFromPet={unequipCardFromPet}
-          />
+          <section className="rpg-gym-skill-workbench" aria-label="道館技能與卡片插槽">
+            <SkillLibraryPanel
+              title="預設技能"
+              description="調整寵物自帶招式；卡片技能在右側插槽裝備。"
+              equipPetId={equipPetId}
+              setEquipPetId={setEquipPetId}
+              skillInventory={skillInventory}
+              petMoveLoadouts={petMoveLoadouts}
+              equipMoveToPet={equipMoveToPet}
+              unequipMoveFromPet={unequipMoveFromPet}
+            />
+            <CardEquipPanel
+              equipPetId={equipPetId}
+              setEquipPetId={setEquipPetId}
+              boundCards={boundCards}
+              petCardLoadouts={petCardLoadouts}
+              equipCardToPet={equipCardToPet}
+              unequipCardFromPet={unequipCardFromPet}
+            />
+          </section>
         ) : null}
         <section className="rpg-ai-difficulty-selector" aria-label="AI 難度">
           <header>
@@ -1325,16 +1308,17 @@ function PartySelection({
                 <>
                   <RpgPetSprite element={pet.element} pose="idle" animate />
                   <b>{pet.name}</b>
-                  <em>{editingPetId === pet.id ? "技能編輯中" : meta?.label}</em>
+                  <em>{editingPetId === pet.id ? "卡槽編輯中" : meta?.label}</em>
                   {onEditPet ? (
                     <button
                       type="button"
                       className="rpg-party-slot-edit"
-                      title="編輯技能"
-                      aria-label={`編輯 ${pet.name} 技能`}
+                      data-rpg-guide-target="card-equip"
+                      title="編輯卡片插槽"
+                      aria-label={`編輯 ${pet.name} 卡片插槽`}
                       onClick={() => onEditPet(pet.id)}
                     >
-                      技能
+                      卡槽
                     </button>
                   ) : null}
                   <button
@@ -1377,7 +1361,7 @@ function PartySelection({
               <RpgPetSprite element={pet.element} pose="idle" animate />
               <span>{meta.label}</span>
               <strong>{pet.name}</strong>
-              <em>{editingPetId === pet.id ? "編輯技能" : selected ? PARTY_FORMATION_SLOTS[selectedIndex]?.label ?? `出場 ${selectedIndex + 1}` : "待命"}</em>
+	              <em>{editingPetId === pet.id ? "編輯卡槽" : selected ? PARTY_FORMATION_SLOTS[selectedIndex]?.label ?? `出場 ${selectedIndex + 1}` : "待命"}</em>
             </button>
           );
         })}
@@ -1448,12 +1432,14 @@ function BattlePanel() {
   const resetBattle = useRpgStore((state) => state.resetBattle);
 
   const leftLiving = useMemo(() => battle?.left.filter((pet) => !pet.defeated && pet.hp > 0) ?? [], [battle]);
+  const activeSide = battle?.activeSide ?? "left";
+  const canCommand = Boolean(battle && !battle.winner && activeSide === "left");
+  const roundEnergy = battle ? getRpgBattleEnergyForTurn(battle.turn) : 1;
   const currentActor = useMemo(() => (battle ? getRpgCurrentTurnActor(battle) : null), [battle]);
-  const usesSingleActorFlow = true;
-  const currentLeftActor = currentActor?.side === "left" ? currentActor : null;
+  const targetingActor = canCommand ? leftLiving[0] ?? null : null;
   const reachableEnemyIds = useMemo(
-    () => new Set(battle && currentLeftActor ? getRpgReachableEnemyTargets(battle, currentLeftActor).map((pet) => pet.id) : []),
-    [battle, currentLeftActor]
+    () => new Set(battle && targetingActor ? getRpgReachableEnemyTargets(battle, targetingActor).map((pet) => pet.id) : []),
+    [battle, targetingActor]
   );
   const replaySequence = useMemo(() => (battle ? buildBattleReplaySequence(battle) : []), [battle]);
   const replaySequenceKey = useMemo(() => replaySequence.map((entry) => entry.key).join("|"), [replaySequence]);
@@ -1461,27 +1447,23 @@ function BattlePanel() {
   const replayStep = replaySequence.length > 0 ? Math.min(replayStepIndex, replaySequence.length - 1) : 0;
   const replay = replaySequence[replayStep] ?? null;
   const impactTargetIds = useMemo(() => new Set(replay?.impactTargetIds ?? []), [replay]);
-  const [selectedCommandActorId, setSelectedCommandActorId] = useState<string | null>(null);
-  const commandPets = usesSingleActorFlow
-    ? currentLeftActor && selectedCommandActorId === currentLeftActor.id
-      ? [currentLeftActor]
-      : []
-    : leftLiving;
-  const allReady = battle
-    ? usesSingleActorFlow
-      ? Boolean(currentLeftActor && pendingActions[currentLeftActor.id])
-      : leftLiving.every((pet) => pendingActions[pet.id])
-    : false;
+  const commandPets = canCommand ? leftLiving : [];
+  const pendingEnergySpent = leftLiving.reduce((sum, pet) => {
+    const move = getRpgMoveById(pendingActions[pet.id]?.moveId ?? "");
+    return sum + (move?.energyCost ?? 0);
+  }, 0);
+  const pendingActionCount = leftLiving.filter((pet) => Boolean(pendingActions[pet.id])).length;
+  const allReady = canCommand && pendingActionCount > 0 && pendingEnergySpent <= roundEnergy;
   const selfSubmitted = battleMode === "versus" && Boolean(versusPlayerId && versusSubmittedPlayerIds.includes(versusPlayerId));
   const selfRematchReady = battleMode === "versus" && Boolean(versusPlayerId && versusRematchRequestedPlayerIds.includes(versusPlayerId));
   const versusLocked = battleMode === "versus" && (versusConnection === "connecting" || versusConnection === "reconnecting" || versusConnection === "error");
   const aiConfig = activeAiDifficulty ? RPG_AI_DIFFICULTY_CONFIGS[activeAiDifficulty] : null;
-  const actionStatus = battleNotice ?? (versusLocked ? "真人道館重新同步中" : selfSubmitted ? "已送出，等待同步" : allReady ? "選招完成" : currentLeftActor ? `輪到 ${currentLeftActor.name}` : "等待對手行動");
-  const actionDetail = currentLeftActor
-    ? `EN ${currentLeftActor.energy}/${currentLeftActor.maxEnergy}${pendingActions[currentLeftActor.id] ? " / 已選招" : " / 點寵物展開招式"}`
+  const actionStatus = battleNotice ?? (versusLocked ? "真人道館重新同步中" : selfSubmitted ? "已送出，等待同步" : allReady ? `已分配 ${pendingEnergySpent}/${roundEnergy} EN` : canCommand ? "選擇本回合行動" : "等待對手行動");
+  const actionDetail = canCommand
+    ? `每隻寵物最多一招，可保留未用 EN；已選 ${pendingActionCount}/${leftLiving.length}`
     : currentActor
       ? `${currentActor.name} 正在行動`
-      : "等待下一位行動者";
+      : "等待下一個行動階段";
   const walletCardById = useMemo(() => new Map(walletCards.map((card) => [walletCardKey(card), card])), [walletCards]);
   const localCardSide = battleMode === "versus" ? versusPlayerSide : "left";
   const equippedCardsForPet = (pet: RpgBattlePetState, side: "left" | "right") => {
@@ -1498,10 +1480,6 @@ function BattlePanel() {
   }, [replaySequenceKey]);
 
   useEffect(() => {
-    setSelectedCommandActorId(null);
-  }, [battle?.id, battle?.turn, currentActor?.id]);
-
-  useEffect(() => {
     const currentReplay = replaySequence[replayStep];
     if (!currentReplay || replayStep >= replaySequence.length - 1) return undefined;
     const timeout = window.setTimeout(() => {
@@ -1511,10 +1489,10 @@ function BattlePanel() {
   }, [replaySequence, replayStep]);
 
   useEffect(() => {
-    if (!usesSingleActorFlow || battleMode !== "ai" || !battle || battle.winner || currentActor?.side !== "right") return undefined;
-    const timeout = window.setTimeout(() => resolveBattleTurn(), 920);
+    if (battleMode !== "ai" || !battle || battle.winner || activeSide !== "right") return undefined;
+    const timeout = window.setTimeout(() => resolveBattleTurn(), 1120);
     return () => window.clearTimeout(timeout);
-  }, [battle, battleMode, currentActor?.id, currentActor?.side, resolveBattleTurn, usesSingleActorFlow]);
+  }, [activeSide, battle, battleMode, resolveBattleTurn]);
 
   if (!battle && battleMode === "versus") {
     return (
@@ -1555,7 +1533,7 @@ function BattlePanel() {
   if (!battle) return null;
 
   return (
-    <section className="rpg-battle-screen" aria-label="道館對戰" data-ai-difficulty={activeAiDifficulty ?? ""}>
+    <section className="rpg-battle-screen" aria-label="道館對戰" data-ai-difficulty={activeAiDifficulty ?? ""} data-active-side={activeSide} data-round-energy={roundEnergy}>
       <header className="rpg-battle-scene-header">
         {battleMode === "versus" ? <UsersThree size={22} weight="fill" /> : <Sword size={22} weight="fill" />}
         <div>
@@ -1597,16 +1575,17 @@ function BattlePanel() {
             current={currentActor?.id === pet.id}
             onSelect={pet.defeated ? undefined : () => {
               selectAllyTarget(pet.id);
-              if (usesSingleActorFlow && currentActor?.id === pet.id) setSelectedCommandActorId(pet.id);
             }}
             acting={replay?.actorId === pet.id}
+            actionMotion={replay?.actorId === pet.id ? actionMotionForMove(replay.move) : "idle"}
+            attackStyle={attackMotionStyle(replay, pet.id)}
             impacted={impactTargetIds.has(pet.id)}
             floatingEntries={floatingEntriesForPet(replay, pet.id)}
             equippedCards={equippedCardsForPet(pet, "left")}
           />
         ))}
         {battle.right.map((pet, index) => {
-          const canSelectEnemy = Boolean(currentLeftActor && !pet.defeated && reachableEnemyIds.has(pet.id));
+          const canSelectEnemy = Boolean(canCommand && !pet.defeated && reachableEnemyIds.has(pet.id));
           return (
             <BattleFieldPet
               key={pet.id}
@@ -1618,6 +1597,8 @@ function BattlePanel() {
               current={currentActor?.id === pet.id}
               onSelect={canSelectEnemy ? () => selectEnemyTarget(pet.id) : undefined}
               acting={replay?.actorId === pet.id}
+              actionMotion={replay?.actorId === pet.id ? actionMotionForMove(replay.move) : "idle"}
+              attackStyle={attackMotionStyle(replay, pet.id)}
               impacted={impactTargetIds.has(pet.id)}
               floatingEntries={floatingEntriesForPet(replay, pet.id)}
               equippedCards={equippedCardsForPet(pet, "right")}
@@ -1643,21 +1624,13 @@ function BattlePanel() {
           />
         ) : (
           <>
-            <div className={["rpg-command-board", usesSingleActorFlow ? "is-single" : ""].filter(Boolean).join(" ")}>
-              {usesSingleActorFlow && !currentLeftActor ? (
+            <div className="rpg-command-board">
+              {!canCommand ? (
                 <CommandPlaceholder
                   pet={currentActor}
                   eyebrow={battleMode === "versus" ? "對手回合" : "敵方回合"}
                   title={currentActor ? `${currentActor.name} 行動中` : "等待行動者"}
                   detail={battleMode === "versus" ? "等待對手選擇招式。" : "AI 正在選擇招式。"}
-                />
-              ) : null}
-              {usesSingleActorFlow && currentLeftActor && commandPets.length === 0 ? (
-                <CommandPlaceholder
-                  pet={currentLeftActor}
-                  eyebrow="我方回合"
-                  title={currentLeftActor.name}
-                  detail="點選場上的這隻寵物後顯示招式。"
                 />
               ) : null}
               {commandPets.map((pet) => (
@@ -1670,7 +1643,11 @@ function BattlePanel() {
                 >
                   <header>
                     <strong>{pet.name}</strong>
-                    <span>EN {pet.energy}/{pet.maxEnergy}</span>
+                    {(() => {
+                      const selectedMove = getRpgMoveById(pendingActions[pet.id]?.moveId ?? "");
+                      const energyAvailableForPet = Math.max(0, roundEnergy - pendingEnergySpent + (selectedMove?.energyCost ?? 0));
+                      return <span>可分配 {energyAvailableForPet}/{roundEnergy} EN</span>;
+                    })()}
                     {pendingActions[pet.id] && !selfSubmitted ? (
                       <button type="button" onClick={() => clearBattleAction(pet.id)}>
                         重選
@@ -1681,8 +1658,10 @@ function BattlePanel() {
                     {pet.moveIds.map((moveId) => {
                       const move = getRpgMoveById(moveId);
                       if (!move) return null;
-                      const disabled = selfSubmitted || versusLocked || pet.energy < move.energyCost;
                       const active = pendingActions[pet.id]?.moveId === move.id;
+                      const currentSelectedMove = getRpgMoveById(pendingActions[pet.id]?.moveId ?? "");
+                      const energyAvailableForPet = Math.max(0, roundEnergy - pendingEnergySpent + (currentSelectedMove?.energyCost ?? 0));
+                      const disabled = selfSubmitted || versusLocked || !canCommand || move.energyCost > energyAvailableForPet;
                       return (
                         <button
                           key={move.id}
@@ -1821,8 +1800,10 @@ function VersusStatusRail({
 
 function BattleEnergyRail({ battle, currentActor }: { battle: RpgBattleState; currentActor: RpgBattlePetState | null }) {
   const turnEnergy = getRpgBattleEnergyForTurn(battle.turn);
-  const actorEnergy = currentActor ? currentActor.energy : turnEnergy;
-  const actorSideLabel = currentActor?.side === "left" ? "我方" : currentActor?.side === "right" ? "敵方" : "";
+  const activeSide = battle.activeSide ?? "left";
+  const activeTeam = activeSide === "left" ? battle.left : battle.right;
+  const activeEnergy = activeTeam.find((pet) => !pet.defeated && pet.hp > 0)?.energy ?? turnEnergy;
+  const activeSideLabel = activeSide === "left" ? "我方" : "敵方";
 
   return (
     <section className="rpg-battle-energy-rail" data-rpg-guide-target="battle-energy" aria-label="道館能量">
@@ -1831,16 +1812,16 @@ function BattleEnergyRail({ battle, currentActor }: { battle: RpgBattleState; cu
           <span>本回合能量</span>
           <strong>{turnEnergy} EN</strong>
         </div>
-        <em>第 1 回合 1，之後每回合 +1，最高 10</em>
+        <em>雙方都行動完才進下一回合，最高 10</em>
       </header>
-      <div className="rpg-energy-pips" aria-label={`目前能量 ${actorEnergy}/${currentActor?.maxEnergy ?? 10}`}>
-        {Array.from({ length: currentActor?.maxEnergy ?? 10 }).map((_, index) => (
-          <span key={index} className={index < actorEnergy ? "is-filled" : ""}>
+      <div className="rpg-energy-pips" aria-label={`目前能量 ${activeEnergy}/10`}>
+        {Array.from({ length: 10 }).map((_, index) => (
+          <span key={index} className={index < activeEnergy ? "is-filled" : ""}>
             {index + 1}
           </span>
         ))}
       </div>
-      <small>{currentActor ? `${actorSideLabel} ${currentActor.name} 可用 ${actorEnergy}/${currentActor.maxEnergy} EN` : "等待行動者"}</small>
+      <small>{currentActor ? `${activeSideLabel}階段：${currentActor.name} 帶頭行動，可用 ${activeEnergy}/${turnEnergy} EN` : `${activeSideLabel}階段等待行動者`}</small>
     </section>
   );
 }
@@ -1914,6 +1895,8 @@ function BattleFieldPet({
   current = false,
   onSelect,
   acting = false,
+  actionMotion = "idle",
+  attackStyle = {},
   impacted = false,
   floatingEntries = [],
   equippedCards = []
@@ -1926,6 +1909,8 @@ function BattleFieldPet({
   current?: boolean;
   onSelect?: () => void;
   acting?: boolean;
+  actionMotion?: BattleActionMotion;
+  attackStyle?: CSSProperties;
   impacted?: boolean;
   floatingEntries?: RpgBattleFloatingEntry[];
   equippedCards?: RpgWalletCard[];
@@ -1941,6 +1926,7 @@ function BattleFieldPet({
     current ? "is-current-turn" : "",
     pet.defeated ? "is-defeated" : "",
     acting ? "is-acting" : "",
+    acting ? `motion-${actionMotion}` : "",
     impacted ? "is-impacted" : "",
     pet.statuses.length > 0 ? "has-statuses" : ""
   ].filter(Boolean).join(" ");
@@ -1953,7 +1939,7 @@ function BattleFieldPet({
             ))}
           </div>
         ) : null}
-        <RpgPetSprite element={pet.element} pose={petPose} frame={acting ? 2 : 0} className="rpg-field-pet-sprite" />
+        <RpgPetSprite element={pet.element} pose={petPose} frame={0} className="rpg-field-pet-sprite" />
         <BattleStatusEffects statuses={pet.statuses} />
         <div className="rpg-field-nameplate">
           <strong>{pet.name}</strong>
@@ -1986,7 +1972,8 @@ function BattleFieldPet({
   );
   const style = {
     "--element": element.color,
-    "--element-soft": element.accent
+    "--element-soft": element.accent,
+    ...attackStyle
   } as CSSProperties;
 
   if (!onSelect) {

@@ -85,6 +85,7 @@ export class RpgVillageScene extends Phaser.Scene {
   private gymPoint = new Phaser.Math.Vector2(1260, 430);
   private arenaPoint = new Phaser.Math.Vector2(980, 360);
   private personalHousePoint = new Phaser.Math.Vector2(840, 340);
+  private unsubscribePlayerName?: () => void;
 
   constructor() {
     super("RpgVillageScene");
@@ -148,6 +149,8 @@ export class RpgVillageScene extends Phaser.Scene {
     window.dispatchEvent(new CustomEvent("renaiss:rpg-ready", { detail: { scene: this.scene.key } }));
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.unsubscribePlayerName?.();
+      this.unsubscribePlayerName = undefined;
       useRpgStore.getState().setNearPlace(null);
     });
   }
@@ -265,7 +268,7 @@ export class RpgVillageScene extends Phaser.Scene {
       .setOrigin(0.5, VILLAGE_PLAYER_ORIGIN_Y)
       .setDisplaySize(VILLAGE_PLAYER_DISPLAY.width, VILLAGE_PLAYER_DISPLAY.height);
     this.playerLabel = this.add
-      .text(this.player.x, this.player.y - 74, "Ari", {
+      .text(this.player.x, this.player.y - 74, useRpgStore.getState().playerName, {
         fontFamily: "Arial Black, Arial",
         fontSize: "13px",
         color: "#fff3b0",
@@ -273,6 +276,11 @@ export class RpgVillageScene extends Phaser.Scene {
         strokeThickness: 4
       })
       .setOrigin(0.5);
+    this.unsubscribePlayerName = useRpgStore.subscribe((state, previous) => {
+      if (state.playerName !== previous.playerName) {
+        this.playerLabel.setText(state.playerName);
+      }
+    });
 
     this.trail = Array.from({ length: 120 }, (_, index) => ({ x: this.player.x - index * 4, y: this.player.y + 8 + Math.sin(index / 4) * 5 }));
     this.followers = RPG_STARTER_PETS.map((pet, index) => {

@@ -3,10 +3,10 @@ import { RPG_ELEMENTS, getRpgBattleEnergyForTurn, getRpgMoveById, type RpgElemen
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRpgStore } from "../state/rpgStore";
 
-type OnboardingStep = "rename" | "draw" | "equip" | "gym" | "battle" | "arena";
+type OnboardingStep = "rename" | "choose" | "arenaIntro" | "draw" | "equip" | "gym" | "battle";
 
 interface SavedOnboardingState {
-  version: 1;
+  version: 2;
   step: OnboardingStep;
   completed: boolean;
 }
@@ -26,8 +26,8 @@ interface StepConfig {
   onSecondary?: () => void;
 }
 
-const RPG_ONBOARDING_STORAGE_KEY = "renaiss:rpg-onboarding:v1";
-const DEFAULT_ONBOARDING: SavedOnboardingState = { version: 1, step: "rename", completed: false };
+const RPG_ONBOARDING_STORAGE_KEY = "renaiss:rpg-onboarding:v2";
+const DEFAULT_ONBOARDING: SavedOnboardingState = { version: 2, step: "rename", completed: false };
 const MIN_CARD_DRAWS_FOR_ONBOARDING = 5;
 const DEFAULT_PLAYER_NAME = "GUEST_2AC1";
 
@@ -36,10 +36,10 @@ function readOnboardingState(): SavedOnboardingState {
     const raw = window.localStorage.getItem(RPG_ONBOARDING_STORAGE_KEY);
     if (!raw) return DEFAULT_ONBOARDING;
     const parsed = JSON.parse(raw) as Partial<SavedOnboardingState>;
-    if (parsed.version !== 1 || !parsed.step) return DEFAULT_ONBOARDING;
+    if (parsed.version !== 2 || !parsed.step) return DEFAULT_ONBOARDING;
     return {
-      version: 1,
-      step: parsed.step,
+      version: 2,
+      step: parsed.step as OnboardingStep,
       completed: Boolean(parsed.completed)
     };
   } catch {
@@ -61,12 +61,13 @@ export function RpgOnboardingGuide() {
   const playerName = useRpgStore((store) => store.playerName);
   const openProfile = useRpgStore((store) => store.openProfile);
   const openGym = useRpgStore((store) => store.openGym);
+  const openArena = useRpgStore((store) => store.openArena);
+  const closePanel = useRpgStore((store) => store.closePanel);
   const startAiBattle = useRpgStore((store) => store.startAiBattle);
   const selectedPartyPetIds = useRpgStore((store) => store.selectedPartyPetIds);
   const cardSkillBindings = useRpgStore((store) => store.cardSkillBindings);
   const petCardLoadouts = useRpgStore((store) => store.petCardLoadouts);
   const activeBattle = useRpgStore((store) => store.activeBattle);
-  const battleMode = useRpgStore((store) => store.battleMode);
 
   const boundCardCount = Object.keys(cardSkillBindings).length;
   const equippedCardCount = Object.values(petCardLoadouts).reduce((count, cardIds) => count + cardIds.length, 0);
@@ -82,13 +83,13 @@ export function RpgOnboardingGuide() {
   const battleTurnEnergy = activeBattle ? getRpgBattleEnergyForTurn(activeBattle.turn) : 1;
 
   const updateStep = (step: OnboardingStep) => {
-    const next = { version: 1 as const, step, completed: false };
+    const next = { version: 2 as const, step, completed: false };
     setState(next);
     saveOnboardingState(next);
   };
 
   const completeGuide = () => {
-    const next = { version: 1 as const, step: "arena" as const, completed: true };
+    const next = { version: 2 as const, step: "arenaIntro" as const, completed: true };
     setState(next);
     saveOnboardingState(next);
   };
@@ -107,10 +108,10 @@ export function RpgOnboardingGuide() {
 
   useEffect(() => {
     if (state.completed) return;
-    if ((state.step === "rename" || state.step === "draw" || state.step === "equip") && screen !== "profile" && screen !== "bag" && screen !== "battle") {
+    if ((state.step === "rename" || state.step === "draw") && screen !== "profile" && screen !== "bag" && screen !== "battle") {
       openProfile();
     }
-    if (state.step === "gym" && screen !== "gym" && screen !== "battle") {
+    if ((state.step === "equip" || state.step === "gym") && screen !== "gym" && screen !== "battle") {
       openGym();
     }
   }, [openGym, openProfile, screen, state.completed, state.step]);
@@ -131,8 +132,53 @@ export function RpgOnboardingGuide() {
         body: "登入後第一件事先在收藏櫃上方修改玩家名稱。這個名稱會用在村莊、道館與真人房間。",
         target: "profile-name",
         progress: defaultishName ? "尚未改名" : `目前名稱：${playerName}`,
-        primaryLabel: "我已儲存名稱，下一步",
-        onPrimary: () => updateStep("draw")
+        primaryLabel: "我已儲存名稱，選玩法",
+        onPrimary: () => {
+          updateStep("choose");
+          closePanel();
+        }
+      };
+    }
+
+    if (state.step === "choose") {
+      return {
+        icon: <Sword size={18} weight="fill" />,
+        eyebrow: "STEP 2 / 選擇玩法",
+        title: "先選你現在想玩的模式",
+        body: "Renaiss 有兩條路：即時競技場是直接進場操作角色、拚分數和本輪獎勵；回合制道館是抽卡、配裝、用寵物隊伍打 AI 或真人房。選一個先開始，另一個之後可以自己從村莊入口進去。",
+        target: "arena-nav",
+        progress: "不用先走完道館流程，也可以直接玩競技場。",
+        primaryLabel: "先玩即時競技場",
+        secondaryLabel: "先玩回合制道館",
+        onPrimary: () => {
+          updateStep("arenaIntro");
+          closePanel();
+        },
+        onSecondary: () => {
+          updateStep("draw");
+          openProfile();
+        }
+      };
+    }
+
+    if (state.step === "arenaIntro") {
+      return {
+        icon: <Trophy size={18} weight="fill" />,
+        eyebrow: "競技場路線",
+        title: "即時競技場：進場拚最高分",
+        body: "競技場是即時操作角色的玩法。每一輪左上角會輪替顯示獎勵卡，玩家在時間內衝高分數、拿到第一名，就有機會取得本輪卡牌獎勵。進入後會再跳出競技場專屬教學。",
+        target: "arena-nav",
+        progress: "想玩回合制時，之後從村莊右上方道館入口進去即可。",
+        primaryLabel: "進入競技場",
+        secondaryLabel: "改走道館路線",
+        onPrimary: () => {
+          completeGuide();
+          openArena();
+        },
+        onSecondary: () => {
+          updateStep("draw");
+          openProfile();
+        }
       };
     }
 
@@ -140,7 +186,7 @@ export function RpgOnboardingGuide() {
       const enoughDraws = boundCardCount >= MIN_CARD_DRAWS_FOR_ONBOARDING;
       return {
         icon: <Sparkle size={18} weight="fill" />,
-        eyebrow: "STEP 2 / 卡片抽技能",
+        eyebrow: "道館 STEP 1 / 卡片抽技能",
         title: "用卡片到抽取機抽技能",
         body: "展示櫃現在有五屬性一鍵抽。你可以一鍵抽水、火、草、暗、光，也可以展開單張卡片後單抽。新手流程至少完成 5 次技能抽取。",
         target: "element-bulk-draw",
@@ -158,14 +204,14 @@ export function RpgOnboardingGuide() {
       const hasEquippedCard = equippedCardCount > 0;
       return {
         icon: <Cards size={18} weight="fill" />,
-        eyebrow: "STEP 3 / 裝備",
-        title: "把抽到的卡片技能插到同屬寵物",
-        body: "卡片技能和基礎技能分開。水卡只能插水屬寵物、火卡只能插火屬寵物；先至少插入 1 張，之後到道館打一場。",
+        eyebrow: "道館 STEP 2 / 裝備",
+        title: "到道館把卡片技能插到同屬寵物",
+        body: "卡片技能和預設技能分開。先在道館點上場寵物的卡槽按鈕，水卡只能插水屬寵物、火卡只能插火屬寵物；先至少插入 1 張，之後可以打一場道館。",
         target: "card-equip",
         progress: `已插入 ${equippedCardCount} 張卡片技能`,
-        primaryLabel: hasEquippedCard ? "裝好了，去道館" : "先插入至少 1 張",
+        primaryLabel: hasEquippedCard ? "裝好了，下一步" : "先插入至少 1 張",
         primaryDisabled: !hasEquippedCard,
-        secondaryLabel: "回收藏櫃",
+        secondaryLabel: "回收藏櫃抽卡",
         onPrimary: () => updateStep("gym"),
         onSecondary: openProfile
       };
@@ -174,14 +220,14 @@ export function RpgOnboardingGuide() {
     if (state.step === "gym") {
       return {
         icon: <FlagBanner size={18} weight="fill" />,
-        eyebrow: "STEP 4 / 配對",
-        title: "確認 3 隻上場，開始第一場 AI 道館",
-        body: "先看隊伍和裝備，確認 3v3 已經就位。按 AI 對戰後會進第一場道館教學。",
+        eyebrow: "道館 STEP 3 / 配對",
+        title: "確認 3 隻上場，再決定要不要開打",
+        body: "如果你現在想試回合制，就確認 3v3 隊伍已就位並按 AI 對戰。你也可以先結束新手導覽，之後想打道館時再從村莊入口回來。",
         target: "gym-ai",
         progress: partyReady ? "隊伍已滿 3/3" : `隊伍 ${selectedPartyPetIds.length}/3`,
         primaryLabel: screen === "gym" ? "開始第一場 AI 對戰" : "前往道館",
         primaryDisabled: screen === "gym" && !partyReady,
-        secondaryLabel: "回收藏櫃調整",
+        secondaryLabel: "先結束導覽",
         onPrimary: () => {
           if (screen !== "gym") {
             openGym();
@@ -189,42 +235,41 @@ export function RpgOnboardingGuide() {
           }
           startAiBattle("normal");
         },
-        onSecondary: openProfile
+        onSecondary: completeGuide
       };
     }
 
     if (state.step === "battle") {
       return {
         icon: <Trophy size={18} weight="fill" />,
-        eyebrow: "STEP 5 / 第一場道館",
+        eyebrow: "道館 STEP 4 / 第一場道館",
         title: "每回合能量會逐步增加",
         body: "第 1 回合是 1 能量，第 2 回合 2 能量，最高 10。敵方回合先等 AI 行動；輪到我方時點目前行動的寵物展開招式，選能量足夠的技能，再按執行。",
         target: "battle-energy",
         progress: activeBattle ? `目前第 ${activeBattle.turn} 回合 / 本回合 ${battleTurnEnergy} 能量` : "尚未進入戰鬥",
-        primaryLabel: "知道了，介紹競技場",
+        primaryLabel: "知道了，完成教學",
         secondaryLabel: activeBattle ? undefined : "前往道館",
-        onPrimary: () => updateStep("arena"),
+        onPrimary: completeGuide,
         onSecondary: openGym
       };
     }
-
     return {
       icon: <Sword size={18} weight="fill" />,
-      eyebrow: "STEP 6 / 競技場",
-      title: "競技場也可以拿卡牌獎勵",
-      body: "道館是回合制養成與配裝；競技場是即時對戰。競技場每輪左上角會顯示本輪獎勵卡，打到最高分就有機會取得卡牌。",
+      eyebrow: "選擇玩法",
+      title: "選一個路線開始",
+      body: "可以先玩即時競技場，也可以先走回合制道館。另一種玩法之後都能從村莊入口進去。",
       target: "arena-nav",
-      progress: battleMode === "ai" ? "你可以先打完這場，再去競技場。" : "教學完成後可自由探索。",
-      primaryLabel: "完成新手教學",
-      onPrimary: completeGuide
+      primaryLabel: "重新選擇",
+      onPrimary: () => updateStep("choose")
     };
   }, [
     activeBattle,
-    battleMode,
     battleTurnEnergy,
     boundCardCount,
+    closePanel,
     drawnElementCount,
     equippedCardCount,
+    openArena,
     openGym,
     openProfile,
     partyReady,

@@ -159,10 +159,12 @@ export function buildBattleReplay(state: RpgBattleState): RpgBattleReplay | null
 
 export function buildBattleReplaySequence(state: RpgBattleState): RpgBattleReplay[] {
   let latestActionTurn: number | null = null;
+  let latestPhaseSide: RpgBattleLogEntry["phaseSide"] = undefined;
   for (let index = state.log.length - 1; index >= 0; index -= 1) {
     const entry = state.log[index];
     if (entry.type === "action" && entry.actorId && entry.moveId) {
       latestActionTurn = entry.turn;
+      latestPhaseSide = entry.phaseSide;
       break;
     }
   }
@@ -170,7 +172,13 @@ export function buildBattleReplaySequence(state: RpgBattleState): RpgBattleRepla
 
   const actionIndexes = state.log
     .map((entry, index) => ({ entry, index }))
-    .filter(({ entry }) => entry.turn === latestActionTurn && entry.type === "action" && entry.actorId && entry.moveId)
+    .filter(({ entry }) => (
+      entry.turn === latestActionTurn &&
+      (!latestPhaseSide || entry.phaseSide === latestPhaseSide) &&
+      entry.type === "action" &&
+      entry.actorId &&
+      entry.moveId
+    ))
     .map(({ index }) => index);
 
   return actionIndexes

@@ -138,6 +138,7 @@ export interface RpgBattlePetState {
 export interface RpgBattleState {
   id: string;
   turn: number;
+  activeSide?: "left" | "right";
   phase: "selecting" | "resolving" | "finished";
   left: RpgBattlePetState[];
   right: RpgBattlePetState[];
@@ -153,6 +154,7 @@ export interface RpgBattleAction {
 
 export interface RpgBattleLogEntry {
   turn: number;
+  phaseSide?: "left" | "right";
   type:
     | "turnStart"
     | "status"

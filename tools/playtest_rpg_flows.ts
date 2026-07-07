@@ -534,12 +534,12 @@ async function verifyWalletCardDrawAndEquip(browser: Browser) {
   const currentFirePetId = await test.page.locator(".rpg-field-pet.is-left.is-current-turn[data-definition-id='pet_fire_emberfox']").getAttribute("data-pet-id");
   assert(currentFirePetId, "Fire pet did not become the selectable current actor.");
   await test.page.locator(`.rpg-field-pet.is-left.is-current-turn[data-pet-id="${currentFirePetId}"]`).click();
-  await test.page.waitForFunction(
-    ({ moveName, actorId }) => {
-      const rows = Array.from(document.querySelectorAll<HTMLElement>(".rpg-command-row"));
-      return rows.length === 1 && rows.some((row) => row.getAttribute("data-actor-id") === actorId) &&
-        rows.some((row) => Array.from(row.querySelectorAll(".rpg-move-list button strong")).some((node) => node.textContent?.trim() === moveName));
-    },
+	  await test.page.waitForFunction(
+	    ({ moveName, actorId }) => {
+	      const rows = Array.from(document.querySelectorAll<HTMLElement>(".rpg-command-row"));
+	      const actorRow = rows.find((row) => row.getAttribute("data-actor-id") === actorId);
+	      return Boolean(actorRow && Array.from(actorRow.querySelectorAll(".rpg-move-list button strong")).some((node) => node.textContent?.trim() === moveName));
+	    },
     { moveName: equippedMoveName, actorId: currentFirePetId },
     { timeout: 15_000 }
   );
@@ -553,7 +553,7 @@ async function verifyWalletCardDrawAndEquip(browser: Browser) {
       moveText: Array.from(document.querySelectorAll(".rpg-command-row .rpg-move-list button strong")).map((node) => node.textContent?.trim())
     };
   }, { moveName: equippedMoveName, actorId: currentFirePetId });
-  assert(battleMoveInfo.rowCount === 1 && battleMoveInfo.actorIds.includes(currentFirePetId), `Expected one current-actor command row for fire pet, got ${JSON.stringify(battleMoveInfo)}`);
+  assert(battleMoveInfo.rowCount >= 1 && battleMoveInfo.actorIds.includes(currentFirePetId), `Expected a command row for fire pet, got ${JSON.stringify(battleMoveInfo)}`);
   assert(battleMoveInfo.matchingRows === 1, `Equipped move ${equippedMoveName} should appear on exactly one battle pet, got ${battleMoveInfo.matchingRows}; moves: ${battleMoveInfo.moveText.join(", ")}`);
   assertNoErrors(test);
   await test.page.context().close();
@@ -1334,16 +1334,16 @@ async function verifyVersusBattleAndReconnect(browser: Browser) {
     `Player B should see own arranged team on left and opponent arranged team on right: ${JSON.stringify({ expectedLeft: formationB, expectedRight: formationA, actual: versusFormationB })}`
   );
 
-  const firstTurn = await readBattleTurn(playerA.page);
+  const firstPhase = await readBattlePhase(playerA.page);
   await submitMoves(playerA.page, STARTER_MOVE_NAMES, "送出選招");
   await waitForBattleVfx(playerA.page, "versus player A first action");
   await waitForBattleVfx(playerB.page, "versus player B observes first action");
   await assertBattleVfxPresentationCoordinates(playerA.page, "versus player A first action");
   await assertBattleVfxPresentationCoordinates(playerB.page, "versus player B observes first action");
   const afterFirstActionA = await versusStatusInfo(playerA.page);
-  const turnAfterFirstAction = await readBattleTurn(playerA.page);
-  assert(afterFirstActionA.selfSubmitted === "false" && afterFirstActionA.submittedCount === "0", `Single-actor versus flow should not leave submitted state: ${JSON.stringify(afterFirstActionA)}`);
-  assert(turnAfterFirstAction === (firstTurn ?? 0) + 1, `Single-actor versus action should advance one turn: before ${firstTurn}, after ${turnAfterFirstAction}`);
+  const phaseAfterFirstAction = await readBattlePhase(playerA.page);
+  assert(afterFirstActionA.selfSubmitted === "false" && afterFirstActionA.submittedCount === "0", `Side-phase versus flow should not leave submitted state: ${JSON.stringify(afterFirstActionA)}`);
+  assert(phaseAfterFirstAction.turn === firstPhase.turn && firstPhase.activeSide === "left" && phaseAfterFirstAction.activeSide === "right", `First side action should keep the same round and pass phase to opponent: before ${JSON.stringify(firstPhase)}, after ${JSON.stringify(phaseAfterFirstAction)}`);
 
   const turnBeforeDisconnect = await readBattleTurn(playerB.page);
   await playerA.page.close();
@@ -1762,18 +1762,18 @@ async function submitMoves(page: Page, moveNames: readonly string[], submitLabel
 async function finishVersusBattle(pageA: Page, pageB: Page) {
   for (let turn = 0; turn < 36; turn += 1) {
     if ((await isResultVisible(pageA)) && (await isResultVisible(pageB))) return;
-    const beforeA = await readBattleTurn(pageA);
-    const beforeB = await readBattleTurn(pageB);
+    const beforeA = await readBattlePhase(pageA);
+    const beforeB = await readBattlePhase(pageB);
     const submittedA = await submitFirstAvailableMoves(pageA, "送出選招");
     const submittedB = submittedA ? false : await submitFirstAvailableMoves(pageB, "送出選招");
     if (submittedA || submittedB) {
-      await waitForTurnAdvanceOrResult(pageA, beforeA);
-      await waitForTurnAdvanceOrResult(pageB, beforeB);
+      await waitForBattlePhaseAdvanceOrResult(pageA, beforeA);
+      await waitForBattlePhaseAdvanceOrResult(pageB, beforeB);
     } else {
       await pageA.waitForTimeout(400);
     }
   }
-  throw new Error("Versus battle did not finish within 36 single-actor turns.");
+  throw new Error("Versus battle did not finish within 36 side phases.");
 }
 
 async function verifyVersusRematch(pageA: Page, pageB: Page) {
@@ -1828,22 +1828,32 @@ async function isResultVisible(page: Page) {
 }
 
 async function readBattleTurn(page: Page) {
+  const phase = await readBattlePhase(page);
+  return phase.turn;
+}
+
+async function readBattlePhase(page: Page) {
   return page.evaluate(() => {
     const text = document.querySelector(".rpg-battle-scene-header span")?.textContent ?? "";
     const match = text.match(/TURN\s+(\d+)/);
-    return match ? Number(match[1]) : null;
+    return {
+      turn: match ? Number(match[1]) : null,
+      activeSide: document.querySelector(".rpg-battle-screen")?.getAttribute("data-active-side") ?? null
+    };
   });
 }
 
-async function waitForTurnAdvanceOrResult(page: Page, previousTurn: number | null) {
+async function waitForBattlePhaseAdvanceOrResult(page: Page, previousPhase: { turn: number | null; activeSide: string | null }) {
   await page.waitForFunction(
-    (turn) => {
+    (phase) => {
       if (document.querySelector(".rpg-battle-result-panel")) return true;
       const text = document.querySelector(".rpg-battle-scene-header span")?.textContent ?? "";
       const match = text.match(/TURN\s+(\d+)/);
-      return match ? Number(match[1]) !== turn : false;
+      const nextTurn = match ? Number(match[1]) : null;
+      const nextSide = document.querySelector(".rpg-battle-screen")?.getAttribute("data-active-side") ?? null;
+      return nextTurn !== phase.turn || nextSide !== phase.activeSide;
     },
-    previousTurn,
+    previousPhase,
     { timeout: 15_000 }
   );
 }

@@ -1,7 +1,7 @@
 import {
   createRpgBattleState,
   createStarterRoster,
-  getRpgCurrentTurnActor,
+  getRpgBattleEnergyForTurn,
   getRpgMoveById,
   isLegalRpgActionTarget,
   RPG_STARTER_PETS,
@@ -210,35 +210,47 @@ export class RpgBattleRoom {
 
   private validateSubmittedActions(player: RpgRoomPlayer, actions: readonly RpgBattleAction[]) {
     if (!this.battle) return { ok: false as const, message: "戰鬥尚未開始。" };
-    const currentActor = getRpgCurrentTurnActor(this.battle);
-    if (!currentActor) return { ok: false as const, message: "目前沒有可行動的寵物。" };
-    if (currentActor.side !== player.side) {
+    const activeSide = this.battle.activeSide ?? "left";
+    if (activeSide !== player.side) {
       return { ok: false as const, message: `還沒輪到 ${player.name}。` };
     }
-    if (actions.length !== 1) {
-      return { ok: false as const, message: `${currentActor.name} 這次只能選一招。` };
+    if (actions.length <= 0) {
+      return { ok: false as const, message: `${player.name} 需要至少選擇一個行動。` };
     }
 
-    const action = actions[0];
-    if (!action || typeof action.actorId !== "string" || typeof action.moveId !== "string" || (action.targetId !== undefined && typeof action.targetId !== "string")) {
-      return { ok: false as const, message: `${player.name} 的選招資料格式不合法。` };
-    }
-    if (action.actorId !== currentActor.id) {
-      return { ok: false as const, message: `目前輪到 ${currentActor.name}，不能指定其他寵物。` };
+    const actorById = new Map((player.side === "left" ? this.battle.left : this.battle.right).map((pet) => [pet.id, pet]));
+    const usedActorIds = new Set<string>();
+    const acceptedActions: RpgBattleAction[] = [];
+    let spentEnergy = 0;
+    const roundEnergy = getRpgBattleEnergyForTurn(this.battle.turn);
+    for (const action of actions) {
+      if (!action || typeof action.actorId !== "string" || typeof action.moveId !== "string" || (action.targetId !== undefined && typeof action.targetId !== "string")) {
+        return { ok: false as const, message: `${player.name} 的選招資料格式不合法。` };
+      }
+      if (usedActorIds.has(action.actorId)) {
+        return { ok: false as const, message: "每隻寵物每回合最多只能選一招。" };
+      }
+      usedActorIds.add(action.actorId);
+
+      const actor = actorById.get(action.actorId);
+      if (!actor || actor.defeated || actor.hp <= 0) {
+        return { ok: false as const, message: "不能指定非本方或已倒下的寵物。" };
+      }
+      const move = getRpgMoveById(action.moveId);
+      if (!move || !actor.moveIds.includes(move.id)) {
+        return { ok: false as const, message: `${actor.name} 沒有這個招式。` };
+      }
+      spentEnergy += move.energyCost;
+      if (spentEnergy > roundEnergy) {
+        return { ok: false as const, message: `本回合最多 ${roundEnergy} EN。` };
+      }
+      if (!isLegalRpgActionTarget(this.battle, actor.id, move.id, action.targetId)) {
+        return { ok: false as const, message: `${actor.name} 的 ${move.name} 目標不合法。` };
+      }
+      acceptedActions.push({ actorId: action.actorId, moveId: action.moveId, targetId: action.targetId });
     }
 
-    const move = getRpgMoveById(action.moveId);
-    if (!move || !currentActor.moveIds.includes(move.id)) {
-      return { ok: false as const, message: `${currentActor.name} 沒有這個招式。` };
-    }
-    if (currentActor.energy < move.energyCost) {
-      return { ok: false as const, message: `${currentActor.name} 能量不足，無法使用 ${move.name}。` };
-    }
-    if (!isLegalRpgActionTarget(this.battle, currentActor.id, move.id, action.targetId)) {
-      return { ok: false as const, message: `${currentActor.name} 的 ${move.name} 目標不合法。` };
-    }
-
-    return { ok: true as const, actions: [{ actorId: action.actorId, moveId: action.moveId, targetId: action.targetId }] };
+    return { ok: true as const, actions: acceptedActions };
   }
 
   private battleFor(player: RpgRoomPlayer): RpgBattleState | null {
@@ -251,6 +263,7 @@ export function presentRpgBattleForSide(battle: RpgBattleState, side: "left" | "
   if (side === "left") return battle;
   return {
     ...battle,
+    activeSide: battle.activeSide === "right" ? "left" : "right",
     left: battle.right.map((pet) => ({ ...pet, side: "left" as const })),
     right: battle.left.map((pet) => ({ ...pet, side: "right" as const })),
     winner: flipBattleSide(battle.winner),

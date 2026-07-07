@@ -4,17 +4,17 @@ import {
   RPG_ELEMENT_META,
   RPG_INITIAL_SKILL_TICKET_INVENTORY,
   RPG_STARTER_PETS,
-  createAiRpgActionForActor,
+  createAiRpgActions,
   createRpgAiRoster,
   createRpgBattleState,
   createStarterRoster,
   drawRpgSkillTicket,
+  getRpgBattleEnergyForTurn,
   getRpgAiDifficultyConfig,
   getRpgDefaultTargetIdForMove,
   getRpgMoveById,
   getRpgReachableEnemyTargets,
   getRpgSkillTicket,
-  getRpgCurrentTurnActor,
   isRpgAiDifficulty,
   resolveRpgBattleTurn,
   type RpgAiDifficulty,
@@ -349,7 +349,8 @@ function applyVersusSnapshot(snapshot: RpgVersusSnapshot, set: (partial: Partial
     const nextBattle = snapshot.battle;
     const battleChanged = Boolean(nextBattle && state.activeBattle && nextBattle.id !== state.activeBattle.id);
     const turnChanged = Boolean(nextBattle && state.activeBattle && nextBattle.turn !== state.activeBattle.turn);
-    const pendingActions = battleChanged || turnChanged || nextBattle?.winner ? {} : state.pendingActions;
+    const phaseChanged = Boolean(nextBattle && state.activeBattle && (nextBattle.activeSide ?? "left") !== (state.activeBattle.activeSide ?? "left"));
+    const pendingActions = battleChanged || turnChanged || phaseChanged || nextBattle?.winner ? {} : state.pendingActions;
     const battleNotice = snapshot.message ??
       (snapshot.status === "waiting"
         ? "等待對手加入。"
@@ -770,6 +771,10 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     const actor = battle?.left.find((pet) => pet.id === actorId);
     const move = getRpgMoveById(moveId);
     if (!battle || !actor || !move) return;
+    if ((battle.activeSide ?? "left") !== "left") {
+      set({ battleNotice: "還沒輪到我方行動。" });
+      return;
+    }
     const targetId = actionTargetForMove(battle, actor, move, state.selectedEnemyId, state.selectedAllyId);
     set((current) => ({
       pendingActions: { ...current.pendingActions, [actorId]: { moveId, targetId } },
@@ -787,20 +792,16 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     const battle = state.activeBattle;
     if (!battle || battle.winner) return;
 
-    const currentActor = getRpgCurrentTurnActor(battle);
-    if (!currentActor) {
-      set({ battleNotice: "目前沒有可行動的角色。" });
-      return;
-    }
-
-    if (currentActor.side === "right") {
+    const activeSide = battle.activeSide ?? "left";
+    const roundEnergy = getRpgBattleEnergyForTurn(battle.turn);
+    if (activeSide === "right") {
       if (state.battleMode === "ai") {
-        const aiAction = createAiRpgActionForActor(battle, currentActor.id);
-        if (!aiAction) {
-          set({ battleNotice: `${currentActor.name} 目前無法行動。` });
+        const aiActions = createAiRpgActions(battle, "right", roundEnergy);
+        if (aiActions.length <= 0) {
+          set({ battleNotice: "敵方目前無法行動。" });
           return;
         }
-        const nextBattle = resolveRpgBattleTurn(battle, [aiAction]);
+        const nextBattle = resolveRpgBattleTurn(battle, aiActions);
         set({
           activeBattle: nextBattle,
           pendingActions: {},
@@ -810,21 +811,26 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         });
         return;
       }
-      set({ battleNotice: `等待對手的 ${currentActor.name} 行動。` });
+      set({ battleNotice: "等待對手行動。" });
       return;
     }
 
-    const pendingAction = state.pendingActions[currentActor.id];
-    if (!pendingAction) {
-      set({ battleNotice: `請選擇 ${currentActor.name} 的招式。` });
+    const playerActions: RpgBattleAction[] = battle.left
+      .filter((pet) => !pet.defeated && pet.hp > 0)
+      .flatMap((pet) => {
+        const pendingAction = state.pendingActions[pet.id];
+        return pendingAction ? [{ actorId: pet.id, moveId: pendingAction.moveId, targetId: pendingAction.targetId }] : [];
+      });
+    if (playerActions.length <= 0) {
+      set({ battleNotice: "請至少選擇一隻我方寵物的招式。" });
+      return;
+    }
+    const spentEnergy = playerActions.reduce((sum, action) => sum + (getRpgMoveById(action.moveId)?.energyCost ?? roundEnergy + 1), 0);
+    if (spentEnergy > roundEnergy) {
+      set({ battleNotice: `本回合最多 ${roundEnergy} EN，目前選招超出能量。` });
       return;
     }
 
-    const playerAction: RpgBattleAction = {
-      actorId: currentActor.id,
-      moveId: pendingAction.moveId,
-      targetId: pendingAction.targetId
-    };
     if (state.battleMode === "versus") {
       if (!versusSocket || !state.versusRoomCode) {
         set({ battleNotice: "真人道館尚未連線。" });
@@ -834,17 +840,13 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         set({ battleNotice: state.versusConnection === "reconnecting" ? "重新連線中，暫停送出選招。" : "真人道館尚未同步完成。" });
         return;
       }
-      versusSocket.submitActions(state.versusRoomCode, [playerAction]);
-      set({ battleNotice: `${currentActor.name} 已送出，等待同步。`, versusSubmittedPlayerIds: state.versusPlayerId ? [...new Set([...state.versusSubmittedPlayerIds, state.versusPlayerId])] : state.versusSubmittedPlayerIds });
+      versusSocket.submitActions(state.versusRoomCode, playerActions);
+      set({ battleNotice: `已送出 ${playerActions.length} 個行動，等待同步。`, versusSubmittedPlayerIds: state.versusPlayerId ? [...new Set([...state.versusSubmittedPlayerIds, state.versusPlayerId])] : state.versusSubmittedPlayerIds });
       return;
     }
 
     if (state.battleMode === "ai") {
-      const nextBattle = resolveRpgBattleTurn(battle, [{
-        actorId: playerAction.actorId,
-        moveId: playerAction.moveId,
-        targetId: playerAction.targetId
-      }]);
+      const nextBattle = resolveRpgBattleTurn(battle, playerActions);
       set({
         activeBattle: nextBattle,
         pendingActions: {},

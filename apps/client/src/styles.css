@@ -5029,16 +5029,34 @@ button.rpg-field-pet {
   opacity: 0.62;
 }
 
-.rpg-field-pet.is-acting .rpg-field-pet-sprite {
-  animation: rpg-field-actor-lunge 760ms steps(5, end) both;
+.rpg-field-pet.is-acting.motion-melee .rpg-field-pet-sprite {
+  animation: rpg-field-actor-melee-lunge 1180ms steps(6, end) both;
 }
 
-.rpg-field-pet.is-right.is-acting .rpg-field-pet-sprite {
-  animation-name: rpg-field-actor-lunge-right;
+.rpg-field-pet.is-right.is-acting.motion-melee .rpg-field-pet-sprite {
+  animation-name: rpg-field-actor-melee-lunge-right;
+}
+
+.rpg-field-pet.is-acting.motion-ranged .rpg-field-pet-sprite,
+.rpg-field-pet.is-acting.motion-cast .rpg-field-pet-sprite {
+  animation: rpg-field-actor-cast 1120ms steps(6, end) both;
+}
+
+.rpg-field-pet.is-right.is-acting.motion-ranged .rpg-field-pet-sprite,
+.rpg-field-pet.is-right.is-acting.motion-cast .rpg-field-pet-sprite {
+  animation-name: rpg-field-actor-cast-right;
+}
+
+.rpg-field-pet.is-acting.motion-support .rpg-field-pet-sprite {
+  animation: rpg-field-actor-support 1160ms steps(6, end) both;
+}
+
+.rpg-field-pet.is-right.is-acting.motion-support .rpg-field-pet-sprite {
+  animation-name: rpg-field-actor-support-right;
 }
 
 .rpg-field-pet.is-impacted .rpg-field-pet-sprite {
-  animation: rpg-field-impact-shake 560ms steps(5, end) both;
+  animation: rpg-field-impact-shake 720ms steps(5, end) both;
 }
 
 .rpg-field-pet.is-right.is-impacted .rpg-field-pet-sprite {
@@ -5089,45 +5107,39 @@ button.rpg-field-pet {
 
 .rpg-field-card-stack {
   position: absolute;
-  left: -34px;
-  bottom: 58px;
+  left: 18px;
+  bottom: 42px;
   z-index: 1;
   display: flex;
-  align-items: flex-end;
-  gap: 2px;
+  align-items: center;
+  gap: 0;
   pointer-events: none;
-  transform: rotate(-4deg);
-  opacity: 0.78;
+  transform: none;
+  opacity: 0.84;
 }
 
 .rpg-field-pet.is-right .rpg-field-card-stack {
   left: auto;
-  right: -34px;
+  right: 18px;
   flex-direction: row-reverse;
-  transform: rotate(4deg);
+  transform: none;
 }
 
 .rpg-field-card-stack .rpg-wallet-card-art {
-  width: 25px;
+  width: 28px;
   background: rgba(32, 18, 11, 0.34);
   border: 1px solid rgba(32, 18, 11, 0.82);
   box-shadow: 2px 2px 0 rgba(9, 5, 3, 0.28);
 }
 
-.rpg-field-card-stack .rpg-wallet-card-art:nth-child(2) {
-  transform: translateY(3px);
+.rpg-field-card-stack .rpg-wallet-card-art + .rpg-wallet-card-art {
+  margin-left: -8px;
+  transform: none;
 }
 
-.rpg-field-card-stack .rpg-wallet-card-art:nth-child(3) {
-  transform: translateY(6px);
-}
-
-.rpg-field-card-stack .rpg-wallet-card-art:nth-child(4) {
-  transform: translateY(9px);
-}
-
-.rpg-field-card-stack .rpg-wallet-card-art:nth-child(5) {
-  transform: translateY(12px);
+.rpg-field-pet.is-right .rpg-field-card-stack .rpg-wallet-card-art + .rpg-wallet-card-art {
+  margin-right: -8px;
+  margin-left: 0;
 }
 
 .rpg-field-nameplate {
@@ -6240,11 +6252,11 @@ button.rpg-field-pet {
 }
 
 .rpg-skill-preview-pet.is-acting .rpg-pet-sprite-frame {
-  animation: rpg-field-actor-lunge 760ms steps(5, end) both;
+  animation: rpg-field-actor-cast 1120ms steps(6, end) both;
 }
 
 .rpg-skill-preview-pet.is-targeted .rpg-pet-sprite-frame {
-  animation: rpg-field-impact-shake 560ms steps(5, end) both;
+  animation: rpg-field-impact-shake 720ms steps(5, end) both;
 }
 
 .rpg-skill-preview-pet.is-right.is-targeted .rpg-pet-sprite-frame {
@@ -7921,33 +7933,117 @@ button.rpg-field-pet {
   }
 }
 
-@keyframes rpg-field-actor-lunge {
+@keyframes rpg-field-actor-melee-lunge {
   0% {
     transform: translateX(-50%);
   }
-  32% {
-    transform: translateX(calc(-50% + 22px)) translateY(-8px);
+  16% {
+    transform: translateX(calc(-50% - 18px)) translateY(-10px);
+  }
+  42% {
+    transform: translateX(calc(-50% + var(--attack-lunge-x, 260px))) translateY(var(--attack-lunge-y, 0px));
   }
   58% {
-    transform: translateX(calc(-50% - 4px)) translateY(2px);
+    transform: translateX(calc(-50% + var(--attack-lunge-x, 260px))) translateY(var(--attack-lunge-y, 0px));
+  }
+  76% {
+    transform: translateX(calc(-50% + 18px)) translateY(4px);
   }
   100% {
     transform: translateX(-50%);
   }
 }
 
-@keyframes rpg-field-actor-lunge-right {
+@keyframes rpg-field-actor-melee-lunge-right {
   0% {
     transform: translateX(-50%) scaleX(-1);
   }
-  32% {
-    transform: translateX(calc(-50% - 22px)) translateY(-8px) scaleX(-1);
+  16% {
+    transform: translateX(calc(-50% + 18px)) translateY(-10px) scaleX(-1);
+  }
+  42% {
+    transform: translateX(calc(-50% + var(--attack-lunge-x, -260px))) translateY(var(--attack-lunge-y, 0px)) scaleX(-1);
   }
   58% {
-    transform: translateX(calc(-50% + 4px)) translateY(2px) scaleX(-1);
+    transform: translateX(calc(-50% + var(--attack-lunge-x, -260px))) translateY(var(--attack-lunge-y, 0px)) scaleX(-1);
+  }
+  76% {
+    transform: translateX(calc(-50% - 18px)) translateY(4px) scaleX(-1);
   }
   100% {
     transform: translateX(-50%) scaleX(-1);
+  }
+}
+
+@keyframes rpg-field-actor-cast {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+  18% {
+    transform: translateX(calc(-50% - 10px)) translateY(-4px) scale(0.98);
+  }
+  44% {
+    transform: translateX(calc(-50% + 12px)) translateY(-12px) scale(1.08);
+  }
+  64% {
+    transform: translateX(calc(-50% + 4px)) translateY(-8px) scale(1.05);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes rpg-field-actor-cast-right {
+  0% {
+    transform: translateX(-50%) scaleX(-1) scale(1);
+  }
+  18% {
+    transform: translateX(calc(-50% + 10px)) translateY(-4px) scaleX(-1) scale(0.98);
+  }
+  44% {
+    transform: translateX(calc(-50% - 12px)) translateY(-12px) scaleX(-1) scale(1.08);
+  }
+  64% {
+    transform: translateX(calc(-50% - 4px)) translateY(-8px) scaleX(-1) scale(1.05);
+  }
+  100% {
+    transform: translateX(-50%) scaleX(-1) scale(1);
+  }
+}
+
+@keyframes rpg-field-actor-support {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  24% {
+    transform: translateX(-50%) translateY(-10px) scale(1.05);
+  }
+  52% {
+    transform: translateX(-50%) translateY(-5px) scale(1.12);
+  }
+  76% {
+    transform: translateX(-50%) translateY(2px) scale(0.98);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes rpg-field-actor-support-right {
+  0% {
+    transform: translateX(-50%) translateY(0) scaleX(-1) scale(1);
+  }
+  24% {
+    transform: translateX(-50%) translateY(-10px) scaleX(-1) scale(1.05);
+  }
+  52% {
+    transform: translateX(-50%) translateY(-5px) scaleX(-1) scale(1.12);
+  }
+  76% {
+    transform: translateX(-50%) translateY(2px) scaleX(-1) scale(0.98);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scaleX(-1) scale(1);
   }
 }
 
@@ -13863,6 +13959,251 @@ button.rpg-field-pet {
 
   .rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-bag-summary,
   .rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-equipped-card-slots {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* RPG cabinet cleanup and gym card-slot workbench. */
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel {
+  grid-template-columns: 1fr;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-cabinet-layout {
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-card-section,
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-card-vault {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-card-section > header,
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-card-vault > header {
+  padding: 0 0 10px;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid rgba(36, 17, 7, 0.42);
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-cabinet-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-shelf-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-tier-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-tier-tabs button {
+  min-width: 118px;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-shelf-summary {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+  color: #5f3923;
+  font-family: "Arial Black", Arial, sans-serif;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-shelf-summary strong {
+  color: #271409;
+  font-size: 13px;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-shelf-summary span,
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-shelf-summary em {
+  font-size: 10px;
+  font-style: normal;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-card-grid {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-card-vault-grid {
+  gap: 10px;
+}
+
+.rpg-party-slot-edit {
+  right: 10px;
+  bottom: 10px;
+  min-width: 60px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 11px;
+  box-shadow: 0 4px 0 rgba(16, 8, 4, 0.3);
+}
+
+.rpg-gym-skill-workbench {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.86fr) minmax(360px, 1.14fr);
+  gap: 12px;
+  margin: 0 0 12px;
+  align-items: start;
+}
+
+.rpg-gym-skill-workbench .rpg-skill-library,
+.rpg-gym-panel .rpg-card-equip-panel {
+  margin: 0;
+}
+
+.rpg-gym-panel .rpg-card-equip-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.rpg-gym-panel .rpg-equipped-card-slots {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rpg-gym-panel .rpg-equipped-card-slot.is-filled {
+  grid-template-columns: minmax(0, 1fr) 54px;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rpg-gym-panel .rpg-equipped-card-slot.is-selected,
+.rpg-gym-panel .rpg-card-equip-row.is-selected {
+  border-color: #ffe08e;
+  box-shadow: 0 0 0 2px rgba(255, 224, 142, 0.34);
+}
+
+.rpg-gym-panel .rpg-card-slot-preview,
+.rpg-gym-panel .rpg-card-equip-preview {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 7px;
+  color: #fff1bd;
+  background: transparent;
+  border: 0;
+  text-align: left;
+}
+
+.rpg-gym-panel .rpg-card-slot-action,
+.rpg-gym-panel .rpg-card-equip-action {
+  min-width: 0;
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0 8px;
+  color: #24150d;
+  background: #d7aa64;
+  border: 0;
+  border-left: 2px solid #20120b;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 9px;
+  text-align: center;
+}
+
+.rpg-gym-panel .rpg-card-equip-list {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.rpg-gym-panel .rpg-card-equip-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 58px;
+  color: #fff1bd;
+  background: #24150d;
+  border: 2px solid #20120b;
+}
+
+.rpg-gym-panel .rpg-card-equip-row.is-equipped {
+  background: rgba(73, 50, 31, 0.96);
+  border-color: #d7aa64;
+}
+
+.rpg-gym-panel .rpg-card-slot-preview span,
+.rpg-gym-panel .rpg-card-equip-preview span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.rpg-gym-panel .rpg-card-slot-preview strong,
+.rpg-gym-panel .rpg-card-slot-preview em,
+.rpg-gym-panel .rpg-card-equip-preview strong,
+.rpg-gym-panel .rpg-card-equip-preview em {
+  min-width: 0;
+  overflow: hidden;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rpg-gym-panel .rpg-card-slot-preview strong,
+.rpg-gym-panel .rpg-card-equip-preview strong {
+  color: #fff1bd;
+  font-size: 10px;
+}
+
+.rpg-gym-panel .rpg-card-slot-preview em,
+.rpg-gym-panel .rpg-card-equip-preview em {
+  color: #d9bb83;
+  font-size: 8px;
+}
+
+.rpg-gym-panel .rpg-card-equip-panel .rpg-wallet-card-detail,
+.rpg-gym-panel .rpg-card-equip-detail-empty {
+  color: #fff1bd;
+  background: rgba(29, 18, 12, 0.82);
+  border: 2px solid #20120b;
+}
+
+.rpg-gym-panel .rpg-card-equip-detail-empty {
+  min-height: 72px;
+  display: grid;
+  grid-auto-flow: column;
+  place-content: center;
+  gap: 8px;
+  color: #d9bb83;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 11px;
+}
+
+.rpg-gym-panel .rpg-card-equip-panel .rpg-bound-skill-reveal {
+  background: #24150d;
+  border-color: #20120b;
+}
+
+@media (max-width: 980px) {
+  .rpg-gym-skill-workbench {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .rpg-layer .rpg-profile-card-panel.rpg-backpack-panel .rpg-wallet-shelf-summary {
+    justify-items: start;
+  }
+
+  .rpg-gym-panel .rpg-equipped-card-slots,
+  .rpg-gym-panel .rpg-card-equip-list {
     grid-template-columns: 1fr;
   }
 }
