@@ -253,7 +253,7 @@ async function newTestPage(browserOrContext: Browser | BrowserContext, label: st
   });
   page.on("pageerror", (error) => errors.push(`${label}: ${error.message}`));
   await page.addInitScript(() => {
-    window.localStorage.setItem("renaiss:rpg-onboarding:v1", JSON.stringify({ version: 1, step: "arena", completed: true }));
+    window.localStorage.setItem("renaiss:rpg-onboarding:v2", JSON.stringify({ version: 2, step: "arenaIntro", completed: true }));
     window.localStorage.setItem("renaiss:tutorial:gym:v1", "1");
     window.localStorage.setItem("renaiss:tutorial:arena:v1", "1");
   });
@@ -505,23 +505,25 @@ async function verifyWalletCardDrawAndEquip(browser: Browser) {
   const persistedMoveInfo = await readExpandedWalletMove(test.page);
   assert(persistedMoveInfo.name === equippedMoveName, `SQLite should preserve the card skill binding after reload: ${JSON.stringify({ equippedMoveName, persistedMoveInfo })}`);
 
+  await openRpgGym(test.page);
+  await setGymFormation(test.page, ["pet_fire_emberfox", "pet_water_tidefin", "pet_grass_mossling"]);
+  await test.page.locator(".rpg-party-formation-slot[data-pet-id='pet_fire_emberfox'] .rpg-party-slot-edit").click();
+  await test.page.waitForSelector("section[aria-label='寵物卡片插槽']", { timeout: 15_000 });
   await test.page.locator("section[aria-label='寵物卡片插槽'] .rpg-library-pets button").filter({ hasText: "火" }).click();
   await test.page.waitForFunction(
     (moveName) => Array.from(document.querySelectorAll(".rpg-card-equip-list button strong")).some((node) => node.textContent?.trim() === moveName),
     equippedMoveName,
     { timeout: 15_000 }
   );
-  await test.page.locator(".rpg-card-equip-list button").filter({ hasText: equippedMoveName }).first().click();
+  await test.page.locator(".rpg-card-equip-row").filter({ hasText: equippedMoveName }).first().locator(".rpg-card-equip-action").click();
   await test.page.waitForFunction(
     (moveName) => Array.from(document.querySelectorAll(".rpg-equipped-card-slot.is-filled strong")).some((node) => node.textContent?.trim() === moveName),
     equippedMoveName,
     { timeout: 15_000 }
   );
+  await test.page.locator(".rpg-gym-workbench-overlay > header button").click();
+  await test.page.waitForSelector(".rpg-gym-workbench-overlay", { state: "detached", timeout: 15_000 });
 
-  await test.page.locator(".rpg-profile-card-panel .rpg-panel-close").click();
-  await test.page.waitForSelector(".rpg-profile-card-panel", { state: "detached", timeout: 15_000 });
-  await test.page.getByRole("button", { name: "道館" }).click();
-  await test.page.waitForSelector(".rpg-gym-panel");
   await test.page.waitForSelector(".rpg-party-formation-board");
   await setGymFormation(test.page, ["pet_fire_emberfox", "pet_water_tidefin", "pet_grass_mossling"]);
   await test.page.locator(".rpg-gym-modes button").filter({ hasText: "AI 對戰" }).click();
@@ -1180,6 +1182,8 @@ async function verifyAiBattle(browser: Browser) {
       targetIds: node.getAttribute("data-target-ids") ?? "",
       targetSides: node.getAttribute("data-target-sides") ?? "",
       actorSide: node.getAttribute("data-actor-side") ?? "",
+      casterWindup: node.querySelectorAll(".rpg-fx-caster-windup").length,
+      castLabel: node.querySelector(".rpg-fx-cast-label strong")?.textContent?.trim() ?? "",
       travelCount: node.querySelectorAll(".rpg-fx-travel-sheet, .rpg-fx-travel-projectile").length,
       travelFromX: travelStyle?.getPropertyValue("--from-x").trim() ?? "",
       travelFromY: travelStyle?.getPropertyValue("--from-y").trim() ?? "",
@@ -1191,6 +1195,7 @@ async function verifyAiBattle(browser: Browser) {
   });
   assert(supportVfxInfo.category === "support-field", `Single-ally support battle VFX should use support-field category: ${JSON.stringify(supportVfxInfo)}`);
   assert(supportVfxInfo.actorSide === "left" && supportVfxInfo.targetSides === "left", `Single-ally support battle VFX should stay on the ally side: ${JSON.stringify(supportVfxInfo)}`);
+  assert(supportVfxInfo.casterWindup === 1 && supportVfxInfo.castLabel.length > 0, `Single-ally support battle VFX should clearly show caster windup and move label: ${JSON.stringify(supportVfxInfo)}`);
   assert(supportVfxInfo.targetCount === "1" && supportVfxInfo.targetIds === allyTargetId, `Single-ally support battle VFX should target the selected ally id: ${JSON.stringify(supportVfxInfo)}`);
   assert(supportVfxInfo.travelCount === 1, `Single-ally support battle VFX should render one actor-to-target travel sheet: ${JSON.stringify(supportVfxInfo)}`);
   assert(
@@ -1249,6 +1254,7 @@ async function verifyAiBattle(browser: Browser) {
   assert(!info.vfxSources.includes("external-750-fx"), `AI battle VFX should not mix in 750 FX: ${JSON.stringify(info)}`);
   assert(!(info.vfxSources.includes("external-super-pixel-gigapack") && info.vfxSources.includes("external-spellsfx-2")), `AI battle VFX should not mix Super Pixel and SpellsFX: ${JSON.stringify(info)}`);
   assert(info.vfxCategory === "wide-sweep" || info.vfxCategory === "status-layered" || info.vfxCategory === "ultimate-multiphase", `AI group battle VFX category is wrong: ${info.vfxCategory}`);
+  assert(info.casterWindupCount === 1 && info.castLabelText.length > 0, `AI group battle VFX should show caster-side windup and move label: ${JSON.stringify(info)}`);
   assert(info.spriteBackground.includes("rpg-skill-vfx-"), `AI battle VFX did not use RPG skill sheet: ${info.spriteBackground}`);
   assert(info.travelBackground.includes("rpg-skill-projectiles") || info.travelBackground.includes("rpg-skill-vfx-"), `AI battle travel VFX did not use a RPG sheet: ${info.travelBackground}`);
   assert(info.travelBackground.includes(GENERATED_ASSET_VERSION), `AI battle travel VFX did not use current asset version: ${info.travelBackground}`);
@@ -1560,7 +1566,9 @@ async function waitForBattleVfx(page: Page, label: string) {
       if (!vfx) return false;
       const moveId = vfx.getAttribute("data-move-id");
       const layer = vfx.querySelector(".rpg-fx-primary-vfx");
-      return Boolean(moveId && layer);
+      const casterWindup = vfx.querySelector(".rpg-fx-caster-windup");
+      const castLabel = vfx.querySelector(".rpg-fx-cast-label strong")?.textContent?.trim();
+      return Boolean(moveId && layer && casterWindup && castLabel);
     },
     null,
     { timeout: 15_000 }
@@ -1571,9 +1579,12 @@ async function waitForBattleVfx(page: Page, label: string) {
     targetCount: node.getAttribute("data-target-count") ?? "",
     actorSide: node.getAttribute("data-actor-side") ?? "",
     casterX: Number.parseFloat(node.getAttribute("data-caster-x") ?? "-999"),
+    casterWindup: node.querySelectorAll(".rpg-fx-caster-windup").length,
+    castLabel: node.querySelector(".rpg-fx-cast-label strong")?.textContent?.trim() ?? "",
     visualLayers: node.querySelectorAll(".rpg-fx-primary-vfx").length
   }));
   assert(info.moveId.length > 0 && info.visualLayers > 0, `${label} did not expose a concrete battle VFX layer: ${JSON.stringify(info)}`);
+  assert(info.casterWindup === 1 && info.castLabel.length > 0, `${label} did not expose caster-side skill feedback: ${JSON.stringify(info)}`);
   assert(info.actorSide === "left" || info.actorSide === "right", `${label} did not expose actor side: ${JSON.stringify(info)}`);
   assert(info.actorSide === "left" ? info.casterX < 50 : info.casterX > 50, `${label} caster point does not match presentation side: ${JSON.stringify(info)}`);
 }
@@ -1891,6 +1902,8 @@ async function battleVfxInfo(page: Page, moveId?: string) {
       targetSides: battleVfx?.getAttribute("data-target-sides") ?? "",
       spriteBackground: style?.backgroundImage ?? "",
       travelSpriteCount: document.querySelectorAll(`${selector} .rpg-fx-travel-projectile, ${selector} .rpg-fx-travel-sheet`).length,
+      casterWindupCount: document.querySelectorAll(`${selector} .rpg-fx-caster-windup`).length,
+      castLabelText: document.querySelector(`${selector} .rpg-fx-cast-label strong`)?.textContent?.trim() ?? "",
       travelBackground: travelStyle?.backgroundImage ?? "",
       travelWidth: travelRect?.width ?? 0,
       travelHeight: travelRect?.height ?? 0,

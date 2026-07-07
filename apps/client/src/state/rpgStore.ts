@@ -31,6 +31,7 @@ import { RpgBattleSocket } from "../game/network/RpgBattleSocket";
 
 export type RpgLocation = "village" | "house";
 export type RpgPlace = "shop" | "gym" | "arena" | "house" | "cabinet" | "houseExit";
+export type RpgNavigationTarget = Extract<RpgPlace, "gym" | "arena">;
 export type RpgScreen = RpgLocation | "profile" | "shop" | "bag" | "gym" | "battle";
 export type RpgBattleMode = "ai" | "versus";
 export type RpgVersusConnection = "idle" | "connecting" | "waiting" | "connected" | "reconnecting" | "error";
@@ -55,6 +56,7 @@ interface RpgStore {
   activeLocation: RpgLocation;
   screen: RpgScreen;
   nearPlace: RpgPlace | null;
+  villageNavigationTarget: RpgNavigationTarget | null;
   ownedPetIds: string[];
   selectedPartyPetIds: string[];
   walletAddress: string;
@@ -93,6 +95,8 @@ interface RpgStore {
   battleNotice: string | null;
   setPlayerName: (name: string) => void;
   setNearPlace: (place: RpgPlace | null) => void;
+  requestVillageNavigation: (place: RpgNavigationTarget) => void;
+  clearVillageNavigation: () => void;
   openProfile: () => void;
   openShop: () => void;
   openBag: () => void;
@@ -338,6 +342,32 @@ function actionTargetForMove(state: RpgBattleState, actor: RpgBattlePetState, mo
   return getRpgDefaultTargetIdForMove(state, actor, move);
 }
 
+function retargetPendingActions(state: RpgStore, targetKind: "enemy" | "ally", targetId: string) {
+  const battle = state.activeBattle;
+  if (!battle) return state.pendingActions;
+  let changed = false;
+  const next = { ...state.pendingActions };
+  for (const [actorId, action] of Object.entries(state.pendingActions)) {
+    const actor = battle.left.find((pet) => pet.id === actorId);
+    const move = getRpgMoveById(action.moveId);
+    if (!actor || !move) continue;
+    if (targetKind === "enemy" && move.target !== "singleEnemy") continue;
+    if (targetKind === "ally" && move.target !== "singleAlly") continue;
+    const nextTargetId = actionTargetForMove(
+      battle,
+      actor,
+      move,
+      targetKind === "enemy" ? targetId : state.selectedEnemyId,
+      targetKind === "ally" ? targetId : state.selectedAllyId
+    );
+    if (nextTargetId !== action.targetId) {
+      next[actorId] = { ...action, targetId: nextTargetId };
+      changed = true;
+    }
+  }
+  return changed ? next : state.pendingActions;
+}
+
 function disconnectVersusSocket() {
   versusSocket?.leave();
   versusSocket?.disconnect();
@@ -398,6 +428,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
   activeLocation: "village",
   screen: "village",
   nearPlace: null,
+  villageNavigationTarget: null,
   ownedPetIds: STARTER_PET_IDS,
   selectedPartyPetIds: STARTER_PET_IDS.slice(0, 3),
   walletAddress: RPG_DEFAULT_WALLET_ADDRESS,
@@ -439,6 +470,15 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     set({ playerName: next.length > 0 ? next : "GUEST_2AC1", battleNotice: null });
   },
   setNearPlace: (place) => set({ nearPlace: place }),
+  requestVillageNavigation: (place) =>
+    set({
+      activeLocation: "village",
+      screen: "village",
+      nearPlace: null,
+      villageNavigationTarget: place,
+      battleNotice: null
+    }),
+  clearVillageNavigation: () => set({ villageNavigationTarget: null }),
   openProfile: () => set({ screen: "profile", battleNotice: null }),
   openShop: () => set({ screen: "profile", battleNotice: null }),
   openBag: () => set({ screen: "bag", battleNotice: null }),
@@ -763,8 +803,18 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       set({ versusConnection: "error", battleNotice: error instanceof Error ? error.message : "加入真人道館失敗。" });
     }
   },
-  selectEnemyTarget: (targetId) => set({ selectedEnemyId: targetId, battleNotice: null }),
-  selectAllyTarget: (targetId) => set({ selectedAllyId: targetId, battleNotice: null }),
+  selectEnemyTarget: (targetId) =>
+    set((state) => ({
+      selectedEnemyId: targetId,
+      pendingActions: retargetPendingActions(state, "enemy", targetId),
+      battleNotice: null
+    })),
+  selectAllyTarget: (targetId) =>
+    set((state) => ({
+      selectedAllyId: targetId,
+      pendingActions: retargetPendingActions(state, "ally", targetId),
+      battleNotice: null
+    })),
   selectBattleMove: (actorId, moveId) => {
     const state = get();
     const battle = state.activeBattle;

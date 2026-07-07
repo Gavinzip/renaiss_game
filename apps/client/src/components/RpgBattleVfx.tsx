@@ -12,6 +12,8 @@ import { RpgSkillProjectileSprite } from "./RpgSkillProjectileSprite";
 import { RpgSkillVfxSprite } from "./RpgSkillVfxSprite";
 
 const FLOATING_TYPES = new Set<RpgBattleLogEntry["type"]>(["damage", "heal", "status", "shield", "defeat"]);
+const TRAVEL_RELEASE_DELAY_MS = 180;
+const IMPACT_RELEASE_DELAY_MS = 280;
 const FIELD_SLOT_POINTS: Record<"left" | "right", Array<{ x: number; y: number }>> = {
   left: [
     { x: 31, y: 58 },
@@ -224,6 +226,8 @@ export function RpgBattleVfx({ replay }: { replay: RpgBattleReplay | null }) {
       data-target-ids={replay.targetPoints.map((target) => target.id).join(",")}
       data-actor-side={replay.actorSide}
       data-caster-x={String(replay.actorPoint.x)}
+      data-caster-y={String(replay.actorPoint.y)}
+      data-caster-windup="true"
       data-target-sides={replay.targetPoints.map((target) => target.side).join(",")}
       className={[
         "rpg-battle-vfx",
@@ -241,6 +245,13 @@ export function RpgBattleVfx({ replay }: { replay: RpgBattleReplay | null }) {
         <strong>{move.name}</strong>
         <em>{move.animation.name}</em>
       </div>
+      <div className="rpg-fx-caster-stack" data-actor-id={replay.actorId}>
+        <RpgSkillVfxSprite move={move} className="rpg-fx-primary-vfx rpg-fx-caster-windup" />
+        <div className="rpg-fx-cast-label">
+          <span>{meta.shortLabel}</span>
+          <strong>{move.name}</strong>
+        </div>
+      </div>
       {travelTargets.map((target, index) =>
         productionSpec.usesBulletProjectile ? (
           <RpgSkillProjectileSprite
@@ -252,7 +263,7 @@ export function RpgBattleVfx({ replay }: { replay: RpgBattleReplay | null }) {
               "--from-y": `${replay.actorPoint.y - 12}%`,
               "--to-x": `${target.x}%`,
               "--to-y": `${target.y - 12}%`,
-              "--travel-delay": `${index * 90}ms`
+              "--travel-delay": `${TRAVEL_RELEASE_DELAY_MS + index * 110}ms`
             } as CSSProperties}
           />
         ) : (
@@ -265,7 +276,7 @@ export function RpgBattleVfx({ replay }: { replay: RpgBattleReplay | null }) {
               "--from-y": `${replay.actorPoint.y - 12}%`,
               "--to-x": `${target.x}%`,
               "--to-y": `${target.y - 12}%`,
-              "--travel-delay": `${index * 90}ms`
+              "--travel-delay": `${TRAVEL_RELEASE_DELAY_MS + index * 110}ms`
             } as CSSProperties}
           />
         )
@@ -279,7 +290,7 @@ export function RpgBattleVfx({ replay }: { replay: RpgBattleReplay | null }) {
               style={{
                 "--impact-x": `${target.x}%`,
                 "--impact-y": `${target.y}%`,
-                "--impact-delay": `${160 + index * 80}ms`
+                "--impact-delay": `${IMPACT_RELEASE_DELAY_MS + index * 90}ms`
               } as CSSProperties}
             >
               <RpgSkillVfxSprite move={move} className="rpg-fx-primary-vfx rpg-fx-impact-sprite" />

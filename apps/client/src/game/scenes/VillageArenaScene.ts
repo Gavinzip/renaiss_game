@@ -27,12 +27,10 @@ import {
   getCombatObjectTexture,
   getEngineerActionFrameTexture,
   getMageAttackFrameTexture,
-  getRpgSkillProjectileFrameTexture,
   getStatusAuraFrameTexture,
   getWarriorArcherVfxFrameTexture,
   getWarriorAttackFrameTexture,
   getWarriorVerticalSlashFrameTexture,
-  RPG_SKILL_PROJECTILE_FRAME_COUNT,
   STATUS_AURA_FRAME_COUNT,
   type CombatVfxKey,
   type StatusAuraKey,
@@ -75,6 +73,9 @@ interface PlayerView {
   healthFill: Phaser.GameObjects.Rectangle;
   staminaBack: Phaser.GameObjects.Rectangle;
   staminaFill: Phaser.GameObjects.Rectangle;
+  archerChargeBack: Phaser.GameObjects.Rectangle;
+  archerChargeFill: Phaser.GameObjects.Rectangle;
+  archerChargeTicks: Phaser.GameObjects.Rectangle[];
   lastX: number;
   lastY: number;
   visualX: number;
@@ -193,6 +194,9 @@ const TURRET_HEALTH_Y = -47;
 const TURRET_HEALTH_WIDTH = 38;
 const TURRET_MUZZLE_NORMAL_DISTANCE = 42;
 const TURRET_MUZZLE_BOOSTED_DISTANCE = 46;
+const ARCHER_CHARGE_BAR_Y = -109;
+const ARCHER_CHARGE_BAR_WIDTH = 66;
+const ARCHER_CHARGE_FILL_WIDTH = 58;
 
 export class VillageArenaScene extends Phaser.Scene {
   private socket: GameSocket | null = null;
@@ -213,6 +217,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private lastHudSync = 0;
   private lastArenaAimPoint: { x: number; y: number } | null = null;
   private pointerOverArenaCanvas = false;
+  private mouseAttackDragging = false;
   private combatFeedbackInitialized = false;
   private seenCombatEventIds = new Set<string>();
   private lastSelfHealth: number | null = null;
@@ -362,7 +367,15 @@ export class VillageArenaScene extends Phaser.Scene {
 
     const pointer = this.input.activePointer;
     const hudInput = useHudStore.getState().hudInput;
-    const pointerAimPoint = this.getPointerAimPoint();
+    const skillPointerActive = hudInput.skillQ || hudInput.skillE || hudInput.skillR;
+    if (!pointer.isDown || skillPointerActive) {
+      this.mouseAttackDragging = false;
+    } else if (!this.mouseAttackDragging && !this.isPointerOverInteractiveHud(pointer)) {
+      this.mouseAttackDragging = true;
+    }
+
+    const mouseAttack = this.mouseAttackDragging;
+    const pointerAimPoint = this.getPointerAimPoint(mouseAttack);
     const pointerAngle = Phaser.Math.RadToDeg(Math.atan2(pointerAimPoint.y - self.y, pointerAimPoint.x - self.x));
     const reviewAngle = this.getReviewAngleOverride();
     const angle = reviewAngle !== null ? reviewAngle : pointerAngle;
@@ -377,7 +390,7 @@ export class VillageArenaScene extends Phaser.Scene {
       angle,
       aimX: aimPoint.x,
       aimY: aimPoint.y,
-      attack: pointer.isDown || hudInput.attack,
+      attack: mouseAttack || hudInput.attack,
       sprint: this.keys.SPACE.isDown || this.keys.SHIFT.isDown,
       skillQ: this.keys.Q.isDown || hudInput.skillQ,
       skillE: this.keys.E.isDown || hudInput.skillE,
@@ -392,7 +405,7 @@ export class VillageArenaScene extends Phaser.Scene {
     const hudInput = useHudStore.getState().hudInput;
     const self = this.getSelf();
     const serverTime = this.snapshot?.serverTime ?? Date.now();
-    const aimPoint = self ? this.getPointerAimPoint() : this.cameras.main.getWorldPoint(this.input.activePointer.x, this.input.activePointer.y);
+    const aimPoint = self ? this.getPointerAimPoint(this.input.activePointer.isDown) : this.cameras.main.getWorldPoint(this.input.activePointer.x, this.input.activePointer.y);
     const skillReady = {
       skillQ: !self || self.cooldowns.skillQ <= serverTime,
       skillE: !self || self.cooldowns.skillE <= serverTime,
@@ -407,10 +420,10 @@ export class VillageArenaScene extends Phaser.Scene {
     };
   }
 
-  private getPointerAimPoint() {
+  private getPointerAimPoint(forcePointerPosition = false) {
     const pointer = this.input.activePointer;
     const worldPointer = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
-    if (this.isArenaPointerTarget(pointer)) {
+    if (this.isArenaPointerTarget(pointer) || forcePointerPosition) {
       this.lastArenaAimPoint = { x: worldPointer.x, y: worldPointer.y };
     }
     return this.lastArenaAimPoint ?? { x: worldPointer.x, y: worldPointer.y };
@@ -430,6 +443,21 @@ export class VillageArenaScene extends Phaser.Scene {
 
     const target = pointer.event?.target;
     return target === this.game.canvas;
+  }
+
+  private isPointerOverInteractiveHud(pointer: Phaser.Input.Pointer) {
+    const target = this.getPointerViewportTarget(pointer);
+    return Boolean(target?.closest("button, a, input, select, textarea, [role='button'], .hud-drawer"));
+  }
+
+  private getPointerViewportTarget(pointer: Phaser.Input.Pointer) {
+    const canvasRect = this.game.canvas.getBoundingClientRect();
+    const clientX = canvasRect.left + pointer.x;
+    const clientY = canvasRect.top + pointer.y;
+    if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) {
+      return pointer.event?.target instanceof Element ? pointer.event.target : null;
+    }
+    return document.elementFromPoint(clientX, clientY);
   }
 
   private renderSnapshot() {
@@ -648,6 +676,7 @@ export class VillageArenaScene extends Phaser.Scene {
       view.healthBack.setStrokeStyle(2, view.hitFlashUntil > now ? 0xfff2b8 : healthRatio < 0.35 ? 0x8f3b24 : 0x3b2d1f);
       view.staminaFill.width = Math.max(0, 48 * (player.stamina / player.maxStamina));
       view.staminaFill.fillColor = player.sprinting ? 0xffd86a : 0x62d7ff;
+      this.updateArcherChargeMeter(view, player);
       this.updateStatusAura(view, player, now);
 
       const isSelf = player.id === this.snapshot?.selfId;
@@ -757,6 +786,11 @@ export class VillageArenaScene extends Phaser.Scene {
       view.healthFill.setVisible(false);
       view.staminaBack.setVisible(false);
       view.staminaFill.setVisible(false);
+      view.archerChargeBack.setVisible(false);
+      view.archerChargeFill.setVisible(false);
+      for (const tick of view.archerChargeTicks) {
+        tick.setVisible(false);
+      }
       return;
     }
 
@@ -938,6 +972,59 @@ export class VillageArenaScene extends Phaser.Scene {
       .setDisplaySize(112 + progress * 18, 96 + progress * 14)
       .setAlpha(0.92 - progress * 0.48)
       .setAngle(Math.sin(now / 40) * 4);
+  }
+
+  private updateArcherChargeMeter(view: PlayerView, player: PublicPlayer) {
+    const charge = this.getArcherChargeProgress(player);
+    if (!charge) {
+      view.archerChargeBack.setVisible(false);
+      view.archerChargeFill.setVisible(false);
+      for (const tick of view.archerChargeTicks) {
+        tick.setVisible(false);
+      }
+      return;
+    }
+
+    view.archerChargeBack
+      .setVisible(true)
+      .setStrokeStyle(2, charge.ratio >= 1 ? 0xf7d36a : 0x5b4021);
+    view.archerChargeFill
+      .setVisible(true)
+      .setFillStyle(charge.ratio >= 1 ? 0xf2c84b : charge.stage >= COMBAT.archerChargeStages - 1 ? 0xbfe25a : 0x78d85d, 1);
+    view.archerChargeFill.width = Math.max(4, ARCHER_CHARGE_FILL_WIDTH * charge.ratio);
+
+    view.archerChargeTicks.forEach((tick, index) => {
+      tick
+        .setVisible(true)
+        .setFillStyle(index + 1 < charge.stage ? 0xf8e39b : 0x2b2114, index + 1 < charge.stage ? 0.95 : 0.82);
+    });
+  }
+
+  private getArcherChargeProgress(player: PublicPlayer) {
+    if (!this.isArcherChargePose(player)) {
+      return null;
+    }
+
+    const serverTime = this.snapshot?.serverTime ?? Date.now();
+    const elapsed = Math.max(0, serverTime - player.actionStartedAt);
+    const maxElapsed = this.getArcherMaxChargeDuration();
+    const ratio = Phaser.Math.Clamp(elapsed / maxElapsed, 0, 1);
+    const stage = Math.max(1, Math.min(COMBAT.archerChargeStages, Math.floor(elapsed / COMBAT.archerChargeStageMs) + 1));
+    return { ratio, stage };
+  }
+
+  private isArcherChargePose(player: PublicPlayer) {
+    return (
+      player.alive &&
+      player.classId === "archer" &&
+      player.action === "attack" &&
+      player.actionStartedAt > 0 &&
+      player.actionEndsAt - player.actionStartedAt >= this.getArcherMaxChargeDuration()
+    );
+  }
+
+  private getArcherMaxChargeDuration() {
+    return Math.max(1, (COMBAT.archerChargeStages - 1) * COMBAT.archerChargeStageMs);
   }
 
   private updateStatusAura(view: PlayerView, player: PublicPlayer, now: number) {
@@ -1411,8 +1498,45 @@ export class VillageArenaScene extends Phaser.Scene {
     const healthFill = this.add.rectangle(-24, -72, 48, 4, 0x65d840, 1).setOrigin(0, 0.5);
     const staminaBack = this.add.rectangle(0, -63, 54, 5, 0x171f25, 0.9).setStrokeStyle(1, 0x2c4450);
     const staminaFill = this.add.rectangle(-24, -63, 48, 2, 0x62d7ff, 1).setOrigin(0, 0.5);
+    const archerChargeBack = this.add
+      .rectangle(0, ARCHER_CHARGE_BAR_Y, ARCHER_CHARGE_BAR_WIDTH, 8, 0x1a160f, 0.92)
+      .setStrokeStyle(2, 0x5b4021)
+      .setVisible(false);
+    const archerChargeFill = this.add
+      .rectangle(-ARCHER_CHARGE_FILL_WIDTH / 2, ARCHER_CHARGE_BAR_Y, 0, 4, 0x78d85d, 1)
+      .setOrigin(0, 0.5)
+      .setVisible(false);
+    const archerChargeTicks = Array.from({ length: Math.max(0, COMBAT.archerChargeStages - 1) }, (_, index) =>
+      this.add
+        .rectangle(
+          -ARCHER_CHARGE_FILL_WIDTH / 2 + ((index + 1) / COMBAT.archerChargeStages) * ARCHER_CHARGE_FILL_WIDTH,
+          ARCHER_CHARGE_BAR_Y,
+          2,
+          8,
+          0x2b2114,
+          0.82
+        )
+        .setVisible(false)
+    );
 
-    container.add([statusAura, shadow, koRune, actionGhost, actionFxBack, sprite, actionFxFront, hitImpact, name, healthBack, healthFill, staminaBack, staminaFill]);
+    container.add([
+      statusAura,
+      shadow,
+      koRune,
+      actionGhost,
+      actionFxBack,
+      sprite,
+      actionFxFront,
+      hitImpact,
+      name,
+      archerChargeBack,
+      archerChargeFill,
+      ...archerChargeTicks,
+      healthBack,
+      healthFill,
+      staminaBack,
+      staminaFill
+    ]);
     return {
       container,
       shadow,
@@ -1428,6 +1552,9 @@ export class VillageArenaScene extends Phaser.Scene {
       healthFill,
       staminaBack,
       staminaFill,
+      archerChargeBack,
+      archerChargeFill,
+      archerChargeTicks,
       lastX: player.x,
       lastY: player.y,
       visualX: player.x,
@@ -1498,14 +1625,14 @@ export class VillageArenaScene extends Phaser.Scene {
 
   private getProjectileTexture(projectile: ProjectileState, frame = this.getProjectileFrame(projectile)) {
     if (projectile.type === "arrow") {
-      return getRpgSkillProjectileFrameTexture("grass", frame);
+      return getCombatObjectTexture("arrow");
     }
     return getCombatVfxFrameTexture(this.getProjectileVfxKey(projectile.type), frame);
   }
 
   private getProjectileTrailTexture(projectile: ProjectileState, frame: number) {
     if (projectile.type === "arrow") {
-      return getRpgSkillProjectileFrameTexture("grass", (frame + 1) % RPG_SKILL_PROJECTILE_FRAME_COUNT);
+      return getCombatObjectTexture("arrow");
     }
     if (projectile.type === "magic_ball") {
       return getCombatVfxFrameTexture("magicOrbProjectile", (frame + 10) % COMBAT_VFX_FRAME_COUNT);
@@ -1536,7 +1663,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private getProjectileFrame(projectile: ProjectileState) {
     const seed = Number(projectile.id.replace(/\D/g, "").slice(-4)) || 0;
     if (projectile.type === "arrow") {
-      return Math.floor((this.time.now + seed * 37) / 62) % RPG_SKILL_PROJECTILE_FRAME_COUNT;
+      return 0;
     }
     if (projectile.type === "turret_shot" || projectile.type === "turret_shot_boosted") {
       const stableFrames = [2, 3, 4, 5, 6, 5, 4, 3];
@@ -1547,7 +1674,7 @@ export class VillageArenaScene extends Phaser.Scene {
 
   private getProjectileDisplaySize(projectile: ProjectileState): [number, number] {
     if (projectile.type === "arrow") {
-      return [136, 58];
+      return [118, 36];
     }
     if (projectile.type === "magic_ball") {
       return [70, 70];
@@ -1560,7 +1687,7 @@ export class VillageArenaScene extends Phaser.Scene {
 
   private getProjectileTrailDisplaySize(projectile: ProjectileState): [number, number] {
     if (projectile.type === "arrow") {
-      return [126, 50];
+      return [108, 32];
     }
     if (projectile.type === "magic_ball") {
       return [78, 78];
@@ -1653,7 +1780,7 @@ export class VillageArenaScene extends Phaser.Scene {
       if (player.action === "skillQ") {
         return this.getDirectionalClassRenderFrame(player, progress, true);
       }
-      return this.getArcherAttackRenderFrame(player.angle, progress);
+      return this.getArcherAttackRenderFrame(player, progress);
     }
 
     if (player.classId === "engineer") {
@@ -1688,10 +1815,11 @@ export class VillageArenaScene extends Phaser.Scene {
     };
   }
 
-  private getArcherAttackRenderFrame(angle: number, progress: number): PlayerRenderFrame {
-    const direction = this.getFacingDirection(angle);
+  private getArcherAttackRenderFrame(player: PublicPlayer, progress: number): PlayerRenderFrame {
+    const direction = this.getFacingDirection(player.angle);
+    const frame = this.isArcherChargePose(player) ? Math.min(1, this.getAttackFrameFromProgress(progress)) : this.getAttackFrameFromProgress(progress);
     return {
-      texture: getArcherAttackFrameTexture(direction, this.getAttackFrameFromProgress(progress)),
+      texture: getArcherAttackFrameTexture(direction, frame),
       flipX: false
     };
   }

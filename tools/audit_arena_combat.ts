@@ -266,8 +266,8 @@ function checkClientAimPersistenceContract(): ArenaAuditCheck {
   if (!clientSource.includes('window.removeEventListener("pointermove", this.updatePointerArenaTarget, true)') || !clientSource.includes('window.removeEventListener("pointerdown", this.updatePointerArenaTarget, true)')) {
     errors.push("Client scene must remove document pointer listeners on shutdown.");
   }
-  if (!clientSource.includes("private getPointerAimPoint()") || !clientSource.includes("this.isArenaPointerTarget(pointer)")) {
-    errors.push("Client input must derive aim through getPointerAimPoint and only refresh it from real arena pointer events.");
+  if (!clientSource.includes("private getPointerAimPoint(forcePointerPosition = false)") || !clientSource.includes("this.isArenaPointerTarget(pointer)")) {
+    errors.push("Client input must derive aim through getPointerAimPoint and refresh from valid arena pointer events.");
   }
   if (!clientSource.includes("if (!this.pointerOverArenaCanvas)")) {
     errors.push("Client input must refuse aim refreshes while the document pointer is over HUD or any non-canvas element.");
@@ -281,13 +281,25 @@ function checkClientAimPersistenceContract(): ArenaAuditCheck {
   if (!clientSource.includes("return target === this.game.canvas")) {
     errors.push("Arena pointer detection should still fall back to direct canvas target checks when client coordinates are unavailable.");
   }
+  if (!clientSource.includes("private mouseAttackDragging = false") || !clientSource.includes("this.mouseAttackDragging = true")) {
+    errors.push("Mouse-held basic attack should track a drag state so aim continues through HUD overlays after starting from the arena.");
+  }
+  if (!clientSource.includes("skillPointerActive") || !clientSource.includes("this.mouseAttackDragging = false")) {
+    errors.push("Held skill buttons must cancel mouse attack dragging so skill HUD controls do not become basic attack aim.");
+  }
+  if (!clientSource.includes("this.isArenaPointerTarget(pointer) || forcePointerPosition")) {
+    errors.push("Mouse-held aiming must keep updating the pointer aim point while a valid attack drag is active.");
+  }
+  if (!clientSource.includes("private isPointerOverInteractiveHud(pointer: Phaser.Input.Pointer)") || !clientSource.includes("button, a, input, select, textarea, [role='button'], .hud-drawer")) {
+    errors.push("Interactive HUD controls must still be excluded from forced pointer aiming.");
+  }
   if (!clientSource.includes("this.publishArenaDebugInput(input)")) {
     errors.push("Debug arena mode should expose the last submitted input so browser playtests can verify actual aim payloads.");
   }
 
   return errors.length > 0
     ? fail("client aim persistence contract", errors)
-    : pass("client aim persistence contract", ["Client aim uses the last valid canvas aim point, so HUD interactions cannot redirect attacks or skills."]);
+    : pass("client aim persistence contract", ["Client aim follows mouse-held attacks while preserving HUD-control protection for skills and settings."]);
 }
 
 function checkTurretGroundingContract(): ArenaAuditCheck {
@@ -407,22 +419,26 @@ function checkWarriorDirectionalMeleeAndTurretDeathContract(): ArenaAuditCheck {
 
 function checkProjectileReadabilityContract(): ArenaAuditCheck {
   const clientSource = readFileSync(resolve(ROOT, "apps/client/src/game/scenes/VillageArenaScene.ts"), "utf8");
+  const serverSource = readFileSync(resolve(ROOT, "apps/server/src/game/GameRoom.ts"), "utf8");
   const errors: string[] = [];
 
-  if (!clientSource.includes('this.load.image("rpgSkillProjectiles", generatedAssetPath("rpg-skill-projectiles"))')) {
-    errors.push("Arena scene must preload the RPG projectile sheet used by the Archer projectile.");
+  if (!clientSource.includes('this.load.image("combatObjects", generatedAssetPath("combat-objects"))')) {
+    errors.push("Arena scene must preload the combat object sheet used by the Archer arrow projectile.");
   }
-  if (!clientSource.includes('return getRpgSkillProjectileFrameTexture("grass", frame)')) {
-    errors.push("Archer projectile body must use the grass row from rpg-skill-projectiles instead of the thin Combat FX arrow row.");
+  if (!clientSource.includes('return getCombatObjectTexture("arrow")')) {
+    errors.push("Archer projectile body must use the dedicated combat object arrow texture instead of a spell projectile row.");
   }
-  if (!clientSource.includes("% RPG_SKILL_PROJECTILE_FRAME_COUNT")) {
-    errors.push("Archer projectile animation must stay tied to the 10-frame RPG projectile row.");
+  if (clientSource.includes('return getRpgSkillProjectileFrameTexture("grass"')) {
+    errors.push("Archer projectile must not regress to the grass spell projectile; it reads as a magic skill instead of an arrow.");
   }
-  if (!clientSource.includes("return [136, 58]")) {
-    errors.push("Archer projectile body must keep a thick enough display size to read as a projectile in normal gameplay.");
+  if (!clientSource.includes("return [118, 36]")) {
+    errors.push("Archer projectile body must keep a slim arrow-like display size without becoming too small for normal gameplay.");
+  }
+  if (!serverSource.includes("this.getMuzzlePoint({ x: player.x, y: player.y - 28 }, player.angle, 58, 0)")) {
+    errors.push("Archer arrow origin must be raised to the bow/upper-body position instead of spawning from the player's feet.");
   }
   if (!clientSource.includes("private shouldRenderProjectileTrail(projectile: ProjectileState)") || !clientSource.includes('return projectile.type !== "arrow" && projectile.type !== "magic_ball";')) {
-    errors.push("Archer and Mage basic projectiles must not render the extra trail layer that caused the stray vertical-line artifact.");
+    errors.push("Archer arrow and Mage basic projectiles must not render the extra trail layer that caused the stray vertical-line artifact.");
   }
   if (!clientSource.includes("return 0.94 + launchScale * 0.06")) {
     errors.push("Archer projectile body alpha must stay nearly opaque for runtime readability.");
@@ -430,7 +446,36 @@ function checkProjectileReadabilityContract(): ArenaAuditCheck {
 
   return errors.length > 0
     ? fail("projectile readability contract", errors)
-    : pass("projectile readability contract", ["Archer and Mage basic projectiles render readable bodies without the separate trail layer that created stray lines."]);
+    : pass("projectile readability contract", ["Archer basic projectile renders as a dedicated arrow object; Mage basic projectile keeps its readable body without the stray trail layer."]);
+}
+
+function checkArcherChargedShotContract(): ArenaAuditCheck {
+  const serverSource = readFileSync(resolve(ROOT, "apps/server/src/game/GameRoom.ts"), "utf8");
+  const clientSource = readFileSync(resolve(ROOT, "apps/client/src/game/scenes/VillageArenaScene.ts"), "utf8");
+  const errors: string[] = [];
+
+  if (serverSource.includes("stage >= COMBAT.archerChargeStages")) {
+    errors.push("Archer full charge must not auto-release when the final stage is reached; release should only happen when attack input goes false.");
+  }
+  if (!serverSource.includes("if (!attacker.input.attack)") || !serverSource.includes("this.fireArcherChargedArrow(attacker, now, stage)")) {
+    errors.push("Archer charged arrow release must be gated by the attack input turning false.");
+  }
+  if (!clientSource.includes("archerChargeBack") || !clientSource.includes("archerChargeFill") || !clientSource.includes("archerChargeTicks")) {
+    errors.push("Client player view must render a visible Archer charge meter with stage ticks.");
+  }
+  if (!clientSource.includes("private getArcherChargeProgress(player: PublicPlayer)") || !clientSource.includes("COMBAT.archerChargeStages") || !clientSource.includes("COMBAT.archerChargeStageMs")) {
+    errors.push("Archer charge meter must derive its progress from the shared charge stage constants.");
+  }
+  if (!clientSource.includes("private isArcherChargePose(player: PublicPlayer)") || !clientSource.includes("player.actionEndsAt - player.actionStartedAt >= this.getArcherMaxChargeDuration()")) {
+    errors.push("Archer charge meter should hide during the short release pose instead of restarting at zero after mouse release.");
+  }
+  if (!clientSource.includes("this.isArcherChargePose(player) ? Math.min(1, this.getAttackFrameFromProgress(progress))")) {
+    errors.push("Archer charge animation should hold the drawn-bow frame at full charge instead of advancing to the release frame while the mouse is still held.");
+  }
+
+  return errors.length > 0
+    ? fail("archer charged shot contract", errors)
+    : pass("archer charged shot contract", ["Full charge waits for mouse release, and the client renders a stage-aware Archer charge meter."]);
 }
 
 function checkMageSkillVfxPresenceContract(): ArenaAuditCheck {
@@ -831,6 +876,7 @@ function main() {
     checkBasicAttackVfxContract(),
     checkWarriorDirectionalMeleeAndTurretDeathContract(),
     checkProjectileReadabilityContract(),
+    checkArcherChargedShotContract(),
     checkMageSkillVfxPresenceContract(),
     checkSkillTooltipContract(),
     checkDeathClassSwitchContract(),

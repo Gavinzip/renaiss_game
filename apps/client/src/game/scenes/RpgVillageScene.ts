@@ -16,7 +16,7 @@ import {
   type VillagePlayerDirection,
   type VillagePlayerFacing
 } from "../render/villagePlayerAnimation";
-import { useRpgStore, type RpgPlace } from "../../state/rpgStore";
+import { useRpgStore, type RpgNavigationTarget, type RpgPlace } from "../../state/rpgStore";
 
 interface FollowerView {
   element: RpgElement;
@@ -51,6 +51,7 @@ const WORLD_WIDTH = WORLD.width;
 const WORLD_HEIGHT = WORLD.height;
 const PLAYER_SPEED = 184;
 const PLAYER_COLLISION_RADIUS = 28;
+const AUTO_NAV_STOP_DISTANCE = 138;
 const FOLLOWER_COLLISION_RADIUS = 34;
 const HOUSE_CLEARANCE_Y = VILLAGE_PLAYER_DISPLAY.height * 0.76;
 const HOUSE_CLEARANCE_X = VILLAGE_PLAYER_DISPLAY.width * 0.56;
@@ -161,12 +162,32 @@ export class RpgVillageScene extends Phaser.Scene {
       return;
     }
 
+    const store = useRpgStore.getState();
     const seconds = delta / 1000;
     const inputBlocked = isDomTextEditingActive();
-    const moveX = inputBlocked ? 0 : (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
-    const moveY = inputBlocked ? 0 : (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const manualMoveX = inputBlocked ? 0 : (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
+    const manualMoveY = inputBlocked ? 0 : (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const manualMoving = manualMoveX !== 0 || manualMoveY !== 0;
+    if (manualMoving && store.villageNavigationTarget) store.clearVillageNavigation();
+    let moveX = manualMoveX;
+    let moveY = manualMoveY;
+    let speed = PLAYER_SPEED * (this.keys.SPACE.isDown ? 1.24 : 1);
+
+    if (!inputBlocked && !manualMoving && store.villageNavigationTarget) {
+      const targetPoint = this.pointForNavigationTarget(store.villageNavigationTarget);
+      const deltaX = targetPoint.x - this.player.x;
+      const deltaY = targetPoint.y - this.player.y;
+      const distance = Math.hypot(deltaX, deltaY);
+      if (distance <= AUTO_NAV_STOP_DISTANCE) {
+        store.clearVillageNavigation();
+      } else {
+        moveX = deltaX / distance;
+        moveY = deltaY / distance;
+        speed = PLAYER_SPEED * 1.08;
+      }
+    }
+
     const length = Math.hypot(moveX, moveY) || 1;
-    const speed = PLAYER_SPEED * (this.keys.SPACE.isDown ? 1.24 : 1);
     const moving = moveX !== 0 || moveY !== 0;
 
     if (moving) {
@@ -184,6 +205,10 @@ export class RpgVillageScene extends Phaser.Scene {
     this.playerLabel.setPosition(this.player.x, this.player.y - 74);
     this.updateFollowers(moving);
     this.updateNearbyPlace(inputBlocked);
+  }
+
+  private pointForNavigationTarget(target: RpgNavigationTarget) {
+    return target === "gym" ? this.gymPoint : this.arenaPoint;
   }
 
   private movePlayer(deltaX: number, deltaY: number) {

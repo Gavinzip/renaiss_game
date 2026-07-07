@@ -3,7 +3,7 @@ import { RPG_ELEMENTS, getRpgBattleEnergyForTurn, getRpgMoveById, type RpgElemen
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRpgStore } from "../state/rpgStore";
 
-type OnboardingStep = "rename" | "choose" | "arenaIntro" | "draw" | "equip" | "gym" | "battle";
+type OnboardingStep = "rename" | "choose" | "arenaIntro" | "gymIntro" | "draw" | "equip" | "gym" | "battle";
 
 interface SavedOnboardingState {
   version: 2;
@@ -17,6 +17,7 @@ interface StepConfig {
   title: string;
   body: string;
   target: string;
+  content?: ReactNode;
   progress?: string;
   warning?: string;
   primaryLabel: string;
@@ -59,6 +60,9 @@ export function RpgOnboardingGuide() {
   const [state, setState] = useState<SavedOnboardingState>(() => readOnboardingState());
   const screen = useRpgStore((store) => store.screen);
   const playerName = useRpgStore((store) => store.playerName);
+  const villageNavigationTarget = useRpgStore((store) => store.villageNavigationTarget);
+  const setPlayerName = useRpgStore((store) => store.setPlayerName);
+  const requestVillageNavigation = useRpgStore((store) => store.requestVillageNavigation);
   const openProfile = useRpgStore((store) => store.openProfile);
   const openGym = useRpgStore((store) => store.openGym);
   const openArena = useRpgStore((store) => store.openArena);
@@ -68,6 +72,7 @@ export function RpgOnboardingGuide() {
   const cardSkillBindings = useRpgStore((store) => store.cardSkillBindings);
   const petCardLoadouts = useRpgStore((store) => store.petCardLoadouts);
   const activeBattle = useRpgStore((store) => store.activeBattle);
+  const [draftName, setDraftName] = useState(() => (playerName && playerName !== DEFAULT_PLAYER_NAME ? playerName : ""));
 
   const boundCardCount = Object.keys(cardSkillBindings).length;
   const equippedCardCount = Object.values(petCardLoadouts).reduce((count, cardIds) => count + cardIds.length, 0);
@@ -81,6 +86,11 @@ export function RpgOnboardingGuide() {
   }, [cardSkillBindings]);
   const partyReady = selectedPartyPetIds.length === 3;
   const battleTurnEnergy = activeBattle ? getRpgBattleEnergyForTurn(activeBattle.turn) : 1;
+  const trimmedDraftName = draftName.trim();
+
+  useEffect(() => {
+    if (state.step === "rename" && playerName && playerName !== DEFAULT_PLAYER_NAME) setDraftName(playerName);
+  }, [playerName, state.step]);
 
   const updateStep = (step: OnboardingStep) => {
     const next = { version: 2 as const, step, completed: false };
@@ -108,7 +118,7 @@ export function RpgOnboardingGuide() {
 
   useEffect(() => {
     if (state.completed) return;
-    if ((state.step === "rename" || state.step === "draw") && screen !== "profile" && screen !== "bag" && screen !== "battle") {
+    if (state.step === "draw" && screen !== "profile" && screen !== "bag" && screen !== "battle") {
       openProfile();
     }
     if ((state.step === "equip" || state.step === "gym") && screen !== "gym" && screen !== "battle") {
@@ -129,11 +139,26 @@ export function RpgOnboardingGuide() {
         icon: <PencilSimple size={18} weight="fill" />,
         eyebrow: "STEP 1 / 名稱",
         title: "先改成你想被看到的名字",
-        body: "登入後第一件事先在收藏櫃上方修改玩家名稱。這個名稱會用在村莊、道館與真人房間。",
-        target: "profile-name",
+        body: "先建立玩家名稱，不會先打開收藏櫃。這個名稱會用在村莊、道館、競技場與真人房間。",
+        target: "onboarding-name",
+        content: (
+          <label className="rpg-onboarding-name-field" data-rpg-guide-target="onboarding-name">
+            <span>玩家名稱</span>
+            <input
+              type="text"
+              value={draftName}
+              maxLength={18}
+              placeholder="輸入你的名字"
+              data-rpg-text-input="true"
+              onChange={(event) => setDraftName(event.target.value)}
+            />
+          </label>
+        ),
         progress: defaultishName ? "尚未改名" : `目前名稱：${playerName}`,
         primaryLabel: "我已儲存名稱，選玩法",
+        primaryDisabled: trimmedDraftName.length === 0,
         onPrimary: () => {
+          setPlayerName(trimmedDraftName);
           updateStep("choose");
           closePanel();
         }
@@ -151,33 +176,62 @@ export function RpgOnboardingGuide() {
         primaryLabel: "先玩即時競技場",
         secondaryLabel: "先玩回合制道館",
         onPrimary: () => {
+          requestVillageNavigation("arena");
           updateStep("arenaIntro");
           closePanel();
         },
         onSecondary: () => {
-          updateStep("draw");
-          openProfile();
+          requestVillageNavigation("gym");
+          updateStep("gymIntro");
+          closePanel();
         }
       };
     }
 
     if (state.step === "arenaIntro") {
+      const navigating = villageNavigationTarget === "arena";
       return {
         icon: <Trophy size={18} weight="fill" />,
         eyebrow: "競技場路線",
         title: "即時競技場：進場拚最高分",
-        body: "競技場是即時操作角色的玩法。每一輪左上角會輪替顯示獎勵卡，玩家在時間內衝高分數、拿到第一名，就有機會取得本輪卡牌獎勵。進入後會再跳出競技場專屬教學。",
+        body: "角色會先走到競技場入口。競技場是即時操作角色的玩法，每一輪左上角會輪替顯示獎勵卡，玩家在時間內衝高分數、拿到第一名，就有機會取得本輪卡牌獎勵。",
         target: "arena-nav",
-        progress: "想玩回合制時，之後從村莊右上方道館入口進去即可。",
-        primaryLabel: "進入競技場",
+        progress: navigating ? "自動前往競技場入口中。你也可以按 WASD 取消導航。" : "已到競技場入口，可以進場。",
+        primaryLabel: navigating ? "前往入口中" : "進入競技場",
+        primaryDisabled: navigating,
         secondaryLabel: "改走道館路線",
         onPrimary: () => {
           completeGuide();
           openArena();
         },
         onSecondary: () => {
+          requestVillageNavigation("gym");
+          updateStep("gymIntro");
+          closePanel();
+        }
+      };
+    }
+
+    if (state.step === "gymIntro") {
+      const navigating = villageNavigationTarget === "gym";
+      return {
+        icon: <FlagBanner size={18} weight="fill" />,
+        eyebrow: "道館路線",
+        title: "回合制道館：先抽技能、再配隊",
+        body: "角色會先走到道館入口。道館玩法會從卡片抽技能開始，接著到道館替寵物插卡、選招式，再打一場 AI 或真人房。",
+        target: "gym-nav",
+        progress: navigating ? "自動前往道館入口中。你也可以按 WASD 取消導航。" : "已到道館附近，接著開始抽技能教學。",
+        primaryLabel: navigating ? "前往入口中" : "開始抽技能教學",
+        primaryDisabled: navigating,
+        secondaryLabel: "改玩競技場",
+        onPrimary: () => {
           updateStep("draw");
           openProfile();
+        },
+        onSecondary: () => {
+          requestVillageNavigation("arena");
+          updateStep("arenaIntro");
+          closePanel();
         }
       };
     }
@@ -244,7 +298,7 @@ export function RpgOnboardingGuide() {
         icon: <Trophy size={18} weight="fill" />,
         eyebrow: "道館 STEP 4 / 第一場道館",
         title: "每回合能量會逐步增加",
-        body: "第 1 回合是 1 能量，第 2 回合 2 能量，最高 10。敵方回合先等 AI 行動；輪到我方時點目前行動的寵物展開招式，選能量足夠的技能，再按執行。",
+        body: "同一回合雙方使用同樣能量：第 1 回合我方 1、敵方 1，第 2 回合我方 2、敵方 2，最高 10。輪到我方時可以把本回合能量分配給多隻寵物，每隻最多選一招，也可以保留未用能量。",
         target: "battle-energy",
         progress: activeBattle ? `目前第 ${activeBattle.turn} 回合 / 本回合 ${battleTurnEnergy} 能量` : "尚未進入戰鬥",
         primaryLabel: "知道了，完成教學",
@@ -267,6 +321,7 @@ export function RpgOnboardingGuide() {
     battleTurnEnergy,
     boundCardCount,
     closePanel,
+    draftName,
     drawnElementCount,
     equippedCardCount,
     openArena,
@@ -274,10 +329,14 @@ export function RpgOnboardingGuide() {
     openProfile,
     partyReady,
     playerName,
+    requestVillageNavigation,
     screen,
     selectedPartyPetIds.length,
+    setPlayerName,
     startAiBattle,
-    state.step
+    state.step,
+    trimmedDraftName,
+    villageNavigationTarget
   ]);
 
   useEffect(() => {
@@ -301,6 +360,7 @@ export function RpgOnboardingGuide() {
         </button>
       </header>
       <p>{config.body}</p>
+      {config.content}
       {config.warning ? <p className="rpg-onboarding-warning">{config.warning}</p> : null}
       {config.progress ? <div className="rpg-onboarding-progress">{config.progress}</div> : null}
       <footer>

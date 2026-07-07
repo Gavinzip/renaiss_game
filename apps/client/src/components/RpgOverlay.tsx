@@ -57,7 +57,7 @@ type CardRevealState = {
 type WalletTier = (typeof WALLET_TIER_ORDER)[number];
 
 function replayStepDuration(replay: RpgBattleReplay) {
-  return Math.max(1180, Math.min(1880, replay.move.animation.frameCount * 112));
+  return Math.max(1660, Math.min(2260, replay.move.animation.frameCount * 118 + 420));
 }
 
 type BattleActionMotion = "idle" | "melee" | "ranged" | "cast" | "support";
@@ -124,7 +124,7 @@ export function RpgOverlay() {
             <button type="button" className={screen === "profile" || screen === "bag" ? "is-active" : ""} title="卡片" aria-label="卡片" onClick={openProfile}>
               <Cards size={24} weight="fill" />
             </button>
-            <button type="button" className={screen === "gym" ? "is-active" : ""} title="道館" aria-label="道館" onClick={openGym}>
+            <button type="button" className={screen === "gym" ? "is-active" : ""} title="道館" aria-label="道館" data-rpg-guide-target="gym-nav" onClick={openGym}>
               <FlagBanner size={24} weight="fill" />
             </button>
             <button type="button" title="競技場" aria-label="競技場" data-rpg-guide-target="arena-nav" onClick={openArena}>
@@ -369,6 +369,63 @@ function ProfilePanel() {
     }
     window.setTimeout(() => setBulkDrawProgress(null), 650);
   };
+  const selectedWalletElementGroups = selectedWalletTierGroup
+    ? ELEMENT_ORDER.map((targetElement) => {
+      const cards = selectedWalletTierGroup.cards.filter((card) => walletCardElement(card, walletCardElements) === targetElement);
+      return { element: targetElement, cards };
+    }).filter((group) => group.cards.length > 0)
+    : [];
+  const renderWalletCard = (card: RpgWalletCard) => {
+    const tier = walletCardTier(card);
+    const cardElement = walletCardElement(card, walletCardElements);
+    const cardId = walletCardKey(card);
+    const boundMove = getRpgMoveById(cardSkillBindings[cardId]);
+    const expanded = selectedCardId === cardId;
+    const reveal = cardReveal?.cardId === cardId ? cardReveal : null;
+    const expandedMode = !expanded ? "" : reveal?.phase === "intro" ? "is-reveal-intro" : reveal?.phase === "reveal" ? "is-reveal-complete" : boundMove ? "is-bound-detail" : "is-draw-ready";
+    return (
+      <article
+        key={cardId}
+        className={["rpg-wallet-card", `is-${tier}`, boundMove ? "is-bound" : "", expanded ? "is-expanded" : "", expandedMode].filter(Boolean).join(" ")}
+        data-token-id={card.tokenId}
+        data-rpg-guide-target={boundMove ? undefined : "single-card-draw"}
+      >
+        <button
+          type="button"
+          className="rpg-wallet-card-summary"
+          onClick={() => {
+            if (expanded) {
+              setSelectedCardId(null);
+              setCardReveal(null);
+              return;
+            }
+            setSelectedCardId(cardId);
+            setCardReveal((current) => (current?.cardId === cardId ? current : null));
+          }}
+        >
+          {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : <span className="rpg-wallet-card-art">NO IMAGE</span>}
+          <div>
+            <small style={{ "--element": RPG_ELEMENT_META[cardElement].color } as CSSProperties}>
+              {RPG_ELEMENT_META[cardElement].label} · {walletTierShortLabel(tier)} · {boundMove ? "已綁定" : "查看"}
+            </small>
+            <strong>{card.pokemonName || card.name}</strong>
+            <span>{card.setName || card.name}</span>
+            <em>{boundMove ? `${boundMove.name} · ${tierLabel(boundMove)} · ${boundMove.energyCost} EN` : `${formatUsd(card.fmvUSD)} / ${card.attributeCandidates.grade ?? "未分級"}`}</em>
+          </div>
+        </button>
+        {expanded ? (
+          <WalletCardSkillDetail
+            card={card}
+            cardElement={cardElement}
+            boundMove={boundMove}
+            reveal={reveal}
+            onDraw={handleDrawSelectedCard}
+            onIntroDone={() => setCardReveal((current) => (current && current.cardId === cardId ? { ...current, phase: "reveal" } : current))}
+          />
+        ) : null}
+      </article>
+    );
+  };
   return (
     <aside className="rpg-panel rpg-profile-card-panel rpg-backpack-panel" aria-label="個人資料與錢包卡片">
       <header>
@@ -403,8 +460,6 @@ function ProfilePanel() {
         </div>
         <button type="button" onClick={saveProfile}>儲存</button>
       </section>
-
-      <ElementFilter value={element} onChange={setElement} />
 
       <section className="rpg-bag-summary" aria-label="背包摘要">
         <article>
@@ -452,6 +507,9 @@ function ProfilePanel() {
                 </button>
               </div>
             </header>
+            <div className="rpg-wallet-showcase-filter">
+              <ElementFilter value={element} onChange={setElement} />
+            </div>
             {isExperienceWallet ? (
               <section className="rpg-wallet-experience-notice" data-rpg-guide-target="wallet-notice">
                 <strong>體驗用暫時錢包</strong>
@@ -529,58 +587,18 @@ function ProfilePanel() {
                   ) : null}
                 </div>
                 {selectedWalletTierGroup ? (
-                    <div className={`rpg-wallet-card-grid rpg-wallet-shelf-grid is-${selectedWalletTierGroup.tier}`}>
-                      {selectedWalletTierGroup.cards.map((card) => {
-                        const tier = walletCardTier(card);
-                        const cardElement = walletCardElement(card, walletCardElements);
-                        const cardId = walletCardKey(card);
-                        const boundMove = getRpgMoveById(cardSkillBindings[cardId]);
-                        const expanded = selectedCardId === cardId;
-                        const reveal = cardReveal?.cardId === cardId ? cardReveal : null;
-                        const expandedMode = !expanded ? "" : reveal?.phase === "intro" ? "is-reveal-intro" : reveal?.phase === "reveal" ? "is-reveal-complete" : boundMove ? "is-bound-detail" : "is-draw-ready";
-                        return (
-                          <article
-                            key={cardId}
-                            className={["rpg-wallet-card", `is-${tier}`, boundMove ? "is-bound" : "", expanded ? "is-expanded" : "", expandedMode].filter(Boolean).join(" ")}
-                            data-token-id={card.tokenId}
-                            data-rpg-guide-target={boundMove ? undefined : "single-card-draw"}
-                          >
-                            <button
-                              type="button"
-                              className="rpg-wallet-card-summary"
-                              onClick={() => {
-                                if (expanded) {
-                                  setSelectedCardId(null);
-                                  setCardReveal(null);
-                                  return;
-                                }
-                                setSelectedCardId(cardId);
-                                setCardReveal((current) => (current?.cardId === cardId ? current : null));
-                              }}
-                            >
-                              {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : <span className="rpg-wallet-card-art">NO IMAGE</span>}
-                              <div>
-                                <small style={{ "--element": RPG_ELEMENT_META[cardElement].color } as CSSProperties}>
-                                  {RPG_ELEMENT_META[cardElement].label} · {walletTierShortLabel(tier)} · {boundMove ? "已綁定" : "查看"}
-                                </small>
-                                <strong>{card.pokemonName || card.name}</strong>
-                                <span>{card.setName || card.name}</span>
-                                <em>{boundMove ? `${boundMove.name} · ${tierLabel(boundMove)} · ${boundMove.energyCost} EN` : `${formatUsd(card.fmvUSD)} / ${card.attributeCandidates.grade ?? "未分級"}`}</em>
-                              </div>
-                            </button>
-                            {expanded ? (
-                              <WalletCardSkillDetail
-                                card={card}
-                                cardElement={cardElement}
-                                boundMove={boundMove}
-                                reveal={reveal}
-                                onDraw={handleDrawSelectedCard}
-                                onIntroDone={() => setCardReveal((current) => (current && current.cardId === cardId ? { ...current, phase: "reveal" } : current))}
-                              />
-                            ) : null}
-                          </article>
-                        );
-                      })}
+                  <div className={`rpg-wallet-element-sections is-${selectedWalletTierGroup.tier}`}>
+                    {selectedWalletElementGroups.map((group) => (
+                      <section key={group.element} className="rpg-wallet-element-section" style={{ "--element": RPG_ELEMENT_META[group.element].color, "--element-soft": RPG_ELEMENT_META[group.element].accent } as CSSProperties}>
+                        <header>
+                          <strong>{RPG_ELEMENT_META[group.element].label}屬性</strong>
+                          <span>{group.cards.length} 張</span>
+                        </header>
+                        <div className={`rpg-wallet-card-grid rpg-wallet-shelf-grid is-${selectedWalletTierGroup.tier}`}>
+                          {group.cards.map(renderWalletCard)}
+                        </div>
+                      </section>
+                    ))}
                     </div>
                 ) : null}
               </div>
@@ -826,7 +844,24 @@ function CardEquipPanel({
   const availableCards = boundCards
     .filter(({ move }) => move.element === pet.element)
     .sort((a, b) => a.move.tierIndex - b.move.tierIndex || a.move.energyCost - b.move.energyCost || a.card.name.localeCompare(b.card.name));
-  const selectedEquipCard = (selectedEquipCardId ? availableCards.find((candidate) => candidate.cardId === selectedEquipCardId) : null) ?? equippedCards[0] ?? availableCards[0] ?? null;
+  const selectedEquipCard = selectedEquipCardId
+    ? availableCards.find((candidate) => candidate.cardId === selectedEquipCardId) ?? equippedCards.find((candidate) => candidate.cardId === selectedEquipCardId) ?? null
+    : null;
+  const toggleSelectedEquipCard = (cardId: string) => {
+    setSelectedEquipCardId((current) => (current === cardId ? null : cardId));
+  };
+  const renderCardDetail = (boundCard: BoundWalletSkillCard) => (
+    <div className="rpg-card-equip-inline-detail">
+      <WalletCardSkillDetail
+        card={boundCard.card}
+        cardElement={boundCard.move.element}
+        boundMove={boundCard.move}
+        reveal={null}
+        onDraw={async () => undefined}
+        onIntroDone={() => undefined}
+      />
+    </div>
+  );
 
   return (
     <section ref={panelRef} className="rpg-card-equip-panel rpg-skill-library" aria-label="寵物卡片插槽" data-rpg-guide-target="card-equip">
@@ -853,11 +888,13 @@ function CardEquipPanel({
       <div className="rpg-equipped-card-slots" style={{ "--element": petMeta.color, "--element-soft": petMeta.accent } as CSSProperties}>
         {Array.from({ length: RPG_MAX_EQUIPPED_MOVES }).map((_, index) => {
           const equipped = equippedCards[index];
+          const expanded = Boolean(equipped && selectedEquipCard?.cardId === equipped.cardId);
           return equipped ? (
-            <article key={equipped.cardId} className={["rpg-equipped-card-slot", "is-filled", selectedEquipCard?.cardId === equipped.cardId ? "is-selected" : ""].filter(Boolean).join(" ")}>
-              <button type="button" className="rpg-card-slot-preview" onClick={() => setSelectedEquipCardId(equipped.cardId)} title="查看卡片效果">
+            <article key={equipped.cardId} className={["rpg-equipped-card-slot", "is-filled", expanded ? "is-selected is-expanded" : ""].filter(Boolean).join(" ")}>
+              <button type="button" className="rpg-card-slot-preview" onClick={() => toggleSelectedEquipCard(equipped.cardId)} title="查看卡片效果">
                 {equipped.card.imageUrl ? <RpgPixelCardImage src={equipped.card.imageUrl} alt={equipped.card.name} /> : null}
                 <span>
+                  <b>插槽 {index + 1}</b>
                   <strong>{equipped.move.name}</strong>
                   <em>{equipped.card.pokemonName || equipped.card.name}</em>
                 </span>
@@ -865,6 +902,7 @@ function CardEquipPanel({
               <button type="button" className="rpg-card-slot-action" onClick={() => void unequipCardFromPet(pet.id, equipped.cardId)}>
                 卸下
               </button>
+              {expanded ? renderCardDetail(equipped) : null}
             </article>
           ) : (
             <div key={`empty-${pet.id}-${index}`} className="rpg-equipped-card-slot is-empty">
@@ -884,11 +922,13 @@ function CardEquipPanel({
         ) : (
           availableCards.map(({ card, cardId, move }) => {
             const equipped = equippedCardIds.includes(cardId);
+            const expanded = selectedEquipCard?.cardId === cardId;
             return (
-              <article key={cardId} className={["rpg-card-equip-row", equipped ? "is-equipped" : "", selectedEquipCard?.cardId === cardId ? "is-selected" : ""].filter(Boolean).join(" ")}>
-                <button type="button" className="rpg-card-equip-preview" onClick={() => setSelectedEquipCardId(cardId)}>
+              <article key={cardId} className={["rpg-card-equip-row", equipped ? "is-equipped" : "", expanded ? "is-selected is-expanded" : ""].filter(Boolean).join(" ")}>
+                <button type="button" className="rpg-card-equip-preview" onClick={() => toggleSelectedEquipCard(cardId)}>
                   {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : null}
                   <span>
+                    <b>{equipped ? "已裝備" : "候選卡片"}</b>
                     <strong>{move.name}</strong>
                     <em>{card.pokemonName || card.name}</em>
                   </span>
@@ -896,26 +936,18 @@ function CardEquipPanel({
                 <button type="button" className="rpg-card-equip-action" onClick={() => void (equipped ? unequipCardFromPet(pet.id, cardId) : equipCardToPet(pet.id, cardId))}>
                   {equipped ? "卸下" : "插入"}
                 </button>
+                {expanded ? renderCardDetail({ card, cardId, move }) : null}
               </article>
             );
           })
         )}
       </div>
-      {selectedEquipCard ? (
-        <WalletCardSkillDetail
-          card={selectedEquipCard.card}
-          cardElement={selectedEquipCard.move.element}
-          boundMove={selectedEquipCard.move}
-          reveal={null}
-          onDraw={async () => undefined}
-          onIntroDone={() => undefined}
-        />
-      ) : (
+      {!selectedEquipCard && availableCards.length === 0 ? (
         <div className="rpg-card-equip-detail-empty">
           <Cards size={20} weight="fill" />
           <span>先在收藏櫃抽出技能，再回到這裡插入卡片。</span>
         </div>
-      )}
+      ) : null}
     </section>
   );
 }
@@ -1196,28 +1228,6 @@ function GymPanel() {
           <span>先組 3v3 隊伍；點已上場寵物可編輯牠能使用的卡片技能。</span>
         </div>
         <PartySelection editingPetId={showSkillEditor ? equipPetId : null} onEditPet={openPartySkillEditor} />
-        {showSkillEditor ? (
-          <section className="rpg-gym-skill-workbench" aria-label="道館技能與卡片插槽">
-            <SkillLibraryPanel
-              title="預設技能"
-              description="調整寵物自帶招式；卡片技能在右側插槽裝備。"
-              equipPetId={equipPetId}
-              setEquipPetId={setEquipPetId}
-              skillInventory={skillInventory}
-              petMoveLoadouts={petMoveLoadouts}
-              equipMoveToPet={equipMoveToPet}
-              unequipMoveFromPet={unequipMoveFromPet}
-            />
-            <CardEquipPanel
-              equipPetId={equipPetId}
-              setEquipPetId={setEquipPetId}
-              boundCards={boundCards}
-              petCardLoadouts={petCardLoadouts}
-              equipCardToPet={equipCardToPet}
-              unequipCardFromPet={unequipCardFromPet}
-            />
-          </section>
-        ) : null}
         <section className="rpg-ai-difficulty-selector" aria-label="AI 難度">
           <header>
             <strong>AI 對戰</strong>
@@ -1265,6 +1275,43 @@ function GymPanel() {
         </div>
         {battleNotice ? <p className="rpg-room-message">{battleNotice}</p> : null}
       </aside>
+      {showSkillEditor ? (
+        <section className="rpg-gym-workbench-overlay" role="dialog" aria-modal="true" aria-label="隊伍與卡片插槽編輯">
+          <header>
+            <FlagBanner size={24} weight="fill" />
+            <div>
+              <strong>隊伍編輯</strong>
+              <span>選寵物、調整預設技能、查看並插入卡片技能</span>
+            </div>
+            <button type="button" title="關閉隊伍編輯" aria-label="關閉隊伍編輯" onClick={() => setShowSkillEditor(false)}>
+              <X size={18} weight="bold" />
+            </button>
+          </header>
+          <div className="rpg-gym-workbench-body">
+            <PartySelection editingPetId={equipPetId} onEditPet={openPartySkillEditor} />
+            <section className="rpg-gym-skill-workbench" aria-label="道館技能與卡片插槽">
+              <SkillLibraryPanel
+                title="預設技能"
+                description="調整寵物自帶招式；卡片技能在右側插槽裝備。"
+                equipPetId={equipPetId}
+                setEquipPetId={setEquipPetId}
+                skillInventory={skillInventory}
+                petMoveLoadouts={petMoveLoadouts}
+                equipMoveToPet={equipMoveToPet}
+                unequipMoveFromPet={unequipMoveFromPet}
+              />
+              <CardEquipPanel
+                equipPetId={equipPetId}
+                setEquipPetId={setEquipPetId}
+                boundCards={boundCards}
+                petCardLoadouts={petCardLoadouts}
+                equipCardToPet={equipCardToPet}
+                unequipCardFromPet={unequipCardFromPet}
+              />
+            </section>
+          </div>
+        </section>
+      ) : null}
       <GymTutorialModal open={gymTutorial.open} onClose={gymTutorial.closeTutorial} />
     </>
   );
@@ -1402,6 +1449,28 @@ function CommandPlaceholder({
   );
 }
 
+function battlePetNameById(battle: RpgBattleState, id?: string) {
+  if (!id) return "未指定";
+  return battle.left.concat(battle.right).find((pet) => pet.id === id)?.name ?? "未指定";
+}
+
+function moveTargetLabel(move: RpgMove) {
+  if (move.target === "singleEnemy") return "單體敵方";
+  if (move.target === "singleAlly") return "單體我方";
+  if (move.target === "allEnemies") return "敵方全體";
+  if (move.target === "allAllies") return "我方全體";
+  return "自身";
+}
+
+function battleActionTargetLabel(battle: RpgBattleState, actor: RpgBattlePetState, action: { moveId: string; targetId?: string }) {
+  const move = getRpgMoveById(action.moveId);
+  if (!move) return "未指定";
+  if (move.target === "singleEnemy" || move.target === "singleAlly") return battlePetNameById(battle, action.targetId);
+  if (move.target === "allEnemies") return "敵方全體";
+  if (move.target === "allAllies") return "我方全體";
+  return actor.name;
+}
+
 function BattlePanel() {
   const battle = useRpgStore((state) => state.activeBattle);
   const battleMode = useRpgStore((state) => state.battleMode);
@@ -1436,11 +1505,12 @@ function BattlePanel() {
   const canCommand = Boolean(battle && !battle.winner && activeSide === "left");
   const roundEnergy = battle ? getRpgBattleEnergyForTurn(battle.turn) : 1;
   const currentActor = useMemo(() => (battle ? getRpgCurrentTurnActor(battle) : null), [battle]);
-  const targetingActor = canCommand ? leftLiving[0] ?? null : null;
-  const reachableEnemyIds = useMemo(
-    () => new Set(battle && targetingActor ? getRpgReachableEnemyTargets(battle, targetingActor).map((pet) => pet.id) : []),
-    [battle, targetingActor]
-  );
+  const reachableEnemyIds = useMemo(() => {
+    const ids = new Set<string>();
+    if (!battle || !canCommand) return ids;
+    leftLiving.forEach((actor) => getRpgReachableEnemyTargets(battle, actor).forEach((pet) => ids.add(pet.id)));
+    return ids;
+  }, [battle, canCommand, leftLiving]);
   const replaySequence = useMemo(() => (battle ? buildBattleReplaySequence(battle) : []), [battle]);
   const replaySequenceKey = useMemo(() => replaySequence.map((entry) => entry.key).join("|"), [replaySequence]);
   const [replayStepIndex, setReplayStepIndex] = useState(0);
@@ -1633,34 +1703,36 @@ function BattlePanel() {
                   detail={battleMode === "versus" ? "等待對手選擇招式。" : "AI 正在選擇招式。"}
                 />
               ) : null}
-              {commandPets.map((pet) => (
-                <article
-                  key={pet.id}
-                  className="rpg-command-row"
-                  data-actor-id={pet.id}
-                  data-pending-target-id={pendingActions[pet.id]?.targetId ?? ""}
-                  data-rpg-guide-target="battle-current-pet"
-                >
-                  <header>
-                    <strong>{pet.name}</strong>
-                    {(() => {
-                      const selectedMove = getRpgMoveById(pendingActions[pet.id]?.moveId ?? "");
-                      const energyAvailableForPet = Math.max(0, roundEnergy - pendingEnergySpent + (selectedMove?.energyCost ?? 0));
-                      return <span>可分配 {energyAvailableForPet}/{roundEnergy} EN</span>;
-                    })()}
-                    {pendingActions[pet.id] && !selfSubmitted ? (
-                      <button type="button" onClick={() => clearBattleAction(pet.id)}>
-                        重選
-                      </button>
-                    ) : null}
-                  </header>
-                  <div className="rpg-move-list" data-rpg-guide-target="battle-moves">
-                    {pet.moveIds.map((moveId) => {
+              {commandPets.map((pet) => {
+                const selectedAction = pendingActions[pet.id];
+                const selectedMove = getRpgMoveById(selectedAction?.moveId ?? "");
+                const selectedTarget = selectedAction && selectedMove ? battleActionTargetLabel(battle, pet, selectedAction) : "尚未選擇";
+                const energyAvailableForPet = Math.max(0, roundEnergy - pendingEnergySpent + (selectedMove?.energyCost ?? 0));
+                return (
+                  <article
+                    key={pet.id}
+                    className="rpg-command-row"
+                    data-actor-id={pet.id}
+                    data-pending-target-id={selectedAction?.targetId ?? ""}
+                    data-rpg-guide-target="battle-current-pet"
+                  >
+                    <header>
+                      <div className="rpg-command-row-title">
+                        <strong>{pet.name}</strong>
+                        {selectedAction && selectedMove ? <em>已選 {selectedMove.name} → {selectedTarget}</em> : <em>點技能後再點場上目標</em>}
+                      </div>
+                      <span>可分配 {energyAvailableForPet}/{roundEnergy} EN</span>
+                      {selectedAction && !selfSubmitted ? (
+                        <button type="button" onClick={() => clearBattleAction(pet.id)}>
+                          重選
+                        </button>
+                      ) : null}
+                    </header>
+                    <div className="rpg-move-list" data-rpg-guide-target="battle-moves">
+                      {pet.moveIds.map((moveId) => {
                       const move = getRpgMoveById(moveId);
                       if (!move) return null;
-                      const active = pendingActions[pet.id]?.moveId === move.id;
-                      const currentSelectedMove = getRpgMoveById(pendingActions[pet.id]?.moveId ?? "");
-                      const energyAvailableForPet = Math.max(0, roundEnergy - pendingEnergySpent + (currentSelectedMove?.energyCost ?? 0));
+                      const active = selectedAction?.moveId === move.id;
                       const disabled = selfSubmitted || versusLocked || !canCommand || move.energyCost > energyAvailableForPet;
                       return (
                         <button
@@ -1673,13 +1745,16 @@ function BattlePanel() {
                         >
                           <span>{RPG_ELEMENT_META[move.element].label}</span>
                           <strong>{move.name}</strong>
-                          <em>{move.energyCost} EN</em>
+                          <em>{move.energyCost} EN / {moveTargetLabel(move)}</em>
+                          {active ? <b>已選</b> : null}
+                          {active ? <small>目標：{selectedTarget}</small> : null}
                         </button>
                       );
-                    })}
-                  </div>
-                </article>
-              ))}
+                      })}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
 
             <footer className="rpg-battle-actions" data-rpg-guide-target="battle-action">
@@ -1941,6 +2016,7 @@ function BattleFieldPet({
         ) : null}
         <RpgPetSprite element={pet.element} pose={petPose} frame={0} className="rpg-field-pet-sprite" />
         <BattleStatusEffects statuses={pet.statuses} />
+        {selected ? <span className="rpg-field-target-tag">{side === "left" ? "我方目標" : "敵方目標"}</span> : null}
         <div className="rpg-field-nameplate">
           <strong>{pet.name}</strong>
         </div>

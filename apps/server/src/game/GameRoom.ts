@@ -615,7 +615,7 @@ export class GameRoom {
   private handleArcherChargedAttack(attacker: PlayerEntity, now: number) {
     if (attacker.archerChargeStartedAt > 0) {
       const stage = this.getArcherChargeStage(attacker, now);
-      if (!attacker.input.attack || stage >= COMBAT.archerChargeStages) {
+      if (!attacker.input.attack) {
         this.fireArcherChargedArrow(attacker, now, stage);
         return;
       }
@@ -999,7 +999,7 @@ export class GameRoom {
 
   private getPlayerProjectileOrigin(player: PlayerEntity, type: ProjectileType) {
     if (type === "arrow") {
-      return this.getMuzzlePoint(player, player.angle, 44, 7);
+      return this.getMuzzlePoint({ x: player.x, y: player.y - 28 }, player.angle, 58, 0);
     }
 
     return this.getMuzzlePoint(player, player.angle, 40, 10);
