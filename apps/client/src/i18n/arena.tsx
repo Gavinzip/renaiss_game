@@ -262,6 +262,7 @@ const cooldownSeconds = (classId: ClassId, skill: SkillKey) => getSkillCooldownM
 const zhCooldown = (classId: ClassId, skill: SkillKey) => `${cooldownSeconds(classId, skill)} 秒冷卻`;
 const enCooldown = (classId: ClassId, skill: SkillKey) => `${cooldownSeconds(classId, skill)}s CD`;
 const koCooldown = (classId: ClassId, skill: SkillKey) => `${cooldownSeconds(classId, skill)}초 쿨다운`;
+const archerChargeDamage = `${CLASS_STATS.archer.attackPower}-${CLASS_STATS.archer.attackPower * COMBAT.archerChargedArrowMaxDamageMultiplier}`;
 
 const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
   zh: {
@@ -272,7 +273,7 @@ const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
       skillR: { description: "在身邊打出裁決重擊，適合近身收割。", facts: [`${COMBAT.warriorUltimateDamage} 傷害`, `${COMBAT.warriorUltimateRadius} 半徑`, "15 秒冷卻"] }
     },
     archer: {
-      attack: { description: "朝準星方向射出箭矢。", facts: [`${CLASS_STATS.archer.attackPower} 傷害`, `${COMBAT.arrowDistance} 射程`] },
+      attack: { description: "按住拉弓，放開射出蓄力箭。", facts: [`${COMBAT.archerChargeStages} 段蓄力`, `${archerChargeDamage} 傷害`, `${COMBAT.arrowDistance} 射程`] },
       skillQ: { description: "向前翻滾，快速拉開位置。", facts: [`${COMBAT.archerRollDistance} 距離`, "5 秒冷卻"] },
       skillE: { description: "在滑鼠位置生成根縛區域，定身範圍內敵人。", facts: [`${COMBAT.archerRootDuration / 1000} 秒定身`, `${COMBAT.archerRootRadius} 半徑`, "8 秒冷卻"] },
       skillR: { description: "在滑鼠位置引爆大範圍種子雨。", facts: [`${COMBAT.archerUltimateDamage} 傷害`, `${COMBAT.archerUltimateRadius} 半徑`, "15 秒冷卻"] }
@@ -298,7 +299,7 @@ const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
       skillR: { description: "Verdict strike around you, built for finishing close fights.", facts: [`${COMBAT.warriorUltimateDamage} damage`, `${COMBAT.warriorUltimateRadius} radius`, "15s CD"] }
     },
     archer: {
-      attack: { description: "Fire an arrow projectile in the facing direction.", facts: [`${CLASS_STATS.archer.attackPower} damage`, `${COMBAT.arrowDistance} range`] },
+      attack: { description: "Hold to draw, release to fire a charged arrow.", facts: [`${COMBAT.archerChargeStages} charge stages`, `${archerChargeDamage} damage`, `${COMBAT.arrowDistance} range`] },
       skillQ: { description: "Roll forward to reposition and create space.", facts: [`${COMBAT.archerRollDistance} distance`, "5s CD"] },
       skillE: { description: "Bloom Root Bind at the cursor, rooting enemies inside the area.", facts: [`${COMBAT.archerRootDuration / 1000}s root`, `${COMBAT.archerRootRadius} radius`, "8s CD"] },
       skillR: { description: "Burst Seed Rain at the cursor across a wide ground area.", facts: [`${COMBAT.archerUltimateDamage} damage`, `${COMBAT.archerUltimateRadius} radius`, "15s CD"] }
@@ -324,7 +325,7 @@ const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
       skillR: { description: "주변에 심판의 일격을 가해 근접전을 마무리합니다.", facts: [`${COMBAT.warriorUltimateDamage} 피해`, `${COMBAT.warriorUltimateRadius} 반경`, "15초 쿨다운"] }
     },
     archer: {
-      attack: { description: "조준 방향으로 화살을 발사합니다.", facts: [`${CLASS_STATS.archer.attackPower} 피해`, `${COMBAT.arrowDistance} 사거리`] },
+      attack: { description: "길게 눌러 활을 당기고 놓으면 충전 화살을 발사합니다.", facts: [`${COMBAT.archerChargeStages}단계 차지`, `${archerChargeDamage} 피해`, `${COMBAT.arrowDistance} 사거리`] },
       skillQ: { description: "앞으로 구르며 위치를 다시 잡습니다.", facts: [`${COMBAT.archerRollDistance} 거리`, "5초 쿨다운"] },
       skillE: { description: "커서 위치에 뿌리 속박 구역을 만들어 범위 안 적을 묶습니다.", facts: [`${COMBAT.archerRootDuration / 1000}초 속박`, `${COMBAT.archerRootRadius} 반경`, "8초 쿨다운"] },
       skillR: { description: "커서 위치에 넓은 씨앗비를 터뜨립니다.", facts: [`${COMBAT.archerUltimateDamage} 피해`, `${COMBAT.archerUltimateRadius} 반경`, "15초 쿨다운"] }

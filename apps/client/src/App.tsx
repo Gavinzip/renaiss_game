@@ -13,7 +13,6 @@ import { Minimap } from "./components/Minimap";
 import { RoundHud } from "./components/RoundHud";
 import { RoundRewards } from "./components/RoundRewards";
 import { RoundResultOverlay } from "./components/RoundResultOverlay";
-import { RoundStartOverlay } from "./components/RoundStartOverlay";
 import { SelfStatusOverlay } from "./components/SelfStatusOverlay";
 import { RpgAnimationPreview } from "./components/RpgAnimationPreview";
 import { RpgReleaseReview } from "./components/RpgReleaseReview";
@@ -91,6 +90,7 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
 function RpgApp({ authUser }: { authUser: XAuthUser }) {
   const previewMode = new URLSearchParams(window.location.search).get("preview");
   const rpgArenaStyle = { "--rpg-arena-url": `url("${generatedAssetPath("rpg-battle-arena")}")` } as CSSProperties;
+  const [rpgReady, setRpgReady] = useState(false);
 
   useEffect(() => {
     useRpgStore.getState().setPlayerName(xPlayerName(authUser));
@@ -100,8 +100,12 @@ function RpgApp({ authUser }: { authUser: XAuthUser }) {
     if (previewMode === "pets" || previewMode === "skills" || previewMode === "status" || previewMode === "release") {
       return undefined;
     }
+    setRpgReady(false);
+    const handleRpgReady = () => setRpgReady(true);
+    window.addEventListener("renaiss:rpg-ready", handleRpgReady);
     const game = createRpgGame("game-root");
     return () => {
+      window.removeEventListener("renaiss:rpg-ready", handleRpgReady);
       game.destroy(true);
       if (window.__renaissRpgGame === game) {
         delete window.__renaissRpgGame;
@@ -128,8 +132,22 @@ function RpgApp({ authUser }: { authUser: XAuthUser }) {
   return (
     <main className="app-shell rpg-app-shell" style={rpgArenaStyle}>
       <div id="game-root" className="game-root" />
-      <RpgOverlay />
+      {rpgReady ? <RpgOverlay /> : <RpgLoadingGate />}
     </main>
+  );
+}
+
+function RpgLoadingGate() {
+  return (
+    <section className="rpg-loading-gate" role="status" aria-live="polite" aria-label="RPG loading">
+      <div className="rpg-loading-window">
+        <span>RENAISS ARENA</span>
+        <strong>載入村莊中</strong>
+        <div className="rpg-loading-bar" aria-hidden="true">
+          <i />
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -392,9 +410,6 @@ function HudOverlay() {
       ) : null}
 
       {joined && snapshot ? <RoundHud round={snapshot.round} serverTime={snapshot.serverTime} /> : null}
-      {joined && snapshot && self?.alive ? (
-        <RoundStartOverlay round={snapshot.round} serverTime={snapshot.serverTime} selfId={selfId} classId={displayClass} />
-      ) : null}
       {joined && snapshot && displayPrefs.combatPopups ? <CombatAnnouncer snapshot={snapshot} selfId={selfId} /> : null}
       {joined && snapshot && displayPrefs.combatPopups ? <CombatToast snapshot={snapshot} selfId={selfId} /> : null}
       {joined && snapshot ? <RoundRewards round={snapshot.round} /> : null}

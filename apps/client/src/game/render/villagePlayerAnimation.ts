@@ -22,7 +22,7 @@ export const VILLAGE_PLAYER_DISPLAY = {
   height: 138
 } as const;
 
-export const VILLAGE_PLAYER_ORIGIN_Y = 0.9;
+export const VILLAGE_PLAYER_ORIGIN_Y = 0.96;
 
 const WALK_FRAME_MS = 118;
 const DOWN_WALK_FRAMES = [0, 1, 2] as const;
@@ -70,7 +70,7 @@ export function getVillagePlayerStepPose(moving: boolean, direction: VillagePlay
       height: VILLAGE_PLAYER_DISPLAY.height,
       originY: VILLAGE_PLAYER_ORIGIN_Y,
       shadowOffsetX: 0,
-      shadowOffsetY: 13,
+      shadowOffsetY: 3,
       shadowScaleX: 1,
       shadowScaleY: 1,
       shadowAlpha: 0.22
@@ -85,7 +85,7 @@ export function getVillagePlayerStepPose(moving: boolean, direction: VillagePlay
     height: VILLAGE_PLAYER_DISPLAY.height * (1 - footPlant * 0.018),
     originY: VILLAGE_PLAYER_ORIGIN_Y + footPlant * verticalMotion,
     shadowOffsetX: direction === "side" ? phase * 1.4 : 0,
-    shadowOffsetY: 13,
+    shadowOffsetY: 3,
     shadowScaleX: 1 + footPlant * 0.06,
     shadowScaleY: 1 - footPlant * 0.03,
     shadowAlpha: 0.19 + footPlant * 0.05

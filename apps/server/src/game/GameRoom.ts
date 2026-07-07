@@ -46,6 +46,7 @@ interface PlayerEntity extends PublicPlayer {
   socketId: string | null;
   input: PlayerInput;
   lastAttackAt: number;
+  archerChargeStartedAt: number;
   action: PlayerActionState | null;
   actionStartedAt: number;
   actionEndsAt: number;
@@ -120,6 +121,7 @@ export class GameRoom {
   private nextHealthPackId = 1;
   private nextEffectId = 1;
   private nextEventId = 1;
+  private roundNumber = 0;
   private roundPhase: RoundPhase = "playing";
   private roundStartedAt = Date.now();
   private roundEndsAt = this.roundStartedAt + WORLD.roundDurationMs;
@@ -203,6 +205,7 @@ export class GameRoom {
     player.maxStamina = COMBAT.maxStamina;
     player.cooldowns = { skillQ: 0, skillE: 0, skillR: 0 };
     player.input = { ...EMPTY_INPUT };
+    this.resetArcherCharge(player);
     player.action = null;
     player.actionStartedAt = 0;
     player.actionEndsAt = 0;
@@ -344,6 +347,7 @@ export class GameRoom {
       cooldowns,
       input: { ...EMPTY_INPUT },
       lastAttackAt: 0,
+      archerChargeStartedAt: 0,
       action: null,
       actionStartedAt: 0,
       actionEndsAt: 0,
@@ -394,6 +398,7 @@ export class GameRoom {
   }
 
   private resetRound(now: number, announce = true) {
+    this.roundNumber += 1;
     this.roundPhase = "playing";
     this.roundStartedAt = now;
     this.roundEndsAt = now + WORLD.roundDurationMs;
@@ -429,6 +434,7 @@ export class GameRoom {
       player.cooldowns = { skillQ: 0, skillE: 0, skillR: 0 };
       player.input = { ...EMPTY_INPUT };
       player.lastAttackAt = 0;
+      this.resetArcherCharge(player);
       player.actionPoseEndsAt = 0;
       player.action = null;
       player.actionStartedAt = 0;
@@ -450,6 +456,7 @@ export class GameRoom {
   private toRoundState(): RoundState {
     return {
       phase: this.roundPhase,
+      roundNumber: this.roundNumber,
       startedAt: this.roundStartedAt,
       endsAt: this.roundEndsAt,
       nextRoundAt: this.nextRoundAt,
@@ -555,6 +562,10 @@ export class GameRoom {
         continue;
       }
 
+      if (player.stunned) {
+        this.resetArcherCharge(player);
+      }
+
       const skillUsed = !player.stunned ? this.handleSkills(player, now) : false;
 
       if (!player.rooted && !player.stunned && !this.isMovementLocked(player, now)) {
@@ -589,10 +600,103 @@ export class GameRoom {
 
       player.angle = player.input.angle;
 
-      if (!skillUsed && !player.stunned && player.input.attack) {
-        this.handleAttack(player, now);
+      if (!skillUsed && !player.stunned) {
+        if (player.classId === "archer") {
+          this.handleArcherChargedAttack(player, now);
+        } else if (player.input.attack) {
+          this.handleAttack(player, now);
+        }
+      } else if (skillUsed) {
+        this.resetArcherCharge(player);
       }
     }
+  }
+
+  private handleArcherChargedAttack(attacker: PlayerEntity, now: number) {
+    if (attacker.archerChargeStartedAt > 0) {
+      const stage = this.getArcherChargeStage(attacker, now);
+      if (!attacker.input.attack || stage >= COMBAT.archerChargeStages) {
+        this.fireArcherChargedArrow(attacker, now, stage);
+        return;
+      }
+
+      this.faceAim(attacker);
+      this.setArcherChargePose(attacker, now);
+      return;
+    }
+
+    if (!attacker.input.attack || attacker.actionPoseEndsAt > now) {
+      return;
+    }
+    if (now - attacker.lastAttackAt < CLASS_STATS.archer.attackCooldownMs) {
+      return;
+    }
+
+    this.faceAim(attacker);
+    this.releaseSpawnGuardForAction(attacker, now);
+    attacker.archerChargeStartedAt = now;
+    this.setArcherChargePose(attacker, now);
+  }
+
+  private fireArcherChargedArrow(attacker: PlayerEntity, now: number, stage: number) {
+    if (attacker.archerChargeStartedAt <= 0) {
+      return;
+    }
+
+    this.faceAim(attacker);
+    attacker.lastAttackAt = now;
+    this.resetArcherCharge(attacker);
+    this.setActionPose(attacker, now, 320, "attack");
+
+    const origin = this.getPlayerProjectileOrigin(attacker, "arrow");
+    this.spawnProjectile({
+      ownerId: attacker.id,
+      type: "arrow",
+      x: origin.x,
+      y: origin.y,
+      angle: attacker.angle,
+      damage: this.getArcherChargedArrowDamage(stage),
+      speed: this.getArcherChargedArrowSpeed(stage),
+      maxDistance: COMBAT.arrowDistance,
+      distanceTraveled: origin.distance
+    });
+  }
+
+  private setArcherChargePose(player: PlayerEntity, now: number) {
+    player.action = "attack";
+    player.actionStartedAt = player.archerChargeStartedAt;
+    player.actionEndsAt = player.archerChargeStartedAt + (COMBAT.archerChargeStages - 1) * COMBAT.archerChargeStageMs;
+    player.actionPoseEndsAt = Math.max(player.actionPoseEndsAt, now + 120);
+    player.attacking = true;
+  }
+
+  private resetArcherCharge(player: PlayerEntity) {
+    player.archerChargeStartedAt = 0;
+  }
+
+  private getArcherChargeStage(player: PlayerEntity, now: number) {
+    if (player.archerChargeStartedAt <= 0) {
+      return 1;
+    }
+    const elapsed = Math.max(0, now - player.archerChargeStartedAt);
+    return Math.max(1, Math.min(COMBAT.archerChargeStages, Math.floor(elapsed / COMBAT.archerChargeStageMs) + 1));
+  }
+
+  private getArcherChargeRatio(stage: number) {
+    if (COMBAT.archerChargeStages <= 1) {
+      return 1;
+    }
+    return (Math.max(1, Math.min(COMBAT.archerChargeStages, stage)) - 1) / (COMBAT.archerChargeStages - 1);
+  }
+
+  private getArcherChargedArrowDamage(stage: number) {
+    const multiplier = 1 + (COMBAT.archerChargedArrowMaxDamageMultiplier - 1) * this.getArcherChargeRatio(stage);
+    return Math.round(CLASS_STATS.archer.attackPower * multiplier);
+  }
+
+  private getArcherChargedArrowSpeed(stage: number) {
+    const multiplier = 1 + (COMBAT.archerChargedArrowMaxSpeedMultiplier - 1) * this.getArcherChargeRatio(stage);
+    return Math.round(COMBAT.arrowSpeed * multiplier);
   }
 
   private handleAttack(attacker: PlayerEntity, now: number) {
@@ -1181,6 +1285,7 @@ export class GameRoom {
     target.killStreak = 0;
     target.respawnAt = now + WORLD.respawnMs;
     target.input = { ...EMPTY_INPUT };
+    this.resetArcherCharge(target);
     target.actionPoseEndsAt = 0;
     target.action = null;
     target.actionStartedAt = 0;
@@ -1254,6 +1359,7 @@ export class GameRoom {
       player.stamina = COMBAT.maxStamina;
       player.alive = true;
       player.sprinting = false;
+      this.resetArcherCharge(player);
       player.actionPoseEndsAt = 0;
       player.action = null;
       player.actionStartedAt = 0;
@@ -1506,7 +1612,7 @@ export class GameRoom {
       attacking: player.attacking,
       action: player.attacking ? player.action : null,
       actionStartedAt: player.attacking ? player.actionStartedAt : 0,
-      actionEndsAt: player.attacking ? player.actionPoseEndsAt : 0,
+      actionEndsAt: player.attacking ? player.actionEndsAt : 0,
       shielded: player.shielded,
       spawnProtected: player.spawnProtected,
       rooted: player.rooted,

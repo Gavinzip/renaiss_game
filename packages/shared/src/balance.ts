@@ -130,6 +130,10 @@ export const COMBAT = {
   assistScore: 0.5,
   arrowSpeed: 740,
   arrowDistance: 660,
+  archerChargeStages: 5,
+  archerChargeStageMs: 260,
+  archerChargedArrowMaxDamageMultiplier: 3,
+  archerChargedArrowMaxSpeedMultiplier: 1.45,
   magicBallSpeed: 560,
   magicBallDistance: 540,
   warriorDashDistance: 280,
@@ -150,8 +154,8 @@ export const COMBAT = {
   turretBoostedRange: 520,
   turretShotSpeed: 520,
   turretBoostedShotSpeed: 760,
-  turretShotDamage: 7,
-  turretBoostedDamage: 10,
+  turretShotDamage: 25,
+  turretBoostedDamage: 25,
   turretAttackInterval: 1000,
   turretBoostedAttackInterval: 520,
   turretBoostDuration: 3000,
@@ -193,8 +197,12 @@ export const ACTION_TOOLTIPS: Record<ClassId, Record<PlayerActionState, ActionTo
   },
   archer: {
     attack: {
-      description: "Fire an arrow projectile in the facing direction.",
-      facts: [`${CLASS_STATS.archer.attackPower} damage`, `${COMBAT.arrowDistance} range`]
+      description: "Hold to draw, release to fire a charged arrow.",
+      facts: [
+        `${COMBAT.archerChargeStages} charge stages`,
+        `${CLASS_STATS.archer.attackPower}-${CLASS_STATS.archer.attackPower * COMBAT.archerChargedArrowMaxDamageMultiplier} damage`,
+        `${COMBAT.arrowDistance} range`
+      ]
     },
     skillQ: {
       description: "Roll forward to reposition and create space.",

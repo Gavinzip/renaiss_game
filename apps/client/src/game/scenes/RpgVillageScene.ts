@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, type RpgElement } from "@renaiss-game/shared";
+import { MAP_COLLIDERS, RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, resolveCollision, type Collider, type RpgElement } from "@renaiss-game/shared";
 import { copyTexture, makeMatteTransparent } from "../assets/chromaKey";
 import { ENV_CROPS, ENV_TEXTURES } from "../assets/crops";
 import { buildRuntimeTextures } from "../assets/runtimeTextures";
@@ -7,6 +7,7 @@ import { generatedAssetPath } from "../assets/generatedAssets";
 import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
 import { RPG_PET_SPRITE_FRAME, RPG_PET_SPRITE_ROW, rpgPetAnimationFrameIndexes } from "../assets/rpgPetSprites";
 import { renderVillageMap } from "../render/villageMap";
+import { isDomTextEditingActive } from "../input/domFocus";
 import {
   getVillagePlayerAnimationFrame,
   getVillagePlayerStepPose,
@@ -47,6 +48,16 @@ interface VillageFollowerDebugState {
 const WORLD_WIDTH = WORLD.width;
 const WORLD_HEIGHT = WORLD.height;
 const PLAYER_SPEED = 184;
+const PLAYER_COLLISION_RADIUS = 28;
+const FOLLOWER_COLLISION_RADIUS = 34;
+const HOUSE_CLEARANCE_Y = VILLAGE_PLAYER_DISPLAY.height * 0.76;
+const HOUSE_CLEARANCE_X = VILLAGE_PLAYER_DISPLAY.width * 0.56;
+const PLAYER_BOUNDS = {
+  left: 80,
+  right: WORLD_WIDTH - 80,
+  top: 110,
+  bottom: WORLD_HEIGHT - 80
+} as const;
 const PET_DISPLAY = 104;
 const FOLLOW_SPACING = 27;
 const FOLLOW_LANE_OFFSETS = [-40, 40, -24, 24, 0] as const;
@@ -63,6 +74,7 @@ export class RpgVillageScene extends Phaser.Scene {
   private followers: FollowerView[] = [];
   private trail: TrailPoint[] = [];
   private keys!: Record<string, Phaser.Input.Keyboard.Key>;
+  private colliders: Collider[] = [];
   private lastNearPlace: RpgPlace | null = null;
   private lastFacing: VillagePlayerFacing = "right";
   private lastMoveAxis: "horizontal" | "vertical" = "horizontal";
@@ -122,13 +134,16 @@ export class RpgVillageScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
     this.cameras.main.setZoom(0.78);
     this.cameras.main.roundPixels = true;
+    this.colliders = [...MAP_COLLIDERS];
 
     renderVillageMap(this);
     this.addRpgVillageProps();
     this.addPlaceLabels();
     this.createParty();
+    this.input.keyboard?.disableGlobalCapture();
     this.keys = this.input.keyboard!.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,SPACE") as Record<string, Phaser.Input.Keyboard.Key>;
     this.cameras.main.startFollow(this.player, true, 0.14, 0.14, 0, 320);
+    window.dispatchEvent(new CustomEvent("renaiss:rpg-ready", { detail: { scene: this.scene.key } }));
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       useRpgStore.getState().setNearPlace(null);
@@ -142,15 +157,15 @@ export class RpgVillageScene extends Phaser.Scene {
     }
 
     const seconds = delta / 1000;
-    const moveX = (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
-    const moveY = (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const inputBlocked = isDomTextEditingActive();
+    const moveX = inputBlocked ? 0 : (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
+    const moveY = inputBlocked ? 0 : (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
     const length = Math.hypot(moveX, moveY) || 1;
     const speed = PLAYER_SPEED * (this.keys.SPACE.isDown ? 1.24 : 1);
     const moving = moveX !== 0 || moveY !== 0;
 
     if (moving) {
-      this.player.x = Phaser.Math.Clamp(this.player.x + (moveX / length) * speed * seconds, 80, WORLD_WIDTH - 80);
-      this.player.y = Phaser.Math.Clamp(this.player.y + (moveY / length) * speed * seconds, 110, WORLD_HEIGHT - 80);
+      this.movePlayer((moveX / length) * speed * seconds, (moveY / length) * speed * seconds);
       this.lastMoveAxis = Math.abs(moveY) > Math.abs(moveX) ? "vertical" : "horizontal";
       if (this.lastMoveAxis === "horizontal") {
         this.lastFacing = moveX < 0 ? "left" : moveX > 0 ? "right" : this.lastFacing;
@@ -163,7 +178,17 @@ export class RpgVillageScene extends Phaser.Scene {
     this.updatePlayerFrame(moving);
     this.playerLabel.setPosition(this.player.x, this.player.y - 74);
     this.updateFollowers(moving);
-    this.updateNearbyPlace();
+    this.updateNearbyPlace(inputBlocked);
+  }
+
+  private movePlayer(deltaX: number, deltaY: number) {
+    const xResolved = this.resolvePlayerPosition(this.player.x + deltaX, this.player.y);
+    const yResolved = this.resolvePlayerPosition(xResolved.x, xResolved.y + deltaY);
+    this.player.setPosition(yResolved.x, yResolved.y);
+  }
+
+  private resolvePlayerPosition(x: number, y: number) {
+    return resolveCollision({ x, y }, PLAYER_COLLISION_RADIUS, PLAYER_BOUNDS, this.colliders);
   }
 
   private updateFollowers(moving: boolean) {
@@ -182,8 +207,17 @@ export class RpgVillageScene extends Phaser.Scene {
       const beforeY = follower.sprite.y;
       const targetDistance = Phaser.Math.Distance.Between(beforeX, beforeY, targetX, targetY);
       const followLerp = targetDistance > 42 ? 0.24 : targetDistance > 14 ? 0.19 : 0.14;
-      follower.sprite.x = Phaser.Math.Linear(beforeX, targetX, followLerp);
-      follower.sprite.y = Phaser.Math.Linear(beforeY, targetY, followLerp);
+      const resolved = resolveCollision(
+        {
+          x: Phaser.Math.Linear(beforeX, targetX, followLerp),
+          y: Phaser.Math.Linear(beforeY, targetY, followLerp)
+        },
+        FOLLOWER_COLLISION_RADIUS,
+        PLAYER_BOUNDS,
+        this.colliders
+      );
+      follower.sprite.x = resolved.x;
+      follower.sprite.y = resolved.y;
       const movedDistance = Phaser.Math.Distance.Between(beforeX, beforeY, follower.sprite.x, follower.sprite.y);
       const followerMoving = moving || targetDistance > 3 || movedDistance > 0.4;
       anyFollowerMoving = anyFollowerMoving || followerMoving;
@@ -197,7 +231,7 @@ export class RpgVillageScene extends Phaser.Scene {
     this.publishFollowerDebugState(moving || anyFollowerMoving);
   }
 
-  private updateNearbyPlace() {
+  private updateNearbyPlace(inputBlocked: boolean) {
     const playerPoint = new Phaser.Math.Vector2(this.player.x, this.player.y);
     const shopDistance = playerPoint.distance(this.shopPoint);
     const gymDistance = playerPoint.distance(this.gymPoint);
@@ -208,7 +242,7 @@ export class RpgVillageScene extends Phaser.Scene {
       this.lastNearPlace = nearPlace;
       useRpgStore.getState().setNearPlace(nearPlace);
     }
-    if (nearPlace && Phaser.Input.Keyboard.JustDown(this.keys.E)) {
+    if (!inputBlocked && nearPlace && Phaser.Input.Keyboard.JustDown(this.keys.E)) {
       const store = useRpgStore.getState();
       if (nearPlace === "house") {
         store.enterHouse();
@@ -328,10 +362,10 @@ export class RpgVillageScene extends Phaser.Scene {
   }
 
   private addPlaceLabels() {
-    this.shopPoint = new Phaser.Math.Vector2(WORLD.width / 2 - 520, WORLD.height / 2 + 470);
-    this.gymPoint = new Phaser.Math.Vector2(WORLD.width / 2 + 520, WORLD.height / 2 + 470);
-    this.arenaPoint = new Phaser.Math.Vector2(WORLD.width / 2 + 720, WORLD.height / 2 + 270);
-    this.personalHousePoint = new Phaser.Math.Vector2(WORLD.width / 2 - 760, WORLD.height / 2 + 225);
+    this.shopPoint = new Phaser.Math.Vector2(WORLD.width / 2 - 410, WORLD.height / 2 + 655);
+    this.gymPoint = new Phaser.Math.Vector2(WORLD.width / 2 + 520, WORLD.height / 2 + 655);
+    this.arenaPoint = new Phaser.Math.Vector2(WORLD.width / 2 + 720, WORLD.height / 2 + 345);
+    this.personalHousePoint = new Phaser.Math.Vector2(WORLD.width / 2 - 760, WORLD.height / 2 + 320);
   }
 
   private addRpgVillageProps() {
@@ -343,15 +377,15 @@ export class RpgVillageScene extends Phaser.Scene {
     this.addHouse(c - 410, m + 470, "houseA", "商城", 0.9);
     this.addHouse(c + 520, m + 470, "houseA", "道館", 0.9);
     this.addHouse(c + 900, m + 450, "houseB", "RocksSmash4680", 0.94);
-    this.addProp(ENV_TEXTURES.treeRound, c - 1110, m + 190, 108, 140, m + 258);
-    this.addProp(ENV_TEXTURES.treePine, c - 995, m + 184, 108, 146, m + 252);
-    this.addProp(ENV_TEXTURES.treeRound, c + 1130, m + 210, 108, 140, m + 278);
-    this.addProp(ENV_TEXTURES.treePine, c + 1005, m - 230, 108, 146, m - 162);
-    this.addProp(ENV_TEXTURES.fence, c - 930, m + 70, 320, 112, m + 112);
-    this.addProp(ENV_TEXTURES.fence, c + 910, m + 70, 320, 112, m + 112);
-    this.addProp(ENV_TEXTURES.crystal, c + 90, m + 805, 120, 142, m + 870);
-    this.addProp(ENV_TEXTURES.lamp, c - 180, m + 505, 58, 146, m + 582, { bottomInsetRatio: LAMP_BOTTOM_TRANSPARENT_RATIO });
-    this.addProp(ENV_TEXTURES.lamp, c + 210, m + 505, 58, 146, m + 582, { bottomInsetRatio: LAMP_BOTTOM_TRANSPARENT_RATIO });
+    this.addProp(ENV_TEXTURES.treeRound, c - 1110, m + 190, 108, 140, m + 258, { collider: { kind: "circle", x: c - 1110, y: m + 162, radius: 40 } });
+    this.addProp(ENV_TEXTURES.treePine, c - 995, m + 184, 108, 146, m + 252, { collider: { kind: "circle", x: c - 995, y: m + 154, radius: 38 } });
+    this.addProp(ENV_TEXTURES.treeRound, c + 1130, m + 210, 108, 140, m + 278, { collider: { kind: "circle", x: c + 1130, y: m + 182, radius: 40 } });
+    this.addProp(ENV_TEXTURES.treePine, c + 1005, m - 230, 108, 146, m - 162, { collider: { kind: "circle", x: c + 1005, y: m - 260, radius: 38 } });
+    this.addProp(ENV_TEXTURES.fence, c - 930, m + 70, 320, 112, m + 112, { collider: { kind: "rect", x: c - 930, y: m + 48, width: 276, height: 34 } });
+    this.addProp(ENV_TEXTURES.fence, c + 910, m + 70, 320, 112, m + 112, { collider: { kind: "rect", x: c + 910, y: m + 48, width: 276, height: 34 } });
+    this.addProp(ENV_TEXTURES.crystal, c + 90, m + 805, 120, 142, m + 870, { collider: { kind: "circle", x: c + 90, y: m + 772, radius: 36 } });
+    this.addProp(ENV_TEXTURES.lamp, c - 180, m + 505, 58, 146, m + 582, { bottomInsetRatio: LAMP_BOTTOM_TRANSPARENT_RATIO, collider: { kind: "circle", x: c - 180, y: m + 546, radius: 24 } });
+    this.addProp(ENV_TEXTURES.lamp, c + 210, m + 505, 58, 146, m + 582, { bottomInsetRatio: LAMP_BOTTOM_TRANSPARENT_RATIO, collider: { kind: "circle", x: c + 210, y: m + 546, radius: 24 } });
   }
 
   private addHouse(x: number, y: number, kind: "houseA" | "houseB", label: string, scale: number) {
@@ -361,6 +395,15 @@ export class RpgVillageScene extends Phaser.Scene {
     const height = width * (sourceCrop.height / sourceCrop.width);
     const groundedY = y + (height - oldCroppedHeight);
     this.addProp(ENV_TEXTURES[kind], x, groundedY, width, height, groundedY + 110);
+    const colliderTop = groundedY - height * 0.52;
+    const colliderBottom = groundedY + HOUSE_CLEARANCE_Y;
+    this.colliders.push({
+      kind: "rect",
+      x,
+      y: (colliderTop + colliderBottom) / 2,
+      width: width + HOUSE_CLEARANCE_X,
+      height: colliderBottom - colliderTop
+    });
     const labelY = y - oldCroppedHeight * 0.52;
     this.add
       .rectangle(x, labelY, Math.max(108, width * 0.46), 28, 0x8b6543, 0.96)
@@ -378,10 +421,11 @@ export class RpgVillageScene extends Phaser.Scene {
       .setDepth(groundedY + 133);
   }
 
-  private addProp(texture: string, x: number, y: number, width: number, height: number, depth: number, options: { bottomInsetRatio?: number } = {}) {
+  private addProp(texture: string, x: number, y: number, width: number, height: number, depth: number, options: { bottomInsetRatio?: number; collider?: Collider } = {}) {
     const bottomInset = height * (options.bottomInsetRatio ?? 0);
     this.add.ellipse(x, y - Math.max(5, height * 0.045), width * 0.62, Math.max(8, height * 0.1), 0x080604, 0.16).setDepth(depth - 6);
     this.add.image(x, y + bottomInset, texture).setOrigin(0.5, 1).setDisplaySize(width, height).setDepth(depth);
+    if (options.collider) this.colliders.push(options.collider);
   }
 
   private updatePlayerFrame(moving: boolean) {

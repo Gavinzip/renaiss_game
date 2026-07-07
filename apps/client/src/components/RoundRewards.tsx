@@ -14,8 +14,8 @@ interface RoundRewardsProps {
 }
 
 function getRoundRewardIndex(round: RoundState) {
-  const roundNumberSeed = Math.floor(round.startedAt / Math.max(1, round.durationMs));
-  return Math.abs(roundNumberSeed) % ROUND_REWARDS.length;
+  const roundNumber = Math.max(1, round.roundNumber || 1);
+  return (roundNumber - 1) % ROUND_REWARDS.length;
 }
 
 export function RoundRewards({ round }: RoundRewardsProps) {

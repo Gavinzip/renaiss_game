@@ -63,6 +63,13 @@ export type Collider =
       height: number;
     };
 
+export interface CollisionBounds {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
 const W = WORLD.width;
 const H = WORLD.height;
 const C = WORLD.width / 2;
@@ -223,17 +230,25 @@ export function mapPropsToColliders(props: MapProp[]) {
   return props.flatMap((prop) => (prop.collider ? [prop.collider] : []));
 }
 
-export function resolveMapCollision(position: Vec2, radius: number, colliders: Collider[] = MAP_COLLIDERS): Vec2 {
+export function resolveCollision(position: Vec2, radius: number, bounds: CollisionBounds, colliders: Collider[]): Vec2 {
   let resolved = {
-    x: clamp(position.x, radius, WORLD.width - radius),
-    y: clamp(position.y, radius, WORLD.height - radius)
+    x: clamp(position.x, bounds.left + radius, bounds.right - radius),
+    y: clamp(position.y, bounds.top + radius, bounds.bottom - radius)
   };
 
   for (const collider of colliders) {
     resolved = pushOutOfCollider(resolved, radius, collider);
+    resolved = {
+      x: clamp(resolved.x, bounds.left + radius, bounds.right - radius),
+      y: clamp(resolved.y, bounds.top + radius, bounds.bottom - radius)
+    };
   }
 
   return resolved;
+}
+
+export function resolveMapCollision(position: Vec2, radius: number, colliders: Collider[] = MAP_COLLIDERS): Vec2 {
+  return resolveCollision(position, radius, { left: 0, right: WORLD.width, top: 0, bottom: WORLD.height }, colliders);
 }
 
 export function isBlocked(position: Vec2, radius = 0, colliders: Collider[] = MAP_COLLIDERS) {

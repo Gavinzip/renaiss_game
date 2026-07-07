@@ -215,8 +215,15 @@ function checkMouseAimOverridesStaleAngleRuntime(): GameplayCheck {
     attack: true
   });
   tick(archerDuel.room);
+  setInput(archerDuel.room, archerDuel.attackerSocket, {
+    angle: 180,
+    aimX: aimOrigin.x + 420,
+    aimY: aimOrigin.y,
+    attack: false
+  });
+  tick(archerDuel.room);
   const archerProjectile = archerDuel.room.snapshotFor(archerDuel.attackerSocket).projectiles.find((projectile) => projectile.ownerId === archerDuel.attackerId);
-  assert(Boolean(archerProjectile), "Archer mouse-aim audit should spawn an arrow projectile.");
+  assert(Boolean(archerProjectile), "Archer mouse-aim audit should spawn an arrow projectile after draw release.");
   assert(Math.abs((archerProjectile?.angle ?? 999) - 0) < 1, `Archer arrow should fly toward cursor aim angle 0, got ${archerProjectile?.angle}.`);
 
   const mageDuel = createDuel("mage", "archer", "aim_mage", "aim_target_mage");

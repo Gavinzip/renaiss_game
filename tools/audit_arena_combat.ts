@@ -52,6 +52,12 @@ function damageSources(): DamageSource[] {
       damage: CLASS_STATS[classId].attackPower,
       sourceType: "attack" as const
     })),
+    {
+      classId: "archer",
+      label: "Archer fully charged arrow",
+      damage: CLASS_STATS.archer.attackPower * COMBAT.archerChargedArrowMaxDamageMultiplier,
+      sourceType: "attack"
+    },
     { classId: "warrior", label: "Warrior R Verdict", damage: COMBAT.warriorUltimateDamage, sourceType: "skill" },
     { classId: "archer", label: "Archer R Seed Rain", damage: COMBAT.archerUltimateDamage, sourceType: "skill" },
     { classId: "engineer", label: "Engineer E Repulsor Pulse", damage: COMBAT.engineerRepulsorPulseDamage, sourceType: "skill" },
@@ -175,8 +181,8 @@ function checkClassBurstComboCeilings(): ArenaAuditCheck {
       total: COMBAT.warriorUltimateDamage + CLASS_STATS.warrior.attackPower
     },
     {
-      label: "Archer R + basic",
-      total: COMBAT.archerUltimateDamage + CLASS_STATS.archer.attackPower
+      label: "Archer R + fully charged arrow",
+      total: COMBAT.archerUltimateDamage + CLASS_STATS.archer.attackPower * COMBAT.archerChargedArrowMaxDamageMultiplier
     },
     {
       label: "Engineer E + basic + two boosted turret shots",
@@ -203,7 +209,7 @@ function checkActionStackingContract(): ArenaAuditCheck {
   if (!serverSource.includes("const skillUsed = !player.stunned ? this.handleSkills(player, now) : false")) {
     errors.push("Player update must track whether a skill was used this tick.");
   }
-  if (!serverSource.includes("if (!skillUsed && !player.stunned && player.input.attack)")) {
+  if (!serverSource.includes("if (!skillUsed && !player.stunned)") || !serverSource.includes("this.handleArcherChargedAttack(player, now)") || !serverSource.includes("this.handleAttack(player, now)")) {
     errors.push("Basic attacks must not fire on the same tick as a skill.");
   }
   if (!serverSource.includes('const requestedSkills: SkillKey[] = ["skillR", "skillE", "skillQ"]')) {

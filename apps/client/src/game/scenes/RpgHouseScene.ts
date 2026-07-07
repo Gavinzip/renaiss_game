@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { resolveCollision, type Collider } from "@renaiss-game/shared";
 import { getClassFrameCrop } from "../assets/crops";
 import { generatedAssetPath } from "../assets/generatedAssets";
 import { shouldLoadStaticAssetsWithCors, staticAssetUrl } from "../assets/staticAssets";
@@ -11,9 +12,11 @@ import {
   type VillagePlayerFacing
 } from "../render/villagePlayerAnimation";
 import { renderVinciHouseRoom, VINCI_HOUSE_WORLD, VINCI_HOUSE_ZONES, type HouseInteractZone } from "../render/vinciHouseRoom";
+import { isDomTextEditingActive } from "../input/domFocus";
 import { useRpgStore, type RpgPlace } from "../../state/rpgStore";
 
 const PLAYER_SPEED = 184;
+const PLAYER_COLLISION_RADIUS = 26;
 const PLAYER_START = { x: 760, y: 480 };
 const PLAYER_BOUNDS = {
   left: 76,
@@ -21,6 +24,12 @@ const PLAYER_BOUNDS = {
   top: 280,
   bottom: 785
 } as const;
+const HOUSE_COLLIDERS: Collider[] = [
+  { kind: "rect", x: 510, y: 338, width: 132, height: 88 },
+  { kind: "rect", x: 680, y: 364, width: 220, height: 104 },
+  { kind: "rect", x: 698, y: 618, width: 266, height: 92 },
+  { kind: "rect", x: 972, y: 632, width: 156, height: 78 }
+];
 
 export class RpgHouseScene extends Phaser.Scene {
   private playerShadow!: Phaser.GameObjects.Ellipse;
@@ -49,6 +58,7 @@ export class RpgHouseScene extends Phaser.Scene {
     renderVinciHouseRoom(this);
     this.createPlayer();
     this.createCabinetHotspots();
+    this.input.keyboard?.disableGlobalCapture();
     this.keys = this.input.keyboard!.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT,E,SPACE") as Record<string, Phaser.Input.Keyboard.Key>;
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12, 0, 40);
     useRpgStore.getState().setNearPlace(null);
@@ -67,15 +77,15 @@ export class RpgHouseScene extends Phaser.Scene {
     }
 
     const seconds = delta / 1000;
-    const moveX = (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
-    const moveY = (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const inputBlocked = isDomTextEditingActive();
+    const moveX = inputBlocked ? 0 : (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
+    const moveY = inputBlocked ? 0 : (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
     const length = Math.hypot(moveX, moveY) || 1;
     const moving = moveX !== 0 || moveY !== 0;
 
     if (moving) {
       const speed = PLAYER_SPEED * (this.keys.SPACE.isDown ? 1.18 : 1);
-      this.player.x = Phaser.Math.Clamp(this.player.x + (moveX / length) * speed * seconds, PLAYER_BOUNDS.left, PLAYER_BOUNDS.right);
-      this.player.y = Phaser.Math.Clamp(this.player.y + (moveY / length) * speed * seconds, PLAYER_BOUNDS.top, PLAYER_BOUNDS.bottom);
+      this.movePlayer((moveX / length) * speed * seconds, (moveY / length) * speed * seconds);
       this.lastMoveAxis = Math.abs(moveY) > Math.abs(moveX) ? "vertical" : "horizontal";
       if (this.lastMoveAxis === "horizontal") {
         this.lastFacing = moveX < 0 ? "left" : moveX > 0 ? "right" : this.lastFacing;
@@ -86,10 +96,16 @@ export class RpgHouseScene extends Phaser.Scene {
     }
 
     this.updatePlayerFrame(moving);
-    this.updateNearPlace();
+    this.updateNearPlace(inputBlocked);
     this.playerLabel.setPosition(this.player.x, this.player.y - 74).setDepth(this.player.y + 1);
     this.playerShadow.setDepth(this.player.y - 3);
     this.player.setDepth(this.player.y);
+  }
+
+  private movePlayer(deltaX: number, deltaY: number) {
+    const xResolved = resolveCollision({ x: this.player.x + deltaX, y: this.player.y }, PLAYER_COLLISION_RADIUS, PLAYER_BOUNDS, HOUSE_COLLIDERS);
+    const yResolved = resolveCollision({ x: xResolved.x, y: xResolved.y + deltaY }, PLAYER_COLLISION_RADIUS, PLAYER_BOUNDS, HOUSE_COLLIDERS);
+    this.player.setPosition(yResolved.x, yResolved.y);
   }
 
   private createPlayer() {
@@ -148,14 +164,14 @@ export class RpgHouseScene extends Phaser.Scene {
     return frame;
   }
 
-  private updateNearPlace() {
+  private updateNearPlace(inputBlocked: boolean) {
     const nearPlace = this.isNear(VINCI_HOUSE_ZONES.cabinet) ? "cabinet" : this.isNear(VINCI_HOUSE_ZONES.door) ? "houseExit" : null;
     if (nearPlace !== this.lastNearPlace) {
       this.lastNearPlace = nearPlace;
       useRpgStore.getState().setNearPlace(nearPlace);
     }
 
-    if (nearPlace && Phaser.Input.Keyboard.JustDown(this.keys.E)) {
+    if (!inputBlocked && nearPlace && Phaser.Input.Keyboard.JustDown(this.keys.E)) {
       if (nearPlace === "cabinet") useRpgStore.getState().openProfile();
       if (nearPlace === "houseExit") useRpgStore.getState().exitHouse();
     }

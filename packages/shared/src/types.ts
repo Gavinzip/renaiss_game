@@ -143,6 +143,7 @@ export type RoundPhase = "playing" | "finished";
 
 export interface RoundState {
   phase: RoundPhase;
+  roundNumber: number;
   startedAt: number;
   endsAt: number;
   nextRoundAt: number | null;
