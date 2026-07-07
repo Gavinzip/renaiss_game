@@ -9,6 +9,7 @@ import { RpgBattleRoomManager } from "./rpg/RpgBattleRoom";
 import { fetchWalletCollectibles, type RpgWalletCollectible } from "./rpg/walletCards";
 import { DEFAULT_RPG_WALLET_ADDRESS, DEFAULT_RPG_WALLET_CARDS } from "./rpg/defaultWalletCards";
 import { installXAuthRoutes } from "./auth/xAuth";
+import { allowedOriginList, resolveCorsOrigin } from "./http/corsPolicy";
 import {
   bindRpgWalletCardSkill,
   equipRpgCardToPet,
@@ -19,6 +20,7 @@ import {
   normalizeRpgWalletAddress,
   persistRpgWalletCards,
   rpgProfileDbPath,
+  rpgProfileStorageInfo,
   unequipRpgCardFromPet
 } from "./rpg/rpgProfileDb";
 
@@ -37,7 +39,7 @@ const RPG_ROOM_SWEEP_MS = 30_000;
 const preferSqliteWalletCards = process.env.RENAISS_RPG_WALLET_SQLITE_FIRST === "1";
 const allowDefaultWalletRefresh = process.env.RENAISS_RPG_REFRESH_DEFAULT_WALLET === "1";
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: resolveCorsOrigin, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 
 installXAuthRoutes(app);
@@ -50,7 +52,11 @@ app.get("/health", (_req, res) => {
     previewRooms: previewRooms.size,
     previewPlayers: [...previewRooms.values()].reduce((count, room) => count + room.playerCount(), 0),
     rpgRooms: rpgRooms.roomCount(),
-    rpgPlayers: rpgRooms.playerCount()
+    rpgPlayers: rpgRooms.playerCount(),
+    storage: rpgProfileStorageInfo(),
+    cors: {
+      allowedOrigins: allowedOriginList()
+    }
   });
 });
 
@@ -275,7 +281,7 @@ function totalWalletFmv(cards: readonly RpgWalletCollectible[]) {
 
 const io = new Server(httpServer, {
   cors: {
-    origin: true,
+    origin: resolveCorsOrigin,
     credentials: true
   }
 });

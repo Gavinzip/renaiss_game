@@ -1,14 +1,14 @@
 import { DatabaseSync } from "node:sqlite";
-import { mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { homedir } from "node:os";
 import { RPG_STARTER_PETS, getRpgMoveById, type RpgElement } from "@renaiss-game/shared";
+import { loadServerEnv } from "../env";
+import { ensureParentDirectory, renaissGameStorageInfo, resolveRpgProfileDbPath, warnIfProductionDataVolumeMissing } from "../storagePaths";
 import type { RpgWalletCollectible } from "./walletCards";
 
-const DEFAULT_DB_PATH = join(homedir(), ".renaiss_game", "rpg-profile.sqlite");
-const dbPath = process.env.RENAISS_RPG_DB_PATH || process.env.RENAISS_GAME_DB_PATH || DEFAULT_DB_PATH;
+loadServerEnv();
 
-mkdirSync(dirname(dbPath), { recursive: true });
+const dbPath = resolveRpgProfileDbPath();
+ensureParentDirectory(dbPath);
+warnIfProductionDataVolumeMissing(dbPath);
 
 const db = new DatabaseSync(dbPath);
 db.exec("PRAGMA journal_mode = WAL");
@@ -106,6 +106,10 @@ export function normalizeRpgWalletAddress(walletAddress: unknown) {
 
 export function rpgProfileDbPath() {
   return dbPath;
+}
+
+export function rpgProfileStorageInfo() {
+  return renaissGameStorageInfo(dbPath);
 }
 
 export function walletCardKey(card: Pick<RpgWalletCollectible, "tokenId" | "id">) {

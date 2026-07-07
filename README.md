@@ -25,6 +25,14 @@ Server: `http://localhost:8787`
 
 Default client route `/` opens the Vinci World login gate, then the RPG village lobby and main game shell after continue.
 
+Production-backend playtest:
+
+```bash
+pnpm dev:remote
+```
+
+This starts only the local Vite client and points it at `https://renaiss-game.zeabur.app`. Use this mode when debugging against the real Zeabur backend and persistent RPG profile database. Mutating RPG card skill draws or pet loadouts in this mode writes to production data.
+
 Local auth setup:
 
 ```bash
@@ -60,6 +68,18 @@ This is a localhost-only fallback for development. It is not real X OAuth and sh
 After the login gate, route `/` opens the RPG village lobby and main game shell. Use `/?arena=1` for the realtime Arena game, `/?preview=release` for the RPG release review hub, and `/?editor=1` for the prop layout editor. The legacy `/?rpg=1` village route remains supported for older review links.
 
 No push is performed from this workspace unless explicitly approved.
+
+## Zeabur Data
+
+Production uses a Zeabur persistent Volume mounted at `/data`.
+
+- Volume ID: `data`
+- Mount Directory: `/data`
+- RPG profile SQLite path: `/data/renaiss-game/rpg-profile.sqlite`
+
+The app exposes the resolved storage information from `/health`. `pnpm remote:check` verifies that the deployed backend is using `/data/renaiss-game`, that `/data` is detected as a mount, and that the local dev origin can call the production backend with credentials.
+
+Zeabur clears the mounted directory when a Volume is first attached. Attach the Volume before relying on production RPG profile state.
 
 ## Asset Commands
 

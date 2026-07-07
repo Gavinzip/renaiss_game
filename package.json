@@ -7,8 +7,10 @@
   "scripts": {
     "dev": "pnpm --parallel --filter @renaiss-game/server --filter @renaiss-game/client dev",
     "dev:client": "pnpm --filter @renaiss-game/client dev",
+    "dev:remote": "VITE_GAME_SERVER_URL=https://renaiss-game.zeabur.app pnpm --filter @renaiss-game/client dev",
     "dev:server": "pnpm --filter @renaiss-game/server dev",
     "local:check": "node tools/check_local_config.mjs",
+    "remote:check": "node tools/check_remote_backend.mjs",
     "assets:classes": "python3 tools/normalize_class_sprites.py && python3 tools/generate_warrior_attack_sprites.py && python3 tools/generate_archer_attack_sprites.py && python3 tools/generate_engineer_action_sprites.py && python3 tools/generate_mage_attack_sprites.py",
     "assets:warrior": "python3 tools/generate_warrior_attack_sprites.py",
     "assets:archer": "python3 tools/generate_archer_attack_sprites.py",

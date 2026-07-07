@@ -19,3 +19,10 @@
 - HTML、API、auth callback、socket route 不要 long cache。
 - 大型且不常變的 MP4、重圖、公開媒體優先放 Cloudflare R2/CDN。
 - 要用 live curl/header/timing 驗證，不要只用 Zeabur `RUNNING` 或 fallback 畫面當作完成。
+
+## Renaiss Game Runtime State
+
+- Zeabur production long-term server data belongs under `/data/renaiss-game`; mount Zeabur Volume ID `data` at `/data`.
+- The RPG profile SQLite file is `/data/renaiss-game/rpg-profile.sqlite`; `/health` must report this path and `dataRootMountDetected: true` before treating storage as persistent.
+- For local UI debugging against the production backend, use `pnpm dev:remote`; this starts only the client and points `VITE_GAME_SERVER_URL` at `https://renaiss-game.zeabur.app`.
+- `pnpm dev:remote` mutates production backend data for write actions. Use it intentionally and do not confuse it with isolated local server testing.

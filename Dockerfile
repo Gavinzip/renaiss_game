@@ -33,13 +33,16 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV NODE_ENV=production
 ENV GAME_SERVER_PORT=8787
+ENV RENAISS_GAME_DATA_DIR=/data/renaiss-game
+ENV RENAISS_RPG_DB_PATH=/data/renaiss-game/rpg-profile.sqlite
 
 WORKDIR /app
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates nginx \
   && rm -rf /var/lib/apt/lists/* \
-  && corepack enable
+  && corepack enable \
+  && mkdir -p /data/renaiss-game
 
 COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=build /app/node_modules ./node_modules

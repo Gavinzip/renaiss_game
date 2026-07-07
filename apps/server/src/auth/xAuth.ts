@@ -251,12 +251,12 @@ function setXSessionCookie(res: Response, req: Request, payload: XSessionPayload
   if (!config) return;
   const encodedPayload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
   const signature = signSession(encodedPayload, config.sessionSecret);
-  const cookie = `${SESSION_COOKIE_NAME}=${encodedPayload}.${signature}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_MAX_AGE_SECONDS}${secureCookieSuffix(req)}`;
+  const cookie = `${SESSION_COOKIE_NAME}=${encodedPayload}.${signature}; Path=/; HttpOnly; Max-Age=${SESSION_MAX_AGE_SECONDS}${sessionCookieAttributes(req)}`;
   res.setHeader("Set-Cookie", cookie);
 }
 
 function clearXSessionCookie(res: Response, req: Request) {
-  res.setHeader("Set-Cookie", `${SESSION_COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secureCookieSuffix(req)}`);
+  res.setHeader("Set-Cookie", `${SESSION_COOKIE_NAME}=; Path=/; HttpOnly; Max-Age=0${sessionCookieAttributes(req)}`);
 }
 
 function signSession(encodedPayload: string, sessionSecret: string) {
@@ -278,8 +278,17 @@ function readCookies(req: Request) {
   );
 }
 
-function secureCookieSuffix(req: Request) {
-  return process.env.AUTH_COOKIE_SECURE === "1" || req.secure || req.headers["x-forwarded-proto"] === "https" ? "; Secure" : "";
+function sessionCookieAttributes(req: Request) {
+  const sameSite = authCookieSameSite();
+  const secure = sameSite === "None" || process.env.AUTH_COOKIE_SECURE === "1" || req.secure || req.headers["x-forwarded-proto"] === "https";
+  return `; SameSite=${sameSite}${secure ? "; Secure" : ""}`;
+}
+
+function authCookieSameSite(): "Lax" | "Strict" | "None" {
+  const configured = process.env.AUTH_COOKIE_SAME_SITE?.trim().toLowerCase();
+  if (configured === "none") return "None";
+  if (configured === "strict") return "Strict";
+  return "Lax";
 }
 
 function sanitizeReturnTo(value: unknown, req: Request) {
