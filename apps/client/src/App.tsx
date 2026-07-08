@@ -26,7 +26,7 @@ import { installStaticAssetCssVariables, staticAssetUrl } from "./game/assets/st
 import { createGame } from "./game/createGame";
 import { createRpgGame } from "./game/createRpgGame";
 import { isMapPreviewMode, loadStoredMapDraftProps } from "./game/mapDraft";
-import { useHudStore, type HudAction } from "./state/hudStore";
+import { useHudStore, type HudAction, type HudSkillAction } from "./state/hudStore";
 import { useRpgStore } from "./state/rpgStore";
 import { RpgOverlay } from "./components/RpgOverlay";
 import { ArenaTutorialModal, useFirstRunTutorial } from "./components/RpgTutorial";
@@ -36,6 +36,7 @@ import { ArenaI18nProvider, ARENA_LANGUAGES, useArenaI18n } from "./i18n/arena";
 const SKILL_ICON_SHEET = `url("${generatedAssetPath("skill-icons")}")`;
 
 export function App() {
+
   useEffect(() => {
     installStaticAssetCssVariables();
   }, []);
@@ -342,6 +343,7 @@ function HudOverlay() {
   const connection = useHudStore((state) => state.connection);
   const joined = useHudStore((state) => state.joined);
   const selectedClass = useHudStore((state) => state.selectedClass);
+  const leaveArena = useHudStore((state) => state.leaveArena);
   const self = snapshot?.players.find((player) => player.id === selfId) ?? null;
   const displayClass = self?.classId ?? selectedClass;
   const skillLabels = self ? t.skills[self.classId] : null;
@@ -361,6 +363,10 @@ function HudOverlay() {
   };
   const toggleDisplayPref = (key: keyof HudDisplayPrefs) => {
     setDisplayPrefs((current) => ({ ...current, [key]: !current[key] }));
+  };
+  const exitArena = () => {
+    leaveArena();
+    window.location.assign("/");
   };
   const devToolsMode = new URLSearchParams(window.location.search).get("dev") === "1";
 
@@ -402,6 +408,7 @@ function HudOverlay() {
           serverTime={snapshot?.serverTime ?? Date.now()}
           displayPrefs={displayPrefs}
           onToggleDisplayPref={toggleDisplayPref}
+          onExitArena={exitArena}
         />
       ) : null}
 
@@ -479,14 +486,19 @@ function SkillButton({
 }) {
   const now = useHudStore((state) => state.snapshot?.serverTime ?? Date.now());
   const setHudAction = useHudStore((state) => state.setHudAction);
+  const queueHudSkillRelease = useHudStore((state) => state.queueHudSkillRelease);
   const remaining = Math.max(0, endAt - now);
   const active = remaining <= 0 && !disabled;
   const cooling = remaining > 0;
   const clearAction = () => setHudAction(action, false);
+  const cancelAction = () => clearAction();
   const releaseAction = () => {
     if (action === "attack") {
       clearAction();
+      return;
     }
+    clearAction();
+    queueHudSkillRelease(action as HudSkillAction);
   };
   const pressAction = (event: PointerEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -496,9 +508,6 @@ function SkillButton({
     }
     tryPointerCapture(event.currentTarget, event.pointerId);
     setHudAction(action, true);
-    if (action !== "attack") {
-      window.setTimeout(() => setHudAction(action, false), 90);
-    }
   };
 
   return (
@@ -512,9 +521,9 @@ function SkillButton({
         event.stopPropagation();
         releaseAction();
       }}
-      onPointerCancel={releaseAction}
-      onPointerLeave={releaseAction}
-      onBlur={releaseAction}
+      onPointerCancel={cancelAction}
+      onPointerLeave={action === "attack" ? cancelAction : undefined}
+      onBlur={cancelAction}
       onContextMenu={(event) => event.preventDefault()}
     >
       <i

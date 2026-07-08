@@ -9,6 +9,7 @@ export const EVENT_LABELS: Record<CombatEventType, string> = {
   ultimate: "ULT",
   turret: "ENG",
   heal: "HP",
+  boost: "ATK",
   control: "CC",
   round: "RD"
 };
@@ -31,6 +32,8 @@ export function formatCombatEventMessage(event: CombatEvent, t: ArenaText) {
       return t.feed.deployedTurret(actor);
     case "heal":
       return t.feed.recovered(actor);
+    case "boost":
+      return t.feed.attackBoosted(actor);
     case "control":
       return t.feed.stunnedRivals(actor, getControlCount(event));
     case "round":

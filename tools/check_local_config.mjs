@@ -8,7 +8,7 @@ const env = {
   ...process.env
 };
 
-const requiredSecrets = ["X_CONSUMER_KEY", "X_CONSUMER_SECRET", "AUTH_SESSION_SECRET"];
+const requiredSecrets = ["X_CLIENT_ID", "X_CLIENT_SECRET", "AUTH_SESSION_SECRET"];
 const requiredUrls = ["X_CALLBACK_URL", "CLIENT_ORIGIN", "VITE_GAME_SERVER_URL"];
 let failed = false;
 let missingSecret = false;

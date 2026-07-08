@@ -1,6 +1,9 @@
 import Phaser from "phaser";
 import { CLASS_META, COMBAT, type ClassId, type GameSnapshot, type PublicPlayer } from "@renaiss-game/shared";
 
+const SKILL_PREVIEW_COLOR = 0xff4f45;
+const SKILL_PREVIEW_GLOW = 0xffd4c7;
+
 export interface TargetingIntent {
   attack: boolean;
   skillQ: boolean;
@@ -104,17 +107,18 @@ export class TargetingOverlay {
       return;
     }
 
+    const skillColor = SKILL_PREVIEW_COLOR;
     if (action === "skillQ") {
-      this.drawSkillQTelegraph(self, angle, color, alpha, time);
+      this.drawSkillQTelegraph(self, angle, skillColor, alpha, time);
       return;
     }
 
     if (action === "skillE") {
-      this.drawSkillETelegraph(self, target, intent, angle, color, alpha, time);
+      this.drawSkillETelegraph(self, target, intent, angle, skillColor, alpha, time);
       return;
     }
 
-    this.drawSkillRTelegraph(self, intent, angle, color, alpha, time);
+    this.drawSkillRTelegraph(self, intent, angle, skillColor, alpha, time);
   }
 
   private drawAttackTelegraph(self: PublicPlayer, angle: number, color: number, alpha: number, time: number) {
@@ -207,13 +211,37 @@ export class TargetingOverlay {
     const pulse = 1 + Math.sin(time / 150) * 0.025;
     const outerX = radiusX * pulse;
     const outerY = radiusY * pulse;
+    const warningAlpha = Math.max(alpha, 0.72);
 
-    this.graphics.fillStyle(0x120b07, alpha * 0.12);
+    this.drawSkillWarningField(cx, cy, outerX, outerY, color, warningAlpha, time);
+    this.graphics.fillStyle(0x120b07, warningAlpha * 0.16);
     this.graphics.fillEllipse(cx, cy + 6, outerX * 1.72, outerY * 1.32);
-    this.graphics.fillStyle(color, alpha * 0.035);
+    this.graphics.fillStyle(color, warningAlpha * 0.16);
     this.graphics.fillEllipse(cx, cy, outerX * 2, outerY * 2);
-    this.drawRunicGroundMarkers(cx, cy, outerX, outerY, color, alpha, time);
-    this.drawTelegraphLabel(cx, cy - outerY - 26, label, color, alpha);
+    this.drawRunicGroundMarkers(cx, cy, outerX, outerY, color, warningAlpha, time);
+    this.drawTelegraphLabel(cx, cy - outerY - 26, label, color, warningAlpha);
+  }
+
+  private drawSkillWarningField(cx: number, cy: number, radiusX: number, radiusY: number, color: number, alpha: number, time: number) {
+    const scan = 0.86 + Math.sin(time / 120) * 0.08;
+    this.graphics.fillStyle(color, alpha * 0.09);
+    this.graphics.fillEllipse(cx, cy, radiusX * 2.06, radiusY * 2.06);
+    this.graphics.lineStyle(9, 0x190706, alpha * 0.58);
+    this.graphics.strokeEllipse(cx, cy + 2, radiusX * 2.08, radiusY * 2.08);
+    this.graphics.lineStyle(5, color, alpha * 0.95);
+    this.graphics.strokeEllipse(cx, cy, radiusX * 2, radiusY * 2);
+    this.graphics.lineStyle(2, SKILL_PREVIEW_GLOW, alpha * 0.82);
+    this.graphics.strokeEllipse(cx, cy - 1, radiusX * 1.86 * scan, radiusY * 1.86 * scan);
+
+    for (let index = 0; index < 4; index += 1) {
+      const theta = (index / 4) * Math.PI * 2 + time / 900;
+      const x = cx + Math.cos(theta) * radiusX;
+      const y = cy + Math.sin(theta) * radiusY;
+      const tangent = theta + Math.PI / 2;
+      this.drawPixelTick(x, y, tangent, color, alpha * 0.9, 30);
+      this.graphics.fillStyle(SKILL_PREVIEW_GLOW, alpha * 0.86);
+      this.fillDiamond(x, y, 5, 7);
+    }
   }
 
   private drawRunicGroundMarkers(cx: number, cy: number, radiusX: number, radiusY: number, color: number, alpha: number, time: number) {

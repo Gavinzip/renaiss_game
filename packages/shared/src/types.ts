@@ -12,6 +12,7 @@ export type ProjectileType =
 
 export type EffectType =
   | "attack_arc"
+  | "attack_boost"
   | "dash"
   | "roll"
   | "shield"
@@ -64,6 +65,8 @@ export interface PublicPlayer {
   actionStartedAt: number;
   actionEndsAt: number;
   shielded: boolean;
+  attackBoosted: boolean;
+  attackBoostEndsAt: number;
   spawnProtected: boolean;
   rooted: boolean;
   stunned: boolean;
@@ -99,6 +102,12 @@ export interface HealthPackState {
   imageIndex: number;
 }
 
+export interface AttackBoostPackState {
+  id: string;
+  x: number;
+  y: number;
+}
+
 export interface EffectState {
   id: string;
   type: EffectType;
@@ -122,7 +131,7 @@ export interface LeaderboardEntry {
   bot: boolean;
 }
 
-export type CombatEventType = "join" | "kill" | "assist" | "streak" | "ultimate" | "turret" | "heal" | "control" | "round";
+export type CombatEventType = "join" | "kill" | "assist" | "streak" | "ultimate" | "turret" | "heal" | "boost" | "control" | "round";
 
 export interface CombatEvent {
   id: string;
@@ -161,6 +170,7 @@ export interface GameSnapshot {
   projectiles: ProjectileState[];
   turrets: TurretState[];
   healthPacks: HealthPackState[];
+  attackBoostPacks: AttackBoostPackState[];
   effects: EffectState[];
   events: CombatEvent[];
   leaderboard: LeaderboardEntry[];

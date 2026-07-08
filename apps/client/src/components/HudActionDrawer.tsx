@@ -1,4 +1,5 @@
 import { CLASS_META, WORLD, type CombatEvent, type GameSnapshot } from "@renaiss-game/shared";
+import { SignOut } from "@phosphor-icons/react";
 import type { CSSProperties } from "react";
 import { getHealthPackVariant } from "../game/assets/healthPackVariants";
 import { formatScore } from "../utils/formatScore";
@@ -20,6 +21,7 @@ interface HudActionDrawerProps {
   serverTime: number;
   displayPrefs: HudDisplayPrefs;
   onToggleDisplayPref: (key: keyof HudDisplayPrefs) => void;
+  onExitArena: () => void;
 }
 
 export function HudActionDrawer({
@@ -28,7 +30,8 @@ export function HudActionDrawer({
   selfId,
   serverTime,
   displayPrefs,
-  onToggleDisplayPref
+  onToggleDisplayPref,
+  onExitArena
 }: HudActionDrawerProps) {
   if (mode === "map") {
     return <MapDrawer snapshot={snapshot} selfId={selfId} />;
@@ -38,7 +41,7 @@ export function HudActionDrawer({
     return <MessagesDrawer events={snapshot?.events ?? []} serverTime={serverTime} />;
   }
 
-  return <SettingsDrawer displayPrefs={displayPrefs} onToggleDisplayPref={onToggleDisplayPref} />;
+  return <SettingsDrawer displayPrefs={displayPrefs} onToggleDisplayPref={onToggleDisplayPref} onExitArena={onExitArena} />;
 }
 
 function MapDrawer({ snapshot, selfId }: { snapshot: GameSnapshot | null; selfId: string | null }) {
@@ -67,6 +70,14 @@ function MapDrawer({ snapshot, selfId }: { snapshot: GameSnapshot | null; selfId
                 />
               );
             })}
+            {snapshot.attackBoostPacks.map((pack) => (
+              <span
+                key={pack.id}
+                className="minimap-attack-pack"
+                title={t.combat.attackBoostPickup}
+                style={pointStyle(pack.x, pack.y)}
+              />
+            ))}
             {snapshot.turrets.map((turret) => {
               const owned = turret.ownerId === selfId;
               const classes = ["minimap-turret", owned ? "self" : "rival", turret.boosted ? "is-boosted" : ""]
@@ -100,7 +111,7 @@ function MapDrawer({ snapshot, selfId }: { snapshot: GameSnapshot | null; selfId
       <footer className="drawer-map-stats">
         <span>{self?.name ?? "GUEST_2AC1"}</span>
         <b>{formatScore(self?.score ?? 0)}</b>
-        <em>{t.drawer.fieldPickups(snapshot?.healthPacks.length ?? 0)}</em>
+        <em>{t.drawer.fieldPickups((snapshot?.healthPacks.length ?? 0) + (snapshot?.attackBoostPacks.length ?? 0))}</em>
       </footer>
     </section>
   );
@@ -141,10 +152,12 @@ function MessagesDrawer({ events, serverTime }: { events: CombatEvent[]; serverT
 
 function SettingsDrawer({
   displayPrefs,
-  onToggleDisplayPref
+  onToggleDisplayPref,
+  onExitArena
 }: {
   displayPrefs: HudDisplayPrefs;
   onToggleDisplayPref: (key: keyof HudDisplayPrefs) => void;
+  onExitArena: () => void;
 }) {
   const { language, setLanguage, t } = useArenaI18n();
 
@@ -174,6 +187,11 @@ function SettingsDrawer({
             ))}
           </div>
         </div>
+        <button type="button" className="drawer-exit-button" onClick={onExitArena}>
+          <SignOut size={19} weight="bold" />
+          <span>{t.drawer.exitArena}</span>
+          <i>{t.drawer.exitToVillage}</i>
+        </button>
       </div>
     </section>
   );

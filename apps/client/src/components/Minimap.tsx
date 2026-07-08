@@ -32,6 +32,14 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
             />
           );
         })}
+        {snapshot.attackBoostPacks.slice(0, 10).map((pack) => (
+          <span
+            key={pack.id}
+            className="minimap-attack-pack"
+            title={t.combat.attackBoostPickup}
+            style={pointStyle(pack.x, pack.y)}
+          />
+        ))}
         {snapshot.turrets.map((turret) => {
           const owned = turret.ownerId === selfId;
           const classes = ["minimap-turret", owned ? "self" : "rival", turret.boosted ? "is-boosted" : ""]

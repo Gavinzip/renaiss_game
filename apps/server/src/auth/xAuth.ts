@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
 import type { Express, Request, Response } from "express";
 
-interface XRequestTokenRecord {
-  secret: string;
+interface XOAuthStateRecord {
+  codeVerifier: string;
   returnTo: string;
   createdAt: number;
 }
@@ -21,13 +21,14 @@ interface AuthUser {
   displayName: string;
 }
 
-const X_REQUEST_TOKEN_URL = "https://api.x.com/oauth/request_token";
-const X_AUTHENTICATE_URL = "https://api.x.com/oauth/authenticate";
-const X_ACCESS_TOKEN_URL = "https://api.x.com/oauth/access_token";
+const X_AUTHORIZE_URL = "https://x.com/i/oauth2/authorize";
+const X_TOKEN_URL = "https://api.x.com/2/oauth2/token";
+const X_USERINFO_URL = "https://api.x.com/2/users/me";
 const SESSION_COOKIE_NAME = "renaiss_x_session";
 const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
-const REQUEST_TOKEN_MAX_AGE_MS = 10 * 60 * 1000;
-const requestTokens = new Map<string, XRequestTokenRecord>();
+const OAUTH_STATE_MAX_AGE_MS = 10 * 60 * 1000;
+const DEFAULT_X_OAUTH_SCOPE = "users.read tweet.read";
+const oauthStates = new Map<string, XOAuthStateRecord>();
 
 export function installXAuthRoutes(app: Express) {
   app.get("/api/auth/session", (req, res) => {
@@ -52,16 +53,23 @@ export function installXAuthRoutes(app: Express) {
     }
 
     try {
-      pruneRequestTokens();
+      pruneOAuthStates();
       const callbackUrl = config.callbackUrl ?? callbackUrlFromRequest(req);
-      const payload = await requestXToken(config, callbackUrl);
-      requestTokens.set(payload.oauthToken, {
-        secret: payload.oauthTokenSecret,
+      const state = randomBase64Url(32);
+      const codeVerifier = randomBase64Url(64);
+      oauthStates.set(state, {
+        codeVerifier,
         returnTo,
         createdAt: Date.now()
       });
-      const authorizeUrl = new URL(X_AUTHENTICATE_URL);
-      authorizeUrl.searchParams.set("oauth_token", payload.oauthToken);
+      const authorizeUrl = new URL(X_AUTHORIZE_URL);
+      authorizeUrl.searchParams.set("response_type", "code");
+      authorizeUrl.searchParams.set("client_id", config.clientId);
+      authorizeUrl.searchParams.set("redirect_uri", callbackUrl);
+      authorizeUrl.searchParams.set("scope", config.scope);
+      authorizeUrl.searchParams.set("state", state);
+      authorizeUrl.searchParams.set("code_challenge", pkceChallenge(codeVerifier));
+      authorizeUrl.searchParams.set("code_challenge_method", "S256");
       res.redirect(authorizeUrl.toString());
     } catch (error) {
       console.error("X login start failed", error);
@@ -71,34 +79,42 @@ export function installXAuthRoutes(app: Express) {
 
   app.get("/api/auth/x/callback", async (req, res) => {
     const config = readXAuthConfig();
-    const oauthToken = typeof req.query.oauth_token === "string" ? req.query.oauth_token : "";
-    const oauthVerifier = typeof req.query.oauth_verifier === "string" ? req.query.oauth_verifier : "";
-    const record = requestTokens.get(oauthToken);
+    const code = typeof req.query.code === "string" ? req.query.code : "";
+    const state = typeof req.query.state === "string" ? req.query.state : "";
+    const oauthError = typeof req.query.error === "string" ? req.query.error : "";
+    const record = oauthStates.get(state);
     const returnTo = record?.returnTo ?? defaultClientOrigin();
 
     if (!config) {
       redirectWithAuthError(res, returnTo, "x_auth_not_configured");
       return;
     }
-    if (!oauthToken || !oauthVerifier || !record || Date.now() - record.createdAt > REQUEST_TOKEN_MAX_AGE_MS) {
-      requestTokens.delete(oauthToken);
+    if (oauthError) {
+      oauthStates.delete(state);
+      redirectWithAuthError(res, returnTo, "x_login_denied");
+      return;
+    }
+    if (!code || !state || !record || Date.now() - record.createdAt > OAUTH_STATE_MAX_AGE_MS) {
+      oauthStates.delete(state);
       redirectWithAuthError(res, returnTo, "x_oauth_state_invalid");
       return;
     }
 
     try {
-      const accessToken = await exchangeXAccessToken(config, oauthToken, oauthVerifier, record.secret);
-      requestTokens.delete(oauthToken);
+      const callbackUrl = config.callbackUrl ?? callbackUrlFromRequest(req);
+      const accessToken = await exchangeXOAuthToken(config, code, callbackUrl, record.codeVerifier);
+      const profile = await fetchXProfile(accessToken.accessToken);
+      oauthStates.delete(state);
       setXSessionCookie(res, req, {
         provider: "x",
-        userId: accessToken.userId,
-        username: accessToken.screenName,
+        userId: profile.id,
+        username: profile.username,
         issuedAt: Date.now()
       });
       redirectWithAuthSuccess(res, returnTo);
     } catch (error) {
       console.error("X login callback failed", error);
-      requestTokens.delete(oauthToken);
+      oauthStates.delete(state);
       redirectWithAuthError(res, returnTo, "x_login_callback_failed");
     }
   });
@@ -110,14 +126,15 @@ export function installXAuthRoutes(app: Express) {
 }
 
 function readXAuthConfig() {
-  const consumerKey = process.env.X_CONSUMER_KEY?.trim();
-  const consumerSecret = process.env.X_CONSUMER_SECRET?.trim();
+  const clientId = process.env.X_CLIENT_ID?.trim();
+  const clientSecret = process.env.X_CLIENT_SECRET?.trim();
   const sessionSecret = process.env.AUTH_SESSION_SECRET?.trim();
-  if (!consumerKey || !consumerSecret || !sessionSecret) return null;
+  if (!clientId || !clientSecret || !sessionSecret) return null;
   return {
-    consumerKey,
-    consumerSecret,
+    clientId,
+    clientSecret,
     sessionSecret,
+    scope: normalizeXOAuthScope(process.env.X_OAUTH_SCOPE),
     callbackUrl: process.env.X_CALLBACK_URL?.trim() || null
   };
 }
@@ -126,84 +143,72 @@ function isXAuthConfigured() {
   return Boolean(readXAuthConfig());
 }
 
-async function requestXToken(config: NonNullable<ReturnType<typeof readXAuthConfig>>, callbackUrl: string) {
-  const oauthParams = baseOAuthParams(config.consumerKey, { oauth_callback: callbackUrl });
-  const response = await fetch(X_REQUEST_TOKEN_URL, {
+async function exchangeXOAuthToken(
+  config: NonNullable<ReturnType<typeof readXAuthConfig>>,
+  code: string,
+  callbackUrl: string,
+  codeVerifier: string
+) {
+  const body = new URLSearchParams({
+    grant_type: "authorization_code",
+    code,
+    redirect_uri: callbackUrl,
+    code_verifier: codeVerifier,
+    client_id: config.clientId
+  });
+  const response = await fetch(X_TOKEN_URL, {
     method: "POST",
     headers: {
-      Authorization: oauthAuthorizationHeader("POST", X_REQUEST_TOKEN_URL, oauthParams, config.consumerSecret)
-    }
+      Authorization: `Basic ${Buffer.from(`${config.clientId}:${config.clientSecret}`).toString("base64")}`,
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body
   });
   const text = await response.text();
-  if (!response.ok) throw new Error(`request_token_failed:${response.status}:${text.slice(0, 160)}`);
-  const params = new URLSearchParams(text);
-  const oauthToken = params.get("oauth_token");
-  const oauthTokenSecret = params.get("oauth_token_secret");
-  if (!oauthToken || !oauthTokenSecret || params.get("oauth_callback_confirmed") !== "true") {
-    throw new Error("request_token_missing_fields");
+  if (!response.ok) throw new Error(`token_exchange_failed:${response.status}:${text.slice(0, 160)}`);
+  const payload = parseJson<{ access_token?: string; token_type?: string }>(text);
+  if (!payload.access_token) {
+    throw new Error("token_exchange_missing_access_token");
   }
-  return { oauthToken, oauthTokenSecret };
+  return { accessToken: payload.access_token };
 }
 
-async function exchangeXAccessToken(config: NonNullable<ReturnType<typeof readXAuthConfig>>, oauthToken: string, oauthVerifier: string, tokenSecret: string) {
-  const oauthParams = baseOAuthParams(config.consumerKey, {
-    oauth_token: oauthToken,
-    oauth_verifier: oauthVerifier
-  });
-  const response = await fetch(X_ACCESS_TOKEN_URL, {
-    method: "POST",
+async function fetchXProfile(accessToken: string) {
+  const url = new URL(X_USERINFO_URL);
+  url.searchParams.set("user.fields", "name,username");
+  const response = await fetch(url, {
     headers: {
-      Authorization: oauthAuthorizationHeader("POST", X_ACCESS_TOKEN_URL, oauthParams, config.consumerSecret, tokenSecret)
+      Authorization: `Bearer ${accessToken}`
     }
   });
   const text = await response.text();
-  if (!response.ok) throw new Error(`access_token_failed:${response.status}:${text.slice(0, 160)}`);
-  const params = new URLSearchParams(text);
-  const userId = params.get("user_id");
-  const screenName = params.get("screen_name");
-  if (!userId || !screenName) throw new Error("access_token_missing_user_identity");
-  return { userId, screenName };
+  if (!response.ok) throw new Error(`userinfo_failed:${response.status}:${text.slice(0, 160)}`);
+  const payload = parseJson<{ data?: { id?: string; username?: string; name?: string } }>(text);
+  const id = payload.data?.id;
+  const username = payload.data?.username;
+  if (!id || !username) throw new Error("userinfo_missing_user_identity");
+  return { id, username };
 }
 
-function baseOAuthParams(consumerKey: string, extra: Record<string, string> = {}) {
-  return {
-    oauth_consumer_key: consumerKey,
-    oauth_nonce: crypto.randomBytes(16).toString("hex"),
-    oauth_signature_method: "HMAC-SHA1",
-    oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
-    oauth_version: "1.0",
-    ...extra
-  };
+function normalizeXOAuthScope(value: string | undefined) {
+  const scope = value?.trim().replace(/\s+/g, " ");
+  return scope || DEFAULT_X_OAUTH_SCOPE;
 }
 
-function oauthAuthorizationHeader(method: string, url: string, params: Record<string, string>, consumerSecret: string, tokenSecret = "") {
-  const signingParams = {
-    ...params,
-    oauth_signature: oauthSignature(method, url, params, consumerSecret, tokenSecret)
-  };
-  const header = Object.entries(signingParams)
-    .filter(([key]) => key.startsWith("oauth_"))
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, value]) => `${percentEncode(key)}="${percentEncode(value)}"`)
-    .join(", ");
-  return `OAuth ${header}`;
+function randomBase64Url(bytes: number) {
+  return crypto.randomBytes(bytes).toString("base64url");
 }
 
-function oauthSignature(method: string, url: string, params: Record<string, string>, consumerSecret: string, tokenSecret: string) {
-  const parameterString = Object.entries(params)
-    .sort(([leftKey, leftValue], [rightKey, rightValue]) => {
-      const keyCompare = percentEncode(leftKey).localeCompare(percentEncode(rightKey));
-      return keyCompare === 0 ? percentEncode(leftValue).localeCompare(percentEncode(rightValue)) : keyCompare;
-    })
-    .map(([key, value]) => `${percentEncode(key)}=${percentEncode(value)}`)
-    .join("&");
-  const signatureBase = [method.toUpperCase(), percentEncode(url), percentEncode(parameterString)].join("&");
-  const signingKey = `${percentEncode(consumerSecret)}&${percentEncode(tokenSecret)}`;
-  return crypto.createHmac("sha1", signingKey).update(signatureBase).digest("base64");
+function pkceChallenge(codeVerifier: string) {
+  return crypto.createHash("sha256").update(codeVerifier).digest("base64url");
 }
 
-function percentEncode(value: string) {
-  return encodeURIComponent(value).replace(/[!'()*]/g, (char) => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
+function parseJson<T>(text: string): T {
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error("x_oauth_invalid_json_response");
+  }
 }
 
 function readXSession(req: Request): AuthUser | null {
@@ -336,9 +341,9 @@ function defaultClientOrigin() {
   return process.env.CLIENT_ORIGIN?.trim() || "http://127.0.0.1:5173";
 }
 
-function pruneRequestTokens() {
+function pruneOAuthStates() {
   const now = Date.now();
-  for (const [token, record] of requestTokens) {
-    if (now - record.createdAt > REQUEST_TOKEN_MAX_AGE_MS) requestTokens.delete(token);
+  for (const [state, record] of oauthStates) {
+    if (now - record.createdAt > OAUTH_STATE_MAX_AGE_MS) oauthStates.delete(state);
   }
 }

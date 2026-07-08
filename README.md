@@ -44,12 +44,13 @@ pnpm dev
 For real X login, regenerate credentials in X Developer Portal and fill only these values in `.env.local`:
 
 ```bash
-X_CONSUMER_KEY=
-X_CONSUMER_SECRET=
+X_CLIENT_ID=
+X_CLIENT_SECRET=
+X_OAUTH_SCOPE=users.read tweet.read
 AUTH_SESSION_SECRET=
 ```
 
-The X Developer Portal callback URL must include:
+The X Developer Portal app should use OAuth 2.0 as a Web App, Automated App or Bot. Its callback URL must include:
 
 ```text
 http://localhost:8787/api/auth/x/callback

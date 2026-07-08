@@ -84,6 +84,8 @@ export interface ArenaText {
     minimap: string;
     combatPopups: string;
     audio: string;
+    exitArena: string;
+    exitToVillage: string;
     on: string;
     off: string;
     alliedTurret: string;
@@ -111,6 +113,7 @@ export interface ArenaText {
     castSkill: (actor: string, skill: string) => string;
     defeated: (actor: string, target: string) => string;
     recovered: (actor: string) => string;
+    attackBoosted: (actor: string) => string;
     killRun: (actor: string, count: number) => string;
     assisted: (actor: string, target?: string) => string;
     roundEvent: string;
@@ -137,6 +140,7 @@ export interface ArenaText {
     scoreRaceRestarted: string;
     recovered: string;
     fieldRecovery: string;
+    attackBoostPickup: string;
     respawning: string;
     defeated: string;
     skill: string;
@@ -402,7 +406,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       idle: "待機",
       live: (count) => `${count} 存活`,
       enterArenaToSync: "進入競技場後同步場地資料",
-      fieldPickups: (count) => `${count} 個恢復道具`,
+      fieldPickups: (count) => `${count} 個場上道具`,
       messages: "訊息",
       arenaSignalStable: "競技場訊號穩定",
       settings: "設定",
@@ -410,6 +414,8 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       minimap: "小地圖",
       combatPopups: "戰鬥提示",
       audio: "音效",
+      exitArena: "退出競技場",
+      exitToVillage: "回到村莊",
       on: "開",
       off: "關",
       alliedTurret: "我方砲台",
@@ -437,6 +443,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       castSkill: (actor, skill) => `${actor} 施放 ${skill}`,
       defeated: (actor, target) => `${actor} 擊敗 ${target}`,
       recovered: (actor) => `${actor} 已回復`,
+      attackBoosted: (actor) => `${actor} 攻擊力增加`,
       killRun: (actor, count) => `${actor} 達成 ${count} 連殺`,
       assisted: (actor, target) => (target ? `${actor} 協助擊破 ${target}` : `${actor} 取得助攻`),
       roundEvent: "新回合開始"
@@ -463,6 +470,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       scoreRaceRestarted: "分數競賽重新開始",
       recovered: "已回復",
       fieldRecovery: "場地恢復道具",
+      attackBoostPickup: "攻擊蘑菇",
       respawning: "重生中",
       defeated: "已被擊倒",
       skill: "技能"
@@ -527,7 +535,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       idle: "Idle",
       live: (count) => `${count} live`,
       enterArenaToSync: "Enter arena to sync field data",
-      fieldPickups: (count) => `${count} recovery pickups`,
+      fieldPickups: (count) => `${count} field pickups`,
       messages: "Messages",
       arenaSignalStable: "Arena signal is stable",
       settings: "Settings",
@@ -535,6 +543,8 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       minimap: "Minimap",
       combatPopups: "Combat Popups",
       audio: "Audio",
+      exitArena: "Exit Arena",
+      exitToVillage: "Back to Village",
       on: "ON",
       off: "OFF",
       alliedTurret: "Allied turret",
@@ -562,6 +572,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       castSkill: (actor, skill) => `${actor} cast ${skill}`,
       defeated: (actor, target) => `${actor} defeated ${target}`,
       recovered: (actor) => `${actor} recovered`,
+      attackBoosted: (actor) => `${actor} increased attack power`,
       killRun: (actor, count) => `${actor} reached a ${count} kill run`,
       assisted: (actor, target) => (target ? `${actor} assisted on ${target}` : `${actor} assisted`),
       roundEvent: "New round started"
@@ -588,6 +599,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       scoreRaceRestarted: "Score race restarted",
       recovered: "Recovered",
       fieldRecovery: "Field Recovery",
+      attackBoostPickup: "Attack mushroom",
       respawning: "Respawning",
       defeated: "Defeated",
       skill: "Skill"
@@ -652,7 +664,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       idle: "대기",
       live: (count) => `${count} 생존`,
       enterArenaToSync: "아레나에 입장하면 필드 데이터가 동기화됩니다",
-      fieldPickups: (count) => `회복 아이템 ${count}개`,
+      fieldPickups: (count) => `필드 아이템 ${count}개`,
       messages: "메시지",
       arenaSignalStable: "아레나 신호 안정",
       settings: "설정",
@@ -660,6 +672,8 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       minimap: "미니맵",
       combatPopups: "전투 팝업",
       audio: "오디오",
+      exitArena: "아레나 나가기",
+      exitToVillage: "마을로 돌아가기",
       on: "켜짐",
       off: "꺼짐",
       alliedTurret: "아군 포탑",
@@ -687,6 +701,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       castSkill: (actor, skill) => `${actor} ${skill} 시전`,
       defeated: (actor, target) => `${actor} ${target} 처치`,
       recovered: (actor) => `${actor} 회복`,
+      attackBoosted: (actor) => `${actor} 공격력 증가`,
       killRun: (actor, count) => `${actor} ${count} 연속 처치`,
       assisted: (actor, target) => (target ? `${actor} ${target} 처치 지원` : `${actor} 어시스트`),
       roundEvent: "새 라운드 시작"
@@ -713,6 +728,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       scoreRaceRestarted: "점수 경쟁 재시작",
       recovered: "회복됨",
       fieldRecovery: "필드 회복 아이템",
+      attackBoostPickup: "공격 버섯",
       respawning: "리스폰 중",
       defeated: "쓰러짐",
       skill: "스킬"

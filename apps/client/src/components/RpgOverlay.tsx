@@ -54,7 +54,7 @@ type CardRevealState = {
   phase: "intro" | "reveal";
   entry: RpgDrawHistoryEntry;
 };
-type WalletTier = (typeof WALLET_TIER_ORDER)[number];
+type WalletTier = "all" | (typeof WALLET_TIER_ORDER)[number];
 
 function replayStepDuration(replay: RpgBattleReplay) {
   return Math.max(1660, Math.min(2260, replay.move.animation.frameCount * 118 + 420));
@@ -270,26 +270,22 @@ function ShopPanel() {
 
 function ProfilePanel() {
   const [element, setElement] = useState<RpgElement | "any">("any");
-  const playerName = useRpgStore((state) => state.playerName);
-  const setPlayerName = useRpgStore((state) => state.setPlayerName);
   const walletAddress = useRpgStore((state) => state.walletAddress);
   const walletCards = useRpgStore((state) => state.walletCards);
   const walletCardsStatus = useRpgStore((state) => state.walletCardsStatus);
   const walletCardsError = useRpgStore((state) => state.walletCardsError);
   const walletCardsFetchedAt = useRpgStore((state) => state.walletCardsFetchedAt);
-  const walletCardsTotalFMV = useRpgStore((state) => state.walletCardsTotalFMV);
   const walletCardsStale = useRpgStore((state) => state.walletCardsStale);
   const walletCardsStaleReason = useRpgStore((state) => state.walletCardsStaleReason);
   const fetchWalletCards = useRpgStore((state) => state.fetchWalletCards);
   const cardSkillBindings = useRpgStore((state) => state.cardSkillBindings);
   const drawWalletCardSkill = useRpgStore((state) => state.drawWalletCardSkill);
+  const openCardEquipForElement = useRpgStore((state) => state.openCardEquipForElement);
   const battleNotice = useRpgStore((state) => state.battleNotice);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [cardReveal, setCardReveal] = useState<CardRevealState | null>(null);
-  const [draftName, setDraftName] = useState(playerName);
-  const [activeWalletTier, setActiveWalletTier] = useState<WalletTier>("high");
+  const [activeWalletTier, setActiveWalletTier] = useState<WalletTier>("all");
   const [bulkDrawProgress, setBulkDrawProgress] = useState<{ done: number; total: number } | null>(null);
-  useEffect(() => setDraftName(playerName), [playerName]);
   useEffect(() => {
     void fetchWalletCards();
   }, [fetchWalletCards]);
@@ -306,7 +302,6 @@ function ProfilePanel() {
   );
   const walletCardElements = useMemo(() => assignRpgWalletCardElements(walletCards), [walletCards]);
   const visibleCards = element === "any" ? ownedCards : ownedCards.filter(({ move }) => move.element === element);
-  const ownedCardTotal = ownedCards.length;
   const visibleWalletCards = element === "any" ? walletCards : walletCards.filter((card) => walletCardElement(card, walletCardElements) === element);
   const unboundWalletCardCount = walletCards.reduce((count, card) => count + (cardSkillBindings[walletCardKey(card)] ? 0 : 1), 0);
   const unboundWalletCardCountByElement = Object.fromEntries(
@@ -315,6 +310,13 @@ function ProfilePanel() {
       walletCards.reduce((count, card) => count + (!cardSkillBindings[walletCardKey(card)] && walletCardElement(card, walletCardElements) === targetElement ? 1 : 0), 0)
     ])
   ) as Record<RpgElement, number>;
+  const sortWalletCards = (cards: RpgWalletCard[]) =>
+    cards.slice().sort((a, b) => b.fmvUSD - a.fmvUSD || (a.pokemonName || a.name).localeCompare(b.pokemonName || b.name));
+  const allWalletTierGroup = {
+    tier: "all" as const,
+    cards: sortWalletCards(visibleWalletCards),
+    totalFMV: visibleWalletCards.reduce((sum, card) => sum + card.fmvUSD, 0)
+  };
   const walletTierGroups = WALLET_TIER_ORDER.map((tier) => {
     const cards = visibleWalletCards
       .filter((card) => walletCardTier(card) === tier)
@@ -325,14 +327,15 @@ function ProfilePanel() {
       totalFMV: cards.reduce((sum, card) => sum + card.fmvUSD, 0)
     };
   });
-  const visibleWalletTierGroups = walletTierGroups.filter((group) => group.cards.length > 0);
-  const selectedWalletTier = visibleWalletTierGroups.some((group) => group.tier === activeWalletTier) ? activeWalletTier : visibleWalletTierGroups[0]?.tier ?? activeWalletTier;
-  const selectedWalletTierGroup = walletTierGroups.find((group) => group.tier === selectedWalletTier) ?? walletTierGroups[0];
+  const walletTierOptions = [allWalletTierGroup, ...walletTierGroups];
+  const visibleWalletTierGroups = walletTierOptions.filter((group) => group.tier === "all" || group.cards.length > 0);
+  const selectedWalletTier = visibleWalletTierGroups.some((group) => group.tier === activeWalletTier) ? activeWalletTier : "all";
+  const selectedWalletTierGroup = walletTierOptions.find((group) => group.tier === selectedWalletTier) ?? allWalletTierGroup;
   const selectedWalletCard = selectedCardId ? walletCards.find((card) => walletCardKey(card) === selectedCardId) ?? null : null;
-  const freeSkillTotal = RPG_STARTER_PETS.reduce((sum, pet) => sum + pet.startingMoveIds.length, 0);
   const isExperienceWallet = walletAddress.toLowerCase() === RPG_DEFAULT_WALLET_ADDRESS;
-  const saveProfile = () => setPlayerName(draftName);
   const walletSyncedLabel = walletCardsFetchedAt ? `更新 ${new Date(walletCardsFetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "尚未同步";
+  const selectedElementDrawMeta = element === "any" ? null : RPG_ELEMENT_META[element];
+  const selectedElementDrawCount = element === "any" ? 0 : unboundWalletCardCountByElement[element] ?? 0;
   const handleDrawSelectedCard = async () => {
     if (!selectedWalletCard) return;
     const cardId = walletCardKey(selectedWalletCard);
@@ -432,70 +435,31 @@ function ProfilePanel() {
         <Cards size={24} weight="fill" />
         <div>
           <strong>收藏櫃</strong>
-          <span>卡片展示、技能抽取與效果查看</span>
+          <span>只顯示卡牌、抽取技能，技能卡可直接前往正確插槽</span>
         </div>
+        {isExperienceWallet ? (
+          <section className="rpg-wallet-experience-notice is-inline is-cabinet-header" data-rpg-guide-target="wallet-notice">
+            <strong>體驗用暫時錢包</strong>
+            <span>目前是提供給新手體驗抽技能、配裝、道館與競技場流程的暫時錢包，不是玩家正式資產。</span>
+          </section>
+        ) : null}
         <PanelCloseButton />
       </header>
-
-      <section className="rpg-profile-editor" aria-label="個人資料" data-rpg-guide-target="profile-name">
-        <ClassPortrait classId="engineer" frame={0} />
-        <div className="rpg-profile-fields">
-          <label>
-            <span>玩家</span>
-            <input
-              name="rpg-player-name"
-              autoComplete="off"
-              spellCheck={false}
-              value={draftName}
-              maxLength={18}
-              data-rpg-text-input="true"
-              onChange={(event) => setDraftName(event.target.value)}
-            />
-          </label>
-          <div className="rpg-profile-wallet-row">
-            <span>錢包</span>
-            <strong title={walletAddress}>{shortWallet(walletAddress)}</strong>
-            <em>{walletCardsStatus === "loading" ? "同步中" : `${walletCards.length} 張`}</em>
-          </div>
-        </div>
-        <button type="button" onClick={saveProfile}>儲存</button>
-      </section>
-
-      <section className="rpg-bag-summary" aria-label="背包摘要">
-        <article>
-          <span>藏品</span>
-          <strong>{walletCardsStatus === "loading" ? "…" : walletCards.length}</strong>
-          <em>{formatUsd(walletCardsTotalFMV)}</em>
-        </article>
-        <article>
-          <span>技能</span>
-          <strong>{ownedCardTotal}</strong>
-          <em>已綁定</em>
-        </article>
-        <article>
-          <span>預設</span>
-          <strong>{freeSkillTotal}</strong>
-          <em>寵物自帶</em>
-        </article>
-        <article>
-          <span>插槽</span>
-          <strong>{RPG_MAX_EQUIPPED_MOVES}</strong>
-          <em>每隻寵物</em>
-        </article>
-      </section>
 
       <div className="rpg-cabinet-layout">
         <div className="rpg-cabinet-main-column">
           <section className="rpg-wallet-card-section" aria-label="錢包卡片">
             <header>
-              <strong>展示櫃</strong>
-              <span>
-                {walletCardsStatus === "loading"
-                  ? "同步藏品中…"
-                  : walletCardsStatus === "error"
-                    ? walletCardsError
-                    : `${visibleWalletCards.length}/${walletCards.length} 張 · ${walletCardsStale ? "快取" : walletSyncedLabel}`}
-              </span>
+              <div className="rpg-wallet-title">
+                <strong>展示櫃</strong>
+                <span>
+                  {walletCardsStatus === "loading"
+                    ? "同步藏品中…"
+                    : walletCardsStatus === "error"
+                      ? walletCardsError
+                      : `${visibleWalletCards.length}/${walletCards.length} 張 · ${walletCardsStale ? "快取" : walletSyncedLabel}`}
+                </span>
+              </div>
               <div className="rpg-wallet-header-actions">
                 <button type="button" data-rpg-guide-target="draw-all" onClick={() => void handleDrawAllWalletCards()} disabled={walletCardsStatus !== "ready" || unboundWalletCardCount === 0 || Boolean(bulkDrawProgress)}>
                   <Sparkle size={15} weight="fill" />
@@ -507,40 +471,6 @@ function ProfilePanel() {
                 </button>
               </div>
             </header>
-            <div className="rpg-wallet-showcase-filter">
-              <ElementFilter value={element} onChange={setElement} />
-            </div>
-            {isExperienceWallet ? (
-              <section className="rpg-wallet-experience-notice" data-rpg-guide-target="wallet-notice">
-                <strong>體驗用暫時錢包</strong>
-                <span>目前幫玩家綁定的是我們提供的大戶錢包，只是為了讓大家先體驗抽技能、配裝、道館與競技場流程；這不是玩家自己的正式錢包資產。</span>
-              </section>
-            ) : null}
-            <section className="rpg-wallet-element-draws" aria-label="五屬性一鍵抽" data-rpg-guide-target="element-bulk-draw">
-              <header>
-                <strong>五屬性一鍵抽</strong>
-                <span>新手至少完成 5 次；也可以展開單張卡片後單抽。</span>
-              </header>
-              <div>
-                {ELEMENT_ORDER.map((targetElement) => {
-                  const meta = RPG_ELEMENT_META[targetElement];
-                  const count = unboundWalletCardCountByElement[targetElement] ?? 0;
-                  return (
-                    <button
-                      key={targetElement}
-                      type="button"
-                      style={{ "--element": meta.color, "--element-soft": meta.accent } as CSSProperties}
-                      disabled={walletCardsStatus !== "ready" || count === 0 || Boolean(bulkDrawProgress)}
-                      onClick={() => void handleDrawWalletCardsByElement(targetElement)}
-                    >
-                      <b>{meta.shortLabel}</b>
-                      <span>一鍵抽{meta.label}</span>
-                      <em>{count > 0 ? `${count} 張` : "已完成"}</em>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
             {walletCardsStatus === "loading" ? (
               <div className="rpg-wallet-state">
                 <Sparkle size={22} weight="fill" />
@@ -562,8 +492,26 @@ function ProfilePanel() {
             ) : (
               <div className="rpg-wallet-cabinet-shell">
                 <div className="rpg-wallet-shelf-toolbar">
-                <nav className="rpg-wallet-tier-tabs" aria-label="卡牌階級">
-                  {walletTierGroups.map((group) => (
+                  <div className="rpg-wallet-showcase-filter">
+                    <ElementFilter value={element} onChange={setElement} />
+                  </div>
+                  <div className="rpg-wallet-context-draw" data-rpg-guide-target="element-bulk-draw">
+                    {selectedElementDrawMeta ? (
+                      <button
+                        type="button"
+                        style={{ "--element": selectedElementDrawMeta.color, "--element-soft": selectedElementDrawMeta.accent } as CSSProperties}
+                        disabled={walletCardsStatus !== "ready" || selectedElementDrawCount === 0 || Boolean(bulkDrawProgress)}
+                        onClick={() => void handleDrawWalletCardsByElement(element as RpgElement)}
+                      >
+                        <Sparkle size={14} weight="fill" />
+                        <span>{selectedElementDrawCount > 0 ? `一鍵抽${selectedElementDrawMeta.label} ${selectedElementDrawCount} 張` : `${selectedElementDrawMeta.label}已全抽`}</span>
+                      </button>
+                    ) : (
+                      <span>選屬性後可在這裡一鍵抽單一屬性</span>
+                    )}
+                  </div>
+                  <nav className="rpg-wallet-tier-tabs" aria-label="卡牌階級">
+                  {walletTierOptions.map((group) => (
                     <button
                       key={group.tier}
                       type="button"
@@ -577,7 +525,7 @@ function ProfilePanel() {
                       <em>{walletTierRangeLabel(group.tier)}</em>
                     </button>
                   ))}
-                </nav>
+                  </nav>
                   {selectedWalletTierGroup ? (
                     <div className={`rpg-wallet-shelf-summary is-${selectedWalletTierGroup.tier}`}>
                       <strong>{walletTierLabel(selectedWalletTierGroup.tier)}</strong>
@@ -611,7 +559,7 @@ function ProfilePanel() {
           <section className="rpg-card-vault" aria-label="已綁定技能卡">
             <header>
               <strong>已綁定技能卡</strong>
-              <span>{element === "any" ? "全部屬性" : `${RPG_ELEMENT_META[element].label}屬性`}</span>
+              <span>{element === "any" ? "全部屬性，點按鈕跳到對應寵物插槽" : `${RPG_ELEMENT_META[element].label}屬性，點按鈕跳到對應寵物插槽`}</span>
             </header>
             {visibleCards.length === 0 ? (
               <div className="rpg-backpack-empty">
@@ -645,6 +593,9 @@ function ProfilePanel() {
                         <span key={label}>{label}</span>
                       ))}
                     </div>
+                    <button type="button" className="rpg-owned-skill-equip" onClick={() => openCardEquipForElement(move.element)}>
+                      前往{RPG_ELEMENT_META[move.element].label}插槽
+                    </button>
                   </article>
                 ))}
               </div>
@@ -675,18 +626,21 @@ function walletCardKey(card: RpgWalletCard) {
 }
 
 function walletTierLabel(tier: WalletTier) {
+  if (tier === "all") return "全部櫃";
   if (tier === "high") return "珍藏櫃";
   if (tier === "middle") return "精選櫃";
   return "日常櫃";
 }
 
 function walletTierShortLabel(tier: WalletTier) {
+  if (tier === "all") return "全部";
   if (tier === "high") return "珍藏";
   if (tier === "middle") return "精選";
   return "日常";
 }
 
 function walletTierRangeLabel(tier: WalletTier) {
+  if (tier === "all") return "全部價位";
   if (tier === "high") return "$500+";
   if (tier === "middle") return "$100-499";
   return "$0-99";
@@ -814,6 +768,7 @@ function CardEquipPanel({
   equipPetId,
   setEquipPetId,
   boundCards,
+  petMoveLoadouts,
   petCardLoadouts,
   equipCardToPet,
   unequipCardFromPet
@@ -822,20 +777,28 @@ function CardEquipPanel({
   equipPetId: string;
   setEquipPetId: (petId: string) => void;
   boundCards: BoundWalletSkillCard[];
+  petMoveLoadouts: Record<string, string[]>;
   petCardLoadouts: Record<string, string[]>;
   equipCardToPet: (definitionId: string, cardId: string) => Promise<void>;
   unequipCardFromPet: (definitionId: string, cardId: string) => Promise<void>;
 }) {
   const pet = RPG_STARTER_PETS.find((candidate) => candidate.id === equipPetId) ?? RPG_STARTER_PETS[0];
   const [selectedEquipCardId, setSelectedEquipCardId] = useState<string | null>(null);
+  const [selectedDefaultMoveId, setSelectedDefaultMoveId] = useState<string | null>(null);
 
   useEffect(() => {
     setSelectedEquipCardId(null);
+    setSelectedDefaultMoveId(null);
   }, [pet?.id]);
 
   if (!pet) return null;
 
   const petMeta = RPG_ELEMENT_META[pet.element];
+  const defaultMoveIds = (petMoveLoadouts[pet.id] && petMoveLoadouts[pet.id].length > 0 ? petMoveLoadouts[pet.id] : pet.startingMoveIds).filter((moveId) => getRpgMoveById(moveId)?.element === pet.element).slice(0, RPG_MAX_EQUIPPED_MOVES);
+  const defaultMoves = defaultMoveIds.flatMap((moveId) => {
+    const move = getRpgMoveById(moveId);
+    return move ? [move] : [];
+  });
   const equippedCardIds = (petCardLoadouts[pet.id] ?? []).slice(0, RPG_MAX_EQUIPPED_MOVES);
   const equippedCards = equippedCardIds.flatMap((cardId) => {
     const boundCard = boundCards.find((candidate) => candidate.cardId === cardId);
@@ -847,8 +810,14 @@ function CardEquipPanel({
   const selectedEquipCard = selectedEquipCardId
     ? availableCards.find((candidate) => candidate.cardId === selectedEquipCardId) ?? equippedCards.find((candidate) => candidate.cardId === selectedEquipCardId) ?? null
     : null;
+  const selectedDefaultMove = selectedDefaultMoveId ? defaultMoves.find((move) => move.id === selectedDefaultMoveId) ?? null : null;
   const toggleSelectedEquipCard = (cardId: string) => {
+    setSelectedDefaultMoveId(null);
     setSelectedEquipCardId((current) => (current === cardId ? null : cardId));
+  };
+  const toggleSelectedDefaultMove = (moveId: string) => {
+    setSelectedEquipCardId(null);
+    setSelectedDefaultMoveId((current) => (current === moveId ? null : moveId));
   };
   const renderCardDetail = (boundCard: BoundWalletSkillCard) => (
     <div className="rpg-card-equip-inline-detail">
@@ -868,7 +837,7 @@ function CardEquipPanel({
       <header>
         <div>
           <strong>卡片插槽：{pet.name}</strong>
-          <span>{petMeta.label}屬性，點卡片看效果，右側按鈕負責插入或卸下</span>
+          <span>{petMeta.label}屬性，預設技能在這裡看效果；卡片列表負責插入或卸下</span>
         </div>
         <div className="rpg-library-pets" role="list" aria-label="選擇寵物">
           {RPG_STARTER_PETS.map((candidate) => (
@@ -885,24 +854,47 @@ function CardEquipPanel({
         </div>
       </header>
 
+      <section className="rpg-default-move-slots" style={{ "--element": petMeta.color, "--element-soft": petMeta.accent } as CSSProperties}>
+        <header>
+          <strong>預設技能</strong>
+          <span>不用卡牌，點技能看完整效果</span>
+        </header>
+        <div>
+          {defaultMoves.map((move, index) => (
+            <button key={`${pet.id}-${move.id}`} type="button" className={selectedDefaultMove?.id === move.id ? "is-selected" : ""} onClick={() => toggleSelectedDefaultMove(move.id)}>
+              <SkillChip move={move} />
+              <span>
+                <b>預設 {index + 1}</b>
+                <strong>{move.name}</strong>
+                <em>{moveEffectLabels(move).slice(0, 2).join(" / ") || targetLabel(move.target)}</em>
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {selectedDefaultMove ? (
+        <div className="rpg-card-equip-inline-detail rpg-default-move-inline-detail">
+          <WalletBoundSkillReveal move={selectedDefaultMove} revealActive={false} />
+        </div>
+      ) : null}
+
       <div className="rpg-equipped-card-slots" style={{ "--element": petMeta.color, "--element-soft": petMeta.accent } as CSSProperties}>
         {Array.from({ length: RPG_MAX_EQUIPPED_MOVES }).map((_, index) => {
           const equipped = equippedCards[index];
-          const expanded = Boolean(equipped && selectedEquipCard?.cardId === equipped.cardId);
           return equipped ? (
-            <article key={equipped.cardId} className={["rpg-equipped-card-slot", "is-filled", expanded ? "is-selected is-expanded" : ""].filter(Boolean).join(" ")}>
-              <button type="button" className="rpg-card-slot-preview" onClick={() => toggleSelectedEquipCard(equipped.cardId)} title="查看卡片效果">
+            <article key={equipped.cardId} className="rpg-equipped-card-slot is-filled">
+              <div className="rpg-card-slot-preview" aria-label={`${equipped.move.name} 已插入`}>
                 {equipped.card.imageUrl ? <RpgPixelCardImage src={equipped.card.imageUrl} alt={equipped.card.name} /> : null}
                 <span>
                   <b>插槽 {index + 1}</b>
                   <strong>{equipped.move.name}</strong>
                   <em>{equipped.card.pokemonName || equipped.card.name}</em>
                 </span>
-              </button>
+              </div>
               <button type="button" className="rpg-card-slot-action" onClick={() => void unequipCardFromPet(pet.id, equipped.cardId)}>
                 卸下
               </button>
-              {expanded ? renderCardDetail(equipped) : null}
             </article>
           ) : (
             <div key={`empty-${pet.id}-${index}`} className="rpg-equipped-card-slot is-empty">
@@ -942,7 +934,7 @@ function CardEquipPanel({
           })
         )}
       </div>
-      {!selectedEquipCard && availableCards.length === 0 ? (
+      {!selectedEquipCard && !selectedDefaultMove && availableCards.length === 0 ? (
         <div className="rpg-card-equip-detail-empty">
           <Cards size={20} weight="fill" />
           <span>先在收藏櫃抽出技能，再回到這裡插入卡片。</span>
@@ -1170,20 +1162,19 @@ function GymPanel() {
   const walletCards = useRpgStore((state) => state.walletCards);
   const cardSkillBindings = useRpgStore((state) => state.cardSkillBindings);
   const petCardLoadouts = useRpgStore((state) => state.petCardLoadouts);
-  const skillInventory = useRpgStore((state) => state.skillInventory);
   const petMoveLoadouts = useRpgStore((state) => state.petMoveLoadouts);
   const fetchWalletCards = useRpgStore((state) => state.fetchWalletCards);
-  const equipMoveToPet = useRpgStore((state) => state.equipMoveToPet);
-  const unequipMoveFromPet = useRpgStore((state) => state.unequipMoveFromPet);
   const equipCardToPet = useRpgStore((state) => state.equipCardToPet);
   const unequipCardFromPet = useRpgStore((state) => state.unequipCardFromPet);
+  const pendingCardEquipPetId = useRpgStore((state) => state.pendingCardEquipPetId);
+  const consumePendingCardEquipPet = useRpgStore((state) => state.consumePendingCardEquipPet);
   const battleNotice = useRpgStore((state) => state.battleNotice);
   const [roomCode, setRoomCode] = useState("");
-  const [equipPetId, setEquipPetId] = useState(selectedPartyPetIds[0] ?? RPG_STARTER_PETS[0]?.id ?? "");
-  const [showSkillEditor, setShowSkillEditor] = useState(false);
+  const [equipPetId, setEquipPetId] = useState(selectedPartyPetIds.find(Boolean) ?? RPG_STARTER_PETS[0]?.id ?? "");
   const gymTutorial = useFirstRunTutorial("gym");
   const connecting = versusConnection === "connecting";
-  const partyReady = selectedPartyPetIds.length === 3;
+  const selectedPartyCount = selectedPartyPetIds.filter(Boolean).length;
+  const partyReady = selectedPartyCount === 3;
   const selectedAiConfig = RPG_AI_DIFFICULTY_CONFIGS[selectedAiDifficulty];
   const boundCards = useMemo(
     () =>
@@ -1198,14 +1189,19 @@ function GymPanel() {
   );
   const openPartySkillEditor = (petId: string) => {
     setEquipPetId(petId);
-    setShowSkillEditor(true);
   };
   useEffect(() => {
-    const firstPartyPetId = selectedPartyPetIds[0];
+    const firstPartyPetId = selectedPartyPetIds.find(Boolean);
     if (firstPartyPetId && !selectedPartyPetIds.includes(equipPetId)) {
       setEquipPetId(firstPartyPetId);
     }
   }, [equipPetId, selectedPartyPetIds]);
+  useEffect(() => {
+    if (!pendingCardEquipPetId) return;
+    const pendingPetId = consumePendingCardEquipPet();
+    if (!pendingPetId) return;
+    setEquipPetId(pendingPetId);
+  }, [consumePendingCardEquipPet, pendingCardEquipPetId]);
   useEffect(() => {
     void fetchWalletCards();
   }, [fetchWalletCards]);
@@ -1227,7 +1223,18 @@ function GymPanel() {
           </button>
           <span>先組 3v3 隊伍；點已上場寵物可編輯牠能使用的卡片技能。</span>
         </div>
-        <PartySelection editingPetId={showSkillEditor ? equipPetId : null} onEditPet={openPartySkillEditor} />
+        <PartySelection editingPetId={equipPetId} onEditPet={openPartySkillEditor} />
+        <section className="rpg-gym-skill-workbench is-inline" aria-label="道館技能與卡片插槽">
+          <CardEquipPanel
+            equipPetId={equipPetId}
+            setEquipPetId={setEquipPetId}
+            boundCards={boundCards}
+            petMoveLoadouts={petMoveLoadouts}
+            petCardLoadouts={petCardLoadouts}
+            equipCardToPet={equipCardToPet}
+            unequipCardFromPet={unequipCardFromPet}
+          />
+        </section>
         <section className="rpg-ai-difficulty-selector" aria-label="AI 難度">
           <header>
             <strong>AI 對戰</strong>
@@ -1275,43 +1282,6 @@ function GymPanel() {
         </div>
         {battleNotice ? <p className="rpg-room-message">{battleNotice}</p> : null}
       </aside>
-      {showSkillEditor ? (
-        <section className="rpg-gym-workbench-overlay" role="dialog" aria-modal="true" aria-label="隊伍與卡片插槽編輯">
-          <header>
-            <FlagBanner size={24} weight="fill" />
-            <div>
-              <strong>隊伍編輯</strong>
-              <span>選寵物、調整預設技能、查看並插入卡片技能</span>
-            </div>
-            <button type="button" title="關閉隊伍編輯" aria-label="關閉隊伍編輯" onClick={() => setShowSkillEditor(false)}>
-              <X size={18} weight="bold" />
-            </button>
-          </header>
-          <div className="rpg-gym-workbench-body">
-            <PartySelection editingPetId={equipPetId} onEditPet={openPartySkillEditor} />
-            <section className="rpg-gym-skill-workbench" aria-label="道館技能與卡片插槽">
-              <SkillLibraryPanel
-                title="預設技能"
-                description="調整寵物自帶招式；卡片技能在右側插槽裝備。"
-                equipPetId={equipPetId}
-                setEquipPetId={setEquipPetId}
-                skillInventory={skillInventory}
-                petMoveLoadouts={petMoveLoadouts}
-                equipMoveToPet={equipMoveToPet}
-                unequipMoveFromPet={unequipMoveFromPet}
-              />
-              <CardEquipPanel
-                equipPetId={equipPetId}
-                setEquipPetId={setEquipPetId}
-                boundCards={boundCards}
-                petCardLoadouts={petCardLoadouts}
-                equipCardToPet={equipCardToPet}
-                unequipCardFromPet={unequipCardFromPet}
-              />
-            </section>
-          </div>
-        </section>
-      ) : null}
       <GymTutorialModal open={gymTutorial.open} onClose={gymTutorial.closeTutorial} />
     </>
   );
@@ -1327,12 +1297,13 @@ function PartySelection({
   const ownedPetIds = useRpgStore((state) => state.ownedPetIds);
   const selectedPartyPetIds = useRpgStore((state) => state.selectedPartyPetIds);
   const togglePartyPet = useRpgStore((state) => state.togglePartyPet);
+  const selectedPartyCount = selectedPartyPetIds.filter(Boolean).length;
 
   return (
     <section className="rpg-gym-party" aria-label="上場隊伍" data-rpg-guide-target="gym-party">
       <header>
         <strong>上場隊伍</strong>
-        <span>{selectedPartyPetIds.length}/3</span>
+        <span>{selectedPartyCount}/3</span>
       </header>
       <div className="rpg-party-formation-board" aria-label="道館站位">
         {PARTY_FORMATION_SLOTS.map((slot, index) => {
@@ -1408,7 +1379,7 @@ function PartySelection({
               <RpgPetSprite element={pet.element} pose="idle" animate />
               <span>{meta.label}</span>
               <strong>{pet.name}</strong>
-	              <em>{editingPetId === pet.id ? "編輯卡槽" : selected ? PARTY_FORMATION_SLOTS[selectedIndex]?.label ?? `出場 ${selectedIndex + 1}` : "待命"}</em>
+              <em>{editingPetId === pet.id ? "編輯卡槽" : selected ? PARTY_FORMATION_SLOTS[selectedIndex]?.label ?? `出場 ${selectedIndex + 1}` : "待命"}</em>
             </button>
           );
         })}

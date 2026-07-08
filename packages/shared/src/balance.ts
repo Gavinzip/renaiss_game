@@ -14,7 +14,11 @@ export const WORLD = {
   healthPackCount: 24,
   healthPackVariantCount: 4,
   healthPackRadius: 34,
-  healthPackHeal: 40
+  healthPackHeal: 40,
+  attackBoostPackCount: 8,
+  attackBoostPackRadius: 34,
+  attackBoostDurationMs: 12000,
+  attackBoostMultiplier: 1.35
 } as const;
 
 export const CLASS_ORDER: ClassId[] = ["warrior", "archer", "engineer", "mage"];

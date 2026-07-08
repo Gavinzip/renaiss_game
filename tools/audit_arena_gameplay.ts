@@ -2,6 +2,7 @@ import { GameRoom } from "../apps/server/src/game/GameRoom";
 import { CLASS_STATS, COMBAT, WORLD, getSkillCooldownMs, type ClassId, type GameSnapshot, type PlayerInput, type PublicPlayer } from "../packages/shared/src/index";
 
 const TEST_SPAWN = { x: WORLD.width / 2, y: WORLD.height / 2 };
+const OPEN_FIELD_TEST_POINT = { x: 2200, y: 4200 };
 const SPAWN_GUARD_CLEAR_MS = 9000;
 const FRAME_MS = 33;
 
@@ -43,10 +44,14 @@ function main() {
     checks.push(checkMageCursorTargetedAreaRuntime());
     checks.push(checkMageFullRotationSurvivability());
     checks.push(checkMouseAimOverridesStaleAngleRuntime());
+    checks.push(checkArcherProjectileBodyHurtboxRuntime());
     checks.push(checkMageBeamMovementLockRuntime());
     checks.push(checkArcherCursorTargetedAreaRuntime());
+    checks.push(checkBotArcherChargedReleaseRuntime());
+    checks.push(checkSharedArenaBotReplacementRuntime());
     checks.push(checkDeathClassSwitchRuntime());
     checks.push(checkWarriorDirectionalMeleeRuntime());
+    checks.push(checkAttackBoostPickupRuntime());
     checks.push(checkTurretDeathVfxRuntime());
     checks.push(checkRandomReviewSpawnRuntime());
   } finally {
@@ -248,6 +253,37 @@ function checkMouseAimOverridesStaleAngleRuntime(): GameplayCheck {
   };
 }
 
+function checkArcherProjectileBodyHurtboxRuntime(): GameplayCheck {
+  const headDuel = createDuel("archer", "mage", "archer_body_hit", "target_body_hit");
+  const targetPoint = { x: OPEN_FIELD_TEST_POINT.x + 420, y: OPEN_FIELD_TEST_POINT.y };
+  placeDuel(headDuel, OPEN_FIELD_TEST_POINT, targetPoint);
+  fireArcherArrowAt(headDuel, { x: targetPoint.x, y: targetPoint.y - 78 });
+  advanceFrames(headDuel.room, 740);
+  const headTarget = getPlayer(headDuel.room.snapshotFor(headDuel.attackerSocket), headDuel.targetId);
+  assert(
+    headTarget.health === CLASS_STATS.mage.maxHealth - CLASS_STATS.archer.attackPower,
+    `Archer arrow aimed through the upper body should hit the player hurtbox. Got target HP ${headTarget.health}.`
+  );
+
+  const highDuel = createDuel("archer", "mage", "archer_body_miss", "target_body_miss");
+  placeDuel(highDuel, OPEN_FIELD_TEST_POINT, targetPoint);
+  fireArcherArrowAt(highDuel, { x: targetPoint.x, y: targetPoint.y - 142 });
+  advanceFrames(highDuel.room, 740);
+  const highTarget = getPlayer(highDuel.room.snapshotFor(highDuel.attackerSocket), highDuel.targetId);
+  assert(
+    highTarget.health === CLASS_STATS.mage.maxHealth,
+    `Archer arrow aimed clearly above the sprite should miss instead of using an oversized circle. Got target HP ${highTarget.health}.`
+  );
+
+  return {
+    name: "archer projectile body hurtbox",
+    details: [
+      "Arrow sweep uses the player's upper-body hurtbox, so shots through the head/chest register.",
+      "Shots clearly above the sprite still miss, keeping the hurtbox from becoming an oversized circle."
+    ]
+  };
+}
+
 function checkMageBeamMovementLockRuntime(): GameplayCheck {
   const duel = createDuel("mage", "archer", "mage_q_lock", "mage_q_target");
   placeDuel(duel, TEST_SPAWN, { x: TEST_SPAWN.x + 360, y: TEST_SPAWN.y });
@@ -372,6 +408,106 @@ function checkDeathClassSwitchRuntime(): GameplayCheck {
   };
 }
 
+function checkBotArcherChargedReleaseRuntime(): GameplayCheck {
+  fakeNow += 25_000;
+  const room = new GameRoom();
+  const joined = room.addHuman("bot_archer_target", {
+    name: "BOT_ARCHER_TARGET",
+    classId: "mage"
+  });
+  const internals = room as unknown as {
+    players: Map<string, PublicPlayer & {
+      alive: boolean;
+      respawnAt: number;
+      spawnGuardEndsAt: number;
+      spawnProtected: boolean;
+      cooldowns: Record<string, number>;
+      aiNextDecisionAt: number;
+      archerChargeStartedAt: number;
+    }>;
+  };
+  const target = internals.players.get(joined.playerId);
+  const archer = internals.players.get("bot_2");
+  assert(Boolean(target) && Boolean(archer), "Bot archer release audit could not find the human target and bot_2.");
+  assert(archer.classId === "archer", `Bot release audit expected bot_2 to be Archer, got ${archer.classId}.`);
+
+  for (const bot of internals.players.values()) {
+    if (bot.bot && bot.id !== archer.id) {
+      bot.alive = false;
+      bot.respawnAt = Number.MAX_SAFE_INTEGER;
+    }
+  }
+
+  archer.x = TEST_SPAWN.x;
+  archer.y = TEST_SPAWN.y;
+  archer.aiNextDecisionAt = 0;
+  archer.cooldowns = {
+    skillQ: Number.MAX_SAFE_INTEGER,
+    skillE: Number.MAX_SAFE_INTEGER,
+    skillR: Number.MAX_SAFE_INTEGER
+  };
+  target.x = TEST_SPAWN.x + 420;
+  target.y = TEST_SPAWN.y;
+  target.spawnGuardEndsAt = 0;
+  target.spawnProtected = false;
+
+  tick(room);
+  assert(archer.archerChargeStartedAt > 0, "Archer bot should start drawing the bow when a live target is in range.");
+
+  const fullChargeMs = (COMBAT.archerChargeStages - 1) * COMBAT.archerChargeStageMs;
+  advance(room, fullChargeMs + 220);
+  const snapshot = room.snapshotFor("bot_archer_target");
+  const arrows = snapshot.projectiles.filter((projectile) => projectile.ownerId === archer.id && projectile.type === "arrow");
+
+  assert(arrows.length > 0, "Archer bot should release a fully charged arrow instead of holding attack forever.");
+  assert(archer.archerChargeStartedAt === 0, "Archer bot charge state should reset after firing.");
+
+  return {
+    name: "bot Archer full-charge release runtime behavior",
+    details: [
+      `Bot Archer releases after ${COMBAT.archerChargeStages} charge stages.`,
+      `Snapshot contains ${arrows.length} Archer arrow projectile(s).`
+    ]
+  };
+}
+
+function checkSharedArenaBotReplacementRuntime(): GameplayCheck {
+  fakeNow += 25_000;
+  const room = new GameRoom();
+
+  assert(room.playerCount() === 0, `Fresh shared arena should start with 0 humans, got ${room.playerCount()}.`);
+  assert(room.botCount() === 8, `Fresh shared arena should keep 8 idle bots, got ${room.botCount()}.`);
+
+  const firstSocket = "shared_human_one";
+  const secondSocket = "shared_human_two";
+  const first = room.addHuman(firstSocket, { name: "HUMAN_ONE", classId: "warrior" });
+  assert(room.playerCount() === 1, `Shared arena should have 1 human after first join, got ${room.playerCount()}.`);
+  assert(room.botCount() === 7, `First human should replace one bot, got ${room.botCount()} bots.`);
+  assert(room.snapshotFor(firstSocket).players.length === 8, "First shared arena snapshot should still expose 8 total combatants.");
+
+  const second = room.addHuman(secondSocket, { name: "HUMAN_TWO", classId: "mage" });
+  assert(room.playerCount() === 2, `Shared arena should have 2 humans after second join, got ${room.playerCount()}.`);
+  assert(room.botCount() === 6, `Second human should replace a second bot, got ${room.botCount()} bots.`);
+  assert(room.snapshotFor(secondSocket).players.length === 8, "Second shared arena snapshot should keep the room population at 8.");
+
+  room.removeHuman(firstSocket);
+  assert(room.playerCount() === 1, `Shared arena should have 1 human after first leave, got ${room.playerCount()}.`);
+  assert(room.botCount() === 7, `One bot should refill after a human leaves, got ${room.botCount()} bots.`);
+  assert(room.snapshotFor(secondSocket).players.some((player) => player.id === second.playerId), "Remaining human should stay in the same shared arena after another human leaves.");
+
+  room.removeHuman(secondSocket);
+  assert(room.playerCount() === 0, `Shared arena should have 0 humans after all leave, got ${room.playerCount()}.`);
+  assert(room.botCount() === 8, `Shared arena should refill to 8 idle bots after all humans leave, got ${room.botCount()} bots.`);
+
+  return {
+    name: "shared arena bot replacement runtime behavior",
+    details: [
+      `Human joins replace bots: first ${first.playerId} -> 7 bots, second ${second.playerId} -> 6 bots.`,
+      "Bot population refills when humans leave the shared room."
+    ]
+  };
+}
+
 function checkWarriorDirectionalMeleeRuntime(): GameplayCheck {
   const duel = createDuel("warrior", "mage", "slash_warrior", "slash_target");
   const internals = duel.room as unknown as {
@@ -465,6 +601,54 @@ function checkTurretDeathVfxRuntime(): GameplayCheck {
   return {
     name: "turret death VFX runtime behavior",
     details: [`Destroyed turret emits ${deathEffect?.type} at radius ${deathEffect?.radius}.`]
+  };
+}
+
+function checkAttackBoostPickupRuntime(): GameplayCheck {
+  const duel = createDuel("warrior", "mage", "boost_warrior", "boost_target");
+  const internals = duel.room as unknown as {
+    players: Map<string, PublicPlayer & { action: unknown; actionStartedAt: number; actionEndsAt: number; actionPoseEndsAt: number; attacking: boolean; lastAttackAt: number; attackBoostEndsAt: number }>;
+    attackBoostPacks: Array<{ id: string; x: number; y: number }>;
+  };
+  const attacker = internals.players.get(duel.attackerId);
+  const target = internals.players.get(duel.targetId);
+  assert(Boolean(attacker) && Boolean(target), "Could not find players for attack boost pickup audit.");
+
+  const safeOrigin = { x: 900, y: 1280 };
+  attacker.x = safeOrigin.x;
+  attacker.y = safeOrigin.y;
+  target.x = safeOrigin.x + COMBAT.meleeRange - 12;
+  target.y = safeOrigin.y;
+  target.health = CLASS_STATS.mage.maxHealth;
+  internals.attackBoostPacks = [{ id: "audit_attack_mushroom", x: attacker.x, y: attacker.y }];
+
+  tick(duel.room);
+  const boostedSnapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const boostedAttacker = getPlayer(boostedSnapshot, duel.attackerId);
+  assert(boostedAttacker.attackBoosted, "Attack boost mushroom should set attackBoosted on the player snapshot.");
+  assert(boostedAttacker.attackBoostEndsAt > boostedSnapshot.serverTime, "Attack boost should expose a future attackBoostEndsAt timestamp.");
+  assert(
+    boostedSnapshot.effects.some((effect) => effect.type === "attack_boost" && effect.ownerId === duel.attackerId),
+    `Attack boost pickup should emit attack_boost effect, got ${JSON.stringify(boostedSnapshot.effects.map((effect) => effect.type))}.`
+  );
+  assert(
+    boostedSnapshot.events.some((event) => event.type === "boost" && event.actorId === duel.attackerId),
+    `Attack boost pickup should emit a boost event, got ${JSON.stringify(boostedSnapshot.events.map((event) => event.type))}.`
+  );
+
+  setInput(duel.room, duel.attackerSocket, { angle: 0, aimX: target.x, aimY: target.y, attack: true });
+  tick(duel.room);
+  const afterAttackTarget = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
+  const expectedDamage = Math.ceil(CLASS_STATS.warrior.attackPower * WORLD.attackBoostMultiplier);
+  const expectedHealth = CLASS_STATS.mage.maxHealth - expectedDamage;
+  assert(afterAttackTarget.health === expectedHealth, `Attack boost should raise Warrior damage to ${expectedDamage}. Got target HP ${afterAttackTarget.health}.`);
+
+  return {
+    name: "attack boost mushroom runtime behavior",
+    details: [
+      `Mushroom pickup gives ${WORLD.attackBoostDurationMs / 1000}s attack boost.`,
+      `Warrior basic damage increased from ${CLASS_STATS.warrior.attackPower} to ${expectedDamage}.`
+    ]
   };
 }
 
@@ -567,6 +751,23 @@ function castSkillAt(duel: DuelSetup, skill: "skillQ" | "skillE" | "skillR", poi
   }
 }
 
+function fireArcherArrowAt(duel: DuelSetup, point: { x: number; y: number }) {
+  setInput(duel.room, duel.attackerSocket, {
+    angle: 180,
+    aimX: point.x,
+    aimY: point.y,
+    attack: true
+  });
+  tick(duel.room);
+  setInput(duel.room, duel.attackerSocket, {
+    angle: 180,
+    aimX: point.x,
+    aimY: point.y,
+    attack: false
+  });
+  tick(duel.room);
+}
+
 function placeDuel(duel: DuelSetup, attackerPoint: { x: number; y: number }, targetPoint: { x: number; y: number }) {
   const internals = duel.room as unknown as {
     players: Map<string, PublicPlayer>;
@@ -606,6 +807,15 @@ function tick(room: GameRoom, deltaMs = FRAME_MS) {
 function advance(room: GameRoom, ms: number) {
   fakeNow += ms;
   room.update(FRAME_MS);
+}
+
+function advanceFrames(room: GameRoom, ms: number) {
+  let remaining = ms;
+  while (remaining > 0) {
+    const frameMs = Math.min(FRAME_MS, remaining);
+    tick(room, frameMs);
+    remaining -= frameMs;
+  }
 }
 
 function getPlayer(snapshot: GameSnapshot, playerId: string): PublicPlayer {

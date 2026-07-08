@@ -23,6 +23,7 @@ import {
   type CombatEventType,
   type EffectState,
   type GameSnapshot,
+  type AttackBoostPackState,
   type HealthPackState,
   type JoinAccepted,
   type JoinRequest,
@@ -98,11 +99,17 @@ const EMPTY_INPUT: PlayerInput = {
 };
 
 const BOT_NAMES = ["RIVAL_AZ", "RIVAL_BX", "RIVAL_CQ", "RIVAL_D9", "RIVAL_KI", "RIVAL_N7", "RIVAL_Q3", "RIVAL_VX"];
+const TARGET_ROOM_POPULATION = BOT_NAMES.length;
 const EVENT_TTL_MS = 9000;
 const EVENT_LIMIT = 18;
 const SPAWN_GUARD_MS = 8500;
 const TURRET_DEPLOY_DISTANCE = COMBAT.playerRadius + COMBAT.turretRadius + 48;
 const TURRET_DEPLOY_ANGLE_OFFSETS = [0, -32, 32, -64, 64, 180] as const;
+const PLAYER_PROJECTILE_HURTBOX = {
+  topOffset: -86,
+  bottomOffset: -8,
+  radius: COMBAT.projectileHitRadius
+} as const;
 
 export class GameRoom {
   private readonly mapColliders: Collider[];
@@ -114,11 +121,13 @@ export class GameRoom {
   private projectiles: ProjectileEntity[] = [];
   private turrets: TurretEntity[] = [];
   private healthPacks: HealthPackState[] = [];
+  private attackBoostPacks: AttackBoostPackState[] = [];
   private effects: EffectState[] = [];
   private events: CombatEvent[] = [];
   private nextProjectileId = 1;
   private nextTurretId = 1;
   private nextHealthPackId = 1;
+  private nextAttackBoostPackId = 1;
   private nextEffectId = 1;
   private nextEventId = 1;
   private roundNumber = 0;
@@ -134,6 +143,7 @@ export class GameRoom {
     this.fixedSpawnEnabled = options.fixedSpawn === true;
     this.fixedSpawnPoint = options.fixedSpawnPoint ?? null;
     this.spawnInitialHealthPacks();
+    this.spawnInitialAttackBoostPacks();
     this.ensureBots();
   }
 
@@ -147,7 +157,7 @@ export class GameRoom {
 
   addHuman(socketId: string, request: JoinRequest): JoinAccepted {
     const hadHumans = this.playerCount() > 0;
-    const id = `p_${socketId.slice(0, 8)}`;
+    const id = this.createHumanId(socketId);
     const player = this.createPlayer({
       id,
       socketId,
@@ -184,6 +194,7 @@ export class GameRoom {
     }
     this.players.delete(playerId);
     this.socketToPlayer.delete(socketId);
+    this.ensureBots();
   }
 
   switchHumanClass(socketId: string, classId: ClassId) {
@@ -212,6 +223,8 @@ export class GameRoom {
     player.actionPoseEndsAt = 0;
     player.attacking = false;
     player.shielded = false;
+    player.attackBoosted = false;
+    player.attackBoostEndsAt = 0;
     player.rooted = false;
     player.stunned = false;
     player.sprinting = false;
@@ -261,6 +274,7 @@ export class GameRoom {
       this.updateProjectiles(deltaMs, now);
       this.updateTurrets(now);
       this.checkHealthPackPickup(now);
+      this.checkAttackBoostPackPickup(now);
       this.respawnPlayers(now);
       this.updateRoundLifecycle(now);
     }
@@ -297,10 +311,25 @@ export class GameRoom {
         boosted
       })),
       healthPacks: this.healthPacks,
+      attackBoostPacks: this.attackBoostPacks,
       effects: this.effects,
       events: this.events.slice(-EVENT_LIMIT),
       leaderboard
     };
+  }
+
+  private createHumanId(socketId: string) {
+    const sanitized = socketId.replace(/[^a-zA-Z0-9_-]/g, "") || "player";
+    const base = `p_${sanitized.slice(0, 8)}`;
+    if (!this.players.has(base)) {
+      return base;
+    }
+
+    let suffix = 2;
+    while (this.players.has(`${base}_${suffix}`)) {
+      suffix += 1;
+    }
+    return `${base}_${suffix}`;
   }
 
   playerCount() {
@@ -339,6 +368,8 @@ export class GameRoom {
       alive: true,
       attacking: false,
       shielded: false,
+      attackBoosted: false,
+      attackBoostEndsAt: 0,
       spawnProtected: !input.bot,
       rooted: false,
       stunned: false,
@@ -409,8 +440,11 @@ export class GameRoom {
     this.effects = [];
     this.events = [];
     this.healthPacks = [];
+    this.attackBoostPacks = [];
     this.nextHealthPackId = 1;
+    this.nextAttackBoostPackId = 1;
     this.spawnInitialHealthPacks();
+    this.spawnInitialAttackBoostPacks();
 
     let botIndex = 0;
     for (const player of this.players.values()) {
@@ -441,6 +475,8 @@ export class GameRoom {
       player.actionEndsAt = 0;
       player.attacking = false;
       player.shieldEndsAt = 0;
+      player.attackBoosted = false;
+      player.attackBoostEndsAt = 0;
       player.spawnGuardEndsAt = player.bot ? 0 : now + SPAWN_GUARD_MS;
       player.rootEndsAt = 0;
       player.stunEndsAt = 0;
@@ -480,11 +516,28 @@ export class GameRoom {
       return;
     }
 
-    const botCount = this.botCount();
-    for (let i = botCount; i < BOT_NAMES.length; i += 1) {
+    const desiredBotCount = Math.max(0, TARGET_ROOM_POPULATION - this.playerCount());
+    const bots = [...this.players.values()]
+      .filter((player) => player.bot)
+      .sort((a, b) => this.botIndex(b.id) - this.botIndex(a.id));
+    let currentBotCount = bots.length;
+
+    for (const bot of bots) {
+      if (currentBotCount <= desiredBotCount) {
+        break;
+      }
+      this.removeBot(bot.id);
+      currentBotCount -= 1;
+    }
+
+    for (let i = 0; i < BOT_NAMES.length && currentBotCount < desiredBotCount; i += 1) {
+      const id = `bot_${i + 1}`;
+      if (this.players.has(id)) {
+        continue;
+      }
       const classId = CLASS_ORDER[i % CLASS_ORDER.length];
       const player = this.createPlayer({
-        id: `bot_${i + 1}`,
+        id,
         socketId: null,
         name: BOT_NAMES[i],
         classId,
@@ -495,12 +548,26 @@ export class GameRoom {
       player.y = spawn.y;
       player.angle = angleTo(player, { x: WORLD.width / 2, y: WORLD.height / 2 });
       this.players.set(player.id, player);
+      currentBotCount += 1;
     }
+  }
+
+  private botIndex(id: string) {
+    const match = /^bot_(\d+)$/.exec(id);
+    return match ? Number(match[1]) - 1 : Number.MAX_SAFE_INTEGER;
+  }
+
+  private removeBot(botId: string) {
+    this.players.delete(botId);
+    this.projectiles = this.projectiles.filter((projectile) => projectile.ownerId !== botId);
+    this.turrets = this.turrets.filter((turret) => turret.ownerId !== botId);
+    this.effects = this.effects.filter((effect) => effect.ownerId !== botId);
   }
 
   private updateStatusFlags(now: number) {
     for (const player of this.players.values()) {
       player.shielded = player.shieldEndsAt > now;
+      player.attackBoosted = player.attackBoostEndsAt > now;
       player.spawnProtected = player.spawnGuardEndsAt > now;
       player.rooted = player.rootEndsAt > now;
       player.stunned = player.stunEndsAt > now;
@@ -538,6 +605,7 @@ export class GameRoom {
       const moveToward = d > (bot.classId === "warrior" ? 100 : 330);
       const strafe = Math.sin((now / 600 + bot.aiSeed * 12) % Math.PI) * 0.7;
       const radians = (desiredAngle * Math.PI) / 180;
+      const isChargingArcher = bot.classId === "archer" && bot.archerChargeStartedAt > 0;
 
       bot.input = {
         moveX: moveToward ? Math.cos(radians) + Math.cos(radians + Math.PI / 2) * strafe : Math.cos(radians + Math.PI / 2) * strafe,
@@ -545,14 +613,32 @@ export class GameRoom {
         angle: desiredAngle,
         aimX: target.x,
         aimY: target.y,
-        attack: d < 620,
+        attack: this.botWantsBasicAttack(bot, d, now),
         sprint: moveToward && d > 520,
-        skillQ: d > 220 && d < 540 && Math.random() < 0.35,
-        skillE: d < COMBAT.mageBurstRadius + 40 && Math.random() < 0.25,
-        skillR: d < COMBAT.mageUltimateRadius + 50 && Math.random() < 0.12
+        skillQ: !isChargingArcher && d > 220 && d < 540 && Math.random() < 0.35,
+        skillE: !isChargingArcher && d < COMBAT.mageBurstRadius + 40 && Math.random() < 0.25,
+        skillR: !isChargingArcher && d < COMBAT.mageUltimateRadius + 50 && Math.random() < 0.12
       };
-      bot.aiNextDecisionAt = now + randomBetween(160, 320);
+      bot.aiNextDecisionAt = this.getBotNextDecisionAt(bot, now);
     }
+  }
+
+  private botWantsBasicAttack(bot: PlayerEntity, targetDistance: number, now: number) {
+    if (targetDistance >= 620) {
+      return false;
+    }
+    if (bot.classId !== "archer" || bot.archerChargeStartedAt <= 0) {
+      return true;
+    }
+    return now < bot.archerChargeStartedAt + this.archerFullChargeMs();
+  }
+
+  private getBotNextDecisionAt(bot: PlayerEntity, now: number) {
+    if (bot.classId === "archer" && bot.archerChargeStartedAt > 0) {
+      const fullChargeAt = bot.archerChargeStartedAt + this.archerFullChargeMs();
+      return Math.max(now + 60, Math.min(now + 120, fullChargeAt));
+    }
+    return now + randomBetween(160, 320);
   }
 
   private updatePlayers(deltaMs: number, now: number) {
@@ -615,7 +701,7 @@ export class GameRoom {
   private handleArcherChargedAttack(attacker: PlayerEntity, now: number) {
     if (attacker.archerChargeStartedAt > 0) {
       const stage = this.getArcherChargeStage(attacker, now);
-      if (!attacker.input.attack) {
+      if (!attacker.input.attack || this.shouldBotReleaseArcherCharge(attacker, now)) {
         this.fireArcherChargedArrow(attacker, now, stage);
         return;
       }
@@ -672,6 +758,14 @@ export class GameRoom {
 
   private resetArcherCharge(player: PlayerEntity) {
     player.archerChargeStartedAt = 0;
+  }
+
+  private shouldBotReleaseArcherCharge(player: PlayerEntity, now: number) {
+    return player.bot && player.archerChargeStartedAt > 0 && now >= player.archerChargeStartedAt + this.archerFullChargeMs();
+  }
+
+  private archerFullChargeMs() {
+    return Math.max(0, (COMBAT.archerChargeStages - 1) * COMBAT.archerChargeStageMs);
   }
 
   private getArcherChargeStage(player: PlayerEntity, now: number) {
@@ -1046,6 +1140,7 @@ export class GameRoom {
     const surviving: ProjectileEntity[] = [];
 
     for (const projectile of this.projectiles) {
+      const previous = { x: projectile.x, y: projectile.y };
       const travel = projectile.speed * deltaSeconds;
       const next = project(projectile, projectile.angle, travel);
       projectile.x = next.x;
@@ -1079,7 +1174,7 @@ export class GameRoom {
 
       let hit = false;
       for (const target of this.players.values()) {
-        if (target.id !== projectile.ownerId && target.alive && distance(projectile, target) <= COMBAT.projectileHitRadius) {
+        if (target.id !== projectile.ownerId && target.alive && this.projectileHitsPlayer(projectile, previous, target)) {
           this.damagePlayer(target, projectile.damage, projectile.ownerId);
           hit = true;
           break;
@@ -1088,7 +1183,7 @@ export class GameRoom {
 
       if (!hit) {
         for (const turret of this.turrets) {
-          if (turret.ownerId !== projectile.ownerId && distance(projectile, turret) <= COMBAT.projectileHitRadius) {
+          if (turret.ownerId !== projectile.ownerId && this.projectileHitsCircle(projectile, previous, turret, COMBAT.projectileHitRadius)) {
             this.damageTurret(turret, projectile.damage, projectile.ownerId, now);
             hit = true;
             break;
@@ -1103,6 +1198,79 @@ export class GameRoom {
 
     this.projectiles = surviving;
     this.turrets = this.turrets.filter((turret) => turret.health > 0);
+  }
+
+  private projectileHitsPlayer(projectile: ProjectileEntity, previous: { x: number; y: number }, target: PlayerEntity) {
+    const hurtbox = this.getPlayerProjectileHurtbox(target);
+    const hitRadius = PLAYER_PROJECTILE_HURTBOX.radius;
+    return this.distanceSqBetweenSegments(previous, projectile, hurtbox.top, hurtbox.bottom) <= hitRadius * hitRadius;
+  }
+
+  private getPlayerProjectileHurtbox(player: PlayerEntity) {
+    return {
+      top: { x: player.x, y: player.y + PLAYER_PROJECTILE_HURTBOX.topOffset },
+      bottom: { x: player.x, y: player.y + PLAYER_PROJECTILE_HURTBOX.bottomOffset }
+    };
+  }
+
+  private projectileHitsCircle(projectile: ProjectileEntity, previous: { x: number; y: number }, target: { x: number; y: number }, radius: number) {
+    return this.distanceSqPointToSegment(target, previous, projectile) <= radius * radius;
+  }
+
+  private distanceSqBetweenSegments(a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }, d: { x: number; y: number }) {
+    if (this.segmentsIntersect(a, b, c, d)) {
+      return 0;
+    }
+    return Math.min(
+      this.distanceSqPointToSegment(a, c, d),
+      this.distanceSqPointToSegment(b, c, d),
+      this.distanceSqPointToSegment(c, a, b),
+      this.distanceSqPointToSegment(d, a, b)
+    );
+  }
+
+  private distanceSqPointToSegment(point: { x: number; y: number }, start: { x: number; y: number }, end: { x: number; y: number }) {
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const lengthSq = dx * dx + dy * dy;
+    if (lengthSq <= 0.0001) {
+      return distanceSq(point, start);
+    }
+
+    const t = clamp(((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSq, 0, 1);
+    const closest = {
+      x: start.x + dx * t,
+      y: start.y + dy * t
+    };
+    return distanceSq(point, closest);
+  }
+
+  private segmentsIntersect(a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }, d: { x: number; y: number }) {
+    const abC = this.cross(a, b, c);
+    const abD = this.cross(a, b, d);
+    const cdA = this.cross(c, d, a);
+    const cdB = this.cross(c, d, b);
+
+    if (abC === 0 && this.pointOnSegment(c, a, b)) return true;
+    if (abD === 0 && this.pointOnSegment(d, a, b)) return true;
+    if (cdA === 0 && this.pointOnSegment(a, c, d)) return true;
+    if (cdB === 0 && this.pointOnSegment(b, c, d)) return true;
+
+    return (abC > 0) !== (abD > 0) && (cdA > 0) !== (cdB > 0);
+  }
+
+  private pointOnSegment(point: { x: number; y: number }, start: { x: number; y: number }, end: { x: number; y: number }) {
+    return (
+      point.x >= Math.min(start.x, end.x) &&
+      point.x <= Math.max(start.x, end.x) &&
+      point.y >= Math.min(start.y, end.y) &&
+      point.y <= Math.max(start.y, end.y)
+    );
+  }
+
+  private cross(origin: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }) {
+    const value = (a.x - origin.x) * (b.y - origin.y) - (a.y - origin.y) * (b.x - origin.x);
+    return Math.abs(value) < 0.0001 ? 0 : value;
   }
 
   private updateTurrets(now: number) {
@@ -1201,12 +1369,13 @@ export class GameRoom {
       return;
     }
 
-    let damage = rawDamage;
+    const boostedDamage = this.getBoostedOutgoingDamage(rawDamage, attackerId, now);
+    let damage = boostedDamage;
     if (target.shielded) {
       damage = Math.ceil(damage * 0.5);
       const attacker = this.players.get(attackerId);
       if (attacker && attacker.alive) {
-        const reflectedDamage = Math.ceil(rawDamage * 0.3);
+        const reflectedDamage = Math.ceil(boostedDamage * 0.3);
         this.recordDamageCredit(attacker, target.id, now);
         attacker.health -= reflectedDamage;
         this.addReflectEffects(target, attacker, reflectedDamage, now);
@@ -1235,6 +1404,14 @@ export class GameRoom {
     if (target.health <= 0) {
       this.killPlayer(target, attackerId, now);
     }
+  }
+
+  private getBoostedOutgoingDamage(rawDamage: number, attackerId: string, now: number) {
+    const attacker = this.players.get(attackerId);
+    if (!attacker || !attacker.alive || attacker.attackBoostEndsAt <= now) {
+      return rawDamage;
+    }
+    return Math.ceil(rawDamage * WORLD.attackBoostMultiplier);
   }
 
   private addReflectEffects(shieldOwner: PlayerEntity, attacker: PlayerEntity, reflectedDamage: number, now: number) {
@@ -1291,6 +1468,8 @@ export class GameRoom {
     target.actionStartedAt = 0;
     target.actionEndsAt = 0;
     target.attacking = false;
+    target.attackBoosted = false;
+    target.attackBoostEndsAt = 0;
     this.addEffect("death", target, 120, 900);
 
     const attacker = this.players.get(attackerId);
@@ -1366,6 +1545,8 @@ export class GameRoom {
       player.actionEndsAt = 0;
       player.attacking = false;
       player.shieldEndsAt = 0;
+      player.attackBoosted = false;
+      player.attackBoostEndsAt = 0;
       player.spawnGuardEndsAt = now + SPAWN_GUARD_MS;
       player.rootEndsAt = 0;
       player.stunEndsAt = 0;
@@ -1411,9 +1592,54 @@ export class GameRoom {
     }
   }
 
+  private checkAttackBoostPackPickup(now: number) {
+    const picked = new Set<string>();
+    for (const player of this.players.values()) {
+      if (!player.alive) {
+        continue;
+      }
+      for (const pack of this.attackBoostPacks) {
+        if (distance(player, pack) <= WORLD.attackBoostPackRadius) {
+          player.attackBoostEndsAt = now + WORLD.attackBoostDurationMs;
+          player.attackBoosted = true;
+          picked.add(pack.id);
+          this.effects.push({
+            id: `fx_${this.nextEffectId++}`,
+            type: "attack_boost",
+            ownerId: player.id,
+            classId: player.classId,
+            x: player.x,
+            y: player.y - 70,
+            angle: 0,
+            radius: 72,
+            startedAt: now,
+            duration: 1300,
+            value: Math.round((WORLD.attackBoostMultiplier - 1) * 100)
+          });
+          this.pushEvent("boost", `${player.name} increased attack power`, player, undefined, now);
+        }
+      }
+    }
+
+    if (!picked.size) {
+      return;
+    }
+
+    this.attackBoostPacks = this.attackBoostPacks.filter((pack) => !picked.has(pack.id));
+    while (this.attackBoostPacks.length < WORLD.attackBoostPackCount) {
+      this.attackBoostPacks.push(this.createAttackBoostPack());
+    }
+  }
+
   private spawnInitialHealthPacks() {
     while (this.healthPacks.length < WORLD.healthPackCount) {
       this.healthPacks.push(this.createHealthPack());
+    }
+  }
+
+  private spawnInitialAttackBoostPacks() {
+    while (this.attackBoostPacks.length < WORLD.attackBoostPackCount) {
+      this.attackBoostPacks.push(this.createAttackBoostPack());
     }
   }
 
@@ -1424,6 +1650,15 @@ export class GameRoom {
       x: position.x,
       y: position.y,
       imageIndex: Math.floor(randomBetween(0, WORLD.healthPackVariantCount))
+    };
+  }
+
+  private createAttackBoostPack(): AttackBoostPackState {
+    const position = this.randomSpawnPoint(220);
+    return {
+      id: `atk_${this.nextAttackBoostPackId++}`,
+      x: position.x,
+      y: position.y
     };
   }
 
@@ -1614,6 +1849,8 @@ export class GameRoom {
       actionStartedAt: player.attacking ? player.actionStartedAt : 0,
       actionEndsAt: player.attacking ? player.actionEndsAt : 0,
       shielded: player.shielded,
+      attackBoosted: player.attackBoosted,
+      attackBoostEndsAt: player.attackBoostEndsAt,
       spawnProtected: player.spawnProtected,
       rooted: player.rooted,
       stunned: player.stunned,

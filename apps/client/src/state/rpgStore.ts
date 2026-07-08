@@ -74,6 +74,7 @@ interface RpgStore {
   petMoveLoadouts: Record<string, string[]>;
   cardSkillBindings: Record<string, string>;
   petCardLoadouts: Record<string, string[]>;
+  pendingCardEquipPetId: string | null;
   selectedAiDifficulty: RpgAiDifficulty;
   activeAiDifficulty: RpgAiDifficulty | null;
   drawHistory: RpgDrawHistoryEntry[];
@@ -101,6 +102,8 @@ interface RpgStore {
   openShop: () => void;
   openBag: () => void;
   openGym: () => void;
+  openCardEquipForElement: (element: RpgElement) => void;
+  consumePendingCardEquipPet: () => string | null;
   openArena: () => void;
   enterHouse: () => void;
   exitHouse: () => void;
@@ -151,6 +154,25 @@ function sanitizeCount(value: unknown) {
 function sanitizePetIds(value: unknown, fallback: readonly string[], maxCount = STARTER_PET_IDS.length) {
   const ids = uniqueStrings(value).filter((id) => STARTER_PET_IDS.includes(id)).slice(0, maxCount);
   return ids.length > 0 ? ids : [...fallback];
+}
+
+function normalizePartySlots(selectedPetIds: readonly string[]) {
+  const next = selectedPetIds.slice(0, 3);
+  while (next.length < 3) next.push("");
+  return next;
+}
+
+function sanitizePartyPetSlots(value: unknown, ownedPetIds: readonly string[], fallback: readonly string[]) {
+  if (!Array.isArray(value)) return normalizePartySlots(fallback);
+  const seen = new Set<string>();
+  const slots = value.slice(0, 3).map((rawPetId) => {
+    if (typeof rawPetId !== "string" || rawPetId.length === 0) return "";
+    if (!STARTER_PET_IDS.includes(rawPetId) || !ownedPetIds.includes(rawPetId) || seen.has(rawPetId)) return "";
+    seen.add(rawPetId);
+    return rawPetId;
+  });
+  const normalized = normalizePartySlots(slots);
+  return normalized.some(Boolean) ? normalized : normalizePartySlots(fallback);
 }
 
 function sanitizeTicketInventory(value: unknown) {
@@ -251,14 +273,14 @@ function sanitizeRpgProgress(value: unknown, current: RpgStore): RpgPersistedPro
     };
   }
   const ownedPetIds = sanitizePetIds(value.ownedPetIds, current.ownedPetIds);
-  const selectedPartyPetIds = sanitizePetIds(value.selectedPartyPetIds, current.selectedPartyPetIds, 3).filter((id) => ownedPetIds.includes(id));
+  const selectedPartyPetIds = sanitizePartyPetSlots(value.selectedPartyPetIds, ownedPetIds, current.selectedPartyPetIds);
   const ticketInventory = sanitizeTicketInventory(value.ticketInventory);
   const skillInventory = sanitizeSkillInventory(value.skillInventory);
   const playerName = typeof value.playerName === "string" && value.playerName.trim().length > 0 ? value.playerName.trim().slice(0, 18) : current.playerName;
   return {
     playerName,
     ownedPetIds,
-    selectedPartyPetIds: selectedPartyPetIds.length > 0 ? selectedPartyPetIds : current.selectedPartyPetIds,
+    selectedPartyPetIds,
     ticketInventory,
     skillInventory,
     petMoveLoadouts: sanitizePetMoveLoadouts(value.petMoveLoadouts, skillInventory),
@@ -312,9 +334,10 @@ function isStarterMove(definitionId: string, moveId: string) {
 }
 
 function selectedRosterForOwner(ownerId: string, selectedPetIds: readonly string[], loadouts: Record<string, string[]>, cardSkillBindings: Record<string, string>, petCardLoadouts: Record<string, string[]>) {
-  if (selectedPetIds.length !== 3) return null;
+  const filledPetIds = selectedPetIds.filter(Boolean);
+  if (filledPetIds.length !== 3) return null;
   const roster = createStarterRoster(ownerId);
-  const selected = selectedPetIds.flatMap((definitionId) => {
+  const selected = filledPetIds.flatMap((definitionId) => {
     const pet = roster.find((candidate) => candidate.definitionId === definitionId);
     return pet ? [{ ...pet, moveIds: moveIdsForPet(definitionId, loadouts, cardSkillBindings, petCardLoadouts) }] : [];
   });
@@ -322,8 +345,9 @@ function selectedRosterForOwner(ownerId: string, selectedPetIds: readonly string
 }
 
 function selectedRosterSelection(selectedPetIds: readonly string[], loadouts: Record<string, string[]>, cardSkillBindings: Record<string, string>, petCardLoadouts: Record<string, string[]>): RpgRosterSelection[] | null {
-  if (selectedPetIds.length !== 3) return null;
-  const selected = selectedPetIds.flatMap((definitionId) => {
+  const filledPetIds = selectedPetIds.filter(Boolean);
+  if (filledPetIds.length !== 3) return null;
+  const selected = filledPetIds.flatMap((definitionId) => {
     const pet = RPG_STARTER_PETS.find((candidate) => candidate.id === definitionId);
     return pet ? [{ definitionId: pet.id, moveIds: moveIdsForPet(pet.id, loadouts, cardSkillBindings, petCardLoadouts) }] : [];
   });
@@ -446,6 +470,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
   petMoveLoadouts: starterLoadouts(),
   cardSkillBindings: {},
   petCardLoadouts: {},
+  pendingCardEquipPetId: null,
   selectedAiDifficulty: "normal",
   activeAiDifficulty: null,
   drawHistory: [],
@@ -483,6 +508,31 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
   openShop: () => set({ screen: "profile", battleNotice: null }),
   openBag: () => set({ screen: "bag", battleNotice: null }),
   openGym: () => set({ screen: "gym", battleNotice: null }),
+  openCardEquipForElement: (element) =>
+    set((state) => {
+      const partyPet = state.selectedPartyPetIds
+        .map((petId) => RPG_STARTER_PETS.find((pet) => pet.id === petId) ?? null)
+        .find((pet) => pet?.element === element);
+      const ownedPet = RPG_STARTER_PETS.find((pet) => pet.element === element && state.ownedPetIds.includes(pet.id));
+      const targetPet = partyPet ?? ownedPet ?? null;
+      if (!targetPet) {
+        return {
+          screen: "gym",
+          pendingCardEquipPetId: null,
+          battleNotice: `還沒有${RPG_ELEMENT_META[element].label}屬性寵物可以插卡。`
+        };
+      }
+      return {
+        screen: "gym",
+        pendingCardEquipPetId: targetPet.id,
+        battleNotice: `已切到${targetPet.name}的卡片插槽。`
+      };
+    }),
+  consumePendingCardEquipPet: () => {
+    const pendingPetId = get().pendingCardEquipPetId;
+    if (pendingPetId) set({ pendingCardEquipPetId: null });
+    return pendingPetId;
+  },
   openArena: () => {
     const url = new URL(window.location.href);
     url.searchParams.delete("rpg");
@@ -534,18 +584,25 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
   togglePartyPet: (definitionId) =>
     set((state) => {
       if (!state.ownedPetIds.includes(definitionId)) return {};
-      const selected = state.selectedPartyPetIds;
-      const next = selected.includes(definitionId)
-        ? selected.filter((id) => id !== definitionId)
-        : selected.length >= 3
-          ? [...selected.slice(1), definitionId]
-          : [...selected, definitionId];
+      const selected = normalizePartySlots(state.selectedPartyPetIds);
+      const selectedIndex = selected.indexOf(definitionId);
+      if (selectedIndex >= 0) {
+        const next = [...selected];
+        next[selectedIndex] = "";
+        return { selectedPartyPetIds: next, battleNotice: null };
+      }
+      const emptyIndex = selected.findIndex((id) => !id);
+      if (emptyIndex < 0) {
+        return { battleNotice: "隊伍已滿，先移出一格再加入。" };
+      }
+      const next = [...selected];
+      next[emptyIndex] = definitionId;
       return { selectedPartyPetIds: next, battleNotice: null };
     }),
   movePartyPetSlot: (fromIndex, toIndex) =>
     set((state) => {
-      const selected = state.selectedPartyPetIds;
-      if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= selected.length || toIndex >= selected.length || toIndex >= 3) return {};
+      const selected = normalizePartySlots(state.selectedPartyPetIds);
+      if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= 3 || toIndex >= 3) return {};
       const next = [...selected];
       [next[fromIndex], next[toIndex]] = [next[toIndex], next[fromIndex]];
       return { selectedPartyPetIds: next, battleNotice: null };

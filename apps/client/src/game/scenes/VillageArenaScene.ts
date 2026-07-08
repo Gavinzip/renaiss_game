@@ -8,12 +8,14 @@ import {
   type CombatEvent,
   type EffectState,
   type GameSnapshot,
+  type AttackBoostPackState,
   type HealthPackState,
   type JoinRequest,
   type PlayerInput,
   type ProjectileState,
   type ProjectileType,
   type PublicPlayer,
+  type SkillKey,
   type TurretState
 } from "@renaiss-game/shared";
 import { copyTexture, makeMatteTransparent } from "../assets/chromaKey";
@@ -65,6 +67,7 @@ interface PlayerView {
   statusAura: Phaser.GameObjects.Image;
   actionGhost: Phaser.GameObjects.Image;
   actionFxBack: Phaser.GameObjects.Image;
+  attackBoostFx: Phaser.GameObjects.Sprite;
   sprite: Phaser.GameObjects.Image;
   actionFxFront: Phaser.GameObjects.Image;
   hitImpact: Phaser.GameObjects.Image;
@@ -197,6 +200,7 @@ const TURRET_MUZZLE_BOOSTED_DISTANCE = 46;
 const ARCHER_CHARGE_BAR_Y = -109;
 const ARCHER_CHARGE_BAR_WIDTH = 66;
 const ARCHER_CHARGE_FILL_WIDTH = 58;
+const SKILL_INPUT_KEYS: SkillKey[] = ["skillQ", "skillE", "skillR"];
 
 export class VillageArenaScene extends Phaser.Scene {
   private socket: GameSocket | null = null;
@@ -205,6 +209,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private projectileViews = new Map<string, ProjectileView>();
   private turretViews = new Map<string, TurretView>();
   private packViews = new Map<string, PackView>();
+  private attackPackViews = new Map<string, PackView>();
   private movementTrails: MovementTrailView[] = [];
   private floatingTextViews = new Map<string, FloatingTextView>();
   private vfxViews = new Map<string, VfxView>();
@@ -225,6 +230,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private nextCameraImpactAt = 0;
   private screenFlash: Phaser.GameObjects.Rectangle | null = null;
   private screenFlashTween: Phaser.Tweens.Tween | null = null;
+  private pendingSkillCasts: Record<SkillKey, boolean> = emptySkillInputState();
   private readonly updatePointerArenaTarget = (event: PointerEvent) => {
     this.pointerOverArenaCanvas = document.elementFromPoint(event.clientX, event.clientY) === this.game.canvas;
   };
@@ -241,6 +247,11 @@ export class VillageArenaScene extends Phaser.Scene {
     this.load.image("skillEffects", generatedAssetPath("skill-effects"));
     this.load.image("combatObjects", generatedAssetPath("combat-objects"));
     this.load.image("healthLogo", generatedAssetPath("vinci-favicon"));
+    this.load.image("attackMushroom", generatedAssetPath("attack-mushroom"));
+    this.load.spritesheet("attackBoostFx", generatedAssetPath("attack-boost-fx"), {
+      frameWidth: 64,
+      frameHeight: 64
+    });
     this.load.image("statusEffects", generatedAssetPath("status-effects"));
     this.load.image("abilityEffects", generatedAssetPath("ability-effects"));
     this.load.image("warriorVerticalSlash", generatedAssetPath("warrior-vertical-slash"));
@@ -313,6 +324,7 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   override update(_time: number, delta: number) {
+    this.captureSkillKeyReleases();
     this.updateCamera();
     this.renderSnapshot();
     this.renderEffects();
@@ -366,8 +378,10 @@ export class VillageArenaScene extends Phaser.Scene {
     }
 
     const pointer = this.input.activePointer;
-    const hudInput = useHudStore.getState().hudInput;
-    const skillPointerActive = hudInput.skillQ || hudInput.skillE || hudInput.skillR;
+    const hudState = useHudStore.getState();
+    const hudInput = hudState.hudInput;
+    const heldSkills = this.getHeldSkillInput(hudInput);
+    const skillPointerActive = heldSkills.skillQ || heldSkills.skillE || heldSkills.skillR;
     if (!pointer.isDown || skillPointerActive) {
       this.mouseAttackDragging = false;
     } else if (!this.mouseAttackDragging && !this.isPointerOverInteractiveHud(pointer)) {
@@ -375,26 +389,30 @@ export class VillageArenaScene extends Phaser.Scene {
     }
 
     const mouseAttack = this.mouseAttackDragging;
+    const hudSkillReleases = hudState.consumeHudSkillReleases();
     const pointerAimPoint = this.getPointerAimPoint(mouseAttack);
     const pointerAngle = Phaser.Math.RadToDeg(Math.atan2(pointerAimPoint.y - self.y, pointerAimPoint.x - self.x));
     const reviewAngle = this.getReviewAngleOverride();
     const angle = reviewAngle !== null ? reviewAngle : pointerAngle;
     const aimPoint = reviewAngle !== null ? project({ x: self.x, y: self.y }, reviewAngle, COMBAT.mageBeamLength) : pointerAimPoint;
+    const keyboardMoveX =
+      (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) -
+      (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
+    const keyboardMoveY =
+      (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) -
+      (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const releasedSkills = this.consumeReleasedSkillInput(hudSkillReleases, self, this.snapshot.serverTime);
     const input: PlayerInput = {
-      moveX:
-        (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) -
-        (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0),
-      moveY:
-        (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) -
-        (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0),
+      moveX: keyboardMoveX,
+      moveY: keyboardMoveY,
       angle,
       aimX: aimPoint.x,
       aimY: aimPoint.y,
       attack: mouseAttack || hudInput.attack,
       sprint: this.keys.SPACE.isDown || this.keys.SHIFT.isDown,
-      skillQ: this.keys.Q.isDown || hudInput.skillQ,
-      skillE: this.keys.E.isDown || hudInput.skillE,
-      skillR: this.keys.R.isDown || hudInput.skillR
+      skillQ: releasedSkills.skillQ,
+      skillE: releasedSkills.skillE,
+      skillR: releasedSkills.skillR
     };
 
     this.publishArenaDebugInput(input);
@@ -403,6 +421,7 @@ export class VillageArenaScene extends Phaser.Scene {
 
   private getTargetingIntent(): TargetingIntent {
     const hudInput = useHudStore.getState().hudInput;
+    const heldSkills = this.getHeldSkillInput(hudInput);
     const self = this.getSelf();
     const serverTime = this.snapshot?.serverTime ?? Date.now();
     const aimPoint = self ? this.getPointerAimPoint(this.input.activePointer.isDown) : this.cameras.main.getWorldPoint(this.input.activePointer.x, this.input.activePointer.y);
@@ -413,11 +432,45 @@ export class VillageArenaScene extends Phaser.Scene {
     };
     return {
       attack: this.input.activePointer.isDown || hudInput.attack,
-      skillQ: skillReady.skillQ && (this.keys.Q.isDown || hudInput.skillQ),
-      skillE: skillReady.skillE && (this.keys.E.isDown || hudInput.skillE),
-      skillR: skillReady.skillR && (this.keys.R.isDown || hudInput.skillR),
+      skillQ: skillReady.skillQ && heldSkills.skillQ,
+      skillE: skillReady.skillE && heldSkills.skillE,
+      skillR: skillReady.skillR && heldSkills.skillR,
       aimPoint
     };
+  }
+
+  private captureSkillKeyReleases() {
+    const self = this.getSelf();
+    if (!self?.alive) {
+      return;
+    }
+
+    if (Phaser.Input.Keyboard.JustUp(this.keys.Q)) {
+      this.pendingSkillCasts.skillQ = true;
+    }
+    if (Phaser.Input.Keyboard.JustUp(this.keys.E)) {
+      this.pendingSkillCasts.skillE = true;
+    }
+    if (Phaser.Input.Keyboard.JustUp(this.keys.R)) {
+      this.pendingSkillCasts.skillR = true;
+    }
+  }
+
+  private getHeldSkillInput(hudInput: { skillQ: boolean; skillE: boolean; skillR: boolean }) {
+    return {
+      skillQ: this.keys.Q.isDown || hudInput.skillQ,
+      skillE: this.keys.E.isDown || hudInput.skillE,
+      skillR: this.keys.R.isDown || hudInput.skillR
+    };
+  }
+
+  private consumeReleasedSkillInput(hudReleases: Record<SkillKey, number>, self: PublicPlayer, serverTime: number) {
+    const released = emptySkillInputState();
+    for (const skill of SKILL_INPUT_KEYS) {
+      released[skill] = (this.pendingSkillCasts[skill] || hudReleases[skill] > 0) && self.cooldowns[skill] <= serverTime;
+    }
+    this.pendingSkillCasts = emptySkillInputState();
+    return released;
   }
 
   private getPointerAimPoint(forcePointerPosition = false) {
@@ -428,6 +481,7 @@ export class VillageArenaScene extends Phaser.Scene {
     }
     return this.lastArenaAimPoint ?? { x: worldPointer.x, y: worldPointer.y };
   }
+
 
   private isArenaPointerTarget(pointer: Phaser.Input.Pointer) {
     if (!this.pointerOverArenaCanvas) {
@@ -470,6 +524,7 @@ export class VillageArenaScene extends Phaser.Scene {
     this.renderProjectiles(snapshot.projectiles);
     this.renderTurrets(snapshot.turrets);
     this.renderPacks(snapshot.healthPacks);
+    this.renderAttackBoostPacks(snapshot.attackBoostPacks);
     this.updateCombatFeedback(snapshot);
     this.updateMovementTrails(this.time.now);
   }
@@ -678,6 +733,7 @@ export class VillageArenaScene extends Phaser.Scene {
       view.staminaFill.fillColor = player.sprinting ? 0xffd86a : 0x62d7ff;
       this.updateArcherChargeMeter(view, player);
       this.updateStatusAura(view, player, now);
+      this.updateAttackBoostFx(view, player, now);
 
       const isSelf = player.id === this.snapshot?.selfId;
       view.name.setColor(player.alive ? (isSelf ? "#9ef06a" : player.bot ? "#ff604f" : "#f0c3a0") : "#b99a82");
@@ -780,6 +836,7 @@ export class VillageArenaScene extends Phaser.Scene {
       view.actionFxFront.setVisible(false);
       view.hitImpact.setVisible(false);
       view.statusAura.setVisible(false);
+      view.attackBoostFx.setVisible(false);
       view.shadow.setScale(1.32, 0.5).setAlpha(0.22);
       view.name.setY(-52);
       view.healthBack.setVisible(false);
@@ -1047,6 +1104,25 @@ export class VillageArenaScene extends Phaser.Scene {
       .setBlendMode(player.spawnProtected ? Phaser.BlendModes.NORMAL : Phaser.BlendModes.ADD);
   }
 
+  private updateAttackBoostFx(view: PlayerView, player: PublicPlayer, now: number) {
+    if (!player.alive || !player.attackBoosted || player.attackBoostEndsAt <= (this.snapshot?.serverTime ?? Date.now())) {
+      view.attackBoostFx.setVisible(false);
+      return;
+    }
+
+    const remaining = Math.max(0, player.attackBoostEndsAt - (this.snapshot?.serverTime ?? Date.now()));
+    const frame = Math.floor(now / 70) % 18;
+    const endingPulse = remaining < 2600 ? 0.68 + Math.sin(now / 70) * 0.22 : 1;
+    const scale = 1 + Math.sin(now / 180) * 0.035;
+    view.attackBoostFx
+      .setVisible(true)
+      .setFrame(frame)
+      .setPosition(Math.sin(now / 230) * 1.5, PLAYER_BODY_BASE_Y - 42)
+      .setDisplaySize(96 * scale, 96 * scale)
+      .setAlpha(0.84 * endingPulse)
+      .setBlendMode(Phaser.BlendModes.ADD);
+  }
+
   private getStatusAura(player: PublicPlayer): StatusAuraKey | null {
     if (player.spawnProtected) {
       return "shield";
@@ -1215,6 +1291,45 @@ export class VillageArenaScene extends Phaser.Scene {
     }
   }
 
+  private renderAttackBoostPacks(packs: AttackBoostPackState[]) {
+    const ids = new Set(packs.map((pack) => pack.id));
+    for (const [id, view] of this.attackPackViews) {
+      if (!ids.has(id)) {
+        view.container.destroy(true);
+        this.attackPackViews.delete(id);
+      }
+    }
+
+    for (const pack of packs) {
+      let view = this.attackPackViews.get(pack.id);
+      if (!view) {
+        view = this.createAttackBoostPackView(pack);
+        this.attackPackViews.set(pack.id, view);
+      }
+      const visual = this.interpolatePoint(view.visualX, view.visualY, pack.x, pack.y, SLOW_ENTITY_INTERPOLATION, SLOW_ENTITY_SNAP_DISTANCE);
+      view.visualX = visual.x;
+      view.visualY = visual.y;
+      const phase = this.time.now / 320 + pack.id.length;
+      const pulse = 1 + Math.sin(phase) * 0.045;
+      const glowPulse = 0.72 + Math.sin(phase + 0.8) * 0.18;
+      view.container.setPosition(view.visualX, view.visualY + Math.sin(phase) * 3);
+      view.container.setDepth(view.visualY + 6);
+      view.logo
+        .clearTint()
+        .setAlpha(0.98)
+        .setScale(pulse);
+      view.aura
+        .setFillStyle(0xff655e, 0.16 + glowPulse * 0.08)
+        .setStrokeStyle(2, 0xffd36f, 0.28 + glowPulse * 0.14)
+        .setScale(1 + glowPulse * 0.08, 1 + glowPulse * 0.04);
+      view.sparkle
+        .setTint(0xffd36f)
+        .setAlpha(0.36 + glowPulse * 0.26)
+        .setAngle(-this.time.now / 22 + pack.id.length * 17)
+        .setDisplaySize(24 + glowPulse * 8, 24 + glowPulse * 8);
+    }
+  }
+
   private renderEffects() {
     const snapshot = this.snapshot;
     this.worldOverlay.clear();
@@ -1313,10 +1428,10 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   private renderFloatingTexts(effects: EffectState[], serverTime: number, selfId: string | null) {
-    const damageEffects = effects.filter(
-      (effect) => (effect.type === "damage_number" || effect.type === "reflect_damage") && typeof effect.value === "number"
+    const floatingEffects = effects.filter(
+      (effect) => ((effect.type === "damage_number" || effect.type === "reflect_damage") && typeof effect.value === "number") || effect.type === "attack_boost"
     );
-    const ids = new Set(damageEffects.map((effect) => effect.id));
+    const ids = new Set(floatingEffects.map((effect) => effect.id));
 
     for (const [id, view] of this.floatingTextViews) {
       if (!ids.has(id)) {
@@ -1325,16 +1440,17 @@ export class VillageArenaScene extends Phaser.Scene {
       }
     }
 
-    for (const effect of damageEffects) {
+    for (const effect of floatingEffects) {
       const progress = Phaser.Math.Clamp((serverTime - effect.startedAt) / effect.duration, 0, 1);
       const reflect = effect.type === "reflect_damage";
+      const attackBoost = effect.type === "attack_boost";
       const selfOwned = Boolean(selfId && effect.ownerId === selfId);
-      const tone = this.getFloatingTextTone(effect, selfOwned, reflect);
+      const tone = this.getFloatingTextTone(effect, selfOwned, reflect, attackBoost);
       let view = this.floatingTextViews.get(effect.id);
       if (!view) {
-        const label = reflect ? `REFLECT -${effect.value}` : `-${effect.value}`;
-        const badgeWidth = Math.max(reflect ? 104 : 58, label.length * (reflect ? 9 : 13));
-        const badgeHeight = reflect ? 28 : 32;
+        const label = attackBoost ? "攻擊力增加" : reflect ? `REFLECT -${effect.value}` : `-${effect.value}`;
+        const badgeWidth = attackBoost ? 136 : Math.max(reflect ? 104 : 58, label.length * (reflect ? 9 : 13));
+        const badgeHeight = attackBoost ? 34 : reflect ? 28 : 32;
         const container = this.add.container(effect.x, effect.y).setDepth(9000);
         const back = this.add
           .rectangle(0, 0, badgeWidth, badgeHeight, tone.back, tone.backAlpha)
@@ -1343,7 +1459,7 @@ export class VillageArenaScene extends Phaser.Scene {
         const text = this.add
           .text(0, -2, label, {
             fontFamily: "Arial Black, Arial, sans-serif",
-            fontSize: reflect ? "15px" : selfOwned ? "25px" : "21px",
+            fontSize: attackBoost ? "18px" : reflect ? "15px" : selfOwned ? "25px" : "21px",
             color: tone.text,
             stroke: tone.strokeText,
             strokeThickness: 6
@@ -1355,12 +1471,12 @@ export class VillageArenaScene extends Phaser.Scene {
       }
 
       const popProgress = Phaser.Math.Clamp(1 - Math.abs(progress - 0.18) / 0.18, 0, 1);
-      const entryPop = 1 + Phaser.Math.Easing.Back.Out(popProgress) * (selfOwned ? 0.16 : 0.1);
+      const entryPop = 1 + Phaser.Math.Easing.Back.Out(popProgress) * (attackBoost ? 0.12 : selfOwned ? 0.16 : 0.1);
       const alpha = progress < 0.78 ? 1 : Phaser.Math.Easing.Cubic.Out(1 - (progress - 0.78) / 0.22);
       const angle = Phaser.Math.DegToRad(effect.angle);
-      const driftX = Math.sin(angle) * progress * (reflect ? 20 : 16);
+      const driftX = Math.sin(angle) * progress * (attackBoost ? 6 : reflect ? 20 : 16);
       const wobbleX = Math.sin(serverTime / 44 + effect.id.length) * 2.5 * (1 - progress);
-      const rise = effect.radius * Phaser.Math.Easing.Cubic.Out(progress) * (reflect ? 0.76 : 1);
+      const rise = effect.radius * Phaser.Math.Easing.Cubic.Out(progress) * (attackBoost ? 0.62 : reflect ? 0.76 : 1);
 
       view.container
         .setPosition(effect.x + driftX + wobbleX, effect.y - rise)
@@ -1372,7 +1488,19 @@ export class VillageArenaScene extends Phaser.Scene {
     }
   }
 
-  private getFloatingTextTone(effect: EffectState, selfOwned: boolean, reflect: boolean) {
+  private getFloatingTextTone(effect: EffectState, selfOwned: boolean, reflect: boolean, attackBoost = false) {
+    if (attackBoost) {
+      return {
+        text: "#fff4b6",
+        strokeText: "#3a100b",
+        back: 0x4d1911,
+        backAlpha: 0.82,
+        stroke: 0xffd36f,
+        strokeAlpha: 0.92,
+        accent: 0xff655e
+      };
+    }
+
     if (reflect) {
       return {
         text: "#ffe28a",
@@ -1478,6 +1606,11 @@ export class VillageArenaScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setVisible(false)
       .setBlendMode(Phaser.BlendModes.NORMAL);
+    const attackBoostFx = this.add
+      .sprite(0, PLAYER_BODY_BASE_Y - 42, "attackBoostFx", 0)
+      .setOrigin(0.5)
+      .setVisible(false)
+      .setBlendMode(Phaser.BlendModes.ADD);
     const sprite = this.add.image(0, 0, getClassFrameTexture(player.classId, 0)).setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y).setDisplaySize(88, 104);
     const actionFxFront = this.add
       .image(0, 0, getAbilityVfxFrameTexture("warriorSlash", 0))
@@ -1525,6 +1658,7 @@ export class VillageArenaScene extends Phaser.Scene {
       koRune,
       actionGhost,
       actionFxBack,
+      attackBoostFx,
       sprite,
       actionFxFront,
       hitImpact,
@@ -1544,6 +1678,7 @@ export class VillageArenaScene extends Phaser.Scene {
       statusAura,
       actionGhost,
       actionFxBack,
+      attackBoostFx,
       sprite,
       actionFxFront,
       hitImpact,
@@ -1617,6 +1752,19 @@ export class VillageArenaScene extends Phaser.Scene {
     const logo = this.add.image(0, -7, "healthLogo").setOrigin(0.5).setDisplaySize(42, 42);
     const sparkle = this.add
       .image(0, -29, getCombatObjectTexture("leafSparkle"))
+      .setOrigin(0.5)
+      .setBlendMode(Phaser.BlendModes.ADD);
+    container.add([shadow, aura, logo, sparkle]);
+    return { container, shadow, aura, logo, sparkle, visualX: pack.x, visualY: pack.y };
+  }
+
+  private createAttackBoostPackView(pack: AttackBoostPackState): PackView {
+    const container = this.add.container(pack.x, pack.y);
+    const shadow = this.add.image(0, 14, getCombatObjectTexture("groundShadow")).setDisplaySize(34, 12).setAlpha(0.28);
+    const aura = this.add.ellipse(0, 2, 42, 18, 0xff655e, 0.18).setStrokeStyle(2, 0xffd36f, 0.32);
+    const logo = this.add.image(0, -8, "attackMushroom").setOrigin(0.5).setDisplaySize(38, 38);
+    const sparkle = this.add
+      .image(0, -31, getCombatObjectTexture("leafSparkle"))
       .setOrigin(0.5)
       .setBlendMode(Phaser.BlendModes.ADD);
     container.add([shadow, aura, logo, sparkle]);
@@ -2166,4 +2314,12 @@ export class VillageArenaScene extends Phaser.Scene {
 
 function getPhaserVfxBlendMode(blendMode: "normal" | "add") {
   return blendMode === "add" ? Phaser.BlendModes.ADD : Phaser.BlendModes.NORMAL;
+}
+
+function emptySkillInputState(): Record<SkillKey, boolean> {
+  return {
+    skillQ: false,
+    skillE: false,
+    skillR: false
+  };
 }

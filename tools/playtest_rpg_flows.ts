@@ -83,6 +83,7 @@ async function main() {
 
     await assertServerHealth();
     browser = await chromium.launch({ headless: true });
+    await verifyArenaEntryReusesXSession(browser);
     await verifyReleaseReview(browser);
     await verifyPetPreview(browser);
     await verifyVillageFollowers(browser);
@@ -288,6 +289,25 @@ async function continueDevLoginIfNeeded(page: Page) {
     await page.waitForFunction(() => !document.querySelector(".x-login-page"), null, { timeout: 15_000 });
     await page.waitForLoadState("networkidle");
   }
+}
+
+async function verifyArenaEntryReusesXSession(browser: Browser) {
+  const test = await newTestPage(browser, "arena-entry-session");
+  await gotoAuthenticated(test.page, CLIENT_URL);
+  await test.page.waitForSelector(".rpg-top-nav", { timeout: 15_000 });
+  await test.page.locator(".rpg-top-nav").getByRole("button", { name: "競技場" }).click();
+  await test.page.waitForURL(/arena=1/, { timeout: 15_000 });
+  await test.page.waitForSelector(".start-panel", { timeout: 15_000 });
+  const info = await test.page.evaluate(() => ({
+    loginVisible: Boolean(document.querySelector(".x-login-page")),
+    startPanelVisible: Boolean(document.querySelector(".start-panel")),
+    enteredSession: window.sessionStorage.getItem("renaiss:x-login-entered:v1") ?? "",
+    url: window.location.href
+  }));
+  assert(!info.loginVisible && info.startPanelVisible, `Arena entry should reuse the current X login session without showing the login gate: ${JSON.stringify(info)}`);
+  assert(info.enteredSession.length > 0, `Arena entry did not persist the current tab login gate state: ${JSON.stringify(info)}`);
+  assertNoErrors(test);
+  await test.page.context().close();
 }
 
 async function verifyReleaseReview(browser: Browser) {

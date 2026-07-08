@@ -84,7 +84,8 @@ export function RpgOnboardingGuide() {
     });
     return elements.size;
   }, [cardSkillBindings]);
-  const partyReady = selectedPartyPetIds.length === 3;
+  const selectedPartyCount = selectedPartyPetIds.filter(Boolean).length;
+  const partyReady = selectedPartyCount === 3;
   const battleTurnEnergy = activeBattle ? getRpgBattleEnergyForTurn(activeBattle.turn) : 1;
   const trimmedDraftName = draftName.trim();
 
@@ -181,9 +182,8 @@ export function RpgOnboardingGuide() {
           closePanel();
         },
         onSecondary: () => {
-          requestVillageNavigation("gym");
-          updateStep("gymIntro");
-          closePanel();
+          updateStep("draw");
+          openProfile();
         }
       };
     }
@@ -205,9 +205,8 @@ export function RpgOnboardingGuide() {
           openArena();
         },
         onSecondary: () => {
-          requestVillageNavigation("gym");
-          updateStep("gymIntro");
-          closePanel();
+          updateStep("draw");
+          openProfile();
         }
       };
     }
@@ -278,7 +277,7 @@ export function RpgOnboardingGuide() {
         title: "確認 3 隻上場，再決定要不要開打",
         body: "如果你現在想試回合制，就確認 3v3 隊伍已就位並按 AI 對戰。你也可以先結束新手導覽，之後想打道館時再從村莊入口回來。",
         target: "gym-ai",
-        progress: partyReady ? "隊伍已滿 3/3" : `隊伍 ${selectedPartyPetIds.length}/3`,
+        progress: partyReady ? "隊伍已滿 3/3" : `隊伍 ${selectedPartyCount}/3`,
         primaryLabel: screen === "gym" ? "開始第一場 AI 對戰" : "前往道館",
         primaryDisabled: screen === "gym" && !partyReady,
         secondaryLabel: "先結束導覽",
@@ -331,7 +330,7 @@ export function RpgOnboardingGuide() {
     playerName,
     requestVillageNavigation,
     screen,
-    selectedPartyPetIds.length,
+    selectedPartyCount,
     setPlayerName,
     startAiBattle,
     state.step,

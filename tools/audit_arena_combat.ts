@@ -302,6 +302,55 @@ function checkClientAimPersistenceContract(): ArenaAuditCheck {
     : pass("client aim persistence contract", ["Client aim follows mouse-held attacks while preserving HUD-control protection for skills and settings."]);
 }
 
+function checkSkillPreviewReleaseContract(): ArenaAuditCheck {
+  const sceneSource = readFileSync(resolve(ROOT, "apps/client/src/game/scenes/VillageArenaScene.ts"), "utf8");
+  const hudStoreSource = readFileSync(resolve(ROOT, "apps/client/src/state/hudStore.ts"), "utf8");
+  const appSource = readFileSync(resolve(ROOT, "apps/client/src/App.tsx"), "utf8");
+  const targetingSource = readFileSync(resolve(ROOT, "apps/client/src/game/render/targetingOverlay.ts"), "utf8");
+  const errors: string[] = [];
+
+  if (!sceneSource.includes("private pendingSkillCasts: Record<SkillKey, boolean>") || !sceneSource.includes("private captureSkillKeyReleases()")) {
+    errors.push("Arena scene should queue keyboard skill casts on release instead of firing while held.");
+  }
+  if (!sceneSource.includes("Phaser.Input.Keyboard.JustUp(this.keys.Q)") || !sceneSource.includes("Phaser.Input.Keyboard.JustUp(this.keys.E)") || !sceneSource.includes("Phaser.Input.Keyboard.JustUp(this.keys.R)")) {
+    errors.push("Keyboard Q/E/R should use release edges so holding a skill can show the targeting preview before cast.");
+  }
+  if (!sceneSource.includes("private getHeldSkillInput") || !sceneSource.includes("private consumeReleasedSkillInput")) {
+    errors.push("Scene should separate held skill intent for preview from released skill input for server casts.");
+  }
+  if (!sceneSource.includes("skillQ: releasedSkills.skillQ") || !sceneSource.includes("skillE: releasedSkills.skillE") || !sceneSource.includes("skillR: releasedSkills.skillR")) {
+    errors.push("Server input must send released skill casts, not continuously held preview state.");
+  }
+  if (!hudStoreSource.includes("queueHudSkillRelease") || !hudStoreSource.includes("consumeHudSkillReleases") || !hudStoreSource.includes("hudSkillReleaseQueue")) {
+    errors.push("HUD store should queue skill button releases so pointer-held previews can cast on pointer up.");
+  }
+  if (!appSource.includes("queueHudSkillRelease(action as HudSkillAction)") || appSource.includes("window.setTimeout(() => setHudAction(action, false), 90)")) {
+    errors.push("Skill bar buttons should hold preview until pointer up instead of using a short timeout pulse.");
+  }
+  if (!appSource.includes("onPointerCancel={cancelAction}") || !appSource.includes('onPointerLeave={action === "attack" ? cancelAction : undefined}')) {
+    errors.push("Skill button pointer cancel/leave should not accidentally cast the held skill.");
+  }
+  if (
+    !targetingSource.includes("const SKILL_PREVIEW_COLOR = 0xff4f45") ||
+    !targetingSource.includes("const SKILL_PREVIEW_GLOW = 0xffd4c7") ||
+    !targetingSource.includes("const skillColor = SKILL_PREVIEW_COLOR")
+  ) {
+    errors.push("Skill targeting previews should render as a clear red ground warning instead of only class-colored combat hints.");
+  }
+  if (
+    !targetingSource.includes("private drawSkillWarningField") ||
+    !targetingSource.includes("this.graphics.lineStyle(9, 0x190706") ||
+    !targetingSource.includes("this.graphics.lineStyle(5, color, alpha * 0.95)") ||
+    !targetingSource.includes("this.graphics.fillStyle(color, warningAlpha * 0.16)")
+  ) {
+    errors.push("Large skill area previews need a high-contrast red fill and thick outline so green skill VFX cannot hide the pre-cast target.");
+  }
+
+  return errors.length > 0
+    ? fail("skill preview release contract", errors)
+    : pass("skill preview release contract", ["Q/E/R hold shows a red targeting preview and only sends the skill cast on key/button release."]);
+}
+
 function checkTurretGroundingContract(): ArenaAuditCheck {
   const sceneSource = readFileSync(resolve(ROOT, "apps/client/src/game/scenes/VillageArenaScene.ts"), "utf8");
   const runtimeTextureSource = readFileSync(resolve(ROOT, "apps/client/src/game/assets/runtimeTextures.ts"), "utf8");
@@ -449,16 +498,45 @@ function checkProjectileReadabilityContract(): ArenaAuditCheck {
     : pass("projectile readability contract", ["Archer basic projectile renders as a dedicated arrow object; Mage basic projectile keeps its readable body without the stray trail layer."]);
 }
 
+function checkProjectileHurtboxContract(): ArenaAuditCheck {
+  const serverSource = readFileSync(resolve(ROOT, "apps/server/src/game/GameRoom.ts"), "utf8");
+  const gameplayAuditSource = readFileSync(resolve(ROOT, "tools/audit_arena_gameplay.ts"), "utf8");
+  const errors: string[] = [];
+
+  if (!serverSource.includes("const PLAYER_PROJECTILE_HURTBOX =") || !serverSource.includes("topOffset: -86") || !serverSource.includes("bottomOffset: -8")) {
+    errors.push("Projectile hits against players should use a vertical body hurtbox matching the pixel sprite, not only the foot position.");
+  }
+  if (!serverSource.includes("const previous = { x: projectile.x, y: projectile.y };") || !serverSource.includes("this.projectileHitsPlayer(projectile, previous, target)")) {
+    errors.push("Projectile collision should sweep from the previous point to the next point so fast charged arrows cannot skip through a body.");
+  }
+  if (!serverSource.includes("private projectileHitsPlayer(projectile: ProjectileEntity, previous") || !serverSource.includes("this.distanceSqBetweenSegments(previous, projectile, hurtbox.top, hurtbox.bottom)")) {
+    errors.push("Player projectile hit checks should compare the arrow travel segment against the player body segment.");
+  }
+  if (serverSource.includes("target.id !== projectile.ownerId && target.alive && distance(projectile, target) <= COMBAT.projectileHitRadius")) {
+    errors.push("Projectile hits against players must not regress to a single circle around the player's feet.");
+  }
+  if (!gameplayAuditSource.includes("checkArcherProjectileBodyHurtboxRuntime") || !gameplayAuditSource.includes("targetPoint.y - 78") || !gameplayAuditSource.includes("targetPoint.y - 142")) {
+    errors.push("Gameplay audit should cover an upper-body Archer hit and a clearly-above-sprite miss.");
+  }
+
+  return errors.length > 0
+    ? fail("projectile hurtbox contract", errors)
+    : pass("projectile hurtbox contract", ["Projectiles sweep against a sprite-height player body hurtbox, so arrows can hit head/chest shots without becoming oversized."]);
+}
+
 function checkArcherChargedShotContract(): ArenaAuditCheck {
   const serverSource = readFileSync(resolve(ROOT, "apps/server/src/game/GameRoom.ts"), "utf8");
   const clientSource = readFileSync(resolve(ROOT, "apps/client/src/game/scenes/VillageArenaScene.ts"), "utf8");
   const errors: string[] = [];
 
   if (serverSource.includes("stage >= COMBAT.archerChargeStages")) {
-    errors.push("Archer full charge must not auto-release when the final stage is reached; release should only happen when attack input goes false.");
+    errors.push("Archer full charge release must go through the named bot-only release guard, not an inline stage check.");
   }
-  if (!serverSource.includes("if (!attacker.input.attack)") || !serverSource.includes("this.fireArcherChargedArrow(attacker, now, stage)")) {
-    errors.push("Archer charged arrow release must be gated by the attack input turning false.");
+  if (!serverSource.includes("if (!attacker.input.attack || this.shouldBotReleaseArcherCharge(attacker, now))") || !serverSource.includes("this.fireArcherChargedArrow(attacker, now, stage)")) {
+    errors.push("Archer charged arrow release must be gated by human attack release or the bot-only full-charge guard.");
+  }
+  if (!serverSource.includes("private shouldBotReleaseArcherCharge(player: PlayerEntity, now: number)") || !serverSource.includes("return player.bot && player.archerChargeStartedAt > 0")) {
+    errors.push("Bot Archer auto-release must stay explicitly limited to bot players.");
   }
   if (!clientSource.includes("archerChargeBack") || !clientSource.includes("archerChargeFill") || !clientSource.includes("archerChargeTicks")) {
     errors.push("Client player view must render a visible Archer charge meter with stage ticks.");
@@ -475,7 +553,7 @@ function checkArcherChargedShotContract(): ArenaAuditCheck {
 
   return errors.length > 0
     ? fail("archer charged shot contract", errors)
-    : pass("archer charged shot contract", ["Full charge waits for mouse release, and the client renders a stage-aware Archer charge meter."]);
+    : pass("archer charged shot contract", ["Human full charge waits for release, bot Archers auto-release at full charge, and the client renders a stage-aware Archer charge meter."]);
 }
 
 function checkMageSkillVfxPresenceContract(): ArenaAuditCheck {
@@ -872,10 +950,12 @@ function main() {
     checkActionStackingContract(),
     checkTurretRotationContract(),
     checkClientAimPersistenceContract(),
+    checkSkillPreviewReleaseContract(),
     checkTurretGroundingContract(),
     checkBasicAttackVfxContract(),
     checkWarriorDirectionalMeleeAndTurretDeathContract(),
     checkProjectileReadabilityContract(),
+    checkProjectileHurtboxContract(),
     checkArcherChargedShotContract(),
     checkMageSkillVfxPresenceContract(),
     checkSkillTooltipContract(),

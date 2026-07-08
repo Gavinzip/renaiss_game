@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { fetchXAuthSession, logoutXSession, xLoginStartUrl, type XAuthSession } from "../api/auth";
 import { staticAssetUrl } from "../game/assets/staticAssets";
 
+const ENTERED_SESSION_KEY = "renaiss:x-login-entered:v1";
+
 interface XLoginGateProps {
   children: ReactNode | ((session: XAuthSession & { authenticated: true; user: NonNullable<XAuthSession["user"]> }) => ReactNode);
 }
@@ -19,6 +21,7 @@ export function XLoginGate({ children }: XLoginGateProps) {
       .then((nextSession) => {
         if (!alive) return;
         setSession(nextSession);
+        setEntered(isEnteredSession(nextSession));
         setStatus("ready");
         cleanAuthQuery();
       })
@@ -38,6 +41,7 @@ export function XLoginGate({ children }: XLoginGateProps) {
     fetchXAuthSession()
       .then((nextSession) => {
         setSession(nextSession);
+        setEntered(isEnteredSession(nextSession));
         setStatus("ready");
         cleanAuthQuery();
       })
@@ -56,14 +60,19 @@ export function XLoginGate({ children }: XLoginGateProps) {
   }
 
   if (session?.authenticated && session.user) {
+    const user = session.user;
     if (!entered) {
       return (
         <XLoginScreen
           mode="continue"
-          user={session.user}
-          onContinue={() => setEntered(true)}
+          user={user}
+          onContinue={() => {
+            rememberEnteredSession(user);
+            setEntered(true);
+          }}
           onSignOut={async () => {
             await logoutXSession();
+            clearEnteredSession();
             setEntered(false);
             setSession({ authenticated: false, configured: true, user: null });
           }}
@@ -153,6 +162,35 @@ function XLoginScreen({
       </section>
     </main>
   );
+}
+
+function enteredSessionValue(user: NonNullable<XAuthSession["user"]>) {
+  return `${user.provider}:${user.id}`;
+}
+
+function isEnteredSession(session: XAuthSession | null) {
+  if (!session?.authenticated || !session.user) return false;
+  try {
+    return window.sessionStorage.getItem(ENTERED_SESSION_KEY) === enteredSessionValue(session.user);
+  } catch {
+    return false;
+  }
+}
+
+function rememberEnteredSession(user: NonNullable<XAuthSession["user"]>) {
+  try {
+    window.sessionStorage.setItem(ENTERED_SESSION_KEY, enteredSessionValue(user));
+  } catch {
+    // Some embedded/private browsers reject sessionStorage. In that case the X cookie still authenticates.
+  }
+}
+
+function clearEnteredSession() {
+  try {
+    window.sessionStorage.removeItem(ENTERED_SESSION_KEY);
+  } catch {
+    // Ignore storage failures during sign-out cleanup.
+  }
 }
 
 function authErrorFromUrl() {
