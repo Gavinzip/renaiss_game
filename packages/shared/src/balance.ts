@@ -137,6 +137,7 @@ export const COMBAT = {
   archerChargeStages: 5,
   archerChargeStageMs: 260,
   archerChargedArrowMaxDamageMultiplier: 3,
+  archerChargedArrowDamagePenalty: 5,
   archerChargedArrowMaxSpeedMultiplier: 1.45,
   magicBallSpeed: 560,
   magicBallDistance: 540,
@@ -148,7 +149,7 @@ export const COMBAT = {
   archerRootRadius: 420,
   archerRootDuration: 2000,
   archerUltimateRadius: 430,
-  archerUltimateDamage: 24,
+  archerUltimateDamage: 19,
   engineerRepulsorPulseRadius: 310,
   engineerRepulsorPulseDamage: 18,
   engineerKnockback: 120,
@@ -173,12 +174,32 @@ export const COMBAT = {
   mageUltimateDamage: 42
 } as const;
 
+export function getArcherChargeRatioForStage(stage: number) {
+  if (COMBAT.archerChargeStages <= 1) {
+    return 1;
+  }
+  return (Math.max(1, Math.min(COMBAT.archerChargeStages, stage)) - 1) / (COMBAT.archerChargeStages - 1);
+}
+
+export function getArcherChargedArrowDamageForStage(stage: number) {
+  const multiplier = 1 + (COMBAT.archerChargedArrowMaxDamageMultiplier - 1) * getArcherChargeRatioForStage(stage);
+  return Math.max(1, Math.round(CLASS_STATS.archer.attackPower * multiplier) - COMBAT.archerChargedArrowDamagePenalty);
+}
+
+export function getArcherChargedArrowDamageRange() {
+  return {
+    min: getArcherChargedArrowDamageForStage(1),
+    max: getArcherChargedArrowDamageForStage(COMBAT.archerChargeStages)
+  };
+}
+
 export interface ActionTooltip {
   description: string;
   facts: string[];
 }
 
 const cdLabel = (classId: ClassId, key: SkillKey) => `${getSkillCooldownMs(classId, key) / 1000}s CD`;
+const archerChargeDamageRange = getArcherChargedArrowDamageRange();
 
 export const ACTION_TOOLTIPS: Record<ClassId, Record<PlayerActionState, ActionTooltip>> = {
   warrior: {
@@ -204,7 +225,7 @@ export const ACTION_TOOLTIPS: Record<ClassId, Record<PlayerActionState, ActionTo
       description: "Hold to draw, release to fire a charged arrow.",
       facts: [
         `${COMBAT.archerChargeStages} charge stages`,
-        `${CLASS_STATS.archer.attackPower}-${CLASS_STATS.archer.attackPower * COMBAT.archerChargedArrowMaxDamageMultiplier} damage`,
+        `${archerChargeDamageRange.min}-${archerChargeDamageRange.max} damage`,
         `${COMBAT.arrowDistance} range`
       ]
     },

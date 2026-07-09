@@ -14,6 +14,7 @@ import {
   project,
   randomBetween,
   resolveMapCollision,
+  getArcherChargedArrowDamageForStage,
   getSkillCooldownMs,
   WORLD,
   isBlocked,
@@ -784,8 +785,7 @@ export class GameRoom {
   }
 
   private getArcherChargedArrowDamage(stage: number) {
-    const multiplier = 1 + (COMBAT.archerChargedArrowMaxDamageMultiplier - 1) * this.getArcherChargeRatio(stage);
-    return Math.round(CLASS_STATS.archer.attackPower * multiplier);
+    return getArcherChargedArrowDamageForStage(stage);
   }
 
   private getArcherChargedArrowSpeed(stage: number) {

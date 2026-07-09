@@ -1,6 +1,7 @@
 import {
   CLASS_STATS,
   COMBAT,
+  getArcherChargedArrowDamageRange,
   getSkillCooldownMs,
   type ClassId,
   type PlayerActionState,
@@ -51,10 +52,37 @@ export interface ArenaText {
     killStreak: string;
     location: string;
     language: string;
+    languageSetupEyebrow: string;
+    languageSetupTitle: string;
+    languageSetupBody: string;
+    languageSetupContinue: string;
+    languageSetupCurrent: string;
     roundRewards: string;
     rewardPool: string;
     highScoreWins: string;
     roundRewardLabel: (index: number) => string;
+    tutorial: string;
+    arenaTutorial: string;
+    closeTutorial: string;
+    rpgLoadingAria: string;
+    rpgLoadingTitle: string;
+    mobileRotateAria: string;
+    mobileRotateTitle: string;
+    mobileRotateBody: string;
+    xLoginAria: string;
+    xSignInAria: string;
+    checkingSession: string;
+    retry: string;
+    continueWithX: string;
+    xLoginNotConfigured: string;
+    continueAs: (username: string) => string;
+    signOut: string;
+    xSessionReadError: string;
+    xAuthNotConfigured: string;
+    xLoginStartFailed: string;
+    xOauthStateInvalid: string;
+    xLoginCallbackFailed: string;
+    xLoginFailed: string;
   };
   round: {
     round: string;
@@ -176,7 +204,7 @@ export function ArenaI18nProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, language);
+    writeStoredLanguage(language);
     document.documentElement.lang = language === "zh" ? "zh-Hant" : language === "ko" ? "ko" : "en";
   }, [language]);
 
@@ -191,19 +219,39 @@ export function useArenaI18n() {
   return value;
 }
 
-function resolveInitialLanguage(): ArenaLanguage {
+export function resolveArenaLanguage(): ArenaLanguage {
   const params = new URLSearchParams(window.location.search);
   const urlLanguage = normalizeLanguage(params.get("lang"));
   if (urlLanguage) {
     return urlLanguage;
   }
 
-  const storedLanguage = normalizeLanguage(window.localStorage.getItem(STORAGE_KEY));
+  const storedLanguage = normalizeLanguage(readStoredLanguage());
   if (storedLanguage) {
     return storedLanguage;
   }
 
   return normalizeLanguage(window.navigator.language) ?? "zh";
+}
+
+function resolveInitialLanguage(): ArenaLanguage {
+  return resolveArenaLanguage();
+}
+
+function readStoredLanguage() {
+  try {
+    return window.localStorage?.getItem(STORAGE_KEY) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredLanguage(language: ArenaLanguage) {
+  try {
+    window.localStorage?.setItem(STORAGE_KEY, language);
+  } catch {
+    // Some embedded/private browsers do not expose localStorage. The URL language and current session still stay in sync.
+  }
 }
 
 function normalizeLanguage(value: string | null): ArenaLanguage | null {
@@ -266,7 +314,8 @@ const cooldownSeconds = (classId: ClassId, skill: SkillKey) => getSkillCooldownM
 const zhCooldown = (classId: ClassId, skill: SkillKey) => `${cooldownSeconds(classId, skill)} 秒冷卻`;
 const enCooldown = (classId: ClassId, skill: SkillKey) => `${cooldownSeconds(classId, skill)}s CD`;
 const koCooldown = (classId: ClassId, skill: SkillKey) => `${cooldownSeconds(classId, skill)}초 쿨다운`;
-const archerChargeDamage = `${CLASS_STATS.archer.attackPower}-${CLASS_STATS.archer.attackPower * COMBAT.archerChargedArrowMaxDamageMultiplier}`;
+const archerChargeDamageRange = getArcherChargedArrowDamageRange();
+const archerChargeDamage = `${archerChargeDamageRange.min}-${archerChargeDamageRange.max}`;
 
 const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
   zh: {
@@ -381,10 +430,37 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       killStreak: "連殺",
       location: "09 FIELD, ECO ARENA 6C6K",
       language: "語言",
+      languageSetupEyebrow: "Renaiss 語言設定",
+      languageSetupTitle: "選擇語言",
+      languageSetupBody: "先選語言，再進入命名與新手導覽。之後可以從左上角個人頭像的設定裡更改。",
+      languageSetupContinue: "進入 Vinci World",
+      languageSetupCurrent: "目前",
       roundRewards: "本輪獎勵",
       rewardPool: "本輪獎勵池",
       highScoreWins: "最高分獲得",
-      roundRewardLabel: (index) => `獎勵 ${String(index).padStart(2, "0")}`
+      roundRewardLabel: (index) => `獎勵 ${String(index).padStart(2, "0")}`,
+      tutorial: "教學",
+      arenaTutorial: "競技場教學",
+      closeTutorial: "關閉教學",
+      rpgLoadingAria: "RPG 載入中",
+      rpgLoadingTitle: "載入村莊中",
+      mobileRotateAria: "請將手機橫向",
+      mobileRotateTitle: "請將手機橫向",
+      mobileRotateBody: "競技場需要橫向畫面遊玩",
+      xLoginAria: "Vinci World X 登入",
+      xSignInAria: "登入",
+      checkingSession: "檢查登入狀態",
+      retry: "重試",
+      continueWithX: "使用 X 繼續",
+      xLoginNotConfigured: "尚未設定 X 登入",
+      continueAs: (username) => `以 @${username.toUpperCase()} 繼續`,
+      signOut: "登出",
+      xSessionReadError: "無法讀取 X 登入狀態。",
+      xAuthNotConfigured: "這台伺服器尚未設定 X 登入。",
+      xLoginStartFailed: "無法啟動 X 登入。",
+      xOauthStateInvalid: "X 登入已逾時，請再試一次。",
+      xLoginCallbackFailed: "X 登入無法完成。",
+      xLoginFailed: "X 登入失敗。"
     },
     round: {
       round: "回合",
@@ -510,10 +586,37 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       killStreak: "Kill streak",
       location: "09 FIELD, ECO ARENA 6C6K",
       language: "Language",
+      languageSetupEyebrow: "Renaiss language setup",
+      languageSetupTitle: "Choose Language",
+      languageSetupBody: "Choose a language before naming your player and starting the guide. You can change it later from profile settings.",
+      languageSetupContinue: "Enter Vinci World",
+      languageSetupCurrent: "Current",
       roundRewards: "Round Rewards",
       rewardPool: "Round reward pool",
       highScoreWins: "High score wins",
-      roundRewardLabel: (index) => `Reward ${String(index).padStart(2, "0")}`
+      roundRewardLabel: (index) => `Reward ${String(index).padStart(2, "0")}`,
+      tutorial: "Tutorial",
+      arenaTutorial: "Arena Tutorial",
+      closeTutorial: "Close tutorial",
+      rpgLoadingAria: "RPG loading",
+      rpgLoadingTitle: "Loading village",
+      mobileRotateAria: "Rotate phone to landscape",
+      mobileRotateTitle: "Rotate your phone",
+      mobileRotateBody: "Arena requires landscape play",
+      xLoginAria: "Vinci World X login",
+      xSignInAria: "Sign in",
+      checkingSession: "Checking session",
+      retry: "Retry",
+      continueWithX: "Continue with X",
+      xLoginNotConfigured: "X login is not configured",
+      continueAs: (username) => `Continue as @${username.toUpperCase()}`,
+      signOut: "Sign out",
+      xSessionReadError: "Unable to read X session.",
+      xAuthNotConfigured: "X login is not configured on this server.",
+      xLoginStartFailed: "X login could not start.",
+      xOauthStateInvalid: "X login expired. Try again.",
+      xLoginCallbackFailed: "X login could not be completed.",
+      xLoginFailed: "X login failed."
     },
     round: {
       round: "Round",
@@ -639,10 +742,37 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       killStreak: "연속 처치",
       location: "09 FIELD, ECO ARENA 6C6K",
       language: "언어",
+      languageSetupEyebrow: "Renaiss 언어 설정",
+      languageSetupTitle: "언어 선택",
+      languageSetupBody: "플레이어 이름과 튜토리얼을 시작하기 전에 언어를 선택하세요. 나중에 프로필 설정에서 바꿀 수 있습니다.",
+      languageSetupContinue: "Vinci World 입장",
+      languageSetupCurrent: "현재",
       roundRewards: "라운드 보상",
       rewardPool: "라운드 보상 목록",
       highScoreWins: "최고 점수 획득",
-      roundRewardLabel: (index) => `보상 ${String(index).padStart(2, "0")}`
+      roundRewardLabel: (index) => `보상 ${String(index).padStart(2, "0")}`,
+      tutorial: "튜토리얼",
+      arenaTutorial: "아레나 튜토리얼",
+      closeTutorial: "튜토리얼 닫기",
+      rpgLoadingAria: "RPG 로딩 중",
+      rpgLoadingTitle: "마을 불러오는 중",
+      mobileRotateAria: "휴대폰을 가로로 돌리세요",
+      mobileRotateTitle: "휴대폰을 가로로 돌리세요",
+      mobileRotateBody: "아레나는 가로 화면에서 플레이합니다",
+      xLoginAria: "Vinci World X 로그인",
+      xSignInAria: "로그인",
+      checkingSession: "세션 확인 중",
+      retry: "다시 시도",
+      continueWithX: "X로 계속하기",
+      xLoginNotConfigured: "X 로그인이 설정되지 않았습니다",
+      continueAs: (username) => `@${username.toUpperCase()}로 계속하기`,
+      signOut: "로그아웃",
+      xSessionReadError: "X 세션을 읽을 수 없습니다.",
+      xAuthNotConfigured: "이 서버에는 X 로그인이 설정되어 있지 않습니다.",
+      xLoginStartFailed: "X 로그인을 시작할 수 없습니다.",
+      xOauthStateInvalid: "X 로그인이 만료되었습니다. 다시 시도하세요.",
+      xLoginCallbackFailed: "X 로그인을 완료할 수 없습니다.",
+      xLoginFailed: "X 로그인에 실패했습니다."
     },
     round: {
       round: "라운드",

@@ -54,11 +54,12 @@ import { TargetingOverlay, type TargetingIntent } from "../render/targetingOverl
 import { getMageActionFxProfile, shouldShowMageActionFx } from "../render/mageActionFx";
 import { getWarriorActionFxProfile, shouldShowWarriorActionFx } from "../render/warriorActionFx";
 import { renderVillageMap } from "../render/villageMap";
-import { useHudStore } from "../../state/hudStore";
+import { useHudStore, type MobileAimInput, type MobileMoveInput } from "../../state/hudStore";
 import { buildRuntimeTextures } from "../assets/runtimeTextures";
 import { getHealthPackVariant } from "../assets/healthPackVariants";
 import { generatedAssetPath } from "../assets/generatedAssets";
 import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
+import { ARENA_TEXT, resolveArenaLanguage } from "../../i18n/arena";
 
 interface PlayerView {
   container: Phaser.GameObjects.Container;
@@ -201,6 +202,7 @@ const ARCHER_CHARGE_BAR_Y = -109;
 const ARCHER_CHARGE_BAR_WIDTH = 66;
 const ARCHER_CHARGE_FILL_WIDTH = 58;
 const SKILL_INPUT_KEYS: SkillKey[] = ["skillQ", "skillE", "skillR"];
+const MOBILE_MOVE_DEADZONE = 0.08;
 
 export class VillageArenaScene extends Phaser.Scene {
   private socket: GameSocket | null = null;
@@ -221,6 +223,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private unsubscribeJoin?: () => void;
   private lastHudSync = 0;
   private lastArenaAimPoint: { x: number; y: number } | null = null;
+  private lastMobileAimPoint: { x: number; y: number } | null = null;
   private pointerOverArenaCanvas = false;
   private mouseAttackDragging = false;
   private combatFeedbackInitialized = false;
@@ -380,6 +383,8 @@ export class VillageArenaScene extends Phaser.Scene {
     const pointer = this.input.activePointer;
     const hudState = useHudStore.getState();
     const hudInput = hudState.hudInput;
+    const mobileMove = hudState.mobileMove;
+    const mobileMoveActive = this.isMobileMoveActive(mobileMove);
     const heldSkills = this.getHeldSkillInput(hudInput);
     const skillPointerActive = heldSkills.skillQ || heldSkills.skillE || heldSkills.skillR;
     if (!pointer.isDown || skillPointerActive) {
@@ -390,11 +395,20 @@ export class VillageArenaScene extends Phaser.Scene {
 
     const mouseAttack = this.mouseAttackDragging;
     const hudSkillReleases = hudState.consumeHudSkillReleases();
+    const skillReleaseQueued = SKILL_INPUT_KEYS.some((skill) => hudSkillReleases[skill] > 0);
     const pointerAimPoint = this.getPointerAimPoint(mouseAttack);
-    const pointerAngle = Phaser.Math.RadToDeg(Math.atan2(pointerAimPoint.y - self.y, pointerAimPoint.x - self.x));
+    const mobileAimPoint = this.getMobileAimPoint(hudState.mobileAim);
+    const useMobileAim = mobileAimPoint !== null && (skillPointerActive || skillReleaseQueued);
+    const useMobileFacingFallback = hudState.mobileControlsActive && !skillPointerActive && !skillReleaseQueued && !mouseAttack;
+    const baseAimPoint = useMobileAim && mobileAimPoint
+      ? mobileAimPoint
+      : useMobileFacingFallback
+        ? this.getSelfForwardAimPoint(self)
+        : pointerAimPoint;
+    const pointerAngle = Phaser.Math.RadToDeg(Math.atan2(baseAimPoint.y - self.y, baseAimPoint.x - self.x));
     const reviewAngle = this.getReviewAngleOverride();
     const angle = reviewAngle !== null ? reviewAngle : pointerAngle;
-    const aimPoint = reviewAngle !== null ? project({ x: self.x, y: self.y }, reviewAngle, COMBAT.mageBeamLength) : pointerAimPoint;
+    const aimPoint = reviewAngle !== null ? project({ x: self.x, y: self.y }, reviewAngle, COMBAT.mageBeamLength) : baseAimPoint;
     const keyboardMoveX =
       (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) -
       (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
@@ -403,8 +417,8 @@ export class VillageArenaScene extends Phaser.Scene {
       (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
     const releasedSkills = this.consumeReleasedSkillInput(hudSkillReleases, self, this.snapshot.serverTime);
     const input: PlayerInput = {
-      moveX: keyboardMoveX,
-      moveY: keyboardMoveY,
+      moveX: Phaser.Math.Clamp(keyboardMoveX + (mobileMoveActive ? mobileMove.x : 0), -1, 1),
+      moveY: Phaser.Math.Clamp(keyboardMoveY + (mobileMoveActive ? mobileMove.y : 0), -1, 1),
       angle,
       aimX: aimPoint.x,
       aimY: aimPoint.y,
@@ -417,14 +431,28 @@ export class VillageArenaScene extends Phaser.Scene {
 
     this.publishArenaDebugInput(input);
     this.socket.sendInput(input);
+    if (skillReleaseQueued) {
+      useHudStore.getState().resetMobileAim();
+    }
   }
 
   private getTargetingIntent(): TargetingIntent {
-    const hudInput = useHudStore.getState().hudInput;
+    const hudState = useHudStore.getState();
+    const hudInput = hudState.hudInput;
     const heldSkills = this.getHeldSkillInput(hudInput);
     const self = this.getSelf();
     const serverTime = this.snapshot?.serverTime ?? Date.now();
-    const aimPoint = self ? this.getPointerAimPoint(this.input.activePointer.isDown) : this.cameras.main.getWorldPoint(this.input.activePointer.x, this.input.activePointer.y);
+    const skillPointerActive = heldSkills.skillQ || heldSkills.skillE || heldSkills.skillR;
+    const mobileAimPoint = this.getMobileAimPoint(hudState.mobileAim);
+    const useMobileAim = mobileAimPoint !== null && skillPointerActive;
+    const useMobileFacingFallback = hudState.mobileControlsActive && hudInput.attack && !skillPointerActive;
+    const aimPoint = self
+      ? useMobileAim && mobileAimPoint
+        ? mobileAimPoint
+        : useMobileFacingFallback
+          ? this.getSelfForwardAimPoint(self)
+          : this.getPointerAimPoint(this.input.activePointer.isDown)
+      : this.cameras.main.getWorldPoint(this.input.activePointer.x, this.input.activePointer.y);
     const skillReady = {
       skillQ: !self || self.cooldowns.skillQ <= serverTime,
       skillE: !self || self.cooldowns.skillE <= serverTime,
@@ -482,6 +510,31 @@ export class VillageArenaScene extends Phaser.Scene {
     return this.lastArenaAimPoint ?? { x: worldPointer.x, y: worldPointer.y };
   }
 
+  private isMobileMoveActive(move: MobileMoveInput) {
+    return Math.hypot(move.x, move.y) > MOBILE_MOVE_DEADZONE;
+  }
+
+  private getMobileAimPoint(aim: MobileAimInput) {
+    if (!aim.active || !Number.isFinite(aim.viewportX) || !Number.isFinite(aim.viewportY)) {
+      return null;
+    }
+
+    const canvasRect = this.game.canvas.getBoundingClientRect();
+    const canvasX = aim.viewportX - canvasRect.left;
+    const canvasY = aim.viewportY - canvasRect.top;
+    if (!Number.isFinite(canvasX) || !Number.isFinite(canvasY)) {
+      return this.lastMobileAimPoint;
+    }
+
+    const worldPoint = this.cameras.main.getWorldPoint(canvasX, canvasY);
+    this.lastMobileAimPoint = { x: worldPoint.x, y: worldPoint.y };
+    return this.lastMobileAimPoint;
+  }
+
+  private getSelfForwardAimPoint(self: PublicPlayer) {
+    const angle = Number.isFinite(self.angle) ? self.angle : 0;
+    return project({ x: self.x, y: self.y }, angle, COMBAT.mageBeamLength);
+  }
 
   private isArenaPointerTarget(pointer: Phaser.Input.Pointer) {
     if (!this.pointerOverArenaCanvas) {
@@ -1448,7 +1501,7 @@ export class VillageArenaScene extends Phaser.Scene {
       const tone = this.getFloatingTextTone(effect, selfOwned, reflect, attackBoost);
       let view = this.floatingTextViews.get(effect.id);
       if (!view) {
-        const label = attackBoost ? "攻擊力增加" : reflect ? `REFLECT -${effect.value}` : `-${effect.value}`;
+        const label = attackBoost ? ARENA_TEXT[resolveArenaLanguage()].feed.attackBoosted("").trim() : reflect ? `REFLECT -${effect.value}` : `-${effect.value}`;
         const badgeWidth = attackBoost ? 136 : Math.max(reflect ? 104 : 58, label.length * (reflect ? 9 : 13));
         const badgeHeight = attackBoost ? 34 : reflect ? 28 : 32;
         const container = this.add.container(effect.x, effect.y).setDepth(9000);

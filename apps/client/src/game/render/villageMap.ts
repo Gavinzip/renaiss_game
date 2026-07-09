@@ -5,28 +5,41 @@ import { getMapPropRenderFrame, getMapPropShadowFrame, getMapPropTexture } from 
 import { getRenderableMapProps } from "../mapDraft";
 
 const TILE_SIZE = 96;
+const STATIC_GROUND_DEPTH = -5000;
+const GROUND_TILESET_TEXTURE = "arena_ground_tileset";
+const GROUND_TILESET_NAME = "arenaGroundTileset";
+const GROUND_TILE_INDEX = {
+  grass: 0,
+  stone: 1,
+  stoneAlt: 2
+} as const;
 
 export function renderVillageMap(scene: Phaser.Scene) {
   const center = WORLD.width / 2;
   const mapProps = getRenderableMapProps();
   const roadEdges = scene.add.graphics().setDepth(-2700);
+  const groundLayer = createGroundTileLayer(scene);
 
+  let tileY = 0;
   for (let y = TILE_SIZE / 2; y < WORLD.height; y += TILE_SIZE) {
+    let tileX = 0;
     for (let x = TILE_SIZE / 2; x < WORLD.width; x += TILE_SIZE) {
       const road = isRoadTile(x, y, center);
       const hash = tileHash(x, y);
-      const texture = road ? (hash % 3 === 0 ? ENV_TEXTURES.stoneAlt : ENV_TEXTURES.stone) : ENV_TEXTURES.grass;
-      const tile = addCropped(scene, texture, x, y, TILE_SIZE + 3, TILE_SIZE + 3, y - 4000);
-      tile.setFlipX(Boolean(hash & 1)).setFlipY(Boolean(hash & 2));
+      const tileIndex = road ? (hash % 3 === 0 ? GROUND_TILE_INDEX.stoneAlt : GROUND_TILE_INDEX.stone) : GROUND_TILE_INDEX.grass;
+      const tile = groundLayer.putTileAt(tileIndex, tileX, tileY);
+      tile.setFlip(Boolean(hash & 1), Boolean(hash & 2));
       if (road) {
-        tile.setTint(hash % 4 === 0 ? 0xf2eef6 : 0xffffff);
+        tile.tint = hash % 4 === 0 ? 0xf2eef6 : 0xffffff;
         drawRoadEdges(roadEdges, x, y, center);
       } else if (hash % 7 === 0) {
-        tile.setTint(0xf3ffd3);
+        tile.tint = 0xf3ffd3;
       } else if (hash % 11 === 0) {
-        tile.setTint(0xe4f5bd);
+        tile.tint = 0xe4f5bd;
       }
+      tileX += 1;
     }
+    tileY += 1;
   }
 
   renderTerrainDecals(scene, center, mapProps);
@@ -50,6 +63,45 @@ export function addCropped(
   image.setDisplaySize(displayWidth, displayHeight);
   image.setDepth(depth);
   return image;
+}
+
+function createGroundTileLayer(scene: Phaser.Scene) {
+  ensureGroundTilesetTexture(scene);
+  const width = Math.ceil(WORLD.width / TILE_SIZE);
+  const height = Math.ceil(WORLD.height / TILE_SIZE);
+  const map = scene.make.tilemap({ tileWidth: TILE_SIZE, tileHeight: TILE_SIZE, width, height });
+  const tileset = map.addTilesetImage(GROUND_TILESET_NAME, GROUND_TILESET_TEXTURE, TILE_SIZE, TILE_SIZE, 0, 0, 0);
+  if (!tileset) {
+    throw new Error("Unable to create arena ground tileset.");
+  }
+  const layer = map.createBlankLayer("arena-ground", tileset, 0, 0, width, height, TILE_SIZE, TILE_SIZE);
+  if (!layer) {
+    throw new Error("Unable to create arena ground tile layer.");
+  }
+  layer.setDepth(STATIC_GROUND_DEPTH);
+  return layer;
+}
+
+function ensureGroundTilesetTexture(scene: Phaser.Scene) {
+  if (scene.textures.exists(GROUND_TILESET_TEXTURE)) {
+    return;
+  }
+
+  const texture = scene.textures.createCanvas(GROUND_TILESET_TEXTURE, TILE_SIZE * 3, TILE_SIZE);
+  if (!texture) {
+    throw new Error("Unable to create arena ground tileset texture.");
+  }
+
+  const context = texture.getContext();
+  drawGroundTile(context, scene, ENV_TEXTURES.grass, GROUND_TILE_INDEX.grass);
+  drawGroundTile(context, scene, ENV_TEXTURES.stone, GROUND_TILE_INDEX.stone);
+  drawGroundTile(context, scene, ENV_TEXTURES.stoneAlt, GROUND_TILE_INDEX.stoneAlt);
+  texture.refresh();
+}
+
+function drawGroundTile(context: CanvasRenderingContext2D, scene: Phaser.Scene, textureKey: string, index: number) {
+  const source = scene.textures.get(textureKey).getSourceImage() as CanvasImageSource;
+  context.drawImage(source, index * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
 }
 
 function addMapProp(scene: Phaser.Scene, prop: MapProp) {

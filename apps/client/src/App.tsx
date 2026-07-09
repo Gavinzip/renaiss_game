@@ -1,6 +1,6 @@
 import { GearSix, MapTrifold, PencilSimple, Question, UsersThree, EnvelopeSimple } from "@phosphor-icons/react";
 import { CLASS_META, CLASS_ORDER, CLASS_STATS, type ActionTooltip, type ClassId, type JoinRequest, type SkillKey } from "@renaiss-game/shared";
-import type { CSSProperties, PointerEvent } from "react";
+import type { CSSProperties, PointerEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { ClassPortrait } from "./components/ClassPortrait";
 import { CombatAnnouncer } from "./components/CombatAnnouncer";
@@ -34,8 +34,11 @@ import { formatScore } from "./utils/formatScore";
 import { ArenaI18nProvider, ARENA_LANGUAGES, useArenaI18n } from "./i18n/arena";
 
 const SKILL_ICON_SHEET = `url("${generatedAssetPath("skill-icons")}")`;
+const LANGUAGE_SELECTION_STORAGE_KEY = "renaiss:first-language-selected:v2";
+const ENTRY_LANGUAGE_OPTIONS = ARENA_LANGUAGES;
 
 export function App() {
+  const arenaMode = new URLSearchParams(window.location.search).get("arena") === "1";
 
   useEffect(() => {
     installStaticAssetCssVariables();
@@ -43,9 +46,67 @@ export function App() {
 
   return (
     <ArenaI18nProvider>
-      <XLoginGate>{(session) => <GameApp authUser={session.user} />}</XLoginGate>
+      <LanguageFirstRunGate>
+        <XLoginGate>{(session) => <GameApp authUser={session.user} />}</XLoginGate>
+      </LanguageFirstRunGate>
+      {arenaMode ? <MobileLandscapeGate /> : null}
     </ArenaI18nProvider>
   );
+}
+
+function LanguageFirstRunGate({ children }: { children: ReactNode }) {
+  const { language, setLanguage, t } = useArenaI18n();
+  const [confirmed, setConfirmed] = useState(() => hasConfirmedEntryLanguage());
+  const copy = t.ui;
+
+  const confirmLanguage = () => {
+    try {
+      window.localStorage.setItem(LANGUAGE_SELECTION_STORAGE_KEY, "1");
+    } catch {
+      // Private browsers can reject storage; the in-memory state still lets this page continue.
+    }
+    setConfirmed(true);
+  };
+
+  if (confirmed) {
+    return <>{children}</>;
+  }
+
+  return (
+    <main className="language-entry-page" aria-label={copy.languageSetupTitle}>
+      <section className="language-entry-panel">
+        <img src={staticAssetUrl("/assets/generated/vinci-favicon.png")} alt="" />
+        <span>{copy.languageSetupEyebrow}</span>
+        <h1>{copy.languageSetupTitle}</h1>
+        <p>{copy.languageSetupBody}</p>
+        <div className="language-entry-options" aria-label={copy.languageSetupTitle}>
+          {ENTRY_LANGUAGE_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              className={language === option.id ? "is-active" : ""}
+              aria-pressed={language === option.id}
+              onClick={() => setLanguage(option.id)}
+            >
+              <strong>{option.label}</strong>
+              <em>{language === option.id ? copy.languageSetupCurrent : option.shortLabel}</em>
+            </button>
+          ))}
+        </div>
+        <button type="button" className="language-entry-confirm" onClick={confirmLanguage}>
+          {copy.languageSetupContinue}
+        </button>
+      </section>
+    </main>
+  );
+}
+
+function hasConfirmedEntryLanguage() {
+  try {
+    return window.localStorage.getItem(LANGUAGE_SELECTION_STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
 }
 
 function GameApp({ authUser }: { authUser: XAuthUser }) {
@@ -142,11 +203,12 @@ function RpgApp({ authUser }: { authUser: XAuthUser }) {
 }
 
 function RpgLoadingGate() {
+  const { t } = useArenaI18n();
   return (
-    <section className="rpg-loading-gate" role="status" aria-live="polite" aria-label="RPG loading">
+    <section className="rpg-loading-gate" role="status" aria-live="polite" aria-label={t.ui.rpgLoadingAria}>
       <div className="rpg-loading-window">
         <span>RENAISS ARENA</span>
-        <strong>載入村莊中</strong>
+        <strong>{t.ui.rpgLoadingTitle}</strong>
         <div className="rpg-loading-bar" aria-hidden="true">
           <i />
         </div>
@@ -232,7 +294,7 @@ function StartPanel({ authUser }: { authUser: XAuthUser }) {
         </button>
         <button className="arena-tutorial-button" type="button" onClick={arenaTutorial.openTutorial}>
           <Question size={17} weight="bold" />
-          <span>教學</span>
+          <span>{t.ui.tutorial}</span>
         </button>
         {connection === "error" ? <p className="connection-error">{t.ui.connectionError}</p> : null}
       </div>
@@ -390,7 +452,7 @@ function HudOverlay() {
         <button type="button" className={activeDrawer === "map" ? "is-active" : ""} title={t.ui.map} aria-pressed={activeDrawer === "map"} onClick={() => toggleDrawer("map")}>
           <MapTrifold size={26} weight="fill" />
         </button>
-        <button type="button" title="競技場教學" aria-label="競技場教學" onClick={() => setArenaTutorialOpen(true)}>
+        <button type="button" title={t.ui.arenaTutorial} aria-label={t.ui.arenaTutorial} onClick={() => setArenaTutorialOpen(true)}>
           <Question size={26} weight="fill" />
         </button>
         <button type="button" className={activeDrawer === "messages" ? "is-active" : ""} title={t.ui.messages} aria-pressed={activeDrawer === "messages"} onClick={() => toggleDrawer("messages")}>
@@ -452,6 +514,18 @@ function HudOverlay() {
         <SkillButton classId={displayClass} slot="skillR" action="skillR" keyLabel="R" title={skillLabels?.skillR ?? "R"} tooltip={actionTooltips.skillR} endAt={self?.cooldowns.skillR ?? 0} disabled={actionsDisabled} />
         <SkillButton classId={displayClass} slot="attack" action="attack" keyLabel="M1" title={t.ui.attack} tooltip={actionTooltips.attack} endAt={0} disabled={actionsDisabled} />
       </section> : null}
+      {joined ? (
+        <MobileArenaControls
+          classId={displayClass}
+          skillQTitle={skillLabels?.skillQ ?? "Q"}
+          skillETitle={skillLabels?.skillE ?? "E"}
+          skillRTitle={skillLabels?.skillR ?? "R"}
+          attackTitle={t.ui.attack}
+          actionTooltips={actionTooltips}
+          skillCooldowns={self?.cooldowns ?? null}
+          disabled={actionsDisabled}
+        />
+      ) : null}
       <ArenaTutorialModal open={arenaTutorialOpen} onClose={() => setArenaTutorialOpen(false)} />
     </div>
   );
@@ -463,6 +537,235 @@ function tryPointerCapture(target: HTMLElement, pointerId: number) {
   } catch {
     // Synthetic pointer events in automated tests may not register as active pointers.
   }
+}
+
+function MobileLandscapeGate() {
+  const { t } = useArenaI18n();
+  return (
+    <section className="mobile-landscape-gate" aria-label={t.ui.mobileRotateAria}>
+      <div className="mobile-rotate-card">
+        <span className="mobile-rotate-phone" aria-hidden="true">
+          <i />
+        </span>
+        <strong>{t.ui.mobileRotateTitle}</strong>
+        <p>{t.ui.mobileRotateBody}</p>
+      </div>
+    </section>
+  );
+}
+
+function MobileArenaControls({
+  classId,
+  skillQTitle,
+  skillETitle,
+  skillRTitle,
+  attackTitle,
+  actionTooltips,
+  skillCooldowns,
+  disabled
+}: {
+  classId: ClassId;
+  skillQTitle: string;
+  skillETitle: string;
+  skillRTitle: string;
+  attackTitle: string;
+  actionTooltips: Record<HudAction, ActionTooltip>;
+  skillCooldowns: Record<HudSkillAction, number> | null;
+  disabled: boolean;
+}) {
+  const setMobileMove = useHudStore((state) => state.setMobileMove);
+  const resetMobileMove = useHudStore((state) => state.resetMobileMove);
+  const resetMobileAim = useHudStore((state) => state.resetMobileAim);
+  const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
+  const [stick, setStick] = useState<{ x: number; y: number; pointerId: number | null }>({ x: 0, y: 0, pointerId: null });
+  const joystickRadius = 46;
+
+  useEffect(() => {
+    if (!disabled) {
+      return;
+    }
+    setStick({ x: 0, y: 0, pointerId: null });
+    resetMobileMove();
+    resetMobileAim();
+  }, [disabled, resetMobileAim, resetMobileMove]);
+
+  const updateStick = (event: PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const rawX = event.clientX - (rect.left + rect.width / 2);
+    const rawY = event.clientY - (rect.top + rect.height / 2);
+    const distance = Math.hypot(rawX, rawY);
+    const scale = distance > joystickRadius ? joystickRadius / distance : 1;
+    const x = rawX * scale;
+    const y = rawY * scale;
+    const deadzone = 7;
+    setStick({ x, y, pointerId: event.pointerId });
+    setMobileMove(distance > deadzone ? { x: x / joystickRadius, y: y / joystickRadius } : { x: 0, y: 0 });
+  };
+
+  const pressStick = (event: PointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (disabled) {
+      return;
+    }
+    tryPointerCapture(event.currentTarget, event.pointerId);
+    setMobileControlsActive(true);
+    updateStick(event);
+  };
+
+  const moveStick = (event: PointerEvent<HTMLDivElement>) => {
+    if (stick.pointerId !== event.pointerId || disabled) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    updateStick(event);
+  };
+
+  const releaseStick = (event: PointerEvent<HTMLDivElement>) => {
+    if (stick.pointerId !== event.pointerId) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    setStick({ x: 0, y: 0, pointerId: null });
+    resetMobileMove();
+  };
+
+  return (
+    <section className="mobile-arena-controls" aria-label="Mobile arena controls">
+      <div
+        className="mobile-joystick-zone"
+        onPointerDown={pressStick}
+        onPointerMove={moveStick}
+        onPointerUp={releaseStick}
+        onPointerCancel={releaseStick}
+        onContextMenu={(event) => event.preventDefault()}
+      >
+        <div
+          className={stick.pointerId !== null ? "mobile-joystick is-active" : "mobile-joystick"}
+          style={{ "--stick-x": `${stick.x}px`, "--stick-y": `${stick.y}px` } as CSSProperties}
+          aria-hidden="true"
+        >
+          <i />
+        </div>
+      </div>
+
+      <div className="mobile-skill-pad" onPointerDownCapture={() => setMobileControlsActive(true)}>
+        <MobileSkillButton classId={classId} slot="skillQ" action="skillQ" actionClass="skill-q" keyLabel="Q" title={skillQTitle} tooltip={actionTooltips.skillQ} endAt={skillCooldowns?.skillQ ?? 0} disabled={disabled} />
+        <MobileSkillButton classId={classId} slot="skillE" action="skillE" actionClass="skill-e" keyLabel="E" title={skillETitle} tooltip={actionTooltips.skillE} endAt={skillCooldowns?.skillE ?? 0} disabled={disabled} />
+        <MobileSkillButton classId={classId} slot="skillR" action="skillR" actionClass="skill-r" keyLabel="R" title={skillRTitle} tooltip={actionTooltips.skillR} endAt={skillCooldowns?.skillR ?? 0} disabled={disabled} />
+        <MobileSkillButton classId={classId} slot="attack" action="attack" actionClass="attack" keyLabel="M1" title={attackTitle} tooltip={actionTooltips.attack} endAt={0} disabled={disabled} />
+      </div>
+    </section>
+  );
+}
+
+function MobileSkillButton({
+  classId,
+  slot,
+  action,
+  actionClass,
+  keyLabel,
+  title,
+  tooltip,
+  endAt,
+  disabled = false
+}: {
+  classId: ClassId;
+  slot: SkillIconSlot;
+  action: HudAction;
+  actionClass: string;
+  keyLabel: string;
+  title: string;
+  tooltip: ActionTooltip;
+  endAt: number;
+  disabled?: boolean;
+}) {
+  const now = useHudStore((state) => state.snapshot?.serverTime ?? Date.now());
+  const setHudAction = useHudStore((state) => state.setHudAction);
+  const queueHudSkillRelease = useHudStore((state) => state.queueHudSkillRelease);
+  const setMobileAim = useHudStore((state) => state.setMobileAim);
+  const resetMobileAim = useHudStore((state) => state.resetMobileAim);
+  const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
+  const [pointerId, setPointerId] = useState<number | null>(null);
+  const remaining = Math.max(0, endAt - now);
+  const active = remaining <= 0 && !disabled;
+  const cooling = remaining > 0;
+  const isSkill = action !== "attack";
+
+  const updateAim = (event: PointerEvent<HTMLButtonElement>) => {
+    if (!isSkill) {
+      return;
+    }
+    setMobileAim(action as HudSkillAction, event.clientX, event.clientY);
+  };
+
+  const cancelAction = () => {
+    setHudAction(action, false);
+    setPointerId(null);
+    if (isSkill) {
+      resetMobileAim();
+    }
+  };
+
+  const pressAction = (event: PointerEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!active) {
+      return;
+    }
+    tryPointerCapture(event.currentTarget, event.pointerId);
+    setPointerId(event.pointerId);
+    setMobileControlsActive(true);
+    setHudAction(action, true);
+    updateAim(event);
+  };
+
+  const moveAction = (event: PointerEvent<HTMLButtonElement>) => {
+    if (!isSkill || pointerId !== event.pointerId || disabled) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    updateAim(event);
+  };
+
+  const releaseAction = (event: PointerEvent<HTMLButtonElement>) => {
+    if (pointerId !== event.pointerId) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    setHudAction(action, false);
+    setPointerId(null);
+    if (isSkill) {
+      updateAim(event);
+      queueHudSkillRelease(action as HudSkillAction);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      className={["mobile-action-button", actionClass, cooling ? "cooling" : "", disabled ? "disabled" : ""].filter(Boolean).join(" ")}
+      aria-label={`${title} (${keyLabel}) - ${tooltip.description}`}
+      disabled={!active}
+      onPointerDown={pressAction}
+      onPointerMove={moveAction}
+      onPointerUp={releaseAction}
+      onPointerCancel={cancelAction}
+      onContextMenu={(event) => event.preventDefault()}
+    >
+      <i
+        className="mobile-action-icon"
+        style={getSkillIconStyle(classId, slot)}
+      />
+      <span>{title}</span>
+      <strong>{keyLabel}</strong>
+      {cooling ? <em>{Math.ceil(remaining / 1000)}</em> : null}
+    </button>
+  );
 }
 
 function SkillButton({

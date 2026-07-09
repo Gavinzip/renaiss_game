@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { fetchXAuthSession, logoutXSession, xLoginStartUrl, type XAuthSession } from "../api/auth";
 import { staticAssetUrl } from "../game/assets/staticAssets";
+import { useArenaI18n, type ArenaText } from "../i18n/arena";
 
 const ENTERED_SESSION_KEY = "renaiss:x-login-entered:v1";
+type XAuthErrorReason = "x_auth_not_configured" | "x_login_start_failed" | "x_oauth_state_invalid" | "x_login_callback_failed";
 
 interface XLoginGateProps {
   children: ReactNode | ((session: XAuthSession & { authenticated: true; user: NonNullable<XAuthSession["user"]> }) => ReactNode);
@@ -12,8 +14,9 @@ export function XLoginGate({ children }: XLoginGateProps) {
   const [session, setSession] = useState<XAuthSession | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [entered, setEntered] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { t } = useArenaI18n();
   const authError = useMemo(() => authErrorFromUrl(), []);
+  const authErrorMessage = authError ? authErrorMessageFromReason(authError, t) : null;
 
   useEffect(() => {
     let alive = true;
@@ -27,7 +30,7 @@ export function XLoginGate({ children }: XLoginGateProps) {
       })
       .catch((nextError) => {
         if (!alive) return;
-        setError(nextError instanceof Error ? nextError.message : "Unable to read X session.");
+        console.warn("Unable to read X session.", nextError);
         setStatus("error");
       });
     return () => {
@@ -37,7 +40,6 @@ export function XLoginGate({ children }: XLoginGateProps) {
 
   const retry = () => {
     setStatus("loading");
-    setError(null);
     fetchXAuthSession()
       .then((nextSession) => {
         setSession(nextSession);
@@ -46,7 +48,7 @@ export function XLoginGate({ children }: XLoginGateProps) {
         cleanAuthQuery();
       })
       .catch((nextError) => {
-        setError(nextError instanceof Error ? nextError.message : "Unable to read X session.");
+        console.warn("Unable to read X session.", nextError);
         setStatus("error");
       });
   };
@@ -56,7 +58,7 @@ export function XLoginGate({ children }: XLoginGateProps) {
   }
 
   if (status === "error") {
-    return <XLoginScreen mode="error" message={error ?? "Unable to read X session."} onRetry={retry} />;
+    return <XLoginScreen mode="error" message={t.ui.xSessionReadError} onRetry={retry} />;
   }
 
   if (session?.authenticated && session.user) {
@@ -82,7 +84,7 @@ export function XLoginGate({ children }: XLoginGateProps) {
     return typeof children === "function" ? children({ ...session, authenticated: true, user: session.user }) : children;
   }
 
-  return <XLoginScreen mode="login" configured={session?.configured ?? false} message={authError} />;
+  return <XLoginScreen mode="login" configured={session?.configured ?? false} message={authErrorMessage} />;
 }
 
 function XLoginScreen({
@@ -102,12 +104,13 @@ function XLoginScreen({
   onSignOut?: () => void | Promise<void>;
   user?: NonNullable<XAuthSession["user"]>;
 }) {
+  const { t } = useArenaI18n();
   const signIn = () => {
     window.location.assign(xLoginStartUrl());
   };
 
   return (
-    <main className="x-login-page" aria-label="Vinci World X login">
+    <main className="x-login-page" aria-label={t.ui.xLoginAria}>
       <div className="x-login-brand">
         <img src={staticAssetUrl("/assets/generated/vinci-favicon.png")} alt="" />
         <div>
@@ -116,11 +119,11 @@ function XLoginScreen({
         </div>
       </div>
 
-      <section className="x-login-controls" aria-label="Sign in">
+      <section className="x-login-controls" aria-label={t.ui.xSignInAria}>
         {mode === "loading" ? (
           <button type="button" className="x-login-button is-loading" disabled>
             <span>X</span>
-            CHECKING SESSION
+            {t.ui.checkingSession}
           </button>
         ) : null}
 
@@ -131,7 +134,7 @@ function XLoginScreen({
             </div>
             <button type="button" className="x-login-button" onClick={onRetry}>
               <span>R</span>
-              RETRY
+              {t.ui.retry}
             </button>
           </>
         ) : null}
@@ -140,9 +143,9 @@ function XLoginScreen({
           <>
             <button type="button" className="x-login-button" onClick={signIn} disabled={!configured}>
               <span>X</span>
-              CONTINUE WITH X
+              {t.ui.continueWithX}
             </button>
-            {!configured ? <div className="x-login-message">X LOGIN NOT CONFIGURED</div> : null}
+            {!configured ? <div className="x-login-message">{t.ui.xLoginNotConfigured}</div> : null}
             {message ? <div className="x-login-message" role="alert">{message}</div> : null}
           </>
         ) : null}
@@ -151,11 +154,11 @@ function XLoginScreen({
           <>
             <button type="button" className="x-login-button" onClick={onContinue}>
               <span>{user.provider === "dev" ? "DEV" : "X"}</span>
-              CONTINUE AS @{user.username.toUpperCase()}
+              {t.ui.continueAs(user.username)}
             </button>
             <button type="button" className="x-login-button x-login-button-secondary" onClick={onSignOut}>
               <span>-</span>
-              SIGN OUT
+              {t.ui.signOut}
             </button>
           </>
         ) : null}
@@ -197,13 +200,23 @@ function authErrorFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const reason = params.get("auth_error");
   if (!reason) return null;
-  const messages: Record<string, string> = {
-    x_auth_not_configured: "X login is not configured on this server.",
-    x_login_start_failed: "X login could not start.",
-    x_oauth_state_invalid: "X login expired. Try again.",
-    x_login_callback_failed: "X login could not be completed."
-  };
-  return messages[reason] ?? "X login failed.";
+  if (
+    reason === "x_auth_not_configured" ||
+    reason === "x_login_start_failed" ||
+    reason === "x_oauth_state_invalid" ||
+    reason === "x_login_callback_failed"
+  ) {
+    return reason;
+  }
+  return "unknown";
+}
+
+function authErrorMessageFromReason(reason: XAuthErrorReason | "unknown", t: ArenaText) {
+  if (reason === "x_auth_not_configured") return t.ui.xAuthNotConfigured;
+  if (reason === "x_login_start_failed") return t.ui.xLoginStartFailed;
+  if (reason === "x_oauth_state_invalid") return t.ui.xOauthStateInvalid;
+  if (reason === "x_login_callback_failed") return t.ui.xLoginCallbackFailed;
+  return t.ui.xLoginFailed;
 }
 
 function cleanAuthQuery() {

@@ -6,12 +6,14 @@ import { generatedAssetPath } from "../game/assets/generatedAssets";
 export function RpgSkillVfxSprite({
   move,
   animate = true,
+  loop = true,
   frame = 0,
   className = "",
   style
 }: {
   move: RpgMove;
   animate?: boolean;
+  loop?: boolean;
   frame?: number;
   className?: string;
   style?: CSSProperties;
@@ -34,11 +36,14 @@ export function RpgSkillVfxSprite({
     if (!animate || spec.frameCount <= 1) return undefined;
 
     const interval = window.setInterval(() => {
-      setFrameIndex((current) => (current + 1) % spec.frameCount);
+      setFrameIndex((current) => {
+        if (loop) return (current + 1) % spec.frameCount;
+        return Math.min(current + 1, spec.frameCount - 1);
+      });
     }, frameMs);
 
     return () => window.clearInterval(interval);
-  }, [animate, frame, frameMs, spec.frameCount]);
+  }, [animate, frame, frameMs, loop, spec.frameCount]);
 
   return (
     <span

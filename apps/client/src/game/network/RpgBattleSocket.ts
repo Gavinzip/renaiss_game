@@ -1,6 +1,7 @@
 import type { RpgBattleAction, RpgVersusJoinAccepted, RpgVersusJoinRequest, RpgVersusRematchRequest, RpgVersusSnapshot, RpgVersusSubmitActions } from "@renaiss-game/shared";
 import { io, type Socket } from "socket.io-client";
 import { gameServerUrl } from "../../api/gameServer";
+import { rpgNotice } from "../../i18n/rpg";
 
 const RPG_VERSUS_SESSION_KEY = "renaiss:rpg-versus-session-id";
 type RpgVersusJoinDraft = Omit<RpgVersusJoinRequest, "sessionId">;
@@ -25,31 +26,31 @@ export class RpgBattleSocket {
     });
 
     this.socket.on("rpg_state", onSnapshot);
-    this.socket.on("rpg_error", (payload?: { message?: string }) => onError(payload?.message ?? "RPG room error."));
+    this.socket.on("rpg_error", (payload?: { message?: string }) => onError(payload?.message ?? rpgNotice().rpgRoomError));
     this.socket.on("disconnect", () => {
-      if (!this.manualDisconnect) onStatus?.("reconnecting", "連線中斷，保留真人房並嘗試重連。");
+      if (!this.manualDisconnect) onStatus?.("reconnecting", rpgNotice().versusDisconnected);
     });
     this.socket.on("connect", () => {
       if (this.reconnectRequest) {
-        onStatus?.("reconnecting", "重新同步真人房。");
+        onStatus?.("reconnecting", rpgNotice().versusResyncing);
         this.socket?.emit("rpg_join_room", this.reconnectRequest);
       } else {
-        onStatus?.("connected", "真人道館已連線。");
+        onStatus?.("connected", rpgNotice().versusConnected);
       }
     });
     this.socket.io.on("reconnect_attempt", () => {
-      onStatus?.("reconnecting", "重新連線真人道館中。");
+      onStatus?.("reconnecting", rpgNotice().versusReconnecting);
     });
     this.socket.io.on("reconnect", () => {
-      onStatus?.("reconnecting", "重新連線成功，同步房間中。");
+      onStatus?.("reconnecting", rpgNotice().versusReconnectSyncing);
     });
 
     return new Promise((resolve, reject) => {
       if (!this.socket) {
-        reject(new Error("Socket not initialized"));
+        reject(new Error(rpgNotice().socketNotInitialized));
         return;
       }
-      const fail = () => reject(new Error("Unable to connect to RPG server"));
+      const fail = () => reject(new Error(rpgNotice().unableConnectRpgServer));
       this.socket.once("connect_error", fail);
       this.socket.once("connect", () => {
         this.socket?.off("connect_error", fail);
@@ -90,13 +91,13 @@ export class RpgBattleSocket {
   private joinLike(eventName: "rpg_create_room" | "rpg_join_room", request: RpgVersusJoinDraft): Promise<RpgVersusJoinAccepted> {
     return new Promise((resolve, reject) => {
       if (!this.socket || !this.socket.connected) {
-        reject(new Error("RPG socket is not connected."));
+        reject(new Error(rpgNotice().socketNotConnected));
         return;
       }
       const requestWithSession: RpgVersusJoinRequest = { ...request, sessionId: this.sessionId };
       const fail = (payload?: { message?: string }) => {
         cleanup();
-        reject(new Error(payload?.message ?? "Unable to join RPG room."));
+        reject(new Error(payload?.message ?? rpgNotice().unableJoinRpgRoom));
       };
       const success = (accepted: RpgVersusJoinAccepted) => {
         cleanup();

@@ -1,4 +1,4 @@
-import { ArrowClockwise, Cards, FlagBanner, HouseLine, Question, Robot, Sparkle, Storefront, Sword, UsersThree, X } from "@phosphor-icons/react";
+import { ArrowClockwise, Cards, FlagBanner, Gear, HouseLine, Question, Robot, Sparkle, Storefront, Sword, UsersThree, X } from "@phosphor-icons/react";
 import {
   RPG_ELEMENTS,
   RPG_ELEMENT_META,
@@ -27,20 +27,35 @@ import { RpgBattleVfx, buildBattleReplaySequence, floatingEntriesForPet, type Rp
 import { RpgPetSprite } from "./RpgPetSprite";
 import { RpgPixelCardImage } from "./RpgPixelCardImage";
 import { RpgSkillVfxSprite } from "./RpgSkillVfxSprite";
-import { BattleStatusEffects, statusShortLabel } from "./RpgStatusEffects";
+import { BattleStatusEffects } from "./RpgStatusEffects";
 import { GymTutorialModal, useFirstRunTutorial } from "./RpgTutorial";
 import { RpgOnboardingGuide } from "./RpgOnboardingGuide";
 import { RPG_DEFAULT_WALLET_ADDRESS, type RpgWalletCard } from "../api/rpgWalletCards";
 import { staticAssetUrl } from "../game/assets/staticAssets";
 import { RPG_MAX_EQUIPPED_MOVES, useRpgStore, type RpgDrawHistoryEntry, type RpgVersusConnection, type RpgVersusRoomStatus } from "../state/rpgStore";
+import { ARENA_LANGUAGES, useArenaI18n } from "../i18n/arena";
+import {
+  RPG_TEXT,
+  rpgAiDifficultyCopy,
+  rpgBattleTargetLabel,
+  rpgCopy,
+  rpgElementLabel,
+  rpgMoveAnimationName,
+  rpgMoveDescription,
+  rpgMoveEffectLabels,
+  rpgMoveName,
+  rpgPetName,
+  rpgStatusShortLabel,
+  rpgTargetLabel,
+  rpgTicketCopy,
+  rpgTierLabel,
+  rpgTierRangeLabel,
+  rpgTierShortLabel
+} from "../i18n/rpg";
 
 const ELEMENT_ORDER = RPG_ELEMENTS;
+const RPG_LANGUAGE_OPTIONS = ARENA_LANGUAGES;
 const WALLET_TIER_ORDER = ["high", "middle", "low"] as const;
-const PARTY_FORMATION_SLOTS = [
-  { label: "前排", shortLabel: "前" },
-  { label: "後左", shortLabel: "左" },
-  { label: "後右", shortLabel: "右" }
-] as const;
 const SKILL_OPENING_VIDEO_BY_ELEMENT: Partial<Record<RpgElement, string>> = {
   water: staticAssetUrl("/assets/skill-openings/water.mp4"),
   fire: staticAssetUrl("/assets/skill-openings/fire.mp4"),
@@ -66,6 +81,10 @@ function clampNumber(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
+function wait(ms: number) {
+  return new Promise<void>((resolve) => window.setTimeout(resolve, ms));
+}
+
 function actionMotionForMove(move: RpgMove): BattleActionMotion {
   if (move.target === "self" || move.target === "singleAlly" || move.target === "allAllies" || move.power <= 0) return "support";
   if (move.animation.style === "strike") return "melee";
@@ -86,11 +105,14 @@ function attackMotionStyle(replay: RpgBattleReplay | null, petId: string): CSSPr
 }
 
 export function RpgOverlay() {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].profile;
   const screen = useRpgStore((state) => state.screen);
   const activeLocation = useRpgStore((state) => state.activeLocation);
   const nearPlace = useRpgStore((state) => state.nearPlace);
   const playerName = useRpgStore((state) => state.playerName);
   const openProfile = useRpgStore((state) => state.openProfile);
+  const openBag = useRpgStore((state) => state.openBag);
   const openGym = useRpgStore((state) => state.openGym);
   const openArena = useRpgStore((state) => state.openArena);
   const closePanel = useRpgStore((state) => state.closePanel);
@@ -98,7 +120,7 @@ export function RpgOverlay() {
   const inBattle = screen === "battle";
   const returnHome = activeLocation === "house" ? exitHouse : closePanel;
   const openNearPlace = () => {
-    if (nearPlace === "shop" || nearPlace === "cabinet") openProfile();
+    if (nearPlace === "shop" || nearPlace === "cabinet") openBag();
     if (nearPlace === "gym") openGym();
     if (nearPlace === "arena") openArena();
     if (nearPlace === "house") useRpgStore.getState().enterHouse();
@@ -106,28 +128,28 @@ export function RpgOverlay() {
   };
 
   return (
-    <div className="rpg-layer" aria-label="RPG interface">
+    <div className="rpg-layer" aria-label={copy.interfaceLabel}>
       {!inBattle ? (
         <>
-          <button type="button" className={["rpg-profile-button", screen === "profile" ? "is-active" : ""].filter(Boolean).join(" ")} title="個人資料" aria-label="個人資料" onClick={openProfile}>
+          <button type="button" className={["rpg-profile-button", screen === "profile" ? "is-active" : ""].filter(Boolean).join(" ")} title={copy.profileButton} aria-label={copy.profileButton} onClick={screen === "profile" ? closePanel : openProfile}>
             <ClassPortrait classId="engineer" frame={0} />
             <span className="rpg-profile-button-copy">
               <strong>{playerName}</strong>
-              <em>個人</em>
+              <em>{copy.profileBadge}</em>
             </span>
           </button>
 
-          <nav className="rpg-top-nav" aria-label="RPG places">
-            <button type="button" title="Village" aria-label="Village" onClick={returnHome}>
+          <nav className="rpg-top-nav" aria-label={copy.navLabel}>
+            <button type="button" title={copy.village} aria-label={copy.village} onClick={returnHome}>
               <HouseLine size={24} weight="fill" />
             </button>
-            <button type="button" className={screen === "profile" || screen === "bag" ? "is-active" : ""} title="卡片" aria-label="卡片" onClick={openProfile}>
+            <button type="button" className={screen === "bag" ? "is-active" : ""} title={copy.cards} aria-label={copy.cards} onClick={openBag}>
               <Cards size={24} weight="fill" />
             </button>
-            <button type="button" className={screen === "gym" ? "is-active" : ""} title="道館" aria-label="道館" data-rpg-guide-target="gym-nav" onClick={openGym}>
+            <button type="button" className={screen === "gym" ? "is-active" : ""} title={copy.gym} aria-label={copy.gym} data-rpg-guide-target="gym-nav" onClick={openGym}>
               <FlagBanner size={24} weight="fill" />
             </button>
-            <button type="button" title="競技場" aria-label="競技場" data-rpg-guide-target="arena-nav" onClick={openArena}>
+            <button type="button" title={copy.arena} aria-label={copy.arena} data-rpg-guide-target="arena-nav" onClick={openArena}>
               <Sword size={24} weight="fill" />
             </button>
           </nav>
@@ -137,7 +159,7 @@ export function RpgOverlay() {
       {nearPlace && screen === "village" ? (
         <button className="rpg-interact-prompt" type="button" onClick={openNearPlace}>
           {nearPlace === "shop" ? <Storefront size={18} weight="fill" /> : nearPlace === "gym" ? <FlagBanner size={18} weight="fill" /> : nearPlace === "house" ? <HouseLine size={18} weight="fill" /> : <Sword size={18} weight="fill" />}
-          <span>{nearPlace === "shop" ? "卡片背包" : nearPlace === "gym" ? "道館" : nearPlace === "house" ? "個人房子" : "競技場"}</span>
+          <span>{nearPlace === "shop" ? copy.cardBag : nearPlace === "gym" ? copy.gym : nearPlace === "house" ? copy.house : copy.arena}</span>
           <kbd>E</kbd>
         </button>
       ) : null}
@@ -145,12 +167,13 @@ export function RpgOverlay() {
       {nearPlace && screen === "house" ? (
         <button className="rpg-interact-prompt" type="button" onClick={openNearPlace}>
           {nearPlace === "cabinet" ? <Cards size={18} weight="fill" /> : <HouseLine size={18} weight="fill" />}
-          <span>{nearPlace === "cabinet" ? "卡牌展示櫃" : "回到村莊"}</span>
+          <span>{nearPlace === "cabinet" ? copy.cardCabinet : copy.exitVillage}</span>
           <kbd>E</kbd>
         </button>
       ) : null}
 
-      {screen === "profile" || screen === "bag" || screen === "shop" ? <ProfilePanel /> : null}
+      {screen === "profile" ? <ProfileHomePanel /> : null}
+      {screen === "bag" || screen === "shop" ? <ProfilePanel /> : null}
       {screen === "gym" ? <GymPanel /> : null}
       {screen === "battle" ? <BattlePanel /> : null}
       <RpgOnboardingGuide />
@@ -160,18 +183,108 @@ export function RpgOverlay() {
 
 function PanelCloseButton() {
   const closePanel = useRpgStore((state) => state.closePanel);
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].common;
   return (
-    <button className="rpg-panel-close" type="button" title="Close" aria-label="Close" onClick={closePanel}>
+    <button className="rpg-panel-close" type="button" title={copy.close} aria-label={copy.close} onClick={closePanel}>
       <X size={18} weight="bold" />
     </button>
   );
 }
 
-function ElementFilter({ value, onChange }: { value: RpgElement | "any"; onChange: (value: RpgElement | "any") => void }) {
+function ProfileHomePanel() {
+  const playerName = useRpgStore((state) => state.playerName);
+  const setPlayerName = useRpgStore((state) => state.setPlayerName);
+  const walletAddress = useRpgStore((state) => state.walletAddress);
+  const openBag = useRpgStore((state) => state.openBag);
+  const openGym = useRpgStore((state) => state.openGym);
+  const openArena = useRpgStore((state) => state.openArena);
+  const { language, setLanguage } = useArenaI18n();
+  const copy = RPG_TEXT[language].profile;
+
   return (
-    <div className="rpg-element-filter" role="list" aria-label="Element filter">
+    <aside className="rpg-panel rpg-profile-home-panel" aria-label={copy.panelLabel}>
+      <header>
+        <Gear size={24} weight="fill" />
+        <div>
+          <strong>{copy.title}</strong>
+          <span>{copy.subtitle}</span>
+        </div>
+        <PanelCloseButton />
+      </header>
+
+      <section className="rpg-profile-settings-card">
+        <ClassPortrait classId="engineer" frame={0} />
+        <div className="rpg-profile-settings-fields">
+          <label>
+            <span>{copy.playerName}</span>
+            <input value={playerName} maxLength={18} onChange={(event) => setPlayerName(event.target.value)} />
+          </label>
+          <div className="rpg-profile-wallet-row">
+            <span>{copy.wallet}</span>
+            <strong>{shortWallet(walletAddress)}</strong>
+            <em>{copy.demoData}</em>
+          </div>
+        </div>
+      </section>
+
+      <section className="rpg-profile-settings-section" aria-label={copy.settings}>
+        <header>
+          <strong>{copy.settings}</strong>
+          <span>{copy.languageHint}</span>
+        </header>
+        <div className="rpg-profile-language-row">
+          <span>{copy.language}</span>
+          <div>
+            {RPG_LANGUAGE_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={language === option.id ? "is-active" : ""}
+                aria-pressed={language === option.id}
+                onClick={() => setLanguage(option.id)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="rpg-profile-settings-section" aria-label={copy.entry}>
+        <header>
+          <strong>{copy.entry}</strong>
+          <span>{copy.entryHint}</span>
+        </header>
+        <div className="rpg-profile-entry-grid">
+          <button type="button" onClick={openBag}>
+            <Cards size={24} weight="fill" />
+            <strong>{copy.cabinet}</strong>
+            <span>{copy.cabinetHint}</span>
+          </button>
+          <button type="button" onClick={openGym}>
+            <FlagBanner size={24} weight="fill" />
+            <strong>{copy.gym}</strong>
+            <span>{copy.gymHint}</span>
+          </button>
+          <button type="button" onClick={openArena}>
+            <Sword size={24} weight="fill" />
+            <strong>{copy.arena}</strong>
+            <span>{copy.arenaHint}</span>
+          </button>
+        </div>
+      </section>
+    </aside>
+  );
+}
+
+function ElementFilter({ value, onChange }: { value: RpgElement | "any"; onChange: (value: RpgElement | "any") => void }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].common;
+  return (
+    <div className="rpg-element-filter" role="list" aria-label={copy.all}>
       <button type="button" className={value === "any" ? "is-active" : ""} onClick={() => onChange("any")}>
-        全
+        {copy.all}
       </button>
       {ELEMENT_ORDER.map((element) => (
         <button
@@ -181,7 +294,7 @@ function ElementFilter({ value, onChange }: { value: RpgElement | "any"; onChang
           onClick={() => onChange(element)}
           style={{ "--element": RPG_ELEMENT_META[element].color } as CSSProperties}
         >
-          {RPG_ELEMENT_META[element].label}
+          {rpgElementLabel(element, language)}
         </button>
       ))}
     </div>
@@ -189,6 +302,8 @@ function ElementFilter({ value, onChange }: { value: RpgElement | "any"; onChang
 }
 
 function ShopPanel() {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].draw;
   const [element, setElement] = useState<RpgElement | "any">("any");
   const [activeDraw, setActiveDraw] = useState<RpgDrawHistoryEntry | null>(null);
   const drawSkill = useRpgStore((state) => state.drawSkill);
@@ -203,12 +318,12 @@ function ShopPanel() {
   };
 
   return (
-    <aside className="rpg-panel rpg-shop-panel" aria-label="商城">
+    <aside className="rpg-panel rpg-shop-panel" aria-label={RPG_TEXT[language].profile.cardBag}>
       <header>
         <Storefront size={24} weight="fill" />
         <div>
-          <strong>卡片機</strong>
-          <span>卡片轉成抽獎券，抽出的技能卡會進背包</span>
+          <strong>{RPG_TEXT[language].profile.cardBag}</strong>
+          <span>{copy.pool(preferredElement ? rpgElementLabel(preferredElement, language) : undefined)}</span>
         </div>
         <PanelCloseButton />
       </header>
@@ -233,7 +348,7 @@ function ShopPanel() {
             >
               <Cards size={22} weight="fill" />
               <span>{ticketBandLabel(ticket)}</span>
-              <strong>{ticket.label}</strong>
+              <strong>{rpgTicketCopy(ticket, language).label}</strong>
               <em>{ticket.drawCount} DRAW / x{count}</em>
             </button>
           );
@@ -246,14 +361,14 @@ function ShopPanel() {
         {drawHistory.length === 0 ? (
           <div className="rpg-empty-draw">
             <Sparkle size={20} weight="fill" />
-            <span>等待技能卡</span>
+            <span>{RPG_TEXT[language].cabinet.waitingForSkillCard}</span>
           </div>
         ) : (
           drawHistory.map((entry) => (
             <article key={entry.id} className="rpg-draw-entry">
               <header>
                 <strong>{entry.ticketLabel}</strong>
-                <span>{entry.moves.length} 張</span>
+                <span>{RPG_TEXT[language].cabinet.cardsCount(entry.moves.length)}</span>
               </header>
               <div>
                 {entry.moves.map((move, index) => (
@@ -269,6 +384,9 @@ function ShopPanel() {
 }
 
 function ProfilePanel() {
+  const { language } = useArenaI18n();
+  const commonCopy = RPG_TEXT[language].common;
+  const cabinetCopy = RPG_TEXT[language].cabinet;
   const [element, setElement] = useState<RpgElement | "any">("any");
   const walletAddress = useRpgStore((state) => state.walletAddress);
   const walletCards = useRpgStore((state) => state.walletCards);
@@ -333,8 +451,9 @@ function ProfilePanel() {
   const selectedWalletTierGroup = walletTierOptions.find((group) => group.tier === selectedWalletTier) ?? allWalletTierGroup;
   const selectedWalletCard = selectedCardId ? walletCards.find((card) => walletCardKey(card) === selectedCardId) ?? null : null;
   const isExperienceWallet = walletAddress.toLowerCase() === RPG_DEFAULT_WALLET_ADDRESS;
-  const walletSyncedLabel = walletCardsFetchedAt ? `更新 ${new Date(walletCardsFetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "尚未同步";
+  const walletSyncedLabel = walletCardsFetchedAt ? cabinetCopy.updatedAt(new Date(walletCardsFetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })) : cabinetCopy.notSynced;
   const selectedElementDrawMeta = element === "any" ? null : RPG_ELEMENT_META[element];
+  const selectedElementDrawLabel = element === "any" ? "" : rpgElementLabel(element, language);
   const selectedElementDrawCount = element === "any" ? 0 : unboundWalletCardCountByElement[element] ?? 0;
   const handleDrawSelectedCard = async () => {
     if (!selectedWalletCard) return;
@@ -349,12 +468,23 @@ function ProfilePanel() {
     if (bulkDrawProgress || walletCardsStatus === "loading") return;
     const cardsToDraw = walletCards.filter((card) => !cardSkillBindings[walletCardKey(card)]);
     if (cardsToDraw.length === 0) return;
-    setSelectedCardId(null);
     setCardReveal(null);
+    setSelectedCardId(walletCardKey(cardsToDraw[0]!));
     setBulkDrawProgress({ done: 0, total: cardsToDraw.length });
+    let firstReveal: CardRevealState | null = null;
     for (let index = 0; index < cardsToDraw.length; index += 1) {
-      await drawWalletCardSkill(walletCardKey(cardsToDraw[index]!));
+      const cardId = walletCardKey(cardsToDraw[index]!);
+      const entry = await drawWalletCardSkill(cardId);
+      const move = entry?.moves[0];
+      if (!firstReveal && entry && move) {
+        const hasOpeningVideo = Boolean(SKILL_OPENING_VIDEO_BY_ELEMENT[move.element]);
+        firstReveal = { cardId, entry, phase: hasOpeningVideo ? "intro" : "reveal" };
+      }
       setBulkDrawProgress({ done: index + 1, total: cardsToDraw.length });
+    }
+    if (firstReveal) {
+      setSelectedCardId(firstReveal.cardId);
+      setCardReveal(firstReveal);
     }
     window.setTimeout(() => setBulkDrawProgress(null), 650);
   };
@@ -362,13 +492,29 @@ function ProfilePanel() {
     if (bulkDrawProgress || walletCardsStatus === "loading") return;
     const cardsToDraw = walletCards.filter((card) => !cardSkillBindings[walletCardKey(card)] && walletCardElement(card, walletCardElements) === targetElement);
     if (cardsToDraw.length === 0) return;
-    setSelectedCardId(null);
     setCardReveal(null);
     setElement(targetElement);
+    setSelectedCardId(walletCardKey(cardsToDraw[0]!));
     setBulkDrawProgress({ done: 0, total: cardsToDraw.length });
+    let firstReveal: CardRevealState | null = null;
     for (let index = 0; index < cardsToDraw.length; index += 1) {
-      await drawWalletCardSkill(walletCardKey(cardsToDraw[index]!));
+      const cardId = walletCardKey(cardsToDraw[index]!);
+      const entry = await drawWalletCardSkill(cardId);
+      const move = entry?.moves[0];
+      if (!firstReveal && entry && move) {
+        const hasOpeningVideo = Boolean(SKILL_OPENING_VIDEO_BY_ELEMENT[move.element]);
+        firstReveal = { cardId, entry, phase: hasOpeningVideo ? "intro" : "reveal" };
+      }
       setBulkDrawProgress({ done: index + 1, total: cardsToDraw.length });
+    }
+    if (firstReveal) {
+      setSelectedCardId(firstReveal.cardId);
+      setCardReveal(firstReveal);
+      const move = firstReveal.entry.moves[0];
+      if (move && SKILL_OPENING_VIDEO_BY_ELEMENT[move.element]) {
+        await wait(1320);
+        setCardReveal((current) => (current?.cardId === firstReveal?.cardId ? { ...current, phase: "reveal" } : current));
+      }
     }
     window.setTimeout(() => setBulkDrawProgress(null), 650);
   };
@@ -406,14 +552,14 @@ function ProfilePanel() {
             setCardReveal((current) => (current?.cardId === cardId ? current : null));
           }}
         >
-          {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : <span className="rpg-wallet-card-art">NO IMAGE</span>}
+          {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : <span className="rpg-wallet-card-art">{commonCopy.noImage}</span>}
           <div>
             <small style={{ "--element": RPG_ELEMENT_META[cardElement].color } as CSSProperties}>
-              {RPG_ELEMENT_META[cardElement].label} · {walletTierShortLabel(tier)} · {boundMove ? "已綁定" : "查看"}
+              {rpgElementLabel(cardElement, language)} · {walletTierShortLabel(tier)} · {boundMove ? cabinetCopy.boundCards : commonCopy.view}
             </small>
             <strong>{card.pokemonName || card.name}</strong>
             <span>{card.setName || card.name}</span>
-            <em>{boundMove ? `${boundMove.name} · ${tierLabel(boundMove)} · ${boundMove.energyCost} EN` : `${formatUsd(card.fmvUSD)} / ${card.attributeCandidates.grade ?? "未分級"}`}</em>
+            <em>{boundMove ? `${rpgMoveName(boundMove, language)} · ${tierLabel(boundMove)} · ${boundMove.energyCost} EN` : `${formatUsd(card.fmvUSD)} / ${card.attributeCandidates.grade ?? commonCopy.none}`}</em>
           </div>
         </button>
         {expanded ? (
@@ -430,17 +576,17 @@ function ProfilePanel() {
     );
   };
   return (
-    <aside className="rpg-panel rpg-profile-card-panel rpg-backpack-panel" aria-label="個人資料與錢包卡片">
+    <aside className="rpg-panel rpg-profile-card-panel rpg-backpack-panel" aria-label={cabinetCopy.aria}>
       <header>
         <Cards size={24} weight="fill" />
         <div>
-          <strong>收藏櫃</strong>
-          <span>只顯示卡牌、抽取技能，技能卡可直接前往正確插槽</span>
+          <strong>{cabinetCopy.title}</strong>
+          <span>{cabinetCopy.subtitle}</span>
         </div>
         {isExperienceWallet ? (
           <section className="rpg-wallet-experience-notice is-inline is-cabinet-header" data-rpg-guide-target="wallet-notice">
-            <strong>體驗用暫時錢包</strong>
-            <span>目前是提供給新手體驗抽技能、配裝、道館與競技場流程的暫時錢包，不是玩家正式資產。</span>
+            <strong>{cabinetCopy.demoWalletTitle}</strong>
+            <span>{cabinetCopy.demoWalletBody}</span>
           </section>
         ) : null}
         <PanelCloseButton />
@@ -448,46 +594,46 @@ function ProfilePanel() {
 
       <div className="rpg-cabinet-layout">
         <div className="rpg-cabinet-main-column">
-          <section className="rpg-wallet-card-section" aria-label="錢包卡片">
+          <section className="rpg-wallet-card-section" aria-label={cabinetCopy.walletCardsAria}>
             <header>
               <div className="rpg-wallet-title">
-                <strong>展示櫃</strong>
+                <strong>{cabinetCopy.showcase}</strong>
                 <span>
                   {walletCardsStatus === "loading"
-                    ? "同步藏品中…"
+                    ? cabinetCopy.syncing
                     : walletCardsStatus === "error"
                       ? walletCardsError
-                      : `${visibleWalletCards.length}/${walletCards.length} 張 · ${walletCardsStale ? "快取" : walletSyncedLabel}`}
+                      : `${visibleWalletCards.length}/${walletCards.length} · ${walletCardsStale ? commonCopy.cached : walletSyncedLabel}`}
                 </span>
               </div>
               <div className="rpg-wallet-header-actions">
                 <button type="button" data-rpg-guide-target="draw-all" onClick={() => void handleDrawAllWalletCards()} disabled={walletCardsStatus !== "ready" || unboundWalletCardCount === 0 || Boolean(bulkDrawProgress)}>
                   <Sparkle size={15} weight="fill" />
-                  <span>{bulkDrawProgress ? `抽獎中 ${bulkDrawProgress.done}/${bulkDrawProgress.total}` : unboundWalletCardCount > 0 ? `一鍵抽獎 ${unboundWalletCardCount}` : "已全抽"}</span>
+                  <span>{bulkDrawProgress ? cabinetCopy.drawing(bulkDrawProgress.done, bulkDrawProgress.total) : unboundWalletCardCount > 0 ? cabinetCopy.drawAll(unboundWalletCardCount) : cabinetCopy.allDrawn}</span>
                 </button>
                 <button type="button" onClick={() => void fetchWalletCards(true)} disabled={walletCardsStatus === "loading" || Boolean(bulkDrawProgress)}>
                   <ArrowClockwise size={15} weight="bold" />
-                  <span>重載</span>
+                  <span>{commonCopy.reload}</span>
                 </button>
               </div>
             </header>
             {walletCardsStatus === "loading" ? (
               <div className="rpg-wallet-state">
                 <Sparkle size={22} weight="fill" />
-                <strong>同步藏品中…</strong>
+                <strong>{cabinetCopy.syncing}</strong>
                 <span>{shortWallet(walletAddress)}</span>
               </div>
             ) : walletCardsStatus === "error" ? (
               <div className="rpg-wallet-state is-error">
                 <Cards size={22} weight="fill" />
-                <strong>讀取失敗</strong>
+                <strong>{cabinetCopy.readFailed}</strong>
                 <span>{walletCardsError}</span>
               </div>
             ) : visibleWalletCards.length === 0 ? (
               <div className="rpg-wallet-state">
                 <Cards size={22} weight="fill" />
-                <strong>沒有符合的卡片</strong>
-                <span>切回全部或刷新卡冊。</span>
+                <strong>{cabinetCopy.noMatchingCards}</strong>
+                <span>{cabinetCopy.noMatchingCardsHint}</span>
               </div>
             ) : (
               <div className="rpg-wallet-cabinet-shell">
@@ -504,13 +650,13 @@ function ProfilePanel() {
                         onClick={() => void handleDrawWalletCardsByElement(element as RpgElement)}
                       >
                         <Sparkle size={14} weight="fill" />
-                        <span>{selectedElementDrawCount > 0 ? `一鍵抽${selectedElementDrawMeta.label} ${selectedElementDrawCount} 張` : `${selectedElementDrawMeta.label}已全抽`}</span>
+                        <span>{selectedElementDrawCount > 0 ? cabinetCopy.elementDraw(selectedElementDrawLabel, selectedElementDrawCount) : cabinetCopy.elementAllDrawn(selectedElementDrawLabel)}</span>
                       </button>
                     ) : (
-                      <span>選屬性後可在這裡一鍵抽單一屬性</span>
+                      <span>{cabinetCopy.chooseElementForDraw}</span>
                     )}
                   </div>
-                  <nav className="rpg-wallet-tier-tabs" aria-label="卡牌階級">
+                  <nav className="rpg-wallet-tier-tabs" aria-label={cabinetCopy.tierTabsAria}>
                   {walletTierOptions.map((group) => (
                     <button
                       key={group.tier}
@@ -521,7 +667,7 @@ function ProfilePanel() {
                       onClick={() => setActiveWalletTier(group.tier)}
                     >
                       <strong>{walletTierLabel(group.tier)}</strong>
-                      <span>{group.cards.length} 張</span>
+                      <span>{cabinetCopy.cardsCount(group.cards.length)}</span>
                       <em>{walletTierRangeLabel(group.tier)}</em>
                     </button>
                   ))}
@@ -529,7 +675,7 @@ function ProfilePanel() {
                   {selectedWalletTierGroup ? (
                     <div className={`rpg-wallet-shelf-summary is-${selectedWalletTierGroup.tier}`}>
                       <strong>{walletTierLabel(selectedWalletTierGroup.tier)}</strong>
-                      <span>{selectedWalletTierGroup.cards.length} 張 / {formatUsd(selectedWalletTierGroup.totalFMV)}</span>
+                      <span>{cabinetCopy.cardsCount(selectedWalletTierGroup.cards.length)} / {formatUsd(selectedWalletTierGroup.totalFMV)}</span>
                       <em>{walletTierRangeLabel(selectedWalletTierGroup.tier)}</em>
                     </div>
                   ) : null}
@@ -539,8 +685,8 @@ function ProfilePanel() {
                     {selectedWalletElementGroups.map((group) => (
                       <section key={group.element} className="rpg-wallet-element-section" style={{ "--element": RPG_ELEMENT_META[group.element].color, "--element-soft": RPG_ELEMENT_META[group.element].accent } as CSSProperties}>
                         <header>
-                          <strong>{RPG_ELEMENT_META[group.element].label}屬性</strong>
-                          <span>{group.cards.length} 張</span>
+                          <strong>{rpgElementLabel(group.element, language)}</strong>
+                          <span>{cabinetCopy.cardsCount(group.cards.length)}</span>
                         </header>
                         <div className={`rpg-wallet-card-grid rpg-wallet-shelf-grid is-${selectedWalletTierGroup.tier}`}>
                           {group.cards.map(renderWalletCard)}
@@ -554,18 +700,18 @@ function ProfilePanel() {
           </section>
 
           {battleNotice ? <p className="rpg-room-message rpg-shop-message">{battleNotice}</p> : null}
-          {walletCardsStale ? <p className="rpg-room-message rpg-shop-message">使用快取卡冊：{walletCardsStaleReason ?? "外部錢包 API 暫時失敗"}</p> : null}
+          {walletCardsStale ? <p className="rpg-room-message rpg-shop-message">{cabinetCopy.cacheNotice(walletCardsStaleReason)}</p> : null}
 
-          <section className="rpg-card-vault" aria-label="已綁定技能卡">
+          <section className="rpg-card-vault" aria-label={cabinetCopy.boundCards}>
             <header>
-              <strong>已綁定技能卡</strong>
-              <span>{element === "any" ? "全部屬性，點按鈕跳到對應寵物插槽" : `${RPG_ELEMENT_META[element].label}屬性，點按鈕跳到對應寵物插槽`}</span>
+              <strong>{cabinetCopy.boundCards}</strong>
+              <span>{element === "any" ? cabinetCopy.boundCardsHintAll : cabinetCopy.boundCardsHintElement(rpgElementLabel(element, language))}</span>
             </header>
             {visibleCards.length === 0 ? (
               <div className="rpg-backpack-empty">
                 <Cards size={24} weight="fill" />
-                <strong>還沒有這個屬性的綁定技能卡</strong>
-                <span>從錢包卡冊抽取技能後，卡片會永久記錄那個招式。</span>
+                <strong>{cabinetCopy.noBoundCards}</strong>
+                <span>{cabinetCopy.noBoundCardsHint}</span>
               </div>
             ) : (
               <div className="rpg-card-vault-grid">
@@ -578,14 +724,14 @@ function ProfilePanel() {
                     style={{ "--element": RPG_ELEMENT_META[move.element].color, "--element-soft": RPG_ELEMENT_META[move.element].accent } as CSSProperties}
                   >
                     <header>
-                      <span>{RPG_ELEMENT_META[move.element].label}</span>
+                      <span>{rpgElementLabel(move.element, language)}</span>
                       <em>{walletTierLabel(walletCardTier(card))}</em>
                     </header>
-                    <strong>{move.name}</strong>
-                    <p>{card.pokemonName || card.name} / {move.description}</p>
+                    <strong>{rpgMoveName(move, language)}</strong>
+                    <p>{card.pokemonName || card.name} / {rpgMoveDescription(move, language)}</p>
                     <div className="rpg-owned-skill-stats">
                       <span>{tierLabel(move)}</span>
-                      <span>能量 {move.energyCost}</span>
+                      <span>{RPG_TEXT[language].draw.energy} {move.energyCost}</span>
                       <span>{targetLabel(move.target)}</span>
                     </div>
                     <div className="rpg-owned-skill-effects">
@@ -594,7 +740,7 @@ function ProfilePanel() {
                       ))}
                     </div>
                     <button type="button" className="rpg-owned-skill-equip" onClick={() => openCardEquipForElement(move.element)}>
-                      前往{RPG_ELEMENT_META[move.element].label}插槽
+                      {cabinetCopy.equipToSlot(rpgElementLabel(move.element, language))}
                     </button>
                   </article>
                 ))}
@@ -626,24 +772,24 @@ function walletCardKey(card: RpgWalletCard) {
 }
 
 function walletTierLabel(tier: WalletTier) {
-  if (tier === "all") return "全部櫃";
-  if (tier === "high") return "珍藏櫃";
-  if (tier === "middle") return "精選櫃";
-  return "日常櫃";
+  if (tier === "all") return rpgTierLabel("all");
+  if (tier === "high") return rpgTierLabel("ultimate");
+  if (tier === "middle") return rpgTierLabel("intermediate");
+  return rpgTierLabel("basic");
 }
 
 function walletTierShortLabel(tier: WalletTier) {
-  if (tier === "all") return "全部";
-  if (tier === "high") return "珍藏";
-  if (tier === "middle") return "精選";
-  return "日常";
+  if (tier === "all") return rpgTierShortLabel("all");
+  if (tier === "high") return rpgTierShortLabel("ultimate");
+  if (tier === "middle") return rpgTierShortLabel("intermediate");
+  return rpgTierShortLabel("basic");
 }
 
 function walletTierRangeLabel(tier: WalletTier) {
-  if (tier === "all") return "全部價位";
-  if (tier === "high") return "$500+";
-  if (tier === "middle") return "$100-499";
-  return "$0-99";
+  if (tier === "all") return rpgTierRangeLabel("all");
+  if (tier === "high") return rpgTierRangeLabel("ultimate");
+  if (tier === "middle") return rpgTierRangeLabel("intermediate");
+  return rpgTierRangeLabel("basic");
 }
 
 function walletCardElement(card: RpgWalletCard, assignments?: Record<string, RpgElement>): RpgElement {
@@ -665,10 +811,14 @@ function WalletCardSkillDetail({
   onDraw: () => Promise<void>;
   onIntroDone: () => void;
 }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].draw;
   const cardId = walletCardKey(card);
   const cardMeta = RPG_ELEMENT_META[cardElement];
+  const cardElementLabel = rpgElementLabel(cardElement, language);
   const move = reveal?.entry.moves[0] ?? boundMove;
   const moveMeta = move ? RPG_ELEMENT_META[move.element] : cardMeta;
+  const moveElementLabel = move ? rpgElementLabel(move.element, language) : cardElementLabel;
   const openingVideo = move ? SKILL_OPENING_VIDEO_BY_ELEMENT[move.element] : SKILL_OPENING_VIDEO_BY_ELEMENT[cardElement];
   const isIntro = Boolean(reveal && reveal.phase === "intro" && openingVideo);
   const isRevealed = Boolean(move && (!reveal || reveal.phase === "reveal"));
@@ -683,20 +833,20 @@ function WalletCardSkillDetail({
     >
       <div className="rpg-wallet-card-detail-main">
         <header>
-          <span>{boundMove ? "已綁定技能" : "尚未抽獎"}</span>
-          <strong>{boundMove ? boundMove.name : `${cardMeta.label}屬性技能抽獎`}</strong>
+          <span>{boundMove ? copy.bound : copy.unbound}</span>
+          <strong>{boundMove ? rpgMoveName(boundMove, language) : copy.drawTitle(cardElementLabel)}</strong>
           <em>{boundMove ? `${tierLabel(boundMove)} / ${boundMove.energyCost} EN` : `${card.pokemonName || card.name} / ${walletTierLabel(walletCardTier(card))}`}</em>
         </header>
 
         {!move ? (
           <div className="rpg-wallet-draw-ready">
             <div>
-              <strong>點擊抽獎後，這張卡會永久綁定一個{cardMeta.label}屬性技能。</strong>
-              <span>{openingVideo ? "抽獎會先播放屬性開場影片，再揭露技能。" : `${cardMeta.label}屬性開場影片待補，會直接揭露技能。`}</span>
+              <strong>{copy.drawReady(cardElementLabel)}</strong>
+              <span>{openingVideo ? copy.drawVideo : copy.drawNoVideo(cardElementLabel)}</span>
             </div>
             <button type="button" data-rpg-guide-target="single-card-draw" onClick={() => void onDraw()}>
               <Sparkle size={18} weight="fill" />
-              <span>抽取技能</span>
+              <span>{copy.drawSkill}</span>
             </button>
           </div>
         ) : null}
@@ -705,8 +855,8 @@ function WalletCardSkillDetail({
           <div className="rpg-skill-opening-stage">
             <video key={`${cardId}-${move?.id}-opening`} src={openingVideo} autoPlay muted playsInline onEnded={onIntroDone} onError={onIntroDone} />
             <div>
-              <span>{moveMeta.label}屬性開場</span>
-              <strong>技能揭露中</strong>
+              <span>{copy.opening(moveElementLabel)}</span>
+              <strong>{copy.revealing}</strong>
             </div>
           </div>
         ) : null}
@@ -718,32 +868,35 @@ function WalletCardSkillDetail({
 }
 
 function WalletBoundSkillReveal({ move, revealActive }: { move: RpgMove; revealActive: boolean }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].draw;
+  const commonCopy = RPG_TEXT[language].common;
   const meta = RPG_ELEMENT_META[move.element];
   return (
     <section className={["rpg-bound-skill-reveal", revealActive ? "is-new" : ""].filter(Boolean).join(" ")} style={{ "--element": meta.color, "--element-soft": meta.accent } as CSSProperties}>
-      <div className="rpg-bound-skill-preview" aria-label={`${move.name} 技能動畫`}>
-        <RpgSkillVfxSprite move={move} className="rpg-bound-skill-vfx" />
+      <div className="rpg-bound-skill-preview" aria-label={copy.animationAria(rpgMoveName(move, language))}>
+        <RpgSkillVfxSprite key={`${move.id}-${revealActive ? "reveal" : "preview"}`} move={move} animate loop className="rpg-bound-skill-vfx" />
       </div>
       <div className="rpg-bound-skill-copy">
-        <span>{meta.label} / {tierLabel(move)} / {targetLabel(move.target)}</span>
-        <strong>{move.name}</strong>
-        <p>{move.description}</p>
+        <span>{rpgElementLabel(move.element, language)} / {tierLabel(move)} / {targetLabel(move.target)}</span>
+        <strong>{rpgMoveName(move, language)}</strong>
+        <p>{rpgMoveDescription(move, language)}</p>
         <dl>
           <div>
-            <dt>傷害</dt>
-            <dd>{move.power > 0 ? move.power : "無"}</dd>
+            <dt>{copy.damage}</dt>
+            <dd>{move.power > 0 ? move.power : commonCopy.none}</dd>
           </div>
           <div>
-            <dt>能量</dt>
+            <dt>{copy.energy}</dt>
             <dd>{move.energyCost} EN</dd>
           </div>
           <div>
-            <dt>速度</dt>
+            <dt>{copy.speed}</dt>
             <dd>{move.speed}</dd>
           </div>
           <div>
-            <dt>動畫</dt>
-            <dd>{move.animation.name}</dd>
+            <dt>{copy.animation}</dt>
+            <dd>{rpgMoveAnimationName(move, language)}</dd>
           </div>
         </dl>
         <div className="rpg-bound-skill-effects">
@@ -763,6 +916,18 @@ type BoundWalletSkillCard = {
   move: RpgMove;
 };
 
+type BattleFieldCard = {
+  card: RpgWalletCard;
+  cardId: string;
+  moveId: string;
+  moveName: string;
+};
+
+type CardEquipSkillSlot =
+  | { kind: "card"; key: string; slotNumber: number; equipped: BoundWalletSkillCard; move: RpgMove }
+  | { kind: "default"; key: string; slotNumber: number; move: RpgMove }
+  | { kind: "empty"; key: string; slotNumber: number };
+
 function CardEquipPanel({
   panelRef,
   equipPetId,
@@ -771,7 +936,8 @@ function CardEquipPanel({
   petMoveLoadouts,
   petCardLoadouts,
   equipCardToPet,
-  unequipCardFromPet
+  unequipCardFromPet,
+  unequipMoveFromPet
 }: {
   panelRef?: RefObject<HTMLElement | null>;
   equipPetId: string;
@@ -781,14 +947,17 @@ function CardEquipPanel({
   petCardLoadouts: Record<string, string[]>;
   equipCardToPet: (definitionId: string, cardId: string) => Promise<void>;
   unequipCardFromPet: (definitionId: string, cardId: string) => Promise<void>;
+  unequipMoveFromPet: (definitionId: string, moveId: string) => void;
 }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].equip;
   const pet = RPG_STARTER_PETS.find((candidate) => candidate.id === equipPetId) ?? RPG_STARTER_PETS[0];
   const [selectedEquipCardId, setSelectedEquipCardId] = useState<string | null>(null);
-  const [selectedDefaultMoveId, setSelectedDefaultMoveId] = useState<string | null>(null);
+  const [selectedSkillSlotKey, setSelectedSkillSlotKey] = useState<string | null>(null);
 
   useEffect(() => {
     setSelectedEquipCardId(null);
-    setSelectedDefaultMoveId(null);
+    setSelectedSkillSlotKey(null);
   }, [pet?.id]);
 
   if (!pet) return null;
@@ -804,42 +973,52 @@ function CardEquipPanel({
     const boundCard = boundCards.find((candidate) => candidate.cardId === cardId);
     return boundCard && boundCard.move.element === pet.element ? [boundCard] : [];
   });
+  const equippedMoveIds = new Set(equippedCards.map(({ move }) => move.id));
+  const filledSkillSlots: CardEquipSkillSlot[] = [
+    ...equippedCards.map((equipped, index) => ({
+      kind: "card" as const,
+      key: `card-${equipped.cardId}`,
+      slotNumber: index + 1,
+      equipped,
+      move: equipped.move
+    })),
+    ...defaultMoves.filter((move) => !equippedMoveIds.has(move.id)).map((move, index) => ({
+      kind: "default" as const,
+      key: `default-${move.id}`,
+      slotNumber: equippedCards.length + index + 1,
+      move
+    }))
+  ].slice(0, RPG_MAX_EQUIPPED_MOVES);
+  const skillSlots: CardEquipSkillSlot[] = Array.from({ length: RPG_MAX_EQUIPPED_MOVES }, (_, index) => {
+    return filledSkillSlots[index] ?? { kind: "empty" as const, key: `empty-${pet.id}-${index}`, slotNumber: index + 1 };
+  });
   const availableCards = boundCards
     .filter(({ move }) => move.element === pet.element)
     .sort((a, b) => a.move.tierIndex - b.move.tierIndex || a.move.energyCost - b.move.energyCost || a.card.name.localeCompare(b.card.name));
   const selectedEquipCard = selectedEquipCardId
     ? availableCards.find((candidate) => candidate.cardId === selectedEquipCardId) ?? equippedCards.find((candidate) => candidate.cardId === selectedEquipCardId) ?? null
     : null;
-  const selectedDefaultMove = selectedDefaultMoveId ? defaultMoves.find((move) => move.id === selectedDefaultMoveId) ?? null : null;
+  const selectedSkillSlot = selectedSkillSlotKey ? skillSlots.find((slot) => slot.key === selectedSkillSlotKey) ?? null : null;
+  const selectedSlotMove = selectedSkillSlot && selectedSkillSlot.kind !== "empty" ? selectedSkillSlot.move : null;
   const toggleSelectedEquipCard = (cardId: string) => {
-    setSelectedDefaultMoveId(null);
+    setSelectedSkillSlotKey(null);
     setSelectedEquipCardId((current) => (current === cardId ? null : cardId));
   };
-  const toggleSelectedDefaultMove = (moveId: string) => {
+  const toggleSelectedSkillSlot = (slotKey: string) => {
     setSelectedEquipCardId(null);
-    setSelectedDefaultMoveId((current) => (current === moveId ? null : moveId));
+    setSelectedSkillSlotKey((current) => (current === slotKey ? null : slotKey));
   };
-  const renderCardDetail = (boundCard: BoundWalletSkillCard) => (
-    <div className="rpg-card-equip-inline-detail">
-      <WalletCardSkillDetail
-        card={boundCard.card}
-        cardElement={boundCard.move.element}
-        boundMove={boundCard.move}
-        reveal={null}
-        onDraw={async () => undefined}
-        onIntroDone={() => undefined}
-      />
-    </div>
-  );
+  const petName = rpgPetName(pet.id, pet.name, language);
+  const petElementLabel = rpgElementLabel(pet.element, language);
 
   return (
-    <section ref={panelRef} className="rpg-card-equip-panel rpg-skill-library" aria-label="寵物卡片插槽" data-rpg-guide-target="card-equip">
+    <section ref={panelRef} className="rpg-card-equip-panel rpg-skill-library" aria-label={copy.panelAria} data-rpg-guide-target="card-equip">
       <header>
         <div>
-          <strong>卡片插槽：{pet.name}</strong>
-          <span>{petMeta.label}屬性，預設技能在這裡看效果；卡片列表負責插入或卸下</span>
+          <strong>{copy.title(petName)}</strong>
+          <span>{copy.subtitle(petElementLabel)}</span>
         </div>
-        <div className="rpg-library-pets" role="list" aria-label="選擇寵物">
+        <div className="rpg-library-pets" role="list" aria-label={copy.petSelectorAria}>
           {RPG_STARTER_PETS.map((candidate) => (
             <button
               key={candidate.id}
@@ -848,59 +1027,60 @@ function CardEquipPanel({
               onClick={() => setEquipPetId(candidate.id)}
               style={{ "--element": RPG_ELEMENT_META[candidate.element].color, "--element-soft": RPG_ELEMENT_META[candidate.element].accent } as CSSProperties}
             >
-              {RPG_ELEMENT_META[candidate.element].label}
+              {rpgElementLabel(candidate.element, language)}
             </button>
           ))}
         </div>
       </header>
 
-      <section className="rpg-default-move-slots" style={{ "--element": petMeta.color, "--element-soft": petMeta.accent } as CSSProperties}>
-        <header>
-          <strong>預設技能</strong>
-          <span>不用卡牌，點技能看完整效果</span>
-        </header>
-        <div>
-          {defaultMoves.map((move, index) => (
-            <button key={`${pet.id}-${move.id}`} type="button" className={selectedDefaultMove?.id === move.id ? "is-selected" : ""} onClick={() => toggleSelectedDefaultMove(move.id)}>
-              <SkillChip move={move} />
-              <span>
-                <b>預設 {index + 1}</b>
-                <strong>{move.name}</strong>
-                <em>{moveEffectLabels(move).slice(0, 2).join(" / ") || targetLabel(move.target)}</em>
-              </span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {selectedDefaultMove ? (
-        <div className="rpg-card-equip-inline-detail rpg-default-move-inline-detail">
-          <WalletBoundSkillReveal move={selectedDefaultMove} revealActive={false} />
-        </div>
-      ) : null}
-
-      <div className="rpg-equipped-card-slots" style={{ "--element": petMeta.color, "--element-soft": petMeta.accent } as CSSProperties}>
-        {Array.from({ length: RPG_MAX_EQUIPPED_MOVES }).map((_, index) => {
-          const equipped = equippedCards[index];
-          return equipped ? (
-            <article key={equipped.cardId} className="rpg-equipped-card-slot is-filled">
-              <div className="rpg-card-slot-preview" aria-label={`${equipped.move.name} 已插入`}>
-                {equipped.card.imageUrl ? <RpgPixelCardImage src={equipped.card.imageUrl} alt={equipped.card.name} /> : null}
-                <span>
-                  <b>插槽 {index + 1}</b>
-                  <strong>{equipped.move.name}</strong>
-                  <em>{equipped.card.pokemonName || equipped.card.name}</em>
-                </span>
+      <div className="rpg-equipped-card-slots rpg-skill-slot-grid" style={{ "--element": petMeta.color, "--element-soft": petMeta.accent } as CSSProperties}>
+        {skillSlots.map((slot) => {
+          if (slot.kind === "empty") {
+            return (
+              <div key={slot.key} className="rpg-equipped-card-slot rpg-skill-slot is-empty">
+                <b>{slot.slotNumber}</b>
+                <span>{copy.emptySlot}</span>
               </div>
-              <button type="button" className="rpg-card-slot-action" onClick={() => void unequipCardFromPet(pet.id, equipped.cardId)}>
-                卸下
+            );
+          }
+          const summary = moveEffectLabels(slot.move).slice(0, 2).join(" / ") || targetLabel(slot.move.target);
+          const isSelected = selectedSkillSlotKey === slot.key;
+          return (
+            <article key={slot.key} className={["rpg-equipped-card-slot", "rpg-skill-slot", "is-filled", `is-${slot.kind}`, isSelected ? "is-selected" : ""].filter(Boolean).join(" ")}>
+              <button type="button" className="rpg-card-slot-preview rpg-skill-slot-preview" aria-label={copy.inspectMove(rpgMoveName(slot.move, language))} onClick={() => toggleSelectedSkillSlot(slot.key)}>
+                {slot.kind === "card" && slot.equipped.card.imageUrl ? (
+                  <RpgPixelCardImage src={slot.equipped.card.imageUrl} alt={slot.equipped.card.name} />
+                ) : (
+                  <span className="rpg-skill-slot-badge" aria-hidden="true">
+                    <b>{petElementLabel}</b>
+                    <em>{tierLabel(slot.move).slice(0, 1)}</em>
+                  </span>
+                )}
+                <span>
+                  <b>{slot.kind === "card" ? copy.slot(slot.slotNumber) : copy.defaultSlot(slot.slotNumber)}</b>
+                  <strong className="rpg-card-equip-skill-name">{rpgMoveName(slot.move, language)}</strong>
+                  <em>{slot.kind === "card" ? slot.equipped.card.pokemonName || slot.equipped.card.name : summary}</em>
+                </span>
               </button>
+              <button
+                type="button"
+                className="rpg-card-slot-action"
+                onClick={() => {
+                  if (slot.kind === "card") {
+                    void unequipCardFromPet(pet.id, slot.equipped.cardId);
+                    return;
+                  }
+                  unequipMoveFromPet(pet.id, slot.move.id);
+                }}
+              >
+                {copy.remove}
+              </button>
+              {isSelected ? (
+                <div className="rpg-card-cell-skill-detail rpg-slot-cell-skill-detail">
+                  <WalletBoundSkillReveal move={slot.move} revealActive={false} />
+                </div>
+              ) : null}
             </article>
-          ) : (
-            <div key={`empty-${pet.id}-${index}`} className="rpg-equipped-card-slot is-empty">
-              <b>{index + 1}</b>
-              <span>空插槽</span>
-            </div>
           );
         })}
       </div>
@@ -909,35 +1089,41 @@ function CardEquipPanel({
         {availableCards.length === 0 ? (
           <div className="rpg-library-empty">
             <Cards size={18} weight="fill" />
-            <span>尚未有{petMeta.label}屬性可插入卡片技能</span>
+            <span>{copy.noCards(petElementLabel)}</span>
           </div>
         ) : (
           availableCards.map(({ card, cardId, move }) => {
             const equipped = equippedCardIds.includes(cardId);
             const expanded = selectedEquipCard?.cardId === cardId;
+            const summary = moveEffectLabels(move).slice(0, 2).join(" / ") || targetLabel(move.target);
             return (
               <article key={cardId} className={["rpg-card-equip-row", equipped ? "is-equipped" : "", expanded ? "is-selected is-expanded" : ""].filter(Boolean).join(" ")}>
                 <button type="button" className="rpg-card-equip-preview" onClick={() => toggleSelectedEquipCard(cardId)}>
                   {card.imageUrl ? <RpgPixelCardImage src={card.imageUrl} alt={card.name} /> : null}
                   <span>
-                    <b>{equipped ? "已裝備" : "候選卡片"}</b>
-                    <strong>{move.name}</strong>
-                    <em>{card.pokemonName || card.name}</em>
+                    <b>{equipped ? copy.equipped : copy.candidateCard} · {tierLabel(move)} · {move.energyCost} EN</b>
+                    <strong className="rpg-card-equip-skill-name">{copy.skillName(rpgMoveName(move, language))}</strong>
+                    <em>{copy.cardName(card.pokemonName || card.name)}</em>
+                    <small>{summary}</small>
                   </span>
                 </button>
                 <button type="button" className="rpg-card-equip-action" onClick={() => void (equipped ? unequipCardFromPet(pet.id, cardId) : equipCardToPet(pet.id, cardId))}>
-                  {equipped ? "卸下" : "插入"}
+                  {equipped ? copy.removeSkill : copy.equipSkill}
                 </button>
-                {expanded ? renderCardDetail({ card, cardId, move }) : null}
+                {expanded ? (
+                  <div className="rpg-card-cell-skill-detail rpg-card-row-skill-detail">
+                    <WalletBoundSkillReveal move={move} revealActive={false} />
+                  </div>
+                ) : null}
               </article>
             );
           })
         )}
       </div>
-      {!selectedEquipCard && !selectedDefaultMove && availableCards.length === 0 ? (
+      {!selectedEquipCard && !selectedSlotMove && availableCards.length === 0 ? (
         <div className="rpg-card-equip-detail-empty">
           <Cards size={20} weight="fill" />
-          <span>先在收藏櫃抽出技能，再回到這裡插入卡片。</span>
+          <span>{copy.emptyDetail}</span>
         </div>
       ) : null}
     </section>
@@ -945,7 +1131,7 @@ function CardEquipPanel({
 }
 
 function SkillLibraryPanel({
-  title = "技能裝備",
+  title,
   description,
   equipPetId,
   setEquipPetId,
@@ -963,10 +1149,13 @@ function SkillLibraryPanel({
   equipMoveToPet: (definitionId: string, moveId: string) => void;
   unequipMoveFromPet: (definitionId: string, moveId: string) => void;
 }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].equip;
   const pet = RPG_STARTER_PETS.find((candidate) => candidate.id === equipPetId) ?? RPG_STARTER_PETS[0];
   if (!pet) return null;
 
-  const petMeta = RPG_ELEMENT_META[pet.element];
+  const petName = rpgPetName(pet.id, pet.name, language);
+  const petElementLabel = rpgElementLabel(pet.element, language);
   const equippedMoveIds = (petMoveLoadouts[pet.id] && petMoveLoadouts[pet.id].length > 0 ? petMoveLoadouts[pet.id] : pet.startingMoveIds).slice(0, RPG_MAX_EQUIPPED_MOVES);
   const freeMoves = pet.startingMoveIds
     .map((moveId) => getRpgMoveById(moveId))
@@ -984,13 +1173,13 @@ function SkillLibraryPanel({
   ];
 
   return (
-    <section className="rpg-skill-library" aria-label="招式庫">
+    <section className="rpg-skill-library" aria-label={copy.skillLibrary}>
       <header>
         <div>
-          <strong>{title}</strong>
-          <span>{description ?? `${petMeta.label}屬性，預設技能免費 / 抽取技能來自背包`}</span>
+          <strong>{title ?? copy.skillLibrary}</strong>
+          <span>{description ?? copy.libraryDescription(petElementLabel)}</span>
         </div>
-        <div className="rpg-library-pets" role="list" aria-label="選擇寵物">
+        <div className="rpg-library-pets" role="list" aria-label={copy.petSelectorAria}>
           {RPG_STARTER_PETS.map((candidate) => (
             <button
               key={candidate.id}
@@ -999,21 +1188,22 @@ function SkillLibraryPanel({
               onClick={() => setEquipPetId(candidate.id)}
               style={{ "--element": RPG_ELEMENT_META[candidate.element].color, "--element-soft": RPG_ELEMENT_META[candidate.element].accent } as CSSProperties}
             >
-              {RPG_ELEMENT_META[candidate.element].label}
+              {rpgElementLabel(candidate.element, language)}
             </button>
           ))}
         </div>
       </header>
 
       <div className="rpg-equipped-moves">
-        <strong>{pet.name} 目前裝備</strong>
+        <strong>{copy.currentLoadout(petName)}</strong>
         <div>
           {equippedMoveIds.map((moveId) => {
             const move = getRpgMoveById(moveId);
             if (!move) return null;
-            const source = pet.startingMoveIds.includes(move.id) ? "預設" : "卡片";
+            const source = pet.startingMoveIds.includes(move.id) ? copy.defaultSource : copy.cardSource;
+            const isDefaultSource = pet.startingMoveIds.includes(move.id);
             return (
-              <button key={`${pet.id}-${move.id}`} type="button" className={source === "預設" ? "is-free-skill" : "is-card-skill"} onClick={() => unequipMoveFromPet(pet.id, move.id)} title="卸下招式">
+              <button key={`${pet.id}-${move.id}`} type="button" className={isDefaultSource ? "is-free-skill" : "is-card-skill"} data-remove-label={copy.removeSkillShort} onClick={() => unequipMoveFromPet(pet.id, move.id)} title={copy.removeSkill}>
                 <SkillChip move={move} />
                 <span className="rpg-move-source-tag">{source}</span>
               </button>
@@ -1026,15 +1216,15 @@ function SkillLibraryPanel({
         {availableMoves.length === 0 ? (
           <div className="rpg-library-empty">
             <Sparkle size={18} weight="fill" />
-            <span>尚未取得{petMeta.label}屬性技能卡</span>
+            <span>{copy.noSkillCards(petElementLabel)}</span>
           </div>
         ) : (
           availableMoves.map(({ move, count, source }) => {
             const equipped = equippedMoveIds.includes(move.id);
             return (
-              <button key={move.id} type="button" className={[equipped ? "is-equipped" : "", source === "free" ? "is-free-skill" : "is-card-skill"].filter(Boolean).join(" ")} onClick={() => equipMoveToPet(pet.id, move.id)} disabled={equipped}>
+              <button key={move.id} type="button" className={[equipped ? "is-equipped" : "", source === "free" ? "is-free-skill" : "is-card-skill"].filter(Boolean).join(" ")} data-equipped-label={copy.equippedShort} onClick={() => equipMoveToPet(pet.id, move.id)} disabled={equipped}>
                 <SkillChip move={move} />
-                <em>{source === "free" ? "預設" : `x${count}`}</em>
+                <em>{source === "free" ? copy.defaultSource : `x${count}`}</em>
               </button>
             );
           })
@@ -1045,48 +1235,28 @@ function SkillLibraryPanel({
 }
 
 function ticketBandLabel(ticket: RpgSkillTicket) {
-  if (ticket.id === "ticket_ten_card") return "高價十連卡";
-  if (ticket.cardPriceBand === "low") return "便宜卡片";
-  if (ticket.cardPriceBand === "middle") return "中價卡片";
-  return "高價卡片";
+  return rpgTicketCopy(ticket).band;
 }
 
 function tierLabel(move: RpgMove) {
-  if (move.tier === "basic") return "初階";
-  if (move.tier === "intermediate") return "中階";
-  return "高階";
+  return rpgTierLabel(move.tier);
 }
 
 function tierName(tier: RpgMove["tier"]) {
-  if (tier === "basic") return "初階";
-  if (tier === "intermediate") return "中階";
-  return "高階";
+  return rpgTierLabel(tier);
 }
 
 function targetLabel(target: RpgMove["target"]) {
-  if (target === "singleEnemy") return "單體";
-  if (target === "allEnemies") return "敵全體";
-  if (target === "singleAlly") return "隊友";
-  if (target === "allAllies") return "我方全體";
-  return "自身";
+  return rpgTargetLabel(target);
 }
 
 function moveEffectLabels(move: RpgMove) {
-  const labels: string[] = [];
-  if (move.power > 0) labels.push(`傷害 ${move.power}`);
-  move.effects.forEach((effect) => {
-    if (effect.heal) labels.push(`${effect.target === "team" ? "全隊回血" : "回血"} ${effect.heal}`);
-    if (effect.cleanse) labels.push("淨化");
-    if (effect.status === "guard") labels.push(`${effect.target === "team" ? "全隊防護" : "防護"} ${effect.power ?? 0} / ${effect.duration ?? 1}T`);
-    if (effect.status === "regen") labels.push(`${effect.target === "team" ? "全隊再生" : "再生"} ${effect.power ?? 0} x${effect.duration ?? 1}T`);
-    if (effect.status === "burn" || effect.status === "poison") labels.push(`${statusShortLabel(effect.status)} ${effect.power ?? 0} x${effect.duration ?? 1}T`);
-    if (effect.status === "stun") labels.push(`暈眩 ${effect.duration ?? 1}T`);
-    if (effect.selfDamage) labels.push(`自損 ${effect.selfDamage}`);
-  });
-  return labels.length > 0 ? labels : ["純效果"];
+  return rpgMoveEffectLabels(move);
 }
 
 function DrawCeremony({ entry, preferredElement }: { entry: RpgDrawHistoryEntry | null; preferredElement?: RpgElement }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].draw;
   const ticket = entry ? RPG_SKILL_TICKETS.find((item) => item.id === entry.ticketId) : null;
   const leadMove = entry?.moves[0] ?? null;
   const leadMeta = leadMove ? RPG_ELEMENT_META[leadMove.element] : preferredElement ? RPG_ELEMENT_META[preferredElement] : RPG_ELEMENT_META.water;
@@ -1099,7 +1269,7 @@ function DrawCeremony({ entry, preferredElement }: { entry: RpgDrawHistoryEntry 
     <section key={entry?.id ?? "empty"} className={["rpg-draw-ceremony", entry ? "is-revealing" : "is-idle", entry && entry.moves.length >= 10 ? "is-ten-draw" : "", ticket ? `is-${ticket.cardPriceBand}` : ""].filter(Boolean).join(" ")} style={style} aria-live="polite">
       <div className="rpg-draw-lane" aria-hidden="true">
         <div className="rpg-draw-source-card">
-          <span>{ticket ? ticketBandLabel(ticket) : "卡片"}</span>
+          <span>{ticket ? ticketBandLabel(ticket) : RPG_TEXT[language].cabinet.card}</span>
           <strong>{ticket?.cardPriceBand === "high" ? "RARE" : ticket?.cardPriceBand === "middle" ? "MID" : "BASIC"}</strong>
           <i />
         </div>
@@ -1118,9 +1288,9 @@ function DrawCeremony({ entry, preferredElement }: { entry: RpgDrawHistoryEntry 
         {entry && leadMove ? (
           <>
             <header>
-              <span>{entry.ticketLabel}</span>
-              <strong>{leadMove.name}</strong>
-              <em>{RPG_ELEMENT_META[leadMove.element].label} / {tierLabel(leadMove)}</em>
+              <span>{ticket ? rpgTicketCopy(ticket, language).label : entry.ticketLabel}</span>
+              <strong>{rpgMoveName(leadMove, language)}</strong>
+              <em>{rpgElementLabel(leadMove.element, language)} / {tierLabel(leadMove)}</em>
             </header>
             <div className="rpg-draw-reveal-grid">
               {entry.moves.map((move, index) => (
@@ -1130,10 +1300,10 @@ function DrawCeremony({ entry, preferredElement }: { entry: RpgDrawHistoryEntry 
                   data-element={move.element}
                   data-tier={move.tier}
                   style={{ "--element": RPG_ELEMENT_META[move.element].color, "--element-soft": RPG_ELEMENT_META[move.element].accent, "--reveal-delay": `${index * 55}ms` } as CSSProperties}
-                  title={move.description}
+                  title={rpgMoveDescription(move, language)}
                 >
-                  <b>{RPG_ELEMENT_META[move.element].label}</b>
-                  <strong>{move.name}</strong>
+                  <b>{rpgElementLabel(move.element, language)}</b>
+                  <strong>{rpgMoveName(move, language)}</strong>
                   <em>{tierLabel(move)}</em>
                 </span>
               ))}
@@ -1142,8 +1312,8 @@ function DrawCeremony({ entry, preferredElement }: { entry: RpgDrawHistoryEntry 
         ) : (
           <div className="rpg-draw-idle-copy">
             <Sparkle size={19} weight="fill" />
-            <strong>等待卡片轉券</strong>
-            <span>{preferredElement ? `${RPG_ELEMENT_META[preferredElement].label}屬性池` : "五屬性技能池"}</span>
+            <strong>{copy.idleTitle}</strong>
+            <span>{copy.pool(preferredElement ? rpgElementLabel(preferredElement, language) : undefined)}</span>
           </div>
         )}
       </div>
@@ -1152,6 +1322,8 @@ function DrawCeremony({ entry, preferredElement }: { entry: RpgDrawHistoryEntry 
 }
 
 function GymPanel() {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].gym;
   const startAiBattle = useRpgStore((state) => state.startAiBattle);
   const selectedAiDifficulty = useRpgStore((state) => state.selectedAiDifficulty);
   const setAiDifficulty = useRpgStore((state) => state.setAiDifficulty);
@@ -1166,6 +1338,7 @@ function GymPanel() {
   const fetchWalletCards = useRpgStore((state) => state.fetchWalletCards);
   const equipCardToPet = useRpgStore((state) => state.equipCardToPet);
   const unequipCardFromPet = useRpgStore((state) => state.unequipCardFromPet);
+  const unequipMoveFromPet = useRpgStore((state) => state.unequipMoveFromPet);
   const pendingCardEquipPetId = useRpgStore((state) => state.pendingCardEquipPetId);
   const consumePendingCardEquipPet = useRpgStore((state) => state.consumePendingCardEquipPet);
   const battleNotice = useRpgStore((state) => state.battleNotice);
@@ -1175,7 +1348,7 @@ function GymPanel() {
   const connecting = versusConnection === "connecting";
   const selectedPartyCount = selectedPartyPetIds.filter(Boolean).length;
   const partyReady = selectedPartyCount === 3;
-  const selectedAiConfig = RPG_AI_DIFFICULTY_CONFIGS[selectedAiDifficulty];
+  const selectedAiCopy = rpgAiDifficultyCopy(selectedAiDifficulty, language);
   const boundCards = useMemo(
     () =>
       walletCards
@@ -1207,24 +1380,73 @@ function GymPanel() {
   }, [fetchWalletCards]);
   return (
     <>
-      <aside className="rpg-panel rpg-gym-panel" aria-label="道館">
+      <aside className="rpg-panel rpg-gym-panel" aria-label={copy.aria}>
         <header>
           <FlagBanner size={24} weight="fill" />
           <div>
-            <strong>道館</strong>
-            <span>AI 配對 / 房間碼真人對戰</span>
+            <strong>{copy.title}</strong>
+            <span>{copy.subtitle}</span>
           </div>
           <PanelCloseButton />
         </header>
         <div className="rpg-panel-help-row">
           <button type="button" className="rpg-tutorial-button" onClick={gymTutorial.openTutorial}>
             <Question size={16} weight="bold" />
-            <span>教學</span>
+            <span>{copy.tutorial}</span>
           </button>
-          <span>先組 3v3 隊伍；點已上場寵物可編輯牠能使用的卡片技能。</span>
+          <span>{copy.help}</span>
         </div>
+        <section className="rpg-gym-battle-entry" aria-label={copy.aiDifficultyAria}>
+          <section className="rpg-ai-difficulty-selector" aria-label={copy.aiDifficultyAria}>
+            <header>
+              <div>
+                <strong>{copy.aiBattle}</strong>
+                <span>{selectedAiCopy.title}</span>
+              </div>
+              <button type="button" className="rpg-ai-start-button" data-rpg-guide-target="gym-ai" disabled={!partyReady} onClick={() => startAiBattle(selectedAiDifficulty)}>
+                <Robot size={20} weight="fill" />
+                <span>{copy.aiMatch(selectedAiCopy.label)}</span>
+              </button>
+            </header>
+            <div>
+              {RPG_AI_DIFFICULTIES.map((difficulty) => {
+                const configCopy = rpgAiDifficultyCopy(difficulty, language);
+                return (
+                  <button
+                    key={difficulty}
+                    type="button"
+                    className={difficulty === selectedAiDifficulty ? "is-selected" : ""}
+                    data-ai-difficulty={difficulty}
+                    onClick={() => setAiDifficulty(difficulty)}
+                  >
+                    <span>{configCopy.label}</span>
+                    <strong>{configCopy.title}</strong>
+                    <em>{configCopy.description}</em>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+          <div className="rpg-gym-modes">
+            <button type="button" disabled={connecting || !partyReady} onClick={() => void createVersusRoom()}>
+              <UsersThree size={25} weight="fill" />
+              <span>{copy.versusBattle}</span>
+              <strong>{connecting ? copy.connecting : copy.createRoom}</strong>
+            </button>
+          </div>
+          <div className="rpg-room-join">
+            <label>
+              <span>{copy.roomCode}</span>
+              <input value={roomCode} maxLength={8} onChange={(event) => setRoomCode(event.target.value.toUpperCase())} placeholder="ABCDE" />
+            </label>
+            <button type="button" disabled={connecting || !partyReady || roomCode.trim().length < 3} onClick={() => void joinVersusRoom(roomCode)}>
+              {copy.joinRoom}
+            </button>
+          </div>
+          {battleNotice ? <p className="rpg-room-message">{battleNotice}</p> : null}
+        </section>
         <PartySelection editingPetId={equipPetId} onEditPet={openPartySkillEditor} />
-        <section className="rpg-gym-skill-workbench is-inline" aria-label="道館技能與卡片插槽">
+        <section className="rpg-gym-skill-workbench is-inline" aria-label={copy.workbenchAria}>
           <CardEquipPanel
             equipPetId={equipPetId}
             setEquipPetId={setEquipPetId}
@@ -1233,54 +1455,9 @@ function GymPanel() {
             petCardLoadouts={petCardLoadouts}
             equipCardToPet={equipCardToPet}
             unequipCardFromPet={unequipCardFromPet}
+            unequipMoveFromPet={unequipMoveFromPet}
           />
         </section>
-        <section className="rpg-ai-difficulty-selector" aria-label="AI 難度">
-          <header>
-            <strong>AI 對戰</strong>
-            <span>{selectedAiConfig.title}</span>
-          </header>
-          <div>
-            {RPG_AI_DIFFICULTIES.map((difficulty) => {
-              const config = RPG_AI_DIFFICULTY_CONFIGS[difficulty];
-              return (
-                <button
-                  key={difficulty}
-                  type="button"
-                  className={difficulty === selectedAiDifficulty ? "is-selected" : ""}
-                  data-ai-difficulty={difficulty}
-                  onClick={() => setAiDifficulty(difficulty)}
-                >
-                  <span>{config.label}</span>
-                  <strong>{config.title}</strong>
-                  <em>{config.description}</em>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-        <div className="rpg-gym-modes">
-          <button type="button" data-rpg-guide-target="gym-ai" disabled={!partyReady} onClick={() => startAiBattle(selectedAiDifficulty)}>
-            <Robot size={25} weight="fill" />
-            <span>AI 對戰</span>
-            <strong>AI 配對 / {selectedAiConfig.label}</strong>
-          </button>
-          <button type="button" disabled={connecting || !partyReady} onClick={() => void createVersusRoom()}>
-            <UsersThree size={25} weight="fill" />
-            <span>真人對戰</span>
-            <strong>{connecting ? "連線中" : "建立房間"}</strong>
-          </button>
-        </div>
-        <div className="rpg-room-join">
-          <label>
-            <span>房間代碼</span>
-            <input value={roomCode} maxLength={8} onChange={(event) => setRoomCode(event.target.value.toUpperCase())} placeholder="ABCDE" />
-          </label>
-          <button type="button" disabled={connecting || !partyReady || roomCode.trim().length < 3} onClick={() => void joinVersusRoom(roomCode)}>
-            加入真人房
-          </button>
-        </div>
-        {battleNotice ? <p className="rpg-room-message">{battleNotice}</p> : null}
       </aside>
       <GymTutorialModal open={gymTutorial.open} onClose={gymTutorial.closeTutorial} />
     </>
@@ -1294,22 +1471,25 @@ function PartySelection({
   editingPetId?: string | null;
   onEditPet?: (petId: string) => void;
 }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].gym;
   const ownedPetIds = useRpgStore((state) => state.ownedPetIds);
   const selectedPartyPetIds = useRpgStore((state) => state.selectedPartyPetIds);
   const togglePartyPet = useRpgStore((state) => state.togglePartyPet);
   const selectedPartyCount = selectedPartyPetIds.filter(Boolean).length;
 
   return (
-    <section className="rpg-gym-party" aria-label="上場隊伍" data-rpg-guide-target="gym-party">
+    <section className="rpg-gym-party" aria-label={copy.partyAria} data-rpg-guide-target="gym-party">
       <header>
-        <strong>上場隊伍</strong>
+        <strong>{copy.partyTitle}</strong>
         <span>{selectedPartyCount}/3</span>
       </header>
-      <div className="rpg-party-formation-board" aria-label="道館站位">
-        {PARTY_FORMATION_SLOTS.map((slot, index) => {
+      <div className="rpg-party-formation-board" aria-label={copy.formationAria}>
+        {copy.formationSlots.map((slot, index) => {
           const petId = selectedPartyPetIds[index];
           const pet = petId ? getStarterPetById(petId) : null;
           const meta = pet ? RPG_ELEMENT_META[pet.element] : null;
+          const petName = pet ? rpgPetName(pet.id, pet.name, language) : "";
           return (
             <article
               key={slot.label}
@@ -1325,32 +1505,32 @@ function PartySelection({
               {pet ? (
                 <>
                   <RpgPetSprite element={pet.element} pose="idle" animate />
-                  <b>{pet.name}</b>
-                  <em>{editingPetId === pet.id ? "卡槽編輯中" : meta?.label}</em>
+                  <b>{petName}</b>
+                  <em>{editingPetId === pet.id ? copy.editingSlot : rpgElementLabel(pet.element, language)}</em>
                   {onEditPet ? (
                     <button
                       type="button"
                       className="rpg-party-slot-edit"
                       data-rpg-guide-target="card-equip"
-                      title="編輯卡片插槽"
-                      aria-label={`編輯 ${pet.name} 卡片插槽`}
+                      title={copy.editCardSlotTitle}
+                      aria-label={copy.editCardSlotAria(petName)}
                       onClick={() => onEditPet(pet.id)}
                     >
-                      卡槽
+                      {copy.cardSlot}
                     </button>
                   ) : null}
                   <button
                     type="button"
                     className="rpg-party-slot-remove"
-                    title="移出隊伍"
-                    aria-label={`將 ${pet.name} 移出隊伍`}
+                    title={copy.removeFromPartyTitle}
+                    aria-label={copy.removeFromPartyAria(petName)}
                     onClick={() => togglePartyPet(pet.id)}
                   >
                     <X size={13} weight="bold" />
                   </button>
                 </>
               ) : (
-                <b>空位</b>
+                <b>{copy.emptyPartySlot}</b>
               )}
             </article>
           );
@@ -1361,6 +1541,7 @@ function PartySelection({
           const meta = RPG_ELEMENT_META[pet.element];
           const selectedIndex = selectedPartyPetIds.indexOf(pet.id);
           const selected = selectedIndex >= 0;
+          const petName = rpgPetName(pet.id, pet.name, language);
           return (
             <button
               key={pet.id}
@@ -1377,9 +1558,9 @@ function PartySelection({
               style={{ "--element": meta.color, "--element-soft": meta.accent } as CSSProperties}
             >
               <RpgPetSprite element={pet.element} pose="idle" animate />
-              <span>{meta.label}</span>
-              <strong>{pet.name}</strong>
-              <em>{editingPetId === pet.id ? "編輯卡槽" : selected ? PARTY_FORMATION_SLOTS[selectedIndex]?.label ?? `出場 ${selectedIndex + 1}` : "待命"}</em>
+              <span>{rpgElementLabel(pet.element, language)}</span>
+              <strong>{petName}</strong>
+              <em>{editingPetId === pet.id ? copy.editSlots : selected ? copy.formationSlots[selectedIndex]?.label ?? copy.fieldSlot(selectedIndex) : copy.standby}</em>
             </button>
           );
         })}
@@ -1421,28 +1602,27 @@ function CommandPlaceholder({
 }
 
 function battlePetNameById(battle: RpgBattleState, id?: string) {
-  if (!id) return "未指定";
-  return battle.left.concat(battle.right).find((pet) => pet.id === id)?.name ?? "未指定";
+  if (!id) return rpgCopy().battle.unspecified;
+  return battle.left.concat(battle.right).find((pet) => pet.id === id)?.name ?? rpgCopy().battle.unspecified;
 }
 
 function moveTargetLabel(move: RpgMove) {
-  if (move.target === "singleEnemy") return "單體敵方";
-  if (move.target === "singleAlly") return "單體我方";
-  if (move.target === "allEnemies") return "敵方全體";
-  if (move.target === "allAllies") return "我方全體";
-  return "自身";
+  return rpgBattleTargetLabel(move.target);
 }
 
 function battleActionTargetLabel(battle: RpgBattleState, actor: RpgBattlePetState, action: { moveId: string; targetId?: string }) {
   const move = getRpgMoveById(action.moveId);
-  if (!move) return "未指定";
+  const copy = rpgCopy().battle;
+  if (!move) return copy.unspecified;
   if (move.target === "singleEnemy" || move.target === "singleAlly") return battlePetNameById(battle, action.targetId);
-  if (move.target === "allEnemies") return "敵方全體";
-  if (move.target === "allAllies") return "我方全體";
+  if (move.target === "allEnemies") return copy.allEnemies;
+  if (move.target === "allAllies") return copy.allAllies;
   return actor.name;
 }
 
 function BattlePanel() {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].battle;
   const battle = useRpgStore((state) => state.activeBattle);
   const battleMode = useRpgStore((state) => state.battleMode);
   const activeAiDifficulty = useRpgStore((state) => state.activeAiDifficulty);
@@ -1485,6 +1665,7 @@ function BattlePanel() {
   const replaySequence = useMemo(() => (battle ? buildBattleReplaySequence(battle) : []), [battle]);
   const replaySequenceKey = useMemo(() => replaySequence.map((entry) => entry.key).join("|"), [replaySequence]);
   const [replayStepIndex, setReplayStepIndex] = useState(0);
+  const [battleMenuOpen, setBattleMenuOpen] = useState(false);
   const replayStep = replaySequence.length > 0 ? Math.min(replayStepIndex, replaySequence.length - 1) : 0;
   const replay = replaySequence[replayStep] ?? null;
   const impactTargetIds = useMemo(() => new Set(replay?.impactTargetIds ?? []), [replay]);
@@ -1499,12 +1680,12 @@ function BattlePanel() {
   const selfRematchReady = battleMode === "versus" && Boolean(versusPlayerId && versusRematchRequestedPlayerIds.includes(versusPlayerId));
   const versusLocked = battleMode === "versus" && (versusConnection === "connecting" || versusConnection === "reconnecting" || versusConnection === "error");
   const aiConfig = activeAiDifficulty ? RPG_AI_DIFFICULTY_CONFIGS[activeAiDifficulty] : null;
-  const actionStatus = battleNotice ?? (versusLocked ? "真人道館重新同步中" : selfSubmitted ? "已送出，等待同步" : allReady ? `已分配 ${pendingEnergySpent}/${roundEnergy} EN` : canCommand ? "選擇本回合行動" : "等待對手行動");
+  const actionStatus = battleNotice ?? (versusLocked ? copy.actionStatusResync : selfSubmitted ? copy.actionStatusSubmitted : allReady ? copy.actionStatusAllocated(pendingEnergySpent, roundEnergy) : canCommand ? copy.actionStatusChoose : copy.actionStatusWaiting);
   const actionDetail = canCommand
-    ? `每隻寵物最多一招，可保留未用 EN；已選 ${pendingActionCount}/${leftLiving.length}`
+    ? copy.actionDetailCommand(pendingActionCount, leftLiving.length)
     : currentActor
-      ? `${currentActor.name} 正在行動`
-      : "等待下一個行動階段";
+      ? copy.actionDetailActing(currentActor.name)
+      : copy.actionDetailWaiting;
   const walletCardById = useMemo(() => new Map(walletCards.map((card) => [walletCardKey(card), card])), [walletCards]);
   const localCardSide = battleMode === "versus" ? versusPlayerSide : "left";
   const equippedCardsForPet = (pet: RpgBattlePetState, side: "left" | "right") => {
@@ -1512,12 +1693,13 @@ function BattlePanel() {
     return (petCardLoadouts[pet.definitionId] ?? []).flatMap((cardId) => {
       const card = walletCardById.get(cardId);
       const move = getRpgMoveById(cardSkillBindings[cardId]);
-      return card && move && move.element === pet.element ? [card] : [];
+      return card && move && move.element === pet.element ? [{ card, cardId, moveId: move.id, moveName: move.name }] : [];
     }).slice(0, RPG_MAX_EQUIPPED_MOVES);
   };
 
   useEffect(() => {
     setReplayStepIndex(0);
+    setBattleMenuOpen(false);
   }, [replaySequenceKey]);
 
   useEffect(() => {
@@ -1537,14 +1719,14 @@ function BattlePanel() {
 
   if (!battle && battleMode === "versus") {
     return (
-      <aside className="rpg-panel rpg-battle-panel" aria-label="真人道館等待">
+      <aside className="rpg-panel rpg-battle-panel" aria-label={copy.versusWaitingAria}>
         <header>
           <UsersThree size={24} weight="fill" />
           <div>
-            <strong>真人道館</strong>
-            <span>{versusRoomCode ? `ROOM ${versusRoomCode}` : versusConnection === "reconnecting" ? "RECONNECTING" : "CONNECTING"}</span>
+            <strong>{copy.versusGym}</strong>
+            <span>{versusRoomCode ? `ROOM ${versusRoomCode}` : versusConnection === "reconnecting" ? copy.reconnecting.toUpperCase() : copy.connecting.toUpperCase()}</span>
           </div>
-          <button className="rpg-panel-close" type="button" title="Back" aria-label="Back" onClick={resetBattle}>
+          <button className="rpg-panel-close" type="button" title={RPG_TEXT[language].common.back} aria-label={RPG_TEXT[language].common.back} onClick={resetBattle}>
             <X size={18} weight="bold" />
           </button>
         </header>
@@ -1564,8 +1746,8 @@ function BattlePanel() {
         />
         <div className="rpg-versus-waiting">
           <UsersThree size={34} weight="fill" />
-          <strong>{versusRoomCode ?? "建立房間中"}</strong>
-          <span>{battleNotice ?? (versusConnection === "reconnecting" ? "重新連線中。" : "等待另一位玩家加入。")}</span>
+          <strong>{versusRoomCode ?? copy.creatingRoom}</strong>
+          <span>{battleNotice ?? (versusConnection === "reconnecting" ? copy.reconnecting : copy.waitingPlayer)}</span>
         </div>
       </aside>
     );
@@ -1574,16 +1756,32 @@ function BattlePanel() {
   if (!battle) return null;
 
   return (
-    <section className="rpg-battle-screen" aria-label="道館對戰" data-ai-difficulty={activeAiDifficulty ?? ""} data-active-side={activeSide} data-round-energy={roundEnergy}>
+    <section className="rpg-battle-screen" aria-label={copy.arenaAria} data-ai-difficulty={activeAiDifficulty ?? ""} data-active-side={activeSide} data-round-energy={roundEnergy}>
       <header className="rpg-battle-scene-header">
         {battleMode === "versus" ? <UsersThree size={22} weight="fill" /> : <Sword size={22} weight="fill" />}
         <div>
-          <strong>{battleMode === "versus" ? "真人道館" : aiConfig ? `${aiConfig.label} AI 道館` : "AI 道館"}</strong>
-          <span>{battleMode === "versus" && versusRoomCode ? `ROOM ${versusRoomCode} / TURN ${battle.turn}` : `${aiConfig?.title ?? "本地道館"} / TURN ${battle.turn}`}</span>
+          <strong>{battleMode === "versus" ? copy.versusGym : activeAiDifficulty ? `${rpgAiDifficultyCopy(activeAiDifficulty, language).label} ${copy.aiGym}` : copy.aiGym}</strong>
+          <span>{battleMode === "versus" && versusRoomCode ? `ROOM ${versusRoomCode} / ${copy.turn(battle.turn)}` : `${activeAiDifficulty ? rpgAiDifficultyCopy(activeAiDifficulty, language).title : copy.localGym} / ${copy.turn(battle.turn)}`}</span>
         </div>
-        <button className="rpg-panel-close" type="button" title="Back" aria-label="Back" onClick={resetBattle}>
-          <X size={18} weight="bold" />
-        </button>
+        <div className="rpg-battle-options">
+          <button
+            className="rpg-battle-options-button"
+            type="button"
+            title={copy.battleSettings}
+            aria-label={copy.battleSettings}
+            aria-expanded={battleMenuOpen}
+            onClick={() => setBattleMenuOpen((open) => !open)}
+          >
+            <Gear size={20} weight="fill" />
+          </button>
+          {battleMenuOpen ? (
+            <div className="rpg-battle-options-menu" role="menu">
+              <button type="button" role="menuitem" onClick={resetBattle}>
+                {battleMode === "versus" ? copy.exitVersus : copy.exitAi}
+              </button>
+            </div>
+          ) : null}
+        </div>
       </header>
       {battleMode === "versus" ? (
         <VersusStatusRail
@@ -1611,7 +1809,7 @@ function BattlePanel() {
             pet={pet}
             side="left"
             slot={index}
-            sideLabel="我方"
+            sideLabel={copy.ally}
             selected={selectedAllyId === pet.id}
             current={currentActor?.id === pet.id}
             onSelect={pet.defeated ? undefined : () => {
@@ -1623,6 +1821,7 @@ function BattlePanel() {
             impacted={impactTargetIds.has(pet.id)}
             floatingEntries={floatingEntriesForPet(replay, pet.id)}
             equippedCards={equippedCardsForPet(pet, "left")}
+            activeCardMoveId={replay?.actorId === pet.id ? replay.move.id : pendingActions[pet.id]?.moveId ?? null}
           />
         ))}
         {battle.right.map((pet, index) => {
@@ -1633,7 +1832,7 @@ function BattlePanel() {
               pet={pet}
               side="right"
               slot={index}
-              sideLabel="敵方"
+              sideLabel={copy.enemy}
               selected={selectedEnemyId === pet.id && canSelectEnemy}
               current={currentActor?.id === pet.id}
               onSelect={canSelectEnemy ? () => selectEnemyTarget(pet.id) : undefined}
@@ -1643,6 +1842,7 @@ function BattlePanel() {
               impacted={impactTargetIds.has(pet.id)}
               floatingEntries={floatingEntriesForPet(replay, pet.id)}
               equippedCards={equippedCardsForPet(pet, "right")}
+              activeCardMoveId={replay?.actorId === pet.id ? replay.move.id : pendingActions[pet.id]?.moveId ?? null}
             />
           );
         })}
@@ -1669,15 +1869,15 @@ function BattlePanel() {
               {!canCommand ? (
                 <CommandPlaceholder
                   pet={currentActor}
-                  eyebrow={battleMode === "versus" ? "對手回合" : "敵方回合"}
-                  title={currentActor ? `${currentActor.name} 行動中` : "等待行動者"}
-                  detail={battleMode === "versus" ? "等待對手選擇招式。" : "AI 正在選擇招式。"}
+                  eyebrow={battleMode === "versus" ? copy.opponentTurn : copy.enemyTurn}
+                  title={currentActor ? copy.acting(currentActor.name) : copy.waitingActor}
+                  detail={battleMode === "versus" ? copy.waitingOpponentMove : copy.aiChoosingMove}
                 />
               ) : null}
               {commandPets.map((pet) => {
                 const selectedAction = pendingActions[pet.id];
                 const selectedMove = getRpgMoveById(selectedAction?.moveId ?? "");
-                const selectedTarget = selectedAction && selectedMove ? battleActionTargetLabel(battle, pet, selectedAction) : "尚未選擇";
+                const selectedTarget = selectedAction && selectedMove ? battleActionTargetLabel(battle, pet, selectedAction) : copy.noTarget;
                 const energyAvailableForPet = Math.max(0, roundEnergy - pendingEnergySpent + (selectedMove?.energyCost ?? 0));
                 return (
                   <article
@@ -1690,12 +1890,12 @@ function BattlePanel() {
                     <header>
                       <div className="rpg-command-row-title">
                         <strong>{pet.name}</strong>
-                        {selectedAction && selectedMove ? <em>已選 {selectedMove.name} → {selectedTarget}</em> : <em>點技能後再點場上目標</em>}
+                        {selectedAction && selectedMove ? <em>{copy.selectedMove(rpgMoveName(selectedMove, language), selectedTarget)}</em> : <em>{copy.chooseSkillThenTarget}</em>}
                       </div>
-                      <span>可分配 {energyAvailableForPet}/{roundEnergy} EN</span>
+                      <span>{copy.availableEnergy(energyAvailableForPet, roundEnergy)}</span>
                       {selectedAction && !selfSubmitted ? (
                         <button type="button" onClick={() => clearBattleAction(pet.id)}>
-                          重選
+                          {copy.reselect}
                         </button>
                       ) : null}
                     </header>
@@ -1714,11 +1914,11 @@ function BattlePanel() {
                           onClick={() => selectBattleMove(pet.id, move.id)}
                           style={{ "--element": RPG_ELEMENT_META[move.element].color } as CSSProperties}
                         >
-                          <span>{RPG_ELEMENT_META[move.element].label}</span>
-                          <strong>{move.name}</strong>
+                          <span>{rpgElementLabel(move.element, language)}</span>
+                          <strong>{rpgMoveName(move, language)}</strong>
                           <em>{move.energyCost} EN / {moveTargetLabel(move)}</em>
-                          {active ? <b>已選</b> : null}
-                          {active ? <small>目標：{selectedTarget}</small> : null}
+                          {active ? <b>{copy.selected}</b> : null}
+                          {active ? <small>{copy.target(selectedTarget)}</small> : null}
                         </button>
                       );
                       })}
@@ -1730,12 +1930,12 @@ function BattlePanel() {
 
             <footer className="rpg-battle-actions" data-rpg-guide-target="battle-action">
               <div>
-                <span>指令狀態</span>
+                <span>{copy.commandStatus}</span>
                 <strong>{actionStatus}</strong>
                 <em>{actionDetail}</em>
               </div>
               <button type="button" disabled={!allReady || selfSubmitted || versusLocked} onClick={resolveBattleTurn}>
-                {battleMode === "versus" ? "送出選招" : "執行"}
+                {battleMode === "versus" ? copy.submitMoves : copy.execute}
               </button>
             </footer>
           </>
@@ -1752,19 +1952,21 @@ function BattlePanel() {
 }
 
 function versusSideLabel(side: "left" | "right" | null) {
-  if (side === "left") return "左席";
-  if (side === "right") return "右席";
-  return "席位同步中";
+  const copy = rpgCopy().versus;
+  if (side === "left") return copy.leftSeat;
+  if (side === "right") return copy.rightSeat;
+  return copy.syncingSeat;
 }
 
 function versusStatusLabel(connection: RpgVersusConnection, roomStatus: RpgVersusRoomStatus | null) {
-  if (connection === "connecting") return "連線中";
-  if (connection === "reconnecting") return "重連中";
-  if (connection === "error") return "連線錯誤";
-  if (roomStatus === "waiting") return "等待對手";
-  if (roomStatus === "opponentDisconnected") return "對手離線";
-  if (roomStatus === "finished") return "結算";
-  return "選招中";
+  const copy = rpgCopy().versus;
+  if (connection === "connecting") return copy.connecting;
+  if (connection === "reconnecting") return copy.reconnecting;
+  if (connection === "error") return copy.error;
+  if (roomStatus === "waiting") return copy.waitingOpponent;
+  if (roomStatus === "opponentDisconnected") return copy.opponentDisconnected;
+  if (roomStatus === "finished") return copy.finished;
+  return copy.selecting;
 }
 
 function VersusStatusRail({
@@ -1794,15 +1996,17 @@ function VersusStatusRail({
   rematchReadyCount: number;
   selfRematchReady: boolean;
 }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].versus;
   const statusLabel = versusStatusLabel(connection, roomStatus);
   const battleOpen = roomStatus === "selecting" || roomStatus === "opponentDisconnected";
-  const progressLabel = roomStatus === "finished" ? "再戰" : battleOpen ? "選招" : "開局";
+  const progressLabel = roomStatus === "finished" ? copy.rematch : battleOpen ? copy.moveSelect : copy.opening;
   const progressValue = roomStatus === "finished" ? `${Math.min(rematchReadyCount, 2)}/2` : battleOpen ? `${Math.min(submittedCount, 2)}/2` : opponentConnected ? "2/2" : "1/2";
   const progressDetail = roomStatus === "finished"
-    ? selfRematchReady ? "你已準備" : opponentConnected ? "等待再戰" : "等待重連"
+    ? selfRematchReady ? copy.youReady : opponentConnected ? copy.waitingRematch : copy.waitingReconnect
     : battleOpen
-      ? selfSubmitted ? "你已送出" : "待你選招"
-      : opponentConnected ? "雙方就位" : "等待加入";
+      ? selfSubmitted ? copy.youSubmitted : copy.waitingYou
+      : opponentConnected ? copy.bothReady : copy.waitingJoin;
 
   return (
     <section
@@ -1813,25 +2017,25 @@ function VersusStatusRail({
       data-submitted-count={String(submittedCount)}
       data-opponent-connected={opponentConnected ? "true" : "false"}
       data-rematch-ready-count={String(rematchReadyCount)}
-      aria-label="真人對戰狀態"
+      aria-label={copy.statusAria}
     >
       <div>
-        <span>房間</span>
-        <strong>{roomCode ?? "建立中"}</strong>
-        <em>{connection === "reconnecting" ? "同步中" : "ROOM"}</em>
+        <span>{copy.room}</span>
+        <strong>{roomCode ?? RPG_TEXT[language].battle.creatingRoom}</strong>
+        <em>{connection === "reconnecting" ? copy.reconnecting : "ROOM"}</em>
       </div>
       <div>
-        <span>席位</span>
+        <span>{copy.seat}</span>
         <strong>{versusSideLabel(playerSide)}</strong>
-        <em>{playerName ?? "我方"}</em>
+        <em>{playerName ?? RPG_TEXT[language].battle.ally}</em>
       </div>
       <div>
-        <span>對手</span>
-        <strong>{opponentName ?? "等待加入"}</strong>
-        <em>{opponentConnected ? "在線" : roomStatus === "waiting" ? "未加入" : "離線保留"}</em>
+        <span>{copy.opponent}</span>
+        <strong>{opponentName ?? copy.waitingJoin}</strong>
+        <em>{opponentConnected ? copy.online : roomStatus === "waiting" ? copy.notJoined : copy.offlineHeld}</em>
       </div>
       <div>
-        <span>狀態</span>
+        <span>{copy.status}</span>
         <strong>{statusLabel}</strong>
         <em>{roomStatus ?? connection}</em>
       </div>
@@ -1845,29 +2049,31 @@ function VersusStatusRail({
 }
 
 function BattleEnergyRail({ battle, currentActor }: { battle: RpgBattleState; currentActor: RpgBattlePetState | null }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].battle;
   const turnEnergy = getRpgBattleEnergyForTurn(battle.turn);
   const activeSide = battle.activeSide ?? "left";
   const activeTeam = activeSide === "left" ? battle.left : battle.right;
   const activeEnergy = activeTeam.find((pet) => !pet.defeated && pet.hp > 0)?.energy ?? turnEnergy;
-  const activeSideLabel = activeSide === "left" ? "我方" : "敵方";
+  const activeSideLabel = activeSide === "left" ? copy.ally : copy.enemy;
 
   return (
-    <section className="rpg-battle-energy-rail" data-rpg-guide-target="battle-energy" aria-label="道館能量">
+    <section className="rpg-battle-energy-rail" data-rpg-guide-target="battle-energy" aria-label={copy.energyTitle}>
       <header>
         <div>
-          <span>本回合能量</span>
+          <span>{copy.energyTitle}</span>
           <strong>{turnEnergy} EN</strong>
         </div>
-        <em>雙方都行動完才進下一回合，最高 10</em>
+        <em>{copy.energyHint}</em>
       </header>
-      <div className="rpg-energy-pips" aria-label={`目前能量 ${activeEnergy}/10`}>
+      <div className="rpg-energy-pips" aria-label={copy.energyAria(activeEnergy)}>
         {Array.from({ length: 10 }).map((_, index) => (
           <span key={index} className={index < activeEnergy ? "is-filled" : ""}>
             {index + 1}
           </span>
         ))}
       </div>
-      <small>{currentActor ? `${activeSideLabel}階段：${currentActor.name} 帶頭行動，可用 ${activeEnergy}/${turnEnergy} EN` : `${activeSideLabel}階段等待行動者`}</small>
+      <small>{currentActor ? copy.energyPhase(activeSideLabel, currentActor.name, activeEnergy, turnEnergy) : copy.energyWaiting(activeSideLabel)}</small>
     </section>
   );
 }
@@ -1895,37 +2101,39 @@ function BattleResultPanel({
   onRematch: () => void;
   onLeave: () => void;
 }) {
-  const resultLabel = winner === "draw" ? "平手" : winner === "left" ? "勝利" : "敗北";
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].battle;
+  const resultLabel = winner === "draw" ? copy.draw : winner === "left" ? copy.win : copy.loss;
   const resultTone = winner === "draw" ? "draw" : winner === "left" ? "win" : "loss";
-  const opponentLabel = opponentName ?? "對手";
+  const opponentLabel = opponentName ?? copy.enemy;
   const versus = battleMode === "versus";
   return (
-    <section className={`rpg-battle-result-panel is-${resultTone}`} aria-label="戰鬥結果">
+    <section className={`rpg-battle-result-panel is-${resultTone}`} aria-label={copy.resultAria}>
       <div className="rpg-result-emblem">
         {versus ? <UsersThree size={24} weight="fill" /> : <Sword size={24} weight="fill" />}
       </div>
       <div className="rpg-result-copy">
-        <span>{versus ? "真人道館結果" : "AI 道館結果"}</span>
+        <span>{versus ? copy.resultVersus : copy.resultAi}</span>
         <strong>{resultLabel}</strong>
-        <em>{battleNotice ?? (versus ? `${opponentLabel}${opponentConnected ? "在線" : "離線，房間保留中"}` : "戰鬥已結束")}</em>
+        <em>{battleNotice ?? (versus ? (opponentConnected ? copy.opponentOnline(opponentLabel) : copy.opponentOffline(opponentLabel)) : copy.battleEnded)}</em>
       </div>
       {versus ? (
         <div className="rpg-rematch-status" aria-live="polite">
-          <span>再戰準備</span>
+          <span>{copy.rematchStatus}</span>
           <strong>{Math.min(rematchReadyCount, 2)}/2</strong>
-          <em>{selfRematchReady ? "你已準備" : opponentConnected ? "等待確認" : "等待對手重連"}</em>
+          <em>{selfRematchReady ? copy.ready : opponentConnected ? copy.waitConfirm : copy.waitReconnect}</em>
         </div>
       ) : null}
       <div className="rpg-result-actions">
         {versus ? (
           <button type="button" className="rpg-rematch-button" disabled={selfRematchReady || rematchLocked} onClick={onRematch}>
             <ArrowClockwise size={18} weight="bold" />
-            <span>{selfRematchReady ? "等待對手" : "準備再戰"}</span>
+            <span>{selfRematchReady ? copy.waitOpponent : copy.readyRematch}</span>
           </button>
         ) : null}
         <button type="button" onClick={onLeave}>
           <FlagBanner size={18} weight="fill" />
-          <span>回道館</span>
+          <span>{copy.backToGym}</span>
         </button>
       </div>
     </section>
@@ -1945,7 +2153,8 @@ function BattleFieldPet({
   attackStyle = {},
   impacted = false,
   floatingEntries = [],
-  equippedCards = []
+  equippedCards = [],
+  activeCardMoveId = null
 }: {
   pet: RpgBattlePetState;
   side: "left" | "right";
@@ -1959,8 +2168,11 @@ function BattleFieldPet({
   attackStyle?: CSSProperties;
   impacted?: boolean;
   floatingEntries?: RpgBattleFloatingEntry[];
-  equippedCards?: RpgWalletCard[];
+  equippedCards?: BattleFieldCard[];
+  activeCardMoveId?: string | null;
 }) {
+  const { language } = useArenaI18n();
+  const copy = RPG_TEXT[language].battle;
   const element = RPG_ELEMENT_META[pet.element];
   const hpPercent = Math.max(0, Math.min(100, (pet.hp / pet.maxHp) * 100));
   const petPose = pet.defeated ? "faint" : impacted ? "hit" : acting ? "attack" : "idle";
@@ -1980,14 +2192,21 @@ function BattleFieldPet({
       <>
         {equippedCards.length > 0 ? (
           <div className="rpg-field-card-stack" aria-hidden="true">
-            {equippedCards.map((card) => (
-              card.imageUrl ? <RpgPixelCardImage key={walletCardKey(card)} src={card.imageUrl} alt={card.name} /> : <span key={walletCardKey(card)} />
+            {equippedCards.map((entry, index) => (
+              <span
+                key={entry.cardId}
+                className={["rpg-field-card-token", entry.moveId === activeCardMoveId ? "is-active" : ""].filter(Boolean).join(" ")}
+                style={{ "--card-index": index, zIndex: entry.moveId === activeCardMoveId ? 20 : index + 1 } as CSSProperties}
+              >
+                {entry.card.imageUrl ? <RpgPixelCardImage src={entry.card.imageUrl} alt={entry.card.name} /> : null}
+                <b>{entry.moveName}</b>
+              </span>
             ))}
           </div>
         ) : null}
         <RpgPetSprite element={pet.element} pose={petPose} frame={0} className="rpg-field-pet-sprite" />
         <BattleStatusEffects statuses={pet.statuses} />
-        {selected ? <span className="rpg-field-target-tag">{side === "left" ? "我方目標" : "敵方目標"}</span> : null}
+        {selected ? <span className="rpg-field-target-tag">{side === "left" ? copy.allyTarget : copy.enemyTarget}</span> : null}
         <div className="rpg-field-nameplate">
           <strong>{pet.name}</strong>
         </div>
@@ -2001,7 +2220,7 @@ function BattleFieldPet({
       <div className="rpg-status-pips rpg-field-status-pips">
         {pet.statuses.map((status) => (
           <span key={status.id} className={`is-${status.id}`}>
-            {statusShortLabel(status.id)}
+            {rpgStatusShortLabel(status.id, language)}
             <b>{status.remainingTurns}</b>
           </span>
         ))}
@@ -2059,11 +2278,12 @@ function BattleFieldPet({
 }
 
 function SkillChip({ move }: { move: RpgMove }) {
+  const { language } = useArenaI18n();
   return (
     <span className="rpg-skill-chip" data-element={move.element} data-tier={move.tier} style={{ "--element": RPG_ELEMENT_META[move.element].color } as CSSProperties}>
-      <b>{RPG_ELEMENT_META[move.element].label}</b>
-      <strong>{move.name}</strong>
-      <em>{move.tier === "basic" ? "初" : move.tier === "intermediate" ? "中" : "高"}</em>
+      <b>{rpgElementLabel(move.element, language)}</b>
+      <strong>{rpgMoveName(move, language)}</strong>
+      <em>{rpgTierShortLabel(move.tier, language)}</em>
     </span>
   );
 }

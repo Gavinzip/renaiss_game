@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import {
-  RPG_ELEMENT_META,
   RPG_INITIAL_SKILL_TICKET_INVENTORY,
   RPG_STARTER_PETS,
   createAiRpgActions,
@@ -10,7 +9,6 @@ import {
   createStarterRoster,
   drawRpgSkillTicket,
   getRpgBattleEnergyForTurn,
-  getRpgAiDifficultyConfig,
   getRpgDefaultTargetIdForMove,
   getRpgMoveById,
   getRpgReachableEnemyTargets,
@@ -28,6 +26,7 @@ import {
 } from "@renaiss-game/shared";
 import { RPG_DEFAULT_WALLET_ADDRESS, drawRpgWalletCardSkill, equipRpgWalletCard, fetchRpgWalletCards, unequipRpgWalletCard, type RpgWalletCard } from "../api/rpgWalletCards";
 import { RpgBattleSocket } from "../game/network/RpgBattleSocket";
+import { rpgAiDifficultyCopy, rpgCopy, rpgElementLabel, rpgMoveName, rpgNotice, rpgPetName, rpgTicketCopy } from "../i18n/rpg";
 
 export type RpgLocation = "village" | "house";
 export type RpgPlace = "shop" | "gym" | "arena" | "house" | "cabinet" | "houseExit";
@@ -248,7 +247,7 @@ function sanitizeDrawHistory(value: unknown) {
     return [{
       id: typeof entry.id === "string" && entry.id.length > 0 ? entry.id : `${entry.ticketId}-${createdAt}-${index}`,
       ticketId: ticket.id,
-      ticketLabel: ticket.label,
+      ticketLabel: rpgTicketCopy(ticket).label,
       createdAt,
       moves
     }];
@@ -324,7 +323,7 @@ function moveIdsForPet(definitionId: string, loadouts: Record<string, string[]>,
   const baseMoveIds = loadouts[definitionId] && loadouts[definitionId].length > 0 ? loadouts[definitionId] : [...definition.startingMoveIds];
   const baseMoves = baseMoveIds.filter((moveId) => getRpgMoveById(moveId)?.element === definition.element).slice(0, RPG_MAX_EQUIPPED_MOVES);
   if (cardSkillBindings && petCardLoadouts) {
-    return [...new Set([...baseMoves, ...cardMoveIdsForPet(definitionId, cardSkillBindings, petCardLoadouts)])];
+    return [...new Set([...cardMoveIdsForPet(definitionId, cardSkillBindings, petCardLoadouts), ...baseMoves])].slice(0, RPG_MAX_EQUIPPED_MOVES);
   }
   return baseMoves;
 }
@@ -400,6 +399,7 @@ function disconnectVersusSocket() {
 
 function applyVersusSnapshot(snapshot: RpgVersusSnapshot, set: (partial: Partial<RpgStore> | ((state: RpgStore) => Partial<RpgStore>)) => void) {
   set((state) => {
+    const notice = rpgNotice();
     const nextBattle = snapshot.battle;
     const battleChanged = Boolean(nextBattle && state.activeBattle && nextBattle.id !== state.activeBattle.id);
     const turnChanged = Boolean(nextBattle && state.activeBattle && nextBattle.turn !== state.activeBattle.turn);
@@ -407,11 +407,11 @@ function applyVersusSnapshot(snapshot: RpgVersusSnapshot, set: (partial: Partial
     const pendingActions = battleChanged || turnChanged || phaseChanged || nextBattle?.winner ? {} : state.pendingActions;
     const battleNotice = snapshot.message ??
       (snapshot.status === "waiting"
-        ? "等待對手加入。"
+        ? notice.waitingOpponent
         : snapshot.status === "finished"
-          ? "戰鬥結束，等待再戰或離開。"
+          ? notice.battleFinishedAwaiting
         : snapshot.status === "opponentDisconnected"
-          ? "對手連線中斷，保留戰鬥並等待重連。"
+          ? notice.opponentDisconnected
           : null);
     return {
       screen: "battle",
@@ -505,11 +505,12 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     }),
   clearVillageNavigation: () => set({ villageNavigationTarget: null }),
   openProfile: () => set({ screen: "profile", battleNotice: null }),
-  openShop: () => set({ screen: "profile", battleNotice: null }),
+  openShop: () => set({ screen: "bag", battleNotice: null }),
   openBag: () => set({ screen: "bag", battleNotice: null }),
   openGym: () => set({ screen: "gym", battleNotice: null }),
   openCardEquipForElement: (element) =>
     set((state) => {
+      const notice = rpgNotice();
       const partyPet = state.selectedPartyPetIds
         .map((petId) => RPG_STARTER_PETS.find((pet) => pet.id === petId) ?? null)
         .find((pet) => pet?.element === element);
@@ -519,13 +520,13 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         return {
           screen: "gym",
           pendingCardEquipPetId: null,
-          battleNotice: `還沒有${RPG_ELEMENT_META[element].label}屬性寵物可以插卡。`
+          battleNotice: notice.noElementPet(rpgElementLabel(element))
         };
       }
       return {
         screen: "gym",
         pendingCardEquipPetId: targetPet.id,
-        battleNotice: `已切到${targetPet.name}的卡片插槽。`
+        battleNotice: notice.switchedCardSlot(rpgPetName(targetPet.id, targetPet.name))
       };
     }),
   consumePendingCardEquipPet: () => {
@@ -564,12 +565,12 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         walletCardsStaleReason: result.staleReason ?? null,
         cardSkillBindings,
         petCardLoadouts: sanitizePetCardLoadouts(result.petCardLoadouts, cardSkillBindings),
-        battleNotice: result.stale ? "外部錢包 API 暫時失敗，現在顯示已同步過的本地卡片。" : result.fallbackUsed ? "錢包卡片來源使用 fallback。" : null
+        battleNotice: result.stale ? rpgNotice().walletStale : result.fallbackUsed ? rpgNotice().walletFallback : null
       });
     } catch (error) {
       set({
         walletCardsStatus: "error",
-        walletCardsError: error instanceof Error ? error.message : "讀取錢包卡片失敗。",
+        walletCardsError: error instanceof Error ? error.message : rpgNotice().walletReadFailed,
         walletCards: [],
         walletCardsTotalFMV: 0,
         walletCardsScannedRows: 0,
@@ -593,7 +594,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       }
       const emptyIndex = selected.findIndex((id) => !id);
       if (emptyIndex < 0) {
-        return { battleNotice: "隊伍已滿，先移出一格再加入。" };
+        return { battleNotice: rpgNotice().partyFull };
       }
       const next = [...selected];
       next[emptyIndex] = definitionId;
@@ -612,14 +613,18 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       const definition = RPG_STARTER_PETS.find((pet) => pet.id === definitionId);
       const move = getRpgMoveById(moveId);
       if (!definition || !move) return {};
-      if (move.element !== definition.element) return { battleNotice: `${move.name} 只能裝備到${RPG_ELEMENT_META[move.element].label}屬性寵物。` };
-      if (!isStarterMove(definitionId, moveId) && !state.skillInventory[moveId]) return { battleNotice: "尚未取得這個技能。" };
+      const notice = rpgNotice();
+      const petName = rpgPetName(definition.id, definition.name);
+      const moveName = rpgMoveName(move);
+      const elementLabel = rpgElementLabel(move.element);
+      if (move.element !== definition.element) return { battleNotice: notice.wrongPetElement(moveName, elementLabel) };
+      if (!isStarterMove(definitionId, moveId) && !state.skillInventory[moveId]) return { battleNotice: notice.missingSkill };
       const current = moveIdsForPet(definitionId, state.petMoveLoadouts);
-      if (current.includes(moveId)) return { battleNotice: `${definition.name} 已裝備 ${move.name}。` };
+      if (current.includes(moveId)) return { battleNotice: notice.alreadyEquipped(petName, moveName) };
       const nextMoves = current.length >= RPG_MAX_EQUIPPED_MOVES ? [...current.slice(1), moveId] : [...current, moveId];
       return {
         petMoveLoadouts: { ...state.petMoveLoadouts, [definitionId]: nextMoves },
-        battleNotice: `${definition.name} 裝備 ${move.name}。`
+        battleNotice: notice.equippedMove(petName, moveName)
       };
     }),
   unequipMoveFromPet: (definitionId, moveId) =>
@@ -627,20 +632,21 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       const definition = RPG_STARTER_PETS.find((pet) => pet.id === definitionId);
       const move = getRpgMoveById(moveId);
       if (!definition || !move) return {};
+      const notice = rpgNotice();
       const current = moveIdsForPet(definitionId, state.petMoveLoadouts);
       if (!current.includes(moveId)) return {};
-      if (current.length <= 1) return { battleNotice: "至少要保留 1 個招式。" };
+      if (current.length <= 1) return { battleNotice: notice.keepOneMove };
       const nextMoves = current.filter((id) => id !== moveId);
       return {
         petMoveLoadouts: { ...state.petMoveLoadouts, [definitionId]: nextMoves },
-        battleNotice: `${definition.name} 卸下 ${move.name}。`
+        battleNotice: notice.unequippedMove(rpgPetName(definition.id, definition.name), rpgMoveName(move))
       };
     }),
   drawSkill: (ticketId, preferredElement) => {
     const state = get();
     const remainingTickets = state.ticketInventory[ticketId] ?? 0;
     if (remainingTickets <= 0) {
-      set({ battleNotice: "沒有可用的技能卡券。" });
+      set({ battleNotice: rpgNotice().noSkillTicket });
       return null;
     }
     const result = drawRpgSkillTicket(ticketId, { preferredElement });
@@ -648,7 +654,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     const entry: RpgDrawHistoryEntry = {
       id: `${ticketId}-${createdAt}-${state.drawHistory.length}`,
       ticketId,
-      ticketLabel: result.ticket.label,
+      ticketLabel: rpgTicketCopy(result.ticket).label,
       createdAt,
       moves: result.moves
     };
@@ -660,20 +666,21 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       drawHistory: [entry, ...state.drawHistory].slice(0, 8),
       skillInventory,
       ticketInventory: { ...state.ticketInventory, [ticketId]: remainingTickets - 1 },
-      battleNotice: `${result.moves.length} 張技能卡已加入背包。`
+      battleNotice: rpgNotice().skillCardsAdded(result.moves.length)
     });
     return entry;
   },
   drawWalletCardSkill: async (cardId) => {
     const state = get();
+    const notice = rpgNotice();
     const card = state.walletCards.find((candidate) => walletCardKey(candidate) === cardId);
     if (!card) {
-      set({ battleNotice: "找不到這張錢包卡片，請先同步錢包。" });
+      set({ battleNotice: notice.missingWalletCard });
       return null;
     }
     const existingMove = getRpgMoveById(state.cardSkillBindings[cardId]);
     if (existingMove) {
-      set({ battleNotice: `${card.pokemonName || card.name} 已綁定 ${existingMove.name}。` });
+      set({ battleNotice: notice.cardAlreadyBound(card.pokemonName || card.name, rpgMoveName(existingMove)) });
       return null;
     }
     try {
@@ -684,7 +691,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       });
       const move = moves[0];
       if (!move) {
-        set({ battleNotice: "後端回傳了不存在的技能，請重新同步。" });
+        set({ battleNotice: notice.missingBackendMove });
         return null;
       }
       const cardSkillBindings = sanitizeCardSkillBindings(result.cardSkillBindings);
@@ -697,11 +704,11 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         petCardLoadouts: sanitizePetCardLoadouts(result.petCardLoadouts, cardSkillBindings),
         skillInventory: result.alreadyBound ? current.skillInventory : { ...current.skillInventory, [move.id]: (current.skillInventory[move.id] ?? 0) + 1 },
         drawHistory: [entry, ...current.drawHistory].slice(0, 8),
-        battleNotice: `${card.pokemonName || card.name} 綁定 ${RPG_ELEMENT_META[move.element].label}屬性技能：${move.name}。`
+        battleNotice: notice.cardBound(card.pokemonName || card.name, rpgElementLabel(move.element), rpgMoveName(move))
       }));
       return entry;
     } catch (error) {
-      set({ battleNotice: error instanceof Error ? error.message : "卡片技能綁定失敗。" });
+      set({ battleNotice: error instanceof Error ? error.message : notice.cardBindFailed });
       return null;
     }
   },
@@ -712,21 +719,21 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     const card = state.walletCards.find((candidate) => walletCardKey(candidate) === cardId);
     if (!definition) return;
     if (!card || !move) {
-      set({ battleNotice: "這張卡還沒有綁定技能，先在錢包卡片點一下抽技能。" });
+      set({ battleNotice: rpgNotice().cardNoSkill });
       return;
     }
     if (move.element !== definition.element) {
-      set({ battleNotice: `${move.name} 是${RPG_ELEMENT_META[move.element].label}屬性，只能裝到${RPG_ELEMENT_META[move.element].label}寵物。` });
+      set({ battleNotice: rpgNotice().cardWrongElement(rpgMoveName(move), rpgElementLabel(move.element)) });
       return;
     }
     try {
       const result = await equipRpgWalletCard(state.walletAddress, definition.id, cardId);
       set({
         petCardLoadouts: sanitizePetCardLoadouts(result.petCardLoadouts, state.cardSkillBindings),
-        battleNotice: `${definition.name} 插入 ${card.pokemonName || card.name}，獲得 ${move.name}。`
+        battleNotice: rpgNotice().cardEquipped(rpgPetName(definition.id, definition.name), card.pokemonName || card.name, rpgMoveName(move))
       });
     } catch (error) {
-      set({ battleNotice: error instanceof Error ? error.message : "插卡失敗。" });
+      set({ battleNotice: error instanceof Error ? error.message : rpgNotice().equipCardFailed });
     }
   },
   unequipCardFromPet: async (definitionId, cardId) => {
@@ -741,19 +748,18 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       const result = await unequipRpgWalletCard(state.walletAddress, definition.id, cardId);
       set({
         petCardLoadouts: sanitizePetCardLoadouts(result.petCardLoadouts, state.cardSkillBindings),
-        battleNotice: `${definition.name} 卸下 ${card?.pokemonName || card?.name || "卡片"}${move ? ` / ${move.name}` : ""}。`
+        battleNotice: rpgNotice().cardUnequipped(rpgPetName(definition.id, definition.name), card?.pokemonName || card?.name || rpgCopy().cabinet.card, move ? rpgMoveName(move) : undefined)
       });
     } catch (error) {
-      set({ battleNotice: error instanceof Error ? error.message : "卸卡失敗。" });
+      set({ battleNotice: error instanceof Error ? error.message : rpgNotice().unequipCardFailed });
     }
   },
   setAiDifficulty: (difficulty) => set({ selectedAiDifficulty: difficulty, battleNotice: null }),
   startAiBattle: (difficulty) => {
     const aiDifficulty = difficulty ?? get().selectedAiDifficulty;
-    const aiConfig = getRpgAiDifficultyConfig(aiDifficulty);
     const playerRoster = selectedRosterForOwner("player", get().selectedPartyPetIds, get().petMoveLoadouts, get().cardSkillBindings, get().petCardLoadouts);
     if (!playerRoster) {
-      set({ battleNotice: "請選滿 3 隻寵物上場。" });
+      set({ battleNotice: rpgNotice().partyNeedsThree });
       return;
     }
     disconnectVersusSocket();
@@ -777,17 +783,17 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       pendingActions: {},
       selectedEnemyId: firstLivingEnemyId(battle),
       selectedAllyId: firstLivingAllyId(battle),
-      battleNotice: `${aiConfig.title}開始。`
+      battleNotice: rpgNotice().aiBattleStarted(rpgAiDifficultyCopy(aiDifficulty).title)
     });
   },
   createVersusRoom: async () => {
     const roster = selectedRosterSelection(get().selectedPartyPetIds, get().petMoveLoadouts, get().cardSkillBindings, get().petCardLoadouts);
     if (!roster) {
-      set({ battleNotice: "請選滿 3 隻寵物上場。" });
+      set({ battleNotice: rpgNotice().partyNeedsThree });
       return;
     }
     disconnectVersusSocket();
-    set({ versusConnection: "connecting", battleMode: "versus", battleNotice: "連接真人道館中。" });
+    set({ versusConnection: "connecting", battleMode: "versus", battleNotice: rpgNotice().connectingVersus });
     const socket = new RpgBattleSocket();
     versusSocket = socket;
     try {
@@ -812,22 +818,22 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         versusRematchRequestedPlayerIds: [],
         selectedEnemyId: null,
         selectedAllyId: null,
-        battleNotice: "房間已建立，等待對手加入。"
+        battleNotice: rpgNotice().roomCreated
       });
     } catch (error) {
       socket.disconnect();
       if (versusSocket === socket) versusSocket = null;
-      set({ versusConnection: "error", battleNotice: error instanceof Error ? error.message : "真人道館連線失敗。" });
+      set({ versusConnection: "error", battleNotice: error instanceof Error ? error.message : rpgNotice().versusConnectFailed });
     }
   },
   joinVersusRoom: async (roomCode) => {
     const roster = selectedRosterSelection(get().selectedPartyPetIds, get().petMoveLoadouts, get().cardSkillBindings, get().petCardLoadouts);
     if (!roster) {
-      set({ battleNotice: "請選滿 3 隻寵物上場。" });
+      set({ battleNotice: rpgNotice().partyNeedsThree });
       return;
     }
     disconnectVersusSocket();
-    set({ versusConnection: "connecting", battleMode: "versus", battleNotice: "加入真人道館中。" });
+    set({ versusConnection: "connecting", battleMode: "versus", battleNotice: rpgNotice().joiningVersus });
     const socket = new RpgBattleSocket();
     versusSocket = socket;
     try {
@@ -852,12 +858,12 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         versusRematchRequestedPlayerIds: [],
         selectedEnemyId: null,
         selectedAllyId: null,
-        battleNotice: "已加入房間，等待同步。"
+        battleNotice: rpgNotice().roomJoined
       });
     } catch (error) {
       socket.disconnect();
       if (versusSocket === socket) versusSocket = null;
-      set({ versusConnection: "error", battleNotice: error instanceof Error ? error.message : "加入真人道館失敗。" });
+      set({ versusConnection: "error", battleNotice: error instanceof Error ? error.message : rpgNotice().joinFailed });
     }
   },
   selectEnemyTarget: (targetId) =>
@@ -879,7 +885,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     const move = getRpgMoveById(moveId);
     if (!battle || !actor || !move) return;
     if ((battle.activeSide ?? "left") !== "left") {
-      set({ battleNotice: "還沒輪到我方行動。" });
+      set({ battleNotice: rpgNotice().notPlayerTurn });
       return;
     }
     const targetId = actionTargetForMove(battle, actor, move, state.selectedEnemyId, state.selectedAllyId);
@@ -905,7 +911,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       if (state.battleMode === "ai") {
         const aiActions = createAiRpgActions(battle, "right", roundEnergy);
         if (aiActions.length <= 0) {
-          set({ battleNotice: "敵方目前無法行動。" });
+          set({ battleNotice: rpgNotice().enemyNoAction });
           return;
         }
         const nextBattle = resolveRpgBattleTurn(battle, aiActions);
@@ -914,11 +920,11 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
           pendingActions: {},
           selectedEnemyId: firstLivingEnemyId(nextBattle),
           selectedAllyId: firstLivingAllyId(nextBattle),
-          battleNotice: nextBattle.winner ? "戰鬥結束。" : null
+          battleNotice: nextBattle.winner ? rpgNotice().battleFinished : null
         });
         return;
       }
-      set({ battleNotice: "等待對手行動。" });
+      set({ battleNotice: rpgNotice().waitingOpponentAction });
       return;
     }
 
@@ -927,28 +933,28 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
       .flatMap((pet) => {
         const pendingAction = state.pendingActions[pet.id];
         return pendingAction ? [{ actorId: pet.id, moveId: pendingAction.moveId, targetId: pendingAction.targetId }] : [];
-      });
+    });
     if (playerActions.length <= 0) {
-      set({ battleNotice: "請至少選擇一隻我方寵物的招式。" });
+      set({ battleNotice: rpgNotice().chooseOneMove });
       return;
     }
     const spentEnergy = playerActions.reduce((sum, action) => sum + (getRpgMoveById(action.moveId)?.energyCost ?? roundEnergy + 1), 0);
     if (spentEnergy > roundEnergy) {
-      set({ battleNotice: `本回合最多 ${roundEnergy} EN，目前選招超出能量。` });
+      set({ battleNotice: rpgNotice().energyExceeded(roundEnergy) });
       return;
     }
 
     if (state.battleMode === "versus") {
       if (!versusSocket || !state.versusRoomCode) {
-        set({ battleNotice: "真人道館尚未連線。" });
+        set({ battleNotice: rpgNotice().versusNotConnected });
         return;
       }
       if (state.versusConnection !== "connected") {
-        set({ battleNotice: state.versusConnection === "reconnecting" ? "重新連線中，暫停送出選招。" : "真人道館尚未同步完成。" });
+        set({ battleNotice: state.versusConnection === "reconnecting" ? rpgNotice().reconnectingNoSubmit : rpgNotice().versusNotSynced });
         return;
       }
       versusSocket.submitActions(state.versusRoomCode, playerActions);
-      set({ battleNotice: `已送出 ${playerActions.length} 個行動，等待同步。`, versusSubmittedPlayerIds: state.versusPlayerId ? [...new Set([...state.versusSubmittedPlayerIds, state.versusPlayerId])] : state.versusSubmittedPlayerIds });
+      set({ battleNotice: rpgNotice().submittedActions(playerActions.length), versusSubmittedPlayerIds: state.versusPlayerId ? [...new Set([...state.versusSubmittedPlayerIds, state.versusPlayerId])] : state.versusSubmittedPlayerIds });
       return;
     }
 
@@ -959,7 +965,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
         pendingActions: {},
         selectedEnemyId: firstLivingEnemyId(nextBattle),
         selectedAllyId: firstLivingAllyId(nextBattle),
-        battleNotice: nextBattle.winner ? "戰鬥結束。" : null
+        battleNotice: nextBattle.winner ? rpgNotice().battleFinished : null
       });
       return;
     }
@@ -967,20 +973,20 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
   requestVersusRematch: () => {
     const state = get();
     if (state.battleMode !== "versus" || !state.activeBattle?.winner) {
-      set({ battleNotice: "目前沒有已結束的真人戰鬥。" });
+      set({ battleNotice: rpgNotice().noFinishedVersus });
       return;
     }
     if (!versusSocket || !state.versusRoomCode) {
-      set({ battleNotice: "真人道館尚未連線。" });
+      set({ battleNotice: rpgNotice().versusNotConnected });
       return;
     }
     if (state.versusConnection !== "connected") {
-      set({ battleNotice: "真人道館重新同步中，暫時不能再戰。" });
+      set({ battleNotice: rpgNotice().versusResyncNoRematch });
       return;
     }
     versusSocket.requestRematch(state.versusRoomCode);
     set({
-      battleNotice: state.versusOpponentConnected ? "已準備再戰，等待對手確認。" : "已準備再戰，等待對手重連。",
+      battleNotice: state.versusOpponentConnected ? rpgNotice().rematchWaitingConfirm : rpgNotice().rematchWaitingReconnect,
       versusRematchRequestedPlayerIds: state.versusPlayerId ? [...new Set([...state.versusRematchRequestedPlayerIds, state.versusPlayerId])] : state.versusRematchRequestedPlayerIds
     });
   },

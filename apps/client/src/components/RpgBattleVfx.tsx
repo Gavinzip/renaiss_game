@@ -10,6 +10,7 @@ import type { CSSProperties } from "react";
 import { RPG_STATUS_VISUALS, statusDisplayLabel } from "./RpgStatusEffects";
 import { RpgSkillProjectileSprite } from "./RpgSkillProjectileSprite";
 import { RpgSkillVfxSprite } from "./RpgSkillVfxSprite";
+import { rpgGenericStatusLabel, rpgStatusLabel } from "../i18n/rpg";
 
 const FLOATING_TYPES = new Set<RpgBattleLogEntry["type"]>(["damage", "heal", "status", "shield", "defeat"]);
 const TRAVEL_RELEASE_DELAY_MS = 180;
@@ -90,7 +91,7 @@ function inferTargetIds(state: RpgBattleState, actorId: string, move: RpgMove, t
 
 function statusText(message: string) {
   const statusId = (Object.keys(RPG_STATUS_VISUALS) as Array<keyof typeof RPG_STATUS_VISUALS>).find((id) => message.includes(id) || message.includes(statusDisplayLabel(id)));
-  return statusId ? statusDisplayLabel(statusId) : "狀態";
+  return statusId ? rpgStatusLabel(statusId) : rpgGenericStatusLabel();
 }
 
 function floatingText(entry: RpgBattleLogEntry) {

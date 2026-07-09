@@ -17,6 +17,7 @@ import {
   type VillagePlayerFacing
 } from "../render/villagePlayerAnimation";
 import { useRpgStore, type RpgNavigationTarget, type RpgPlace } from "../../state/rpgStore";
+import { rpgCopy } from "../../i18n/rpg";
 
 interface FollowerView {
   element: RpgElement;
@@ -408,11 +409,12 @@ export class RpgVillageScene extends Phaser.Scene {
   private addRpgVillageProps() {
     const c = WORLD.width / 2;
     const m = WORLD.height / 2;
+    const profileCopy = rpgCopy().profile;
     this.addHouse(c - 1030, m + 455, "houseB", "CardsMelt4048", 0.94);
-    this.addHouse(c - 760, m + 120, "houseB", "個人房子", 0.94);
-    this.addHouse(c + 720, m + 150, "houseB", "競技場", 0.92);
-    this.addHouse(c - 410, m + 470, "houseA", "商城", 0.9);
-    this.addHouse(c + 520, m + 470, "houseA", "道館", 0.9);
+    this.addHouse(c - 760, m + 120, "houseB", profileCopy.house, 0.94);
+    this.addHouse(c + 720, m + 150, "houseB", profileCopy.arena, 0.92);
+    this.addHouse(c - 410, m + 470, "houseA", profileCopy.cabinet, 0.9);
+    this.addHouse(c + 520, m + 470, "houseA", profileCopy.gym, 0.9);
     this.addHouse(c + 900, m + 450, "houseB", "RocksSmash4680", 0.94);
     this.addProp(ENV_TEXTURES.treeRound, c - 1110, m + 190, 108, 140, m + 258, { collider: { kind: "circle", x: c - 1110, y: m + 162, radius: 40 } });
     this.addProp(ENV_TEXTURES.treePine, c - 995, m + 184, 108, 146, m + 252, { collider: { kind: "circle", x: c - 995, y: m + 154, radius: 38 } });
