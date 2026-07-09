@@ -28,7 +28,7 @@ const TUTORIAL_STORAGE_KEYS: Record<TutorialId, string> = {
 
 const ARENA_SCOREBOARD: readonly { rank: number; name: string; classId: ClassId; score: number }[] = [
   { rank: 1, name: "YOU", classId: "engineer", score: 128 },
-  { rank: 2, name: "VINCI", classId: "warrior", score: 96 },
+  { rank: 2, name: "RENAISS", classId: "warrior", score: 96 },
   { rank: 3, name: "LUMEN", classId: "mage", score: 82 },
   { rank: 4, name: "ARROW", classId: "archer", score: 71 }
 ];

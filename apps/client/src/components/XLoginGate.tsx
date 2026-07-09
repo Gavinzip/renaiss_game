@@ -115,7 +115,7 @@ function XLoginScreen({
         <img src={staticAssetUrl("/assets/generated/vinci-favicon.png")} alt="" />
         <div>
           <span>renaiss</span>
-          <h1>VINCI WORLD</h1>
+          <h1>Renaiss World</h1>
         </div>
       </div>
 
