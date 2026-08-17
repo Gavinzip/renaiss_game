@@ -79,6 +79,7 @@ import { ArenaI18nProvider, ARENA_LANGUAGES, useArenaI18n } from "./i18n/arena";
 
 const LANGUAGE_SELECTION_STORAGE_KEY = "renaiss:first-language-selected:v2";
 const ENTRY_LANGUAGE_OPTIONS = ARENA_LANGUAGES;
+type ArenaSetupView = "arena" | "skills";
 
 export function App() {
   const appParams = new URLSearchParams(window.location.search);
@@ -175,6 +176,7 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
   const unlockedSkillIds = useArenaSkillCollectionStore((state) => state.unlockedSkillIds);
   const loadSkillCollection = useArenaSkillCollectionStore((state) => state.loadForOwner);
   const reconcileCatalogLoadouts = useHudStore((state) => state.reconcileCatalogLoadouts);
+  const [arenaSetupView, setArenaSetupView] = useState<ArenaSetupView>("arena");
 
   useEffect(() => {
     void loadSkillCollection(`${authUser.provider}:${authUser.id}`);
@@ -185,14 +187,20 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
   }, [collectionStatus, reconcileCatalogLoadouts, unlockedSkillIds]);
 
   useEffect(() => {
-    if (editorMode || !arenaMode || arenaStatusReviewMode || arenaRuntime === "unity") {
+    if (
+      editorMode ||
+      !arenaMode ||
+      arenaStatusReviewMode ||
+      arenaRuntime === "unity" ||
+      arenaSetupView === "skills"
+    ) {
       return undefined;
     }
     const game = createGame("game-root");
     return () => {
       game.destroy(true);
     };
-  }, [arenaMode, arenaRuntime, arenaStatusReviewMode, editorMode]);
+  }, [arenaMode, arenaRuntime, arenaSetupView, arenaStatusReviewMode, editorMode]);
 
   if (editorMode) {
     return <MapEditor />;
@@ -208,15 +216,19 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
 
   return (
     <main className="app-shell">
-      <div id="game-root" className="game-root" />
+      {arenaSetupView === "arena" ? <div id="game-root" className="game-root" /> : null}
       {mapPreviewMode ? (
         <div className="map-preview-banner">
           Map draft gameplay preview
           <span>{mapPreviewDraftCount ? `${mapPreviewDraftCount} props` : "no saved draft"}</span>
         </div>
       ) : null}
-      <HudOverlay />
-      <StartPanel authUser={authUser} />
+      {arenaSetupView === "arena" ? <HudOverlay /> : null}
+      <StartPanel
+        authUser={authUser}
+        setupView={arenaSetupView}
+        onSetupViewChange={setArenaSetupView}
+      />
       {isArenaStatusReviewKey(liveStatusReviewKey) ? (
         <ArenaStatusLiveReviewBanner reviewKey={liveStatusReviewKey} />
       ) : null}
@@ -292,7 +304,15 @@ function RpgLoadingGate() {
   );
 }
 
-function StartPanel({ authUser }: { authUser: XAuthUser }) {
+function StartPanel({
+  authUser,
+  setupView,
+  onSetupViewChange
+}: {
+  authUser: XAuthUser;
+  setupView: ArenaSetupView;
+  onSetupViewChange: (view: ArenaSetupView) => void;
+}) {
   const { language, setLanguage, t } = useArenaI18n();
   const joined = useHudStore((state) => state.joined);
   const connection = useHudStore((state) => state.connection);
@@ -305,7 +325,6 @@ function StartPanel({ authUser }: { authUser: XAuthUser }) {
   const setSelectedMode = useHudStore((state) => state.setSelectedMode);
   const requestJoin = useHudStore((state) => state.requestJoin);
   const [name, setName] = useState(xPlayerName(authUser));
-  const [setupView, setSetupView] = useState<"arena" | "skills">("arena");
   const connectionLoop = useRef<GameUiSoundHandle | null>(null);
   const previousConnection = useRef(connection);
   const arenaTutorial = useFirstRunTutorial("arena");
@@ -398,7 +417,7 @@ function StartPanel({ authUser }: { authUser: XAuthUser }) {
       <ArenaSkillLoadoutScreen
         classId={classId}
         onClassChange={setSelectedClass}
-        onClose={() => setSetupView("arena")}
+        onClose={() => onSetupViewChange("arena")}
       />
     );
   }
@@ -531,7 +550,7 @@ function StartPanel({ authUser }: { authUser: XAuthUser }) {
         classId={classId}
         loadout={catalogLoadout}
         onConfigure={() => {
-          setSetupView("skills");
+          onSetupViewChange("skills");
           playGameUiSound("open");
         }}
       />
@@ -545,7 +564,7 @@ function StartPanel({ authUser }: { authUser: XAuthUser }) {
           className="enter-button"
           type="button"
           onClick={catalogLoadoutComplete ? enterArena : () => {
-            setSetupView("skills");
+            onSetupViewChange("skills");
             playGameUiSound("open");
           }}
         >
