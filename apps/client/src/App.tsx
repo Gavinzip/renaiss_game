@@ -44,6 +44,7 @@ import { GameAudio } from "./components/GameAudio";
 import { HudActionDrawer, type HudActionMode } from "./components/HudActionDrawer";
 import { MapEditor } from "./components/MapEditor";
 import { Minimap } from "./components/Minimap";
+import { MobileJoystick } from "./components/MobileJoystick";
 import { RoundHud } from "./components/RoundHud";
 import { RoundRewards } from "./components/RoundRewards";
 import { RoundResultOverlay } from "./components/RoundResultOverlay";
@@ -72,6 +73,7 @@ import {
 } from "./state/hudPreferences";
 import { useRpgStore } from "./state/rpgStore";
 import { RpgOverlay } from "./components/RpgOverlay";
+import { RpgMobileControls } from "./components/RpgMobileControls";
 import { useArenaSkillCollectionStore } from "./state/arenaSkillCollectionStore";
 import { ArenaTutorialModal, useFirstRunTutorial } from "./components/RpgTutorial";
 import { formatScore } from "./utils/formatScore";
@@ -174,8 +176,9 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
   const mapPreviewDraftCount = mapPreviewMode ? loadStoredMapDraftProps()?.length ?? 0 : 0;
   const collectionStatus = useArenaSkillCollectionStore((state) => state.status);
   const unlockedSkillIds = useArenaSkillCollectionStore((state) => state.unlockedSkillIds);
+  const serverCatalogLoadouts = useArenaSkillCollectionStore((state) => state.catalogLoadouts);
   const loadSkillCollection = useArenaSkillCollectionStore((state) => state.loadForOwner);
-  const reconcileCatalogLoadouts = useHudStore((state) => state.reconcileCatalogLoadouts);
+  const hydrateCatalogLoadouts = useHudStore((state) => state.hydrateCatalogLoadouts);
   const [arenaSetupView, setArenaSetupView] = useState<ArenaSetupView>("arena");
 
   useEffect(() => {
@@ -183,8 +186,10 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
   }, [authUser.id, authUser.provider, loadSkillCollection]);
 
   useEffect(() => {
-    if (collectionStatus === "ready") reconcileCatalogLoadouts(unlockedSkillIds);
-  }, [collectionStatus, reconcileCatalogLoadouts, unlockedSkillIds]);
+    if (collectionStatus === "ready") {
+      hydrateCatalogLoadouts(serverCatalogLoadouts, unlockedSkillIds);
+    }
+  }, [collectionStatus, hydrateCatalogLoadouts, serverCatalogLoadouts, unlockedSkillIds]);
 
   useEffect(() => {
     if (
@@ -284,7 +289,12 @@ function RpgApp({ authUser }: { authUser: XAuthUser }) {
   return (
     <main className="app-shell rpg-app-shell" style={rpgArenaStyle}>
       <div id="game-root" className="game-root" />
-      {rpgReady ? <RpgOverlay /> : <RpgLoadingGate />}
+      {rpgReady ? (
+        <>
+          <RpgOverlay />
+          <RpgMobileControls />
+        </>
+      ) : <RpgLoadingGate />}
     </main>
   );
 }
@@ -316,9 +326,12 @@ function StartPanel({
   const { language, setLanguage, t } = useArenaI18n();
   const joined = useHudStore((state) => state.joined);
   const connection = useHudStore((state) => state.connection);
+  const arenaAssets = useHudStore((state) => state.arenaAssets);
   const selectedClass = useHudStore((state) => state.selectedClass);
   const selectedMode = useHudStore((state) => state.selectedMode);
   const arenaCatalogLoadouts = useHudStore((state) => state.arenaCatalogLoadouts);
+  const catalogLoadoutSyncPending = useHudStore((state) => state.catalogLoadoutSyncPending);
+  const catalogLoadoutSyncError = useHudStore((state) => state.catalogLoadoutSyncError);
   const collectionStatus = useArenaSkillCollectionStore((state) => state.status);
   const unlockedSkillIds = useArenaSkillCollectionStore((state) => state.unlockedSkillIds);
   const setSelectedClass = useHudStore((state) => state.setSelectedClass);
@@ -348,6 +361,14 @@ function StartPanel({
     window.location.assign(`${url.pathname}${url.search}${url.hash}`);
   };
   const enterArena = () => {
+    const latestHudState = useHudStore.getState();
+    if (
+      arenaAssets.status !== "ready" ||
+      latestHudState.catalogLoadoutSyncPending > 0 ||
+      latestHudState.catalogLoadoutSyncError
+    ) {
+      return;
+    }
     if (!arenaTutorial.seen) {
       playGameUiSound("open");
       arenaTutorial.openTutorial();
@@ -563,20 +584,39 @@ function StartPanel({
         <button
           className="enter-button"
           type="button"
+          data-arena-assets-progress={`${arenaAssets.loaded}/${arenaAssets.total}`}
+          disabled={catalogLoadoutComplete && (
+            arenaAssets.status !== "ready" ||
+            catalogLoadoutSyncPending > 0 ||
+            Boolean(catalogLoadoutSyncError) ||
+            connection === "connecting" ||
+            connection === "preparing" ||
+            connection === "reconnecting"
+          )}
           onClick={catalogLoadoutComplete ? enterArena : () => {
             onSetupViewChange("skills");
             playGameUiSound("open");
           }}
         >
-          {connection === "connecting" || connection === "preparing" || connection === "reconnecting"
-            ? connection === "preparing"
-              ? t.ui.preparingAssets
-              : connection === "reconnecting"
-                ? t.ui.reconnecting
-                : t.ui.connecting
-            : catalogLoadoutComplete
-              ? t.ui.enterArena
-              : t.ui.equipBeforeEntry}
+          {!catalogLoadoutComplete
+            ? t.ui.equipBeforeEntry
+            : catalogLoadoutSyncPending > 0
+              ? language === "zh" ? "保存技能配置中" : language === "ko" ? "스킬 설정 저장 중" : "Saving skill loadout"
+              : catalogLoadoutSyncError
+                ? language === "zh" ? "技能配置保存失敗" : language === "ko" ? "스킬 설정 저장 실패" : "Loadout save failed"
+            : arenaAssets.status === "loading"
+              ? t.ui.preparingAllSkills(arenaAssets.loaded, arenaAssets.total)
+              : arenaAssets.status === "idle"
+                ? t.ui.preparingAssets
+                : arenaAssets.status === "error"
+                  ? t.ui.assetPreparationError
+                  : connection === "preparing"
+                    ? t.ui.preparingAssets
+                    : connection === "reconnecting"
+                      ? t.ui.reconnecting
+                      : connection === "connecting"
+                        ? t.ui.connecting
+                        : t.ui.enterArena}
         </button>
         <div className="arena-start-secondary-actions">
           <button className="arena-skill-forge-link" type="button" onClick={openSkillForge}>
@@ -592,6 +632,12 @@ function StartPanel({
           </button>
         </div>
         {connection === "error" ? <p className="connection-error">{t.ui.connectionError}</p> : null}
+        {catalogLoadoutSyncError ? (
+          <p className="connection-error">{catalogLoadoutSyncError}</p>
+        ) : null}
+        {arenaAssets.status === "error" ? (
+          <p className="connection-error">{t.ui.assetPreparationError}</p>
+        ) : null}
       </footer>
       <ArenaTutorialModal open={arenaTutorial.open} onClose={arenaTutorial.closeTutorial} />
     </section>
@@ -1074,8 +1120,6 @@ function MobileArenaControls({
   const resetMobileMove = useHudStore((state) => state.resetMobileMove);
   const resetMobileAim = useHudStore((state) => state.resetMobileAim);
   const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
-  const [stick, setStick] = useState<{ x: number; y: number; pointerId: number | null }>({ x: 0, y: 0, pointerId: null });
-  const joystickRadius = 46;
   const coreSkill = getArenaCatalogCoreSkill(classId);
   const coreSkillDetail = getArenaCatalogSkillDetail(coreSkill?.id ?? null);
   const coreSkillTooltip: ActionTooltip = coreSkillDetail
@@ -1093,72 +1137,18 @@ function MobileArenaControls({
     if (!disabled) {
       return;
     }
-    setStick({ x: 0, y: 0, pointerId: null });
     resetMobileMove();
     resetMobileAim();
   }, [disabled, resetMobileAim, resetMobileMove]);
 
-  const updateStick = (event: PointerEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const rawX = event.clientX - (rect.left + rect.width / 2);
-    const rawY = event.clientY - (rect.top + rect.height / 2);
-    const distance = Math.hypot(rawX, rawY);
-    const scale = distance > joystickRadius ? joystickRadius / distance : 1;
-    const x = rawX * scale;
-    const y = rawY * scale;
-    const deadzone = 7;
-    setStick({ x, y, pointerId: event.pointerId });
-    setMobileMove(distance > deadzone ? { x: x / joystickRadius, y: y / joystickRadius } : { x: 0, y: 0 });
-  };
-
-  const pressStick = (event: PointerEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (disabled) {
-      return;
-    }
-    tryPointerCapture(event.currentTarget, event.pointerId);
-    setMobileControlsActive(true);
-    updateStick(event);
-  };
-
-  const moveStick = (event: PointerEvent<HTMLDivElement>) => {
-    if (stick.pointerId !== event.pointerId || disabled) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-    updateStick(event);
-  };
-
-  const releaseStick = (event: PointerEvent<HTMLDivElement>) => {
-    if (stick.pointerId !== event.pointerId) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-    setStick({ x: 0, y: 0, pointerId: null });
-    resetMobileMove();
-  };
-
   return (
     <section className="mobile-arena-controls" aria-label="Mobile arena controls">
-      <div
-        className="mobile-joystick-zone"
-        onPointerDown={pressStick}
-        onPointerMove={moveStick}
-        onPointerUp={releaseStick}
-        onPointerCancel={releaseStick}
-        onContextMenu={(event) => event.preventDefault()}
-      >
-        <div
-          className={stick.pointerId !== null ? "mobile-joystick is-active" : "mobile-joystick"}
-          style={{ "--stick-x": `${stick.x}px`, "--stick-y": `${stick.y}px` } as CSSProperties}
-          aria-hidden="true"
-        >
-          <i />
-        </div>
-      </div>
+      <MobileJoystick
+        ariaLabel="Movement joystick"
+        disabled={disabled}
+        onEngage={() => setMobileControlsActive(true)}
+        onMove={setMobileMove}
+      />
 
       <div
         className={`mobile-skill-pad ${classId === "engineer" ? "has-engineer-core" : ""}`}

@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import {
   isArenaCatalogSkillAllowedInSlot,
+  isArenaCatalogLoadoutComplete,
   isArenaSkillAllowedInSlot,
+  type ArenaCatalogLoadouts,
   type ArenaCatalogSkillId,
   type ArenaGameMode,
   type ArenaLoadout,
@@ -15,13 +17,14 @@ import {
 } from "@renaiss-game/shared";
 import {
   loadArenaCatalogLoadouts,
-  saveArenaCatalogLoadouts,
-  type ArenaCatalogLoadouts
+  saveArenaCatalogLoadouts
 } from "./arenaCatalogLoadoutStorage";
+import { persistArenaCatalogLoadout } from "../api/arenaSkillCollection";
 import { loadArenaLoadouts, saveArenaLoadouts, type ArenaLoadouts } from "./arenaLoadoutStorage";
 import type { ArenaConnectionStatus } from "../game/network/GameSocket";
 
 export type ConnectionState = "idle" | ArenaConnectionStatus;
+export type ArenaAssetPreparationStatus = "idle" | "loading" | "ready" | "error";
 export type HudAction = "attack" | "skillF" | "skillQ" | "skillE" | "skillR";
 export type HudSkillAction = Exclude<HudAction, "attack">;
 export interface MobileMoveInput {
@@ -52,11 +55,18 @@ const emptyMobileAim = (): MobileAimInput => ({
 interface HudStore {
   joined: boolean;
   connection: ConnectionState;
+  arenaAssets: {
+    status: ArenaAssetPreparationStatus;
+    loaded: number;
+    total: number;
+  };
   selectedClass: ClassId;
   selectedMode: ArenaGameMode;
   engineerTurretKind: EngineerTurretKind;
   arenaLoadouts: ArenaLoadouts;
   arenaCatalogLoadouts: ArenaCatalogLoadouts;
+  catalogLoadoutSyncPending: number;
+  catalogLoadoutSyncError: string | null;
   selfId: string | null;
   joinRequest: JoinRequest | null;
   classSwitchRequest: ClassSwitchRequest & { requestedAt: number } | null;
@@ -82,10 +92,18 @@ interface HudStore {
     slot: ArenaLoadoutSlot,
     skill: ArenaCatalogSkillId
   ) => void;
-  reconcileCatalogLoadouts: (unlockedSkillIds: readonly ArenaCatalogSkillId[]) => void;
+  hydrateCatalogLoadouts: (
+    serverLoadouts: ArenaCatalogLoadouts,
+    unlockedSkillIds: readonly ArenaCatalogSkillId[]
+  ) => void;
   requestJoin: (request: JoinRequest) => void;
   requestClassSwitch: (classId: ClassId) => void;
   setConnection: (connection: ConnectionState) => void;
+  beginArenaAssetPreparation: (total: number) => void;
+  setArenaAssetProgress: (loaded: number, total: number) => void;
+  finishArenaAssetPreparation: () => void;
+  failArenaAssetPreparation: () => void;
+  resetArenaAssetPreparation: () => void;
   setJoined: (playerId: string) => void;
   setSnapshot: (snapshot: GameSnapshot) => void;
   setHudAction: (action: HudAction, active: boolean) => void;
@@ -103,11 +121,14 @@ interface HudStore {
 export const useHudStore = create<HudStore>((set, get) => ({
   joined: false,
   connection: "idle",
+  arenaAssets: { status: "idle", loaded: 0, total: 0 },
   selectedClass: "warrior",
   selectedMode: loadArenaMode(),
   engineerTurretKind: loadEngineerTurretKind(),
   arenaLoadouts: loadArenaLoadouts(),
   arenaCatalogLoadouts: loadArenaCatalogLoadouts(),
+  catalogLoadoutSyncPending: 0,
+  catalogLoadoutSyncError: null,
   selfId: null,
   joinRequest: null,
   classSwitchRequest: null,
@@ -147,40 +168,83 @@ export const useHudStore = create<HudStore>((set, get) => ({
       saveArenaLoadouts(arenaLoadouts);
       return { arenaLoadouts };
     }),
-  setCatalogLoadoutSkill: (classId, slot, skill) =>
-    set((state) => {
-      if (!isArenaCatalogSkillAllowedInSlot(classId, slot, skill)) {
-        return state;
-      }
-      const arenaCatalogLoadouts = {
-        ...state.arenaCatalogLoadouts,
-        [classId]: {
-          ...state.arenaCatalogLoadouts[classId],
-          [slot]: skill
+  setCatalogLoadoutSkill: (classId, slot, skill) => {
+    if (!isArenaCatalogSkillAllowedInSlot(classId, slot, skill)) return;
+    const state = get();
+    const nextLoadout = {
+      ...state.arenaCatalogLoadouts[classId],
+      [slot]: skill
+    };
+    const arenaCatalogLoadouts = {
+      ...state.arenaCatalogLoadouts,
+      [classId]: nextLoadout
+    };
+    saveArenaCatalogLoadouts(arenaCatalogLoadouts);
+    set((current) => ({
+      arenaCatalogLoadouts,
+      catalogLoadoutSyncPending: current.catalogLoadoutSyncPending + 1,
+      catalogLoadoutSyncError: null
+    }));
+    void persistArenaCatalogLoadout(classId, nextLoadout).then(
+      () => set((current) => ({
+        catalogLoadoutSyncPending: Math.max(0, current.catalogLoadoutSyncPending - 1)
+      })),
+      (error) => set((current) => ({
+        catalogLoadoutSyncPending: Math.max(0, current.catalogLoadoutSyncPending - 1),
+        catalogLoadoutSyncError:
+          error instanceof Error ? error.message : "Unable to save Arena skill loadout."
+      }))
+    );
+  },
+  hydrateCatalogLoadouts: (serverLoadouts, unlockedSkillIds) => {
+    const state = get();
+    const unlocked = new Set(unlockedSkillIds);
+    const slots = ["skillQ", "skillE", "skillR"] as const;
+    const arenaCatalogLoadouts = { ...serverLoadouts };
+    const migrations: ClassId[] = [];
+    for (const classId of ["warrior", "archer", "engineer", "mage"] as const) {
+      const serverLoadout = serverLoadouts[classId];
+      const localLoadout = state.arenaCatalogLoadouts[classId];
+      const merged = { ...serverLoadout };
+      for (const slot of slots) {
+        const localSkill = localLoadout[slot];
+        if (
+          merged[slot] === null &&
+          localSkill !== null &&
+          unlocked.has(localSkill) &&
+          isArenaCatalogSkillAllowedInSlot(classId, slot, localSkill)
+        ) {
+          merged[slot] = localSkill;
         }
-      };
-      saveArenaCatalogLoadouts(arenaCatalogLoadouts);
-      return { arenaCatalogLoadouts };
-    }),
-  reconcileCatalogLoadouts: (unlockedSkillIds) =>
-    set((state) => {
-      const unlocked = new Set(unlockedSkillIds);
-      const arenaCatalogLoadouts = Object.fromEntries(
-        Object.entries(state.arenaCatalogLoadouts).map(([classId, loadout]) => [
-          classId,
-          {
-            skillQ: loadout.skillQ && unlocked.has(loadout.skillQ) ? loadout.skillQ : null,
-            skillE: loadout.skillE && unlocked.has(loadout.skillE) ? loadout.skillE : null,
-            skillR: loadout.skillR && unlocked.has(loadout.skillR) ? loadout.skillR : null
-          }
-        ])
-      ) as ArenaCatalogLoadouts;
-      saveArenaCatalogLoadouts(arenaCatalogLoadouts);
-      return { arenaCatalogLoadouts };
-    }),
+      }
+      arenaCatalogLoadouts[classId] = merged;
+      if (slots.some((slot) => merged[slot] !== serverLoadout[slot])) {
+        migrations.push(classId);
+      }
+    }
+    saveArenaCatalogLoadouts(arenaCatalogLoadouts);
+    set((current) => ({
+      arenaCatalogLoadouts,
+      catalogLoadoutSyncPending:
+        current.catalogLoadoutSyncPending + migrations.length,
+      catalogLoadoutSyncError: null
+    }));
+    for (const classId of migrations) {
+      void persistArenaCatalogLoadout(classId, arenaCatalogLoadouts[classId]).then(
+        () => set((current) => ({
+          catalogLoadoutSyncPending: Math.max(0, current.catalogLoadoutSyncPending - 1)
+        })),
+        (error) => set((current) => ({
+          catalogLoadoutSyncPending: Math.max(0, current.catalogLoadoutSyncPending - 1),
+          catalogLoadoutSyncError:
+            error instanceof Error ? error.message : "Unable to migrate Arena skill loadout."
+        }))
+      );
+    }
+  },
   requestJoin: (request) => set({ joinRequest: request, selectedClass: request.classId, connection: "connecting" }),
   requestClassSwitch: (classId) =>
-    set((state) => ({
+    set((state) => isArenaCatalogLoadoutComplete(state.arenaCatalogLoadouts[classId]) ? ({
       classSwitchRequest: {
         classId,
         loadout: { ...state.arenaLoadouts[classId] },
@@ -189,8 +253,35 @@ export const useHudStore = create<HudStore>((set, get) => ({
         requestedAt: Date.now()
       },
       selectedClass: classId
-    })),
+    }) : state),
   setConnection: (connection) => set({ connection }),
+  beginArenaAssetPreparation: (total) => set({
+    arenaAssets: {
+      status: "loading",
+      loaded: 0,
+      total: Math.max(0, Math.floor(total))
+    }
+  }),
+  setArenaAssetProgress: (loaded, total) => set({
+    arenaAssets: {
+      status: "loading",
+      loaded: Math.max(0, Math.floor(loaded)),
+      total: Math.max(0, Math.floor(total))
+    }
+  }),
+  finishArenaAssetPreparation: () => set((state) => ({
+    arenaAssets: {
+      status: "ready",
+      loaded: state.arenaAssets.total,
+      total: state.arenaAssets.total
+    }
+  })),
+  failArenaAssetPreparation: () => set((state) => ({
+    arenaAssets: { ...state.arenaAssets, status: "error" }
+  })),
+  resetArenaAssetPreparation: () => set({
+    arenaAssets: { status: "idle", loaded: 0, total: 0 }
+  }),
   setJoined: (playerId) => set({ joined: true, selfId: playerId, connection: "connected" }),
   setSnapshot: (snapshot) => set({ snapshot, selfId: snapshot.selfId }),
   setHudAction: (action, active) => set((state) => ({ hudInput: { ...state.hudInput, [action]: active } })),
@@ -219,6 +310,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
   leaveArena: () => set({
     joined: false,
     connection: "idle",
+    arenaAssets: { status: "idle", loaded: 0, total: 0 },
     selfId: null,
     joinRequest: null,
     classSwitchRequest: null,

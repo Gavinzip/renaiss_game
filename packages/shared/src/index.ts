@@ -18,6 +18,7 @@ export * from "./arenaSkillCatalog";
 export * from "./arenaSkillCatalogDetails";
 export * from "./arenaSkillActionProfiles";
 export * from "./arenaSkillSpecs";
+export * from "./arenaSkillTelegraphs";
 export * from "./arenaSkillTargeting";
 export * from "./arenaStatusReviewExamples";
 export * from "./arenaStatuses";

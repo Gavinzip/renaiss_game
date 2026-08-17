@@ -1393,6 +1393,12 @@
   background: color-mix(in srgb, var(--class-accent) 14%, #211229);
 }
 
+.arena-combat-hud .death-class-card.is-disabled {
+  opacity: 0.42;
+  filter: grayscale(0.78);
+  cursor: not-allowed;
+}
+
 .arena-combat-hud .death-class-card .class-portrait {
   width: 36px;
   height: 40px;

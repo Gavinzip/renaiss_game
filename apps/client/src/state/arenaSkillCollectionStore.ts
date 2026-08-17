@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import type { ArenaCatalogSkill, ArenaCatalogSkillId, ClassId } from "@renaiss-game/shared";
+import {
+  createEmptyArenaCatalogLoadouts,
+  type ArenaCatalogLoadouts,
+  type ArenaCatalogSkill,
+  type ArenaCatalogSkillId,
+  type ClassId
+} from "@renaiss-game/shared";
 import {
   drawArenaClassSkill,
   fetchArenaSkillCollection,
@@ -14,6 +20,7 @@ interface ArenaSkillCollectionStore {
   ownerKey: string | null;
   status: CollectionStatus;
   unlockedSkillIds: ArenaCatalogSkillId[];
+  catalogLoadouts: ArenaCatalogLoadouts;
   drawLimit: number | null;
   drawsRemaining: number | null;
   lastDraw: ArenaCatalogSkill | null;
@@ -28,6 +35,7 @@ export const useArenaSkillCollectionStore = create<ArenaSkillCollectionStore>((s
   ownerKey: null,
   status: "idle",
   unlockedSkillIds: [],
+  catalogLoadouts: createEmptyArenaCatalogLoadouts(),
   drawLimit: null,
   drawsRemaining: null,
   lastDraw: null,
@@ -39,6 +47,7 @@ export const useArenaSkillCollectionStore = create<ArenaSkillCollectionStore>((s
       ownerKey,
       status: "loading",
       unlockedSkillIds: [],
+      catalogLoadouts: createEmptyArenaCatalogLoadouts(),
       drawLimit: null,
       drawsRemaining: null,
       lastDraw: null,
@@ -50,6 +59,7 @@ export const useArenaSkillCollectionStore = create<ArenaSkillCollectionStore>((s
       set({
         status: "ready",
         unlockedSkillIds: result.unlockedSkillIds,
+        catalogLoadouts: result.catalogLoadouts,
         drawLimit: result.drawLimit,
         drawsRemaining: result.drawsRemaining,
         error: null
@@ -71,6 +81,7 @@ export const useArenaSkillCollectionStore = create<ArenaSkillCollectionStore>((s
     const result = await unlockAllArenaSkills();
     set({
       unlockedSkillIds: result.unlockedSkillIds,
+      catalogLoadouts: result.catalogLoadouts,
       drawLimit: result.drawLimit,
       drawsRemaining: result.drawsRemaining,
       lastDraw: null,
@@ -81,6 +92,7 @@ export const useArenaSkillCollectionStore = create<ArenaSkillCollectionStore>((s
   commitDrawResult: (result) => {
     set({
       unlockedSkillIds: result.unlockedSkillIds,
+      catalogLoadouts: result.catalogLoadouts,
       drawLimit: result.drawLimit,
       drawsRemaining: result.drawsRemaining,
       lastDraw: result.skill,

@@ -18,6 +18,7 @@ import {
   bindRpgWalletCardSkill,
   arenaProgressionOwnerKey,
   drawArenaSkill,
+  getArenaCatalogLoadouts,
   getArenaSkillDrawAllowance,
   equipRpgCardToPet,
   getArenaUnlockedSkillIds,
@@ -30,6 +31,8 @@ import {
   rpgProfileDbPath,
   rpgProfileStorageInfo,
   isArenaCatalogLoadoutUnlocked,
+  isArenaCatalogLoadoutSelectionUnlocked,
+  saveArenaCatalogLoadout,
   unlockAllArenaSkills,
   unequipRpgCardFromPet
 } from "./rpg/rpgProfileDb";
@@ -94,7 +97,35 @@ app.get("/api/arena/skill-collection", (req, res) => {
   res.json({
     success: true,
     unlockedSkillIds: getArenaUnlockedSkillIds(ownerKey),
+    catalogLoadouts: getArenaCatalogLoadouts(ownerKey),
     ...allowance
+  });
+});
+
+app.post("/api/arena/catalog-loadout", (req, res) => {
+  const requestOrigin = req.get("origin");
+  if (!requestOrigin || !isAllowedGameOrigin(requestOrigin)) {
+    res.status(403).json({ success: false, reason: "arena_catalog_loadout_origin_required" });
+    return;
+  }
+  const user = resolveHttpAuthUser(req);
+  if (!user) {
+    res.status(401).json({ success: false, reason: "arena_auth_required" });
+    return;
+  }
+  if (!isClassId(req.body?.classId) || !isArenaCatalogLoadout(req.body.classId, req.body?.loadout)) {
+    res.status(400).json({ success: false, reason: "invalid_arena_catalog_loadout" });
+    return;
+  }
+  const ownerKey = arenaProgressionOwnerKey(user.provider, user.id);
+  if (!isArenaCatalogLoadoutSelectionUnlocked(ownerKey, req.body.loadout)) {
+    res.status(403).json({ success: false, reason: "arena_catalog_loadout_contains_locked_skill" });
+    return;
+  }
+  res.json({
+    success: true,
+    classId: req.body.classId,
+    loadout: saveArenaCatalogLoadout(ownerKey, req.body.classId, req.body.loadout)
   });
 });
 
@@ -124,7 +155,11 @@ app.post("/api/arena/skill-draw", (req, res) => {
     });
     return;
   }
-  res.json({ success: true, ...result });
+  res.json({
+    success: true,
+    ...result,
+    catalogLoadouts: getArenaCatalogLoadouts(ownerKey)
+  });
 });
 
 app.post("/api/arena/skill-unlock-all", (req, res) => {
@@ -139,7 +174,11 @@ app.post("/api/arena/skill-unlock-all", (req, res) => {
     return;
   }
   const ownerKey = arenaProgressionOwnerKey(user.provider, user.id);
-  res.json({ success: true, ...unlockAllArenaSkills(ownerKey) });
+  res.json({
+    success: true,
+    ...unlockAllArenaSkills(ownerKey),
+    catalogLoadouts: getArenaCatalogLoadouts(ownerKey)
+  });
 });
 
 app.get("/health", (_req, res) => {

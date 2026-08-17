@@ -168,6 +168,10 @@ interface TurretEntity extends TurretState {
   armorCoreEndsAt: number;
 }
 
+type DamageableAimTarget =
+  | { kind: "player"; target: PlayerEntity }
+  | { kind: "turret"; target: TurretEntity };
+
 interface DamageOverTimeEntity {
   id: string;
   ownerId: string;
@@ -1705,11 +1709,14 @@ export class GameRoom {
     for (const target of this.getLivingMageFieldTargets(field)) {
       actualDamage += this.damagePlayer(target, damage, field.ownerId, field.skillId);
     }
+    const owner = this.players.get(field.ownerId);
+    if (owner) {
+      this.damageTurretsInRadius(owner, field.skillId, field, field.radius, damage);
+    }
 
     if (!healOwner || actualDamage <= 0) {
       return;
     }
-    const owner = this.players.get(field.ownerId);
     if (!owner?.alive) {
       return;
     }
@@ -2318,21 +2325,38 @@ export class GameRoom {
       return true;
     }
 
-    const target =
+    const damageTarget =
       skillId === "warrior_05" ||
       skillId === "warrior_06" ||
       skillId === "warrior_10"
-        ? this.getAimTarget(player, skillId === "warrior_10" ? 170 : 125)
+        ? this.getAimDamageTarget(player, skillId === "warrior_10" ? 170 : 125)
         : null;
     if (
       (skillId === "warrior_05" ||
         skillId === "warrior_06" ||
         skillId === "warrior_10") &&
-      !target
+      !damageTarget
     ) {
       return false;
     }
 
+    if (damageTarget?.kind === "turret") {
+      const turret = damageTarget.target;
+      const executeBonus =
+        skillId === "warrior_10" && turret.health / turret.maxHealth < 0.25
+          ? 16
+          : 0;
+      const damage =
+        skillId === "warrior_05"
+          ? 20
+          : skillId === "warrior_06"
+            ? 18
+            : 34 + executeBonus;
+      this.damageTurret(turret, damage, player.id, now, skillId);
+      this.addCatalogEffect(skillId, player, turret, 90, 760, now);
+      return true;
+    }
+    const target = damageTarget?.kind === "player" ? damageTarget.target : null;
     if (skillId === "warrior_05" && target) {
       this.damagePlayer(target, 20, player.id, skillId);
       this.applyStun(target, 450, now);
@@ -2387,6 +2411,7 @@ export class GameRoom {
         this.damagePlayer(enemy, 26, player.id, skillId);
         this.applySlow(enemy, 0.55, 1500, now);
       }
+      this.damageTurretsInRadius(player, skillId, player, 200, 26);
       this.addCatalogEffect(skillId, player, player, 200, 1500, now);
       return true;
     }
@@ -2395,6 +2420,7 @@ export class GameRoom {
         this.damagePlayer(enemy, 48, player.id, skillId);
         this.applyStun(enemy, 1200, now);
       }
+      this.damageTurretsInRadius(player, skillId, player, 230, 48);
       this.addCatalogEffect(skillId, player, player, 230, 1300, now);
       return true;
     }
@@ -2411,6 +2437,7 @@ export class GameRoom {
           target
         );
       }
+      this.damageTurretsInRadius(player, skillId, player, 260, 38);
       return true;
     }
     return false;
@@ -2558,8 +2585,9 @@ export class GameRoom {
       );
     }
     if (skillId === "archer_12") {
-      const target = this.getAimTarget(player, 950);
-      if (!target) return false;
+      const damageTarget = this.getAimDamageTarget(player, 950);
+      if (!damageTarget) return false;
+      const target = damageTarget.target;
       const shotOrigin = this.getMuzzlePoint(
         { x: player.x, y: player.y - 28 },
         player.angle,
@@ -2573,7 +2601,7 @@ export class GameRoom {
         150,
         1100,
         now,
-        target,
+        damageTarget.kind === "player" ? damageTarget.target : undefined,
         undefined,
         {
           startX: shotOrigin.x,
@@ -2583,16 +2611,26 @@ export class GameRoom {
         }
       );
       const targetId = target.id;
+      const targetKind = damageTarget.kind;
       this.scheduleCatalogAction(player.id, now + 650, () => {
         const owner = this.players.get(player.id);
-        const currentTarget = this.players.get(targetId);
-        if (
-          owner?.alive &&
-          currentTarget?.alive &&
-          this.areEnemies(owner, currentTarget) &&
-          this.sharesCombatDimension(owner, currentTarget, Date.now())
-        ) {
-          this.damagePlayer(currentTarget, 54, owner.id, skillId);
+        if (!owner?.alive) return;
+        if (targetKind === "player") {
+          const currentTarget = this.players.get(targetId);
+          if (
+            currentTarget?.alive &&
+            this.areEnemies(owner, currentTarget) &&
+            this.sharesCombatDimension(owner, currentTarget, Date.now())
+          ) {
+            this.damagePlayer(currentTarget, 54, owner.id, skillId);
+          }
+          return;
+        }
+        const currentTurret = this.turrets.find(
+          (turret) => turret.id === targetId && turret.health > 0
+        );
+        if (currentTurret) {
+          this.damageTurret(currentTurret, 54, owner.id, Date.now(), skillId);
         }
       });
       return true;
@@ -2782,21 +2820,28 @@ export class GameRoom {
       );
       return true;
     }
+    const targetedRange =
+      (skillId === "mage_02"
+        ? 480
+        : skillId === "mage_11"
+          ? COMBAT.mageSoulChainRange
+          : 520) +
+      (skillId === "mage_11" ? 0 : focusRangeBonus);
+    const damageTarget =
+      skillId === "mage_02" || skillId === "mage_05"
+        ? this.getAimDamageTarget(player, targetedRange)
+        : null;
     const target =
+      (skillId === "mage_02" || skillId === "mage_05") &&
+      damageTarget?.kind === "player"
+        ? damageTarget.target
+        :
       skillId === "mage_02" ||
       skillId === "mage_03" ||
       skillId === "mage_04" ||
       skillId === "mage_05" ||
       skillId === "mage_11"
-        ? this.getAimTarget(
-            player,
-            (skillId === "mage_02"
-              ? 480
-              : skillId === "mage_11"
-                ? COMBAT.mageSoulChainRange
-                : 520) +
-              (skillId === "mage_11" ? 0 : focusRangeBonus)
-          )
+        ? this.getAimTarget(player, targetedRange)
         : null;
     if (
       (skillId === "mage_02" ||
@@ -2804,9 +2849,34 @@ export class GameRoom {
         skillId === "mage_04" ||
         skillId === "mage_05" ||
         skillId === "mage_11") &&
-      !target
+      (skillId === "mage_02" || skillId === "mage_05"
+        ? !damageTarget
+        : !target)
     ) {
       return false;
+    }
+    if (
+      (skillId === "mage_02" || skillId === "mage_05") &&
+      damageTarget?.kind === "turret"
+    ) {
+      const damage =
+        (skillId === "mage_02" ? 16 : 26) + focusDamageBonus;
+      this.damageTurret(
+        damageTarget.target,
+        damage,
+        player.id,
+        now,
+        skillId
+      );
+      this.addCatalogEffect(
+        skillId,
+        player,
+        damageTarget.target,
+        94,
+        900,
+        now
+      );
+      return true;
     }
     if (skillId === "mage_02" && target) {
       this.damagePlayer(target, 16 + focusDamageBonus, player.id, skillId);
@@ -3171,6 +3241,7 @@ export class GameRoom {
         this.damagePlayer(enemy, 18, player.id, skillId);
         this.pushTargetAway(enemy, anyTurret, 115);
       }
+      this.damageTurretsInRadius(player, skillId, anyTurret, 150, 18);
       this.addCatalogEffect(skillId, player, anyTurret, 150, 850, now);
       return true;
     }
@@ -3319,6 +3390,38 @@ export class GameRoom {
       )[0] ?? null;
   }
 
+  private getAimDamageTarget(
+    player: PlayerEntity,
+    range: number
+  ): DamageableAimTarget | null {
+    const aim = this.getAimPoint(player);
+    const playerTarget = this.getAimTarget(player, range);
+    const now = Date.now();
+    const turretTarget = this.getActiveDuelDimensionId(player, now)
+      ? null
+      : this.turrets
+          .filter((turret) => {
+            const owner = this.players.get(turret.ownerId);
+            return Boolean(
+              turret.health > 0 &&
+              owner &&
+              this.areEnemies(player, owner) &&
+              distance(player, turret) <= range
+            );
+          })
+          .sort(
+            (left, right) =>
+              distanceSq(aim, left) - distanceSq(aim, right) ||
+              distanceSq(player, left) - distanceSq(player, right)
+          )[0] ?? null;
+    if (!playerTarget && !turretTarget) return null;
+    if (!turretTarget) return { kind: "player", target: playerTarget! };
+    if (!playerTarget) return { kind: "turret", target: turretTarget };
+    return distanceSq(aim, turretTarget) < distanceSq(aim, playerTarget)
+      ? { kind: "turret", target: turretTarget }
+      : { kind: "player", target: playerTarget };
+  }
+
   private getNearestEnemyToPoint(
     owner: PlayerEntity,
     point: { x: number; y: number },
@@ -3373,6 +3476,30 @@ export class GameRoom {
   ) {
     for (const target of this.getEnemiesInRadius(owner, center, radius)) {
       this.damagePlayer(target, damage, owner.id, skillId);
+    }
+    this.damageTurretsInRadius(owner, skillId, center, radius, damage);
+  }
+
+  private damageTurretsInRadius(
+    owner: PlayerEntity,
+    skillId: ArenaCatalogSkillId,
+    center: { x: number; y: number },
+    radius: number,
+    damage: number
+  ) {
+    const now = Date.now();
+    if (this.getActiveDuelDimensionId(owner, now)) return;
+    for (const turret of this.turrets) {
+      const turretOwner = this.players.get(turret.ownerId);
+      if (
+        turret.health <= 0 ||
+        !turretOwner ||
+        !this.areEnemies(owner, turretOwner) ||
+        distance(center, turret) > radius
+      ) {
+        continue;
+      }
+      this.damageTurret(turret, damage, owner.id, now, skillId);
     }
   }
 
@@ -4075,7 +4202,7 @@ export class GameRoom {
       COMBAT.mageBeamDamage +
       (focusLensActive ? COMBAT.mageFocusLensDamageBonus : 0);
     const origin = getMageStaffAnchor(player);
-    const target = [...this.players.values()]
+    const playerTarget = [...this.players.values()]
       .filter(
         (candidate) =>
           this.areEnemies(player, candidate) &&
@@ -4085,15 +4212,53 @@ export class GameRoom {
           angleDiff(angleTo(player, candidate), player.angle) <= COMBAT.mageBeamHalfAngle
       )
       .sort((left, right) => distanceSq(player, left) - distanceSq(player, right))[0];
+    const turretTarget = this.getActiveDuelDimensionId(player, now)
+      ? undefined
+      : this.turrets
+          .filter((turret) => {
+            const owner = this.players.get(turret.ownerId);
+            return Boolean(
+              turret.health > 0 &&
+              owner &&
+              this.areEnemies(player, owner) &&
+              distance(player, turret) <= beamRange &&
+              angleDiff(angleTo(player, turret), player.angle) <=
+                COMBAT.mageBeamHalfAngle
+            );
+          })
+          .sort(
+            (left, right) => distanceSq(player, left) - distanceSq(player, right)
+          )[0];
+    const target: DamageableAimTarget | null =
+      turretTarget &&
+      (!playerTarget || distanceSq(player, turretTarget) < distanceSq(player, playerTarget))
+        ? { kind: "turret", target: turretTarget }
+        : playerTarget
+          ? { kind: "player", target: playerTarget }
+          : null;
     const end = target
-      ? { x: target.x, y: target.y + MAGE_TARGET_TORSO_OFFSET_Y }
+      ? {
+          x: target.target.x,
+          y:
+            target.kind === "player"
+              ? target.target.y + MAGE_TARGET_TORSO_OFFSET_Y
+              : target.target.y - 20
+        }
       : project(origin, player.angle, beamRange);
 
-    if (target) {
+    if (target?.kind === "player") {
       this.damagePlayer(
-        target,
+        target.target,
         beamDamage,
         player.id,
+        "mage_00"
+      );
+    } else if (target?.kind === "turret") {
+      this.damageTurret(
+        target.target,
+        beamDamage,
+        player.id,
+        now,
         "mage_00"
       );
     }
@@ -4102,7 +4267,7 @@ export class GameRoom {
       id: `fx_${this.nextEffectId++}`,
       type: "beam",
       ownerId: player.id,
-      targetId: target?.id,
+      targetId: target?.kind === "player" ? target.target.id : undefined,
       classId: player.classId,
       skillId: "mage_00",
       x: origin.x,
@@ -4188,6 +4353,13 @@ export class GameRoom {
             executeAt
           );
         }
+        this.damageTurretsInRadius(
+          owner,
+          "mage_07",
+          owner,
+          COMBAT.mageBurstRadius,
+          COMBAT.mageBurstDamage
+        );
       }
     );
   }
@@ -4210,16 +4382,13 @@ export class GameRoom {
   private castCleanStorm(player: PlayerEntity, now: number) {
     this.setActionPose(player, now, 920, "skillR");
     const center = this.getAimPoint(player);
-    for (const target of this.players.values()) {
-      if (
-        this.areEnemies(player, target) &&
-        this.sharesCombatDimension(player, target, now) &&
-        target.alive &&
-        distance(center, target) <= COMBAT.mageUltimateRadius
-      ) {
-        this.damagePlayer(target, COMBAT.mageUltimateDamage, player.id, "mage_12");
-      }
-    }
+    this.damageRadius(
+      player,
+      "mage_12",
+      center,
+      COMBAT.mageUltimateRadius,
+      COMBAT.mageUltimateDamage
+    );
     this.addMageSkillEffect(
       "ultimate",
       "mage_12",

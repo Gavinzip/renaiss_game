@@ -1,4 +1,4 @@
-import { CLASS_META, CLASS_ORDER, CLASS_STATS, WORLD, getEffectiveBasicAttackDamage, type ClassId, type PublicPlayer } from "@renaiss-game/shared";
+import { CLASS_META, CLASS_ORDER, CLASS_STATS, WORLD, getEffectiveBasicAttackDamage, isArenaCatalogLoadoutComplete, type ClassId, type PublicPlayer } from "@renaiss-game/shared";
 import type { CSSProperties } from "react";
 import { useHudStore } from "../state/hudStore";
 import { ClassPortrait } from "./ClassPortrait";
@@ -12,6 +12,7 @@ interface DeathOverlayProps {
 export function DeathOverlay({ player, serverTime }: DeathOverlayProps) {
   const { t } = useArenaI18n();
   const requestClassSwitch = useHudStore((state) => state.requestClassSwitch);
+  const catalogLoadouts = useHudStore((state) => state.arenaCatalogLoadouts);
 
   if (!player || player.alive) {
     return null;
@@ -40,6 +41,7 @@ export function DeathOverlay({ player, serverTime }: DeathOverlayProps) {
               key={classId}
               classId={classId}
               current={player.classId === classId}
+              disabled={!isArenaCatalogLoadoutComplete(catalogLoadouts[classId])}
               onSelect={() => requestClassSwitch(classId)}
             />
           ))}
@@ -52,10 +54,12 @@ export function DeathOverlay({ player, serverTime }: DeathOverlayProps) {
 function ClassSwitchButton({
   classId,
   current,
+  disabled,
   onSelect
 }: {
   classId: ClassId;
   current: boolean;
+  disabled: boolean;
   onSelect: () => void;
 }) {
   const { t } = useArenaI18n();
@@ -65,8 +69,9 @@ function ClassSwitchButton({
   return (
     <button
       type="button"
-      className={current ? "death-class-card is-current" : "death-class-card"}
+      className={`${current ? "death-class-card is-current" : "death-class-card"}${disabled ? " is-disabled" : ""}`}
       aria-pressed={current}
+      disabled={disabled}
       onClick={onSelect}
       style={{ "--class-accent": meta.accent } as CSSProperties}
     >
@@ -74,7 +79,7 @@ function ClassSwitchButton({
       <span>
         <strong>{t.classes[classId].label}</strong>
         <small>{t.classes[classId].role}</small>
-        <b>{t.death.hpAtk(stats.maxHealth, getEffectiveBasicAttackDamage(classId))}</b>
+        <b>{disabled ? "Q / E / R 未配置完成" : t.death.hpAtk(stats.maxHealth, getEffectiveBasicAttackDamage(classId))}</b>
       </span>
     </button>
   );

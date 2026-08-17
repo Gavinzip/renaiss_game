@@ -1,18 +1,15 @@
 import {
   CLASS_ORDER,
+  createEmptyArenaCatalogLoadouts,
   isArenaCatalogLoadout,
-  type ArenaCatalogLoadout,
+  type ArenaCatalogLoadouts,
   type ClassId
 } from "@renaiss-game/shared";
 
 const STORAGE_KEY = "renaiss:arena-catalog-loadouts:v3";
 
-export type ArenaCatalogLoadouts = Record<ClassId, ArenaCatalogLoadout>;
-
 export function createDefaultArenaCatalogLoadouts(): ArenaCatalogLoadouts {
-  return Object.fromEntries(
-    CLASS_ORDER.map((classId) => [classId, { skillQ: null, skillE: null, skillR: null }])
-  ) as ArenaCatalogLoadouts;
+  return createEmptyArenaCatalogLoadouts();
 }
 
 export function loadArenaCatalogLoadouts(): ArenaCatalogLoadouts {

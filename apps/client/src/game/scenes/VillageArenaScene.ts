@@ -18,6 +18,7 @@ import {
   type ArenaCatalogSkillId,
   type ArenaLoadoutSlot,
   type ArenaSkillActionBody,
+  type ClassSwitchRequest,
   type HealthPackState,
   type JoinRequest,
   type PlayerInput,
@@ -101,7 +102,9 @@ import {
 } from "../assets/runtimeTextures";
 import {
   ARENA_RUNTIME_ACTOR_DISPLAY_HEIGHT,
+  ARENA_SKILL_RUNTIME_ENTRY_COUNT,
   buildArenaSkillRuntimeTextures,
+  ensureArenaSkillRuntimeTextures,
   getArenaSkillRuntimeActionBody,
   getArenaSkillRuntimeActionBodyFrameAtProgress,
   getArenaSkillRuntimeActionBodyFrameTexture,
@@ -123,6 +126,7 @@ import {
   getEngineerCoreFrameAtProgress,
   getEngineerCoreFrameTexture,
   getEngineerCoreRuntimeAsset,
+  prepareAllArenaSkillRuntimeTextures,
   preloadArenaSkillRuntimeTextures,
   releaseArenaSkillRuntimeSourceTextures,
   type ArenaSkillRuntimePathCore
@@ -141,6 +145,7 @@ interface PlayerView {
   actionFxBack: Phaser.GameObjects.Image;
   concealmentOutline: Phaser.GameObjects.Image;
   sprite: Phaser.GameObjects.Image;
+  poisonOverlay: Phaser.GameObjects.Image;
   actionFxFront: Phaser.GameObjects.Image;
   hitImpact: Phaser.GameObjects.Image;
   name: Phaser.GameObjects.Text;
@@ -193,6 +198,7 @@ interface TurretView {
   shield: Phaser.GameObjects.Sprite;
   healthBack: Phaser.GameObjects.Rectangle;
   health: Phaser.GameObjects.Rectangle;
+  ownerMarker: Phaser.GameObjects.Rectangle;
   visualX: number;
   visualY: number;
 }
@@ -339,6 +345,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private duelRealmMask!: Phaser.Display.Masks.GeometryMask;
   private keys!: Record<string, Phaser.Input.Keyboard.Key>;
   private lastSentAt = 0;
+  private allSkillsReadyPromise: Promise<void> | null = null;
   private unsubscribeJoin?: () => void;
   private lastHudSync = 0;
   private lastArenaAimPoint: { x: number; y: number } | null = null;
@@ -392,7 +399,11 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   preload() {
-    preloadArenaSkillRuntimeTextures(this);
+    const hud = useHudStore.getState();
+    hud.beginArenaAssetPreparation(ARENA_SKILL_RUNTIME_ENTRY_COUNT);
+    // Scene construction uses the duel-realm texture immediately. The other
+    // packages warm sequentially after create() to cap mobile peak memory.
+    preloadArenaSkillRuntimeTextures(this, ["warrior_13"]);
     if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
     this.load.image("classSprites", generatedAssetPath("class-sprites"));
     for (const classId of NEW_COMPATIBLE_WALK_CLASS_IDS) {
@@ -449,6 +460,7 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   create() {
+    if (!this.game.isRunning) return;
     copyTexture(this, "classSprites", "classSpritesClean");
     makeMatteTransparent(this, "villageAssets", "villageAssetsClean", "magenta");
     makeMatteTransparent(this, "skillEffects", "skillEffectsClean", "edgeBlack");
@@ -461,9 +473,9 @@ export class VillageArenaScene extends Phaser.Scene {
     );
     buildRuntimeTextures(this);
     buildMagicTurretRuntimeTextures(this);
-    buildArenaSkillRuntimeTextures(this);
+    buildArenaSkillRuntimeTextures(this, ["warrior_13"]);
     buildNewCompatibleWalkTextures(this);
-    releaseArenaSkillRuntimeSourceTextures(this);
+    releaseArenaSkillRuntimeSourceTextures(this, ["warrior_13"]);
     releaseArenaRuntimeSourceTextures(this);
 
     this.cameras.main.setBounds(0, 0, WORLD.width, WORLD.height);
@@ -515,14 +527,12 @@ export class VillageArenaScene extends Phaser.Scene {
         void this.joinArena(request);
       },
       onClassSwitchRequest: (request) => {
-        this.socket?.switchClass({
-          classId: request.classId,
-          loadout: request.loadout,
-          catalogLoadout: request.catalogLoadout,
-          engineerTurretKind: request.engineerTurretKind
-        });
+        void this.switchArenaClass(request);
       }
     });
+
+    this.allSkillsReadyPromise = this.prepareAllSkills();
+    void this.allSkillsReadyPromise.catch(() => undefined);
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       window.removeEventListener("pointermove", this.updatePointerArenaTarget, true);
@@ -542,6 +552,8 @@ export class VillageArenaScene extends Phaser.Scene {
       this.screenFlashTween?.stop();
       this.screenFlashTween = null;
       this.screenFlash = null;
+      this.allSkillsReadyPromise = null;
+      useHudStore.getState().resetArenaAssetPreparation();
     });
   }
 
@@ -558,11 +570,23 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   private async joinArena(request: JoinRequest) {
-    if (this.socket) {
+    if (!this.game.isRunning || !this.sys.isActive() || this.socket) {
       return;
     }
 
     const hud = useHudStore.getState();
+    try {
+      await this.allSkillsReadyPromise;
+    } catch (error) {
+      if (this.game.isRunning && this.sys.isActive()) {
+        console.error("Arena all-skill preparation failed", error);
+        hud.failArenaAssetPreparation();
+      }
+      return;
+    }
+    if (!this.game.isRunning || !this.sys.isActive()) {
+      return;
+    }
     hud.setConnection("connecting");
     this.socket = new GameSocket();
 
@@ -591,6 +615,41 @@ export class VillageArenaScene extends Phaser.Scene {
       useHudStore.getState().setConnection("error");
       this.socket?.disconnect();
       this.socket = null;
+    }
+  }
+
+  private async prepareAllSkills() {
+    const hud = useHudStore.getState();
+    try {
+      await prepareAllArenaSkillRuntimeTextures(this, (loaded, total) => {
+        if (this.game.isRunning) {
+          useHudStore.getState().setArenaAssetProgress(loaded, total);
+        }
+      });
+      if (this.game.isRunning) {
+        useHudStore.getState().finishArenaAssetPreparation();
+      }
+    } catch (error) {
+      if (this.game.isRunning) {
+        hud.failArenaAssetPreparation();
+        console.error("Arena all-skill preparation failed", error);
+      }
+      throw error;
+    }
+  }
+
+  private async switchArenaClass(request: ClassSwitchRequest) {
+    const requiredSkillIds = [
+      request.catalogLoadout.skillQ,
+      request.catalogLoadout.skillE,
+      request.catalogLoadout.skillR
+    ].filter((skillId): skillId is ArenaCatalogSkillId => Boolean(skillId));
+    try {
+      await ensureArenaSkillRuntimeTextures(this, requiredSkillIds);
+      this.socket?.switchClass(request);
+    } catch (error) {
+      console.error("Arena class switch assets failed", error);
+      useHudStore.getState().setConnection("error");
     }
   }
 
@@ -1111,6 +1170,7 @@ export class VillageArenaScene extends Phaser.Scene {
       view.actionGhost.setFlipX(renderFrame.flipX);
       this.addMovementTrail(view, player, renderFrame, previousX, previousY, movedDistance, moving, now);
       this.applyPlayerPose(view, player, moving, now, renderFrame);
+      this.updatePoisonOverlay(view, player, now);
 
       view.name.setText(player.name);
       const healthRatio = player.health / player.maxHealth;
@@ -1134,6 +1194,31 @@ export class VillageArenaScene extends Phaser.Scene {
       );
       view.shadow.setFillStyle(0x050403, isSelf && player.alive ? 0.36 : 0.28);
     }
+  }
+
+  private updatePoisonOverlay(
+    view: PlayerView,
+    player: PublicPlayer,
+    now: number
+  ) {
+    if (!player.alive || !player.poisoned || !view.sprite.visible) {
+      view.poisonOverlay.setVisible(false);
+      return;
+    }
+    const pulse = 0.26 + (Math.sin(now / 145) + 1) * 0.055;
+    view.poisonOverlay
+      .setVisible(true)
+      .setTexture(view.sprite.texture.key)
+      .setFrame(view.sprite.frame.name)
+      .setOrigin(view.sprite.originX, view.sprite.originY)
+      .setPosition(view.sprite.x, view.sprite.y)
+      .setDisplaySize(view.sprite.displayWidth, view.sprite.displayHeight)
+      .setFlipX(view.sprite.flipX)
+      .setFlipY(view.sprite.flipY)
+      .setAngle(view.sprite.angle)
+      .setAlpha(pulse * view.sprite.alpha)
+      .setTintFill(0xa84cff)
+      .setBlendMode(Phaser.BlendModes.ADD);
   }
 
   private addMovementTrail(
@@ -1831,6 +1916,9 @@ export class VillageArenaScene extends Phaser.Scene {
       view.container.setPosition(view.visualX, view.visualY + bodyRise);
       view.container.setDepth(view.visualY + 26);
       const shieldActive = turret.shield > 0 && turret.shieldEndsAt > serverTime;
+      const isOwnTurret = turret.ownerId === this.snapshot?.selfId;
+      const relationColor = isOwnTurret ? 0x75f06a : 0xff625d;
+      const relationFill = isOwnTurret ? 0x123d17 : 0x461416;
       const fireFrame = this.getTurretFireFrame(turret.id);
       if (turret.kind === "mechanical") {
         view.base
@@ -1882,15 +1970,23 @@ export class VillageArenaScene extends Phaser.Scene {
         .setAlpha((shieldActive ? 0.5 : 0.42) * revealAlpha)
         .setScale(shieldActive ? 1.08 : 1, shieldActive ? 1.03 : 1);
       view.anchor
-        .setFillStyle(turret.kind === "mechanical" ? 0x321a0d : 0x122431, shieldActive ? 0.24 : 0.16)
-        .setStrokeStyle(2, turret.kind === "mechanical" ? 0xffa24f : 0x72d7ff, shieldActive ? 0.52 : 0.28)
+        .setFillStyle(relationFill, shieldActive ? 0.28 : 0.2)
+        .setStrokeStyle(3, relationColor, shieldActive ? 0.78 : 0.62)
         .setAlpha(revealAlpha);
       view.healthBack.setPosition(0, healthY);
       view.health.setPosition(-TURRET_HEALTH_WIDTH / 2, healthY);
       view.health.width = Math.max(0, TURRET_HEALTH_WIDTH * (turret.health / turret.maxHealth));
+      view.health.setFillStyle(relationColor, 1);
+      view.ownerMarker
+        .setPosition(0, healthY - 7)
+        .setFillStyle(relationColor, 1)
+        .setStrokeStyle(1, isOwnTurret ? 0x183c18 : 0x4a1111, 1)
+        .setAngle(45)
+        .setAlpha(revealAlpha);
       const healthVisible = deployProgress >= (isMechanical ? 0.82 : 0.65);
       view.healthBack.setVisible(healthVisible);
       view.health.setVisible(healthVisible);
+      view.ownerMarker.setVisible(healthVisible);
     }
   }
 
@@ -3167,6 +3263,12 @@ export class VillageArenaScene extends Phaser.Scene {
       .setVisible(false)
       .setBlendMode(Phaser.BlendModes.NORMAL);
     const sprite = this.add.image(0, 0, getClassFrameTexture(player.classId, 0)).setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y).setDisplaySize(88, 104);
+    const poisonOverlay = this.add
+      .image(0, 0, getClassFrameTexture(player.classId, 0))
+      .setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y)
+      .setDisplaySize(88, 104)
+      .setVisible(false)
+      .setBlendMode(Phaser.BlendModes.ADD);
     const concealmentOutline = createPlayerConcealmentOutline(
       this,
       getClassFrameTexture(player.classId, 0)
@@ -3218,6 +3320,7 @@ export class VillageArenaScene extends Phaser.Scene {
       actionFxBack,
       concealmentOutline,
       sprite,
+      poisonOverlay,
       actionFxFront,
       hitImpact,
       name,
@@ -3239,6 +3342,7 @@ export class VillageArenaScene extends Phaser.Scene {
       actionFxBack,
       concealmentOutline,
       sprite,
+      poisonOverlay,
       actionFxFront,
       hitImpact,
       name,
@@ -3355,8 +3459,9 @@ export class VillageArenaScene extends Phaser.Scene {
       .setVisible(false);
     const healthBack = this.add.rectangle(0, healthY, 32, 5, 0x211611, 0.86);
     const health = this.add.rectangle(-TURRET_HEALTH_WIDTH / 2, healthY, TURRET_HEALTH_WIDTH, 3, 0x65d840, 1).setOrigin(0, 0.5);
-    container.add([shadow, anchor, base, body, shield, healthBack, health]);
-    return { container, shadow, anchor, base, body, shield, healthBack, health, visualX: turret.x, visualY: turret.y };
+    const ownerMarker = this.add.rectangle(0, healthY - 7, 7, 7, 0x65d840, 1).setAngle(45);
+    container.add([shadow, anchor, base, body, shield, healthBack, health, ownerMarker]);
+    return { container, shadow, anchor, base, body, shield, healthBack, health, ownerMarker, visualX: turret.x, visualY: turret.y };
   }
 
   private createPackView(pack: HealthPackState): PackView {

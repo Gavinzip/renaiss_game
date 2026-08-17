@@ -1,5 +1,10 @@
 import {
+  CLASS_ORDER,
+  createEmptyArenaCatalogLoadouts,
   getArenaCatalogSkill,
+  isArenaCatalogLoadout,
+  type ArenaCatalogLoadout,
+  type ArenaCatalogLoadouts,
   type ArenaCatalogSkill,
   type ArenaCatalogSkillId,
   type ClassId
@@ -10,6 +15,8 @@ interface ArenaSkillCollectionPayload {
   success: boolean;
   reason?: string;
   unlockedSkillIds?: unknown;
+  catalogLoadouts?: unknown;
+  loadout?: unknown;
   skill?: { id?: unknown } | null;
   classComplete?: boolean;
   drawLimitReached?: boolean;
@@ -19,6 +26,7 @@ interface ArenaSkillCollectionPayload {
 
 export interface ArenaSkillCollectionResult {
   unlockedSkillIds: ArenaCatalogSkillId[];
+  catalogLoadouts: ArenaCatalogLoadouts;
   drawLimit: number;
   drawsRemaining: number;
 }
@@ -36,8 +44,56 @@ export async function fetchArenaSkillCollection(): Promise<ArenaSkillCollectionR
   const payload = await readPayload(response);
   return {
     unlockedSkillIds: readUnlockedSkillIds(payload.unlockedSkillIds),
+    catalogLoadouts: readCatalogLoadouts(payload.catalogLoadouts),
     ...readDrawAllowance(payload)
   };
+}
+
+export async function persistArenaCatalogLoadout(
+  classId: ClassId,
+  loadout: ArenaCatalogLoadout
+): Promise<ArenaCatalogLoadout> {
+  const previous = catalogLoadoutSaveQueues.get(classId) ?? Promise.resolve(null);
+  const operation = previous
+    .catch(() => null)
+    .then(() => requestArenaCatalogLoadoutSave(classId, loadout));
+  catalogLoadoutSaveQueues.set(classId, operation);
+  operation.then(
+    () => clearCatalogLoadoutSaveQueue(classId, operation),
+    () => clearCatalogLoadoutSaveQueue(classId, operation)
+  );
+  return operation;
+}
+
+const catalogLoadoutSaveQueues = new Map<
+  ClassId,
+  Promise<ArenaCatalogLoadout | null>
+>();
+
+async function requestArenaCatalogLoadoutSave(
+  classId: ClassId,
+  loadout: ArenaCatalogLoadout
+): Promise<ArenaCatalogLoadout> {
+  const response = await fetch(`${gameServerUrl()}/api/arena/catalog-loadout`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ classId, loadout })
+  });
+  const payload = await readPayload(response);
+  if (!isArenaCatalogLoadout(classId, payload.loadout)) {
+    throw new Error("Saved Arena skill loadout response is invalid.");
+  }
+  return payload.loadout;
+}
+
+function clearCatalogLoadoutSaveQueue(
+  classId: ClassId,
+  operation: Promise<ArenaCatalogLoadout | null>
+) {
+  if (catalogLoadoutSaveQueues.get(classId) === operation) {
+    catalogLoadoutSaveQueues.delete(classId);
+  }
 }
 
 export async function drawArenaClassSkill(classId: ClassId): Promise<ArenaSkillDrawResult> {
@@ -55,6 +111,7 @@ export async function drawArenaClassSkill(classId: ClassId): Promise<ArenaSkillD
   }
   return {
     unlockedSkillIds,
+    catalogLoadouts: readCatalogLoadouts(payload.catalogLoadouts),
     ...readDrawAllowance(payload),
     skill,
     classComplete: payload.classComplete === true,
@@ -71,6 +128,7 @@ export async function unlockAllArenaSkills(): Promise<ArenaSkillCollectionResult
   const payload = await readPayload(response);
   return {
     unlockedSkillIds: readUnlockedSkillIds(payload.unlockedSkillIds),
+    catalogLoadouts: readCatalogLoadouts(payload.catalogLoadouts),
     ...readDrawAllowance(payload)
   };
 }
@@ -93,6 +151,21 @@ function readUnlockedSkillIds(value: unknown): ArenaCatalogSkillId[] {
     unique.add(candidate as ArenaCatalogSkillId);
   }
   return [...unique];
+}
+
+function readCatalogLoadouts(value: unknown): ArenaCatalogLoadouts {
+  if (!value || typeof value !== "object") {
+    throw new Error("Arena skill loadouts response is invalid.");
+  }
+  const result = createEmptyArenaCatalogLoadouts();
+  const candidate = value as Partial<Record<ClassId, unknown>>;
+  for (const classId of CLASS_ORDER) {
+    if (!isArenaCatalogLoadout(classId, candidate[classId])) {
+      throw new Error(`Arena ${classId} loadout response is invalid.`);
+    }
+    result[classId] = { ...candidate[classId] };
+  }
+  return result;
 }
 
 function readDrawAllowance(payload: ArenaSkillCollectionPayload) {

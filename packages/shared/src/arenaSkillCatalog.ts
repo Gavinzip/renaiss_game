@@ -16,6 +16,17 @@ export interface ArenaCatalogSkill {
   core: boolean;
 }
 
+export type ArenaCatalogLoadouts = Record<ClassId, ArenaCatalogLoadout>;
+
+export function createEmptyArenaCatalogLoadouts(): ArenaCatalogLoadouts {
+  return Object.fromEntries(
+    (["warrior", "archer", "engineer", "mage"] as const).map((classId) => [
+      classId,
+      { skillQ: null, skillE: null, skillR: null }
+    ])
+  ) as ArenaCatalogLoadouts;
+}
+
 const TIER_BY_INDEX = (index: number): ArenaSkillTier => {
   if (index < 7) return "basic";
   if (index < 12) return "intermediate";

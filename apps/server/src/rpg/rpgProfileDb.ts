@@ -2,10 +2,13 @@ import { DatabaseSync } from "node:sqlite";
 import {
   ARENA_LOADOUT_SLOTS,
   ARENA_SKILL_CATALOG,
+  CLASS_ORDER,
   RPG_STARTER_PETS,
+  createEmptyArenaCatalogLoadouts,
   getArenaCatalogSkillsForClass,
   getRpgMoveById,
   type ArenaCatalogLoadout,
+  type ArenaCatalogLoadouts,
   type ArenaCatalogSkill,
   type ArenaCatalogSkillId,
   type ClassId,
@@ -94,6 +97,16 @@ db.exec(`
     owner_key TEXT PRIMARY KEY,
     last_draw_at INTEGER NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS arena_catalog_loadouts (
+    owner_key TEXT NOT NULL,
+    class_id TEXT NOT NULL,
+    skill_q TEXT,
+    skill_e TEXT,
+    skill_r TEXT,
+    updated_at INTEGER NOT NULL,
+    PRIMARY KEY (owner_key, class_id)
+  );
 `);
 
 interface BindingRow {
@@ -121,6 +134,13 @@ interface ArenaSkillUnlockRow {
 
 interface ArenaSkillDrawStateRow {
   last_draw_at: number;
+}
+
+interface ArenaCatalogLoadoutRow {
+  class_id: ClassId;
+  skill_q: ArenaCatalogSkillId | null;
+  skill_e: ArenaCatalogSkillId | null;
+  skill_r: ArenaCatalogSkillId | null;
 }
 
 function now() {
@@ -172,6 +192,49 @@ export function getArenaSkillDrawAllowance(ownerKey: string) {
     drawLimit: ARENA_SKILL_DRAW_LIMIT,
     drawsRemaining: Math.max(0, ARENA_SKILL_DRAW_LIMIT - drawsUsed)
   };
+}
+
+export function getArenaCatalogLoadouts(ownerKey: string): ArenaCatalogLoadouts {
+  const loadouts = createEmptyArenaCatalogLoadouts();
+  const rows = db.prepare(`
+    SELECT class_id, skill_q, skill_e, skill_r
+    FROM arena_catalog_loadouts
+    WHERE owner_key = ?
+  `).all(ownerKey) as unknown as ArenaCatalogLoadoutRow[];
+  for (const row of rows) {
+    if (!CLASS_ORDER.includes(row.class_id)) continue;
+    loadouts[row.class_id] = {
+      skillQ: row.skill_q,
+      skillE: row.skill_e,
+      skillR: row.skill_r
+    };
+  }
+  return loadouts;
+}
+
+export function saveArenaCatalogLoadout(
+  ownerKey: string,
+  classId: ClassId,
+  loadout: ArenaCatalogLoadout
+) {
+  db.prepare(`
+    INSERT INTO arena_catalog_loadouts (
+      owner_key, class_id, skill_q, skill_e, skill_r, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT(owner_key, class_id) DO UPDATE SET
+      skill_q = excluded.skill_q,
+      skill_e = excluded.skill_e,
+      skill_r = excluded.skill_r,
+      updated_at = excluded.updated_at
+  `).run(
+    ownerKey,
+    classId,
+    loadout.skillQ,
+    loadout.skillE,
+    loadout.skillR,
+    now()
+  );
+  return getArenaCatalogLoadouts(ownerKey)[classId];
 }
 
 export function drawArenaSkill(ownerKey: string, classId: ClassId) {
@@ -246,6 +309,17 @@ export function isArenaCatalogLoadoutUnlocked(
   return ARENA_LOADOUT_SLOTS.every((slot) => {
     const skillId = loadout[slot];
     return typeof skillId === "string" && owned.has(skillId);
+  });
+}
+
+export function isArenaCatalogLoadoutSelectionUnlocked(
+  ownerKey: string,
+  loadout: ArenaCatalogLoadout
+) {
+  const owned = new Set(getArenaUnlockedSkillIds(ownerKey));
+  return ARENA_LOADOUT_SLOTS.every((slot) => {
+    const skillId = loadout[slot];
+    return skillId === null || owned.has(skillId);
   });
 }
 
