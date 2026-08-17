@@ -82,7 +82,6 @@ const ENTRY_LANGUAGE_OPTIONS = ARENA_LANGUAGES;
 
 export function App() {
   const appParams = new URLSearchParams(window.location.search);
-  const arenaMode = appParams.get("arena") === "1";
   const arenaStatusReviewMode = appParams.get("statusReview") === "1";
 
   useEffect(() => {
@@ -98,7 +97,7 @@ export function App() {
           <XLoginGate>{(session) => <GameApp authUser={session.user} />}</XLoginGate>
         )}
       </LanguageFirstRunGate>
-      {arenaMode && !arenaStatusReviewMode ? <MobileLandscapeGate /> : null}
+      <MobileLandscapeGate />
     </ArenaI18nProvider>
   );
 }

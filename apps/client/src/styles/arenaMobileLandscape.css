@@ -1,0 +1,1121 @@
+/*
+ * Phone presentation contract.
+ *
+ * Renaiss Arena is played in landscape. Portrait phones receive one clear
+ * rotation gate on every route; landscape phones get compact, safe-area-aware
+ * layouts without changing the desktop composition owned by the other files.
+ */
+
+@media (orientation: portrait) and (max-width: 900px) {
+  .mobile-landscape-gate {
+    display: grid;
+    padding:
+      max(20px, env(safe-area-inset-top))
+      max(20px, env(safe-area-inset-right))
+      max(20px, env(safe-area-inset-bottom))
+      max(20px, env(safe-area-inset-left));
+  }
+
+  .mobile-rotate-card {
+    width: min(340px, calc(100vw - 32px));
+    max-height: calc(100dvh - 40px);
+    overflow: auto;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) and (max-width: 1100px) {
+  :root {
+    --phone-safe-top: max(4px, env(safe-area-inset-top));
+    --phone-safe-right: max(6px, env(safe-area-inset-right));
+    --phone-safe-bottom: max(4px, env(safe-area-inset-bottom));
+    --phone-safe-left: max(6px, env(safe-area-inset-left));
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  /* First-run language selection */
+  .language-entry-page {
+    width: 100vw;
+    min-height: 100dvh;
+    padding: var(--phone-safe-top) var(--phone-safe-right) var(--phone-safe-bottom) var(--phone-safe-left);
+  }
+
+  .language-entry-panel {
+    width: min(780px, calc(100vw - var(--phone-safe-left) - var(--phone-safe-right) - 8px));
+    max-height: calc(100dvh - var(--phone-safe-top) - var(--phone-safe-bottom) - 8px);
+    grid-template-columns: 88px minmax(0, 1fr) minmax(132px, 0.34fr);
+    grid-template-areas:
+      "logo eyebrow confirm"
+      "logo title confirm"
+      "logo body confirm"
+      "options options options";
+    align-items: center;
+    justify-items: stretch;
+    gap: 5px 12px;
+    padding: 14px 16px;
+    overflow: auto;
+    border-width: 4px;
+    box-shadow: inset 0 0 0 2px rgba(255, 225, 149, 0.16), 5px 6px 0 rgba(9, 4, 2, 0.42);
+  }
+
+  .language-entry-panel img {
+    grid-area: logo;
+    justify-self: center;
+    width: 68px;
+    height: 68px;
+  }
+
+  .language-entry-panel > span {
+    grid-area: eyebrow;
+    align-self: end;
+    font-size: 8px;
+    text-align: left;
+  }
+
+  .language-entry-panel h1 {
+    grid-area: title;
+    justify-self: start;
+    font-size: clamp(27px, 5.2vw, 40px);
+    text-align: left;
+    text-shadow: 3px 3px 0 #1b0c05;
+  }
+
+  .language-entry-panel p {
+    grid-area: body;
+    align-self: start;
+    max-width: none;
+    font-size: 9px;
+    line-height: 1.35;
+    text-align: left;
+  }
+
+  .language-entry-options {
+    grid-area: options;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 4px;
+  }
+
+  .language-entry-options button {
+    min-height: 48px;
+    gap: 2px;
+    padding: 6px;
+    border-width: 3px;
+    box-shadow: inset 0 0 0 1px rgba(255, 226, 154, 0.12), 0 3px 0 rgba(9, 4, 2, 0.34);
+  }
+
+  .language-entry-options button strong {
+    font-size: 13px;
+  }
+
+  .language-entry-confirm {
+    grid-area: confirm;
+    align-self: stretch;
+    min-height: 70px;
+    margin: 0;
+    padding: 8px;
+    border-width: 3px;
+    font-size: 13px;
+  }
+
+  /* Login */
+  .x-login-brand {
+    gap: 5px;
+    margin-top: -70px;
+  }
+
+  .x-login-brand img {
+    width: 54px;
+    height: 54px;
+  }
+
+  .x-login-brand span {
+    margin-bottom: 2px;
+    font-size: 9px;
+  }
+
+  .x-login-brand h1 {
+    font-size: clamp(42px, 8vw, 62px);
+    text-shadow: 4px 4px 0 #0c111b, -2px 2px 0 #0c111b, 2px -2px 0 #0c111b;
+  }
+
+  .x-login-controls {
+    width: min(300px, calc(100vw - var(--phone-safe-left) - var(--phone-safe-right) - 24px));
+    gap: 7px;
+    transform: translate(-50%, 26px);
+  }
+
+  .x-login-button {
+    min-height: 46px;
+    grid-template-columns: 32px 1fr;
+    gap: 8px;
+    padding: 0 12px 0 7px;
+    border-width: 3px;
+    box-shadow: inset 0 0 0 2px rgba(255, 220, 128, 0.2), 0 4px 0 rgba(14, 7, 4, 0.72);
+    font-size: 11px;
+  }
+
+  .x-login-button span {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+  }
+
+  /* Village HUD and secondary panels */
+  .rpg-profile-button {
+    left: var(--phone-safe-left);
+    top: var(--phone-safe-top);
+    min-height: 50px;
+    max-width: 190px;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 6px;
+    padding: 4px 8px 4px 4px;
+    border-width: 3px;
+    box-shadow: inset 0 0 0 2px rgba(255, 226, 154, 0.18), 0 3px 0 rgba(12, 6, 3, 0.34);
+  }
+
+  .rpg-profile-button .class-portrait {
+    width: 38px;
+    height: 44px;
+    border-width: 2px;
+  }
+
+  .rpg-profile-button-copy {
+    gap: 2px;
+  }
+
+  .rpg-profile-button-copy strong {
+    font-size: 9px;
+  }
+
+  .rpg-profile-button-copy em {
+    padding: 1px 5px;
+    border-width: 1px;
+    font-size: 6px;
+  }
+
+  .rpg-top-nav {
+    right: var(--phone-safe-right);
+    top: var(--phone-safe-top);
+    gap: 7px;
+  }
+
+  .rpg-layer .rpg-top-nav button {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-width: 4px;
+    box-shadow: inset 0 0 0 2px rgba(69, 37, 18, 0.46), inset 0 3px 0 rgba(255, 221, 139, 0.22), 0 3px 0 rgba(14, 8, 5, 0.38);
+  }
+
+  .rpg-layer .rpg-top-nav button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .rpg-interact-prompt {
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .rpg-layer .rpg-panel:not(.arena-skill-forge),
+  .rpg-layer .rpg-profile-panel,
+  .rpg-layer .rpg-profile-card-panel,
+  .rpg-profile-home-panel {
+    inset:
+      calc(var(--phone-safe-top) + 2px)
+      calc(var(--phone-safe-right) + 2px)
+      calc(var(--phone-safe-bottom) + 2px)
+      calc(var(--phone-safe-left) + 2px);
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    padding: 9px;
+    overflow: auto;
+  }
+
+  .rpg-layer .rpg-panel:not(.arena-skill-forge) > header,
+  .rpg-layer .rpg-profile-card-panel > header,
+  .rpg-profile-home-panel > header {
+    min-height: 42px;
+    margin-bottom: 7px;
+  }
+
+  /* Arena entry */
+  .start-panel {
+    left: var(--phone-safe-left);
+    right: var(--phone-safe-right);
+    top: var(--phone-safe-top);
+    bottom: var(--phone-safe-bottom);
+    width: auto;
+    height: auto;
+    max-height: none;
+    transform: none;
+    grid-template-columns: minmax(102px, 0.6fr) minmax(116px, 0.72fr) minmax(0, 2fr);
+    grid-template-rows: 42px 40px minmax(0, 1fr) 46px;
+    grid-template-areas:
+      "banner banner banner"
+      "mode mode mode"
+      "classes stage loadout"
+      "footer footer footer";
+    gap: 4px;
+    padding: 4px;
+    overflow: hidden;
+    border-width: 3px;
+    box-shadow: inset 0 0 0 2px #6f492d, 4px 5px 0 rgba(10, 5, 13, 0.55);
+  }
+
+  .start-panel > .arena-loadout-banner {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 5px;
+    padding: 3px 6px;
+    border-width: 2px;
+    box-shadow: inset 0 0 0 1px #8c5a32, inset 0 -3px 0 #2a1833;
+  }
+
+  .arena-loadout-banner .start-brand-row {
+    gap: 6px;
+  }
+
+  .arena-loadout-banner .start-brand-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .arena-loadout-banner .start-brand-row span,
+  .arena-loadout-banner .arena-tags {
+    display: none;
+  }
+
+  .arena-loadout-banner h1,
+  .start-panel h1 {
+    font-size: clamp(17px, 3vw, 23px);
+    line-height: 1;
+    text-shadow: 2px 2px 0 #160c1d;
+    white-space: nowrap;
+  }
+
+  .arena-loadout-banner .language-switcher {
+    gap: 2px;
+    margin: 0;
+  }
+
+  .arena-loadout-banner .language-switcher button {
+    min-width: 28px;
+    width: 28px;
+    height: 27px;
+    border-width: 3px;
+    box-shadow: 1px 2px 0 rgba(14, 8, 5, 0.32);
+    font-size: 7px;
+  }
+
+  .start-panel > .arena-mode-selector {
+    min-height: 0;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 5px;
+    padding: 3px 5px;
+    border-width: 1px;
+  }
+
+  .arena-mode-selector header {
+    gap: 0;
+  }
+
+  .arena-mode-selector header span,
+  .arena-mode-selector button small {
+    display: none;
+  }
+
+  .arena-mode-selector header strong,
+  .arena-mode-selector button strong {
+    font-size: 8px;
+  }
+
+  .arena-mode-selector > div {
+    gap: 4px;
+  }
+
+  .arena-mode-selector button {
+    min-height: 30px;
+    align-content: center;
+    padding: 3px 6px;
+  }
+
+  .start-panel > .class-command,
+  .start-panel > .class-stage,
+  .start-panel > .arena-loadout-summary {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .start-panel > .class-command {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    padding: 3px;
+    border-width: 2px;
+    box-shadow: inset 0 0 0 1px #70462c;
+  }
+
+  .start-panel > .class-command > header {
+    display: none;
+  }
+
+  .start-panel .class-grid {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+    margin: 0;
+  }
+
+  .start-panel .class-card {
+    min-height: 0;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 3px;
+    padding: 1px 3px;
+    border-width: 1px;
+    box-shadow: inset 0 0 0 1px #754a2f;
+  }
+
+  .start-panel .class-card .class-portrait {
+    width: 27px;
+    height: 32px;
+  }
+
+  .start-panel .class-card strong {
+    font-size: 7px;
+  }
+
+  .start-panel .class-card em {
+    display: none;
+  }
+
+  .start-panel > .class-stage {
+    gap: 2px;
+    align-content: center;
+    padding: 3px;
+    border-width: 2px;
+    box-shadow: inset 0 0 0 1px #70462c;
+  }
+
+  .start-panel > .class-stage .class-portrait {
+    width: min(78px, 12vh);
+    height: min(94px, 14.4vh);
+  }
+
+  .start-panel .class-stage-name {
+    gap: 0;
+  }
+
+  .start-panel .class-stage-name strong {
+    font-size: 11px;
+  }
+
+  .start-panel .class-stage-name span,
+  .start-panel > .class-stage .stat-stack {
+    display: none;
+  }
+
+  .start-panel .class-skill-icons {
+    gap: 3px;
+    margin: 1px 0;
+  }
+
+  .start-panel .skill-glyph {
+    width: 28px;
+    height: 28px;
+    border-width: 1px;
+    box-shadow: inset 0 0 0 1px #3a2443, 0 2px 0 #110918;
+  }
+
+  .start-panel .skill-glyph i {
+    width: 24px;
+    height: 24px;
+  }
+
+  .start-panel .skill-glyph b {
+    min-width: 12px;
+    height: 12px;
+    right: -2px;
+    bottom: -2px;
+    border-width: 1px;
+    font-size: 5px;
+  }
+
+  .start-panel > .arena-loadout-summary {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 4px;
+    padding: 5px;
+    border-width: 5px;
+    border-image-width: 5px;
+    box-shadow: 2px 2px 0 rgba(10, 4, 12, 0.42);
+  }
+
+  .arena-loadout-summary > header {
+    min-height: 0;
+    gap: 1px;
+    padding: 3px 5px;
+  }
+
+  .arena-loadout-summary > header span,
+  .arena-loadout-summary > header small,
+  .arena-loadout-summary > p {
+    display: none;
+  }
+
+  .arena-loadout-summary > header strong {
+    font-size: 11px;
+  }
+
+  .arena-loadout-summary-slots {
+    min-height: 0;
+    gap: 4px;
+  }
+
+  .arena-loadout-summary-slot > button {
+    min-height: 0;
+    height: 100%;
+    gap: 2px;
+    padding: 6px 3px 3px;
+  }
+
+  .arena-loadout-summary-slot .arena-skill-icon {
+    width: min(38px, 9vh);
+    height: min(38px, 9vh);
+  }
+
+  .arena-loadout-summary-slot > button > b {
+    min-width: 18px;
+    height: 17px;
+    border-width: 1px;
+    font-size: 7px;
+  }
+
+  .arena-loadout-summary-slot small,
+  .arena-loadout-summary-slot strong {
+    font-size: 6px;
+  }
+
+  .arena-configure-skills-button {
+    width: 100%;
+    min-height: 28px;
+    padding: 2px 6px;
+    border-width: 4px;
+    border-image-width: 4px;
+    box-shadow: 1px 2px 0 var(--arena-chrome-shadow);
+    font-size: 7px;
+  }
+
+  .start-panel > .start-copy {
+    grid-template-columns: minmax(112px, 0.5fr) minmax(150px, 1fr) auto;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 5px;
+    overflow: hidden;
+    border-width: 2px;
+    box-shadow: inset 0 0 0 1px #70462c;
+  }
+
+  .start-panel > .start-copy label {
+    gap: 1px;
+    font-size: 6px;
+  }
+
+  .start-panel > .start-copy input {
+    width: 100%;
+    height: 28px;
+    padding: 3px 7px;
+    border-width: 1px;
+    font-size: 7px;
+  }
+
+  .start-panel > .start-copy .enter-button {
+    height: 31px;
+    min-height: 31px;
+    margin: 0;
+    border-width: 2px;
+    box-shadow: inset 0 2px 0 #f3cf78, inset 0 -2px 0 #9b632d, 0 2px 0 #130919;
+    font-size: 9px;
+  }
+
+  .start-panel > .start-copy .arena-start-secondary-actions {
+    gap: 3px;
+  }
+
+  .start-panel > .start-copy .arena-start-secondary-actions > button {
+    min-width: 32px;
+    width: 32px;
+    min-height: 31px;
+    height: 31px;
+    padding: 2px;
+    border-width: 2px;
+    box-shadow: inset 0 0 0 1px #68452f;
+  }
+
+  .start-panel > .start-copy .arena-start-secondary-actions > button span {
+    display: none;
+  }
+
+  /* Skill forge */
+  .arena-skill-forge {
+    inset:
+      var(--phone-safe-top)
+      var(--phone-safe-right)
+      var(--phone-safe-bottom)
+      var(--phone-safe-left);
+    width: auto;
+    height: auto;
+    grid-template-rows: 48px 42px minmax(0, 1fr) 76px 40px;
+    overflow: hidden;
+    border-width: 2px;
+    outline-width: 1px;
+    box-shadow: 4px 5px 0 rgba(7, 4, 10, 0.58);
+  }
+
+  .arena-skill-forge-header {
+    min-height: 0;
+    grid-template-columns: 34px minmax(0, 1fr) 32px;
+    gap: 7px;
+    padding: 5px 8px;
+    border-bottom-width: 2px;
+  }
+
+  .arena-skill-forge-mark,
+  .arena-skill-forge-close {
+    width: 30px;
+    height: 30px;
+    border-width: 2px;
+    box-shadow: inset -2px -2px #9b5a23, 2px 2px 0 #09060b;
+  }
+
+  .arena-skill-forge-header > div:nth-child(2) {
+    gap: 1px;
+  }
+
+  .arena-skill-forge-header span {
+    font-size: 7px;
+  }
+
+  .arena-skill-forge-header h1 {
+    font-size: 16px;
+    text-shadow: 2px 2px 0 #0c070d;
+  }
+
+  .arena-skill-forge-header p {
+    display: none;
+  }
+
+  .arena-skill-forge-classes {
+    gap: 2px;
+    padding: 4px 6px;
+    border-bottom-width: 1px;
+  }
+
+  .arena-skill-forge-classes > button {
+    height: 34px;
+    grid-template-columns: 26px minmax(0, 1fr);
+    justify-items: stretch;
+    gap: 4px;
+    padding: 2px 4px;
+    border-width: 1px;
+    text-align: left;
+  }
+
+  .arena-skill-forge-classes .class-portrait {
+    display: block;
+    width: 24px;
+    height: 28px;
+  }
+
+  .arena-skill-forge-classes strong {
+    font-size: 7px;
+  }
+
+  .arena-skill-forge-classes small {
+    font-size: 5px;
+  }
+
+  .arena-skill-forge-body {
+    min-height: 0;
+    padding: 5px;
+  }
+
+  .arena-skill-showcase,
+  .arena-skill-showcase-media {
+    min-height: 0;
+  }
+
+  .arena-skill-showcase.is-detail .arena-skill-showcase-media {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 35%);
+  }
+
+  .arena-skill-reveal-idle {
+    gap: 2px;
+  }
+
+  .arena-skill-reveal-idle .class-portrait {
+    width: 64px;
+    height: 74px;
+    filter: drop-shadow(3px 3px 0 #09060b);
+  }
+
+  .arena-skill-reveal-idle span {
+    font-size: 10px;
+    text-shadow: 2px 2px 0 #09060b;
+  }
+
+  .arena-skill-reveal-idle strong,
+  .arena-skill-reveal-idle small {
+    font-size: 6px;
+  }
+
+  .arena-skill-reveal-idle small {
+    max-width: 300px;
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .arena-skill-showcase-card {
+    gap: 4px;
+    margin: 5px;
+    padding: 6px;
+    box-shadow: 2px 2px 0 rgba(6, 3, 8, 0.68);
+  }
+
+  .arena-skill-showcase-card > header {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    gap: 5px;
+  }
+
+  .arena-skill-showcase-card .arena-skill-icon {
+    width: 30px;
+    height: 30px;
+    border-width: 1px;
+    box-shadow: 1px 1px 0 #09060b;
+  }
+
+  .arena-skill-showcase-card > header small,
+  .arena-skill-showcase-card > p,
+  .arena-skill-showcase-actions dt,
+  .arena-skill-showcase-actions dd {
+    font-size: 6px;
+  }
+
+  .arena-skill-showcase-card h2 {
+    font-size: 12px;
+    text-shadow: 1px 1px #09060b;
+  }
+
+  .arena-skill-showcase-card > p {
+    display: -webkit-box;
+    overflow: hidden;
+    line-height: 1.3;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .arena-skill-showcase-actions {
+    gap: 4px;
+  }
+
+  .arena-skill-showcase-actions dl > div {
+    gap: 1px;
+    padding: 3px;
+  }
+
+  .arena-skill-equip-button {
+    min-height: 26px;
+    padding: 3px 7px;
+    font-size: 7px;
+  }
+
+  .arena-skill-collection-grid {
+    min-height: 0;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 4px;
+    padding: 4px 5px;
+    overflow: hidden;
+    border-top-width: 1px;
+  }
+
+  .arena-skill-collection-grid > header {
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .arena-skill-collection-grid > header span {
+    font-size: 6px;
+  }
+
+  .arena-skill-collection-grid > header strong {
+    font-size: 9px;
+  }
+
+  .arena-skill-collection-grid > div {
+    grid-template-columns: 7fr 5fr 3fr;
+    gap: 3px;
+  }
+
+  .arena-skill-collection-tier {
+    grid-template-rows: 22px minmax(0, 1fr);
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .arena-skill-collection-tier > header {
+    gap: 3px;
+  }
+
+  .arena-skill-collection-tier > header strong,
+  .arena-skill-collection-tier > header small,
+  .arena-skill-equipped-summary > em {
+    font-size: 5px;
+  }
+
+  .arena-skill-equipped-summary {
+    height: 19px;
+    grid-template-columns: 14px minmax(0, 1fr);
+    gap: 2px;
+    padding: 1px 2px;
+  }
+
+  .arena-skill-equipped-summary.has-skill {
+    grid-template-columns: 14px 9px minmax(0, 1fr);
+  }
+
+  .arena-skill-equipped-summary > span {
+    height: 14px;
+    font-size: 5px;
+  }
+
+  .arena-skill-collection-tier > div {
+    grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
+    gap: 2px;
+  }
+
+  .arena-skill-collection-tier button {
+    height: 34px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0;
+    padding: 2px;
+  }
+
+  .arena-skill-collection-tier .arena-skill-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .arena-skill-collection-tier button > span:not(.arena-skill-equipped-badge) {
+    display: none;
+  }
+
+  .arena-skill-collection-tier .arena-skill-equipped-badge {
+    top: -3px;
+    right: -2px;
+    height: 13px;
+    gap: 1px;
+    padding: 1px 2px;
+    border-width: 1px;
+    box-shadow: 1px 1px 0 rgba(6, 3, 8, 0.72);
+    font-size: 5px;
+  }
+
+  .arena-skill-forge-footer {
+    min-height: 0;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 4px;
+    padding: 3px 5px;
+    border-top-width: 1px;
+  }
+
+  .arena-skill-footer-draw {
+    gap: 3px;
+  }
+
+  .arena-skill-footer-draw > button,
+  .arena-skill-footer-nav > button {
+    min-height: 30px;
+    padding: 3px 6px;
+    box-shadow: inset -2px -2px #9b5b23, 2px 2px 0 #09060b;
+    font-size: 6px;
+  }
+
+  .arena-skill-footer-draw > button.is-draw small {
+    min-width: 24px;
+    padding-left: 4px;
+    font-size: 5px;
+  }
+
+  .arena-skill-footer-notices {
+    max-height: 32px;
+  }
+
+  .arena-skill-footer-nav {
+    gap: 3px;
+  }
+
+  .arena-skill-forge-message {
+    padding: 2px 4px;
+    font-size: 5px;
+  }
+
+  /* Keep tutorial navigation fixed while the current step scrolls independently. */
+  .tutorial-backdrop {
+    padding:
+      var(--phone-safe-top)
+      var(--phone-safe-right)
+      var(--phone-safe-bottom)
+      var(--phone-safe-left);
+  }
+
+  .tutorial-modal {
+    width: calc(100vw - var(--phone-safe-left) - var(--phone-safe-right));
+    height: calc(100dvh - var(--phone-safe-top) - var(--phone-safe-bottom));
+    max-height: none;
+    display: grid;
+    grid-template-rows: 54px minmax(0, 1fr);
+    overflow: hidden;
+    border-width: 4px;
+    box-shadow: inset 0 0 0 2px #7a4b27, 5px 5px 0 rgba(9, 4, 2, 0.48);
+  }
+
+  .tutorial-modal-header {
+    min-height: 0;
+    gap: 8px;
+    padding: 6px 10px;
+    border-bottom-width: 3px;
+  }
+
+  .tutorial-modal-header span {
+    font-size: 7px;
+  }
+
+  .tutorial-modal-header strong {
+    margin-top: 1px;
+    font-size: 19px;
+    text-shadow: 2px 2px 0 #0c0503;
+  }
+
+  .tutorial-modal-header em {
+    margin-top: 2px;
+    font-size: 7px;
+  }
+
+  .tutorial-close-button {
+    min-width: 32px;
+    min-height: 32px;
+    border-width: 2px;
+    box-shadow: inset 0 2px 0 rgba(255, 238, 180, 0.36), 2px 3px 0 rgba(10, 4, 2, 0.42);
+  }
+
+  .tutorial-modal > .rb-stepper,
+  .tutorial-modal .rb-stepper-shell {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .tutorial-modal .rb-stepper-shell {
+    display: grid;
+    grid-template-rows: 24px minmax(0, 1fr) 38px;
+  }
+
+  .tutorial-modal .rb-stepper-indicator-row {
+    min-height: 0;
+    padding: 3px 10px 2px;
+  }
+
+  .tutorial-modal .rb-stepper-indicator-inner {
+    width: 19px;
+    height: 19px;
+    border-width: 2px;
+  }
+
+  .tutorial-modal .rb-stepper-step-number {
+    font-size: 7px;
+  }
+
+  .tutorial-modal .rb-stepper-connector {
+    height: 3px;
+    margin-inline: 4px;
+    border-width: 1px;
+  }
+
+  .tutorial-modal .rb-stepper-content {
+    min-height: 0;
+    height: 100% !important;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+  }
+
+  .tutorial-modal .rb-stepper-step {
+    padding: 3px 10px 5px;
+  }
+
+  .tutorial-modal .rb-stepper-footer {
+    padding: 4px 10px 5px;
+  }
+
+  .tutorial-modal .rb-stepper-back-button,
+  .tutorial-modal .rb-stepper-next-button {
+    min-height: 28px;
+    padding-inline: 10px;
+    border-width: 2px;
+    box-shadow: inset 0 2px 0 rgba(255, 238, 180, 0.36), 2px 3px 0 rgba(10, 4, 2, 0.42);
+    font-size: 8px;
+  }
+
+  .tutorial-step-header {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 7px;
+    margin-bottom: 5px;
+  }
+
+  .tutorial-step-header > span {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+  }
+
+  .tutorial-step-header em {
+    font-size: 7px;
+  }
+
+  .tutorial-step-header strong {
+    font-size: 13px;
+  }
+
+  .tutorial-class-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .tutorial-class-card {
+    gap: 2px;
+    padding: 4px;
+    border-width: 2px;
+  }
+
+  .tutorial-class-card .class-portrait {
+    width: 51px;
+    height: 61px;
+  }
+
+  .tutorial-class-card strong {
+    font-size: 9px;
+  }
+
+  .tutorial-class-card span {
+    font-size: 6px;
+  }
+
+  .tutorial-score-step {
+    grid-template-columns: minmax(0, 0.72fr) minmax(220px, 1fr);
+    gap: 6px;
+  }
+
+  .tutorial-timer-board {
+    min-height: 0;
+    gap: 4px;
+    padding: 8px;
+    border-width: 2px;
+  }
+
+  .tutorial-timer-board span,
+  .tutorial-timer-board em {
+    font-size: 7px;
+  }
+
+  .tutorial-timer-board strong {
+    font-size: 30px;
+    text-shadow: 2px 2px 0 #0c0503;
+  }
+
+  .tutorial-scoreboard {
+    gap: 3px;
+    padding: 4px;
+    border-width: 2px;
+  }
+
+  .tutorial-scoreboard article {
+    grid-template-columns: 24px 24px minmax(0, 1fr) auto;
+    gap: 4px;
+    min-height: 28px;
+    padding: 2px 4px;
+    border-width: 1px;
+  }
+
+  .tutorial-scoreboard .class-portrait {
+    width: 22px;
+    height: 26px;
+  }
+
+  .tutorial-scoreboard b,
+  .tutorial-scoreboard span,
+  .tutorial-scoreboard strong {
+    font-size: 7px;
+  }
+
+  .arena-combat-hud .hud-drawer {
+    top: max(56px, calc(env(safe-area-inset-top) + 48px));
+    right: var(--phone-safe-right);
+    width: min(306px, calc(100vw - var(--phone-safe-left) - var(--phone-safe-right) - 8px));
+    max-height: calc(100dvh - max(56px, calc(env(safe-area-inset-top) + 48px)) - var(--phone-safe-bottom) - 4px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 360px) and (max-width: 760px) {
+  .language-entry-panel {
+    grid-template-columns: 72px minmax(0, 1fr) 116px;
+    padding: 9px 12px;
+  }
+
+  .language-entry-panel img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .language-entry-options button {
+    min-height: 42px;
+  }
+
+  .start-panel {
+    grid-template-columns: 94px 106px minmax(0, 1fr);
+    grid-template-rows: 38px 35px minmax(0, 1fr) 41px;
+  }
+
+  .arena-skill-forge {
+    grid-template-rows: 43px 37px minmax(0, 1fr) 68px 36px;
+  }
+
+  .arena-skill-forge-header {
+    padding-block: 3px;
+  }
+
+  .arena-skill-forge-classes {
+    padding-block: 2px;
+  }
+
+  .arena-skill-forge-classes > button {
+    height: 31px;
+  }
+
+  .arena-skill-reveal-idle .class-portrait {
+    width: 54px;
+    height: 62px;
+  }
+}

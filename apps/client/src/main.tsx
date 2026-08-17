@@ -10,6 +10,7 @@ import "./styles/arenaSkillForge.css";
 import "./styles/arenaCombatHud.css";
 import "./styles/arenaStatusReview.css";
 import "./styles/arenaEntryDesktop.css";
+import "./styles/arenaMobileLandscape.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
