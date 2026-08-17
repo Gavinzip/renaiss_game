@@ -2573,7 +2573,8 @@ input {
 }
 
 .mobile-landscape-gate,
-.mobile-arena-controls {
+.mobile-arena-controls,
+.rpg-mobile-controls {
   display: none;
 }
 
@@ -4230,12 +4231,17 @@ input {
 }
 
 @media (orientation: landscape) and (any-pointer: coarse) and (max-height: 620px) {
-  .mobile-arena-controls {
+  .mobile-arena-controls,
+  .rpg-mobile-controls {
     position: absolute;
     inset: 0;
     z-index: 9;
     display: block;
     pointer-events: none;
+  }
+
+  .rpg-mobile-controls .mobile-joystick {
+    opacity: 0.9;
   }
 
   .mobile-joystick-zone {

@@ -338,7 +338,58 @@ const bySkillId = new Map(
   manifest.entries.map((entry) => [entry.skillId, entry])
 );
 
+type RuntimeFrameAssetRole =
+  | "effect"
+  | "body"
+  | "projectile"
+  | "impact"
+  | "alternate";
+
+function runtimeFrameAssetFingerprint(asset: ArenaSkillRuntimeFrameAsset) {
+  const columns = asset.grid?.columns ?? asset.frameCount;
+  const rows = asset.grid?.rows ?? 1;
+  return [
+    asset.outputSha256,
+    asset.frameWidth,
+    asset.frameHeight,
+    asset.frameCount,
+    columns,
+    rows,
+    asset.unionBounds.join(",")
+  ].join(":");
+}
+
+const runtimeFrameAssetNamespaces = new Map<string, string>();
+for (const entry of manifest.entries) {
+  if (!hasArenaSkillRuntimeFrames(entry)) continue;
+  const register = (
+    role: RuntimeFrameAssetRole,
+    asset: ArenaSkillRuntimeFrameAsset | undefined
+  ) => {
+    if (!asset) return;
+    const fingerprint = runtimeFrameAssetFingerprint(asset);
+    if (!runtimeFrameAssetNamespaces.has(fingerprint)) {
+      runtimeFrameAssetNamespaces.set(fingerprint, `${role}_${entry.skillId}`);
+    }
+  };
+  register("effect", entry);
+  register("body", entry.actionBody);
+  register("projectile", entry.projectileAsset);
+  register("impact", entry.impactAsset);
+  register("alternate", entry.alternateEffectAsset);
+}
+
+function getRuntimeFrameAssetNamespace(
+  skillId: ArenaCatalogSkillId,
+  role: RuntimeFrameAssetRole,
+  asset: ArenaSkillRuntimeFrameAsset
+) {
+  return runtimeFrameAssetNamespaces.get(runtimeFrameAssetFingerprint(asset)) ??
+    `${role}_${skillId}`;
+}
+
 export const ARENA_SKILL_RUNTIME_MANIFEST = manifest;
+export const ARENA_SKILL_RUNTIME_ENTRY_COUNT = manifest.entryCount;
 
 const coreBySkillId = new Map(
   manifest.coreEntries.map((entry) => [entry.skillId, entry])
@@ -456,7 +507,11 @@ export function getArenaSkillRuntimeFrameTexture(
   const clamped = entry && hasArenaSkillRuntimeFrames(entry)
     ? Math.max(0, Math.min(entry.frameCount - 1, frame))
     : 0;
-  return `arena_skill_runtime_${skillId}_${clamped}`;
+  if (!entry || !hasArenaSkillRuntimeFrames(entry)) {
+    return `arena_skill_runtime_effect_${skillId}_${clamped}`;
+  }
+  const namespace = getRuntimeFrameAssetNamespace(skillId, "effect", entry);
+  return `arena_skill_runtime_${namespace}_${clamped}`;
 }
 
 export type ArenaSkillRuntimeSecondaryRole =
@@ -502,7 +557,8 @@ export function getArenaSkillRuntimeSecondaryFrameTexture(
     return getArenaSkillRuntimeFrameTexture(skillId, frame);
   }
   const clamped = Math.max(0, Math.min(asset.frameCount - 1, frame));
-  return `arena_skill_runtime_${role}_${skillId}_${clamped}`;
+  const namespace = getRuntimeFrameAssetNamespace(skillId, role, asset);
+  return `arena_skill_runtime_${namespace}_${clamped}`;
 }
 
 export function getArenaSkillRuntimeProjectileAsset(
@@ -571,7 +627,8 @@ export function getArenaSkillRuntimeActionBodyFrameTexture(
       directionIndex * directional.framesPerDirection + localFrame;
   }
   const clamped = Math.max(0, Math.min(body.frameCount - 1, logicalFrame));
-  return `arena_skill_runtime_body_${skillId}_${clamped}`;
+  const namespace = getRuntimeFrameAssetNamespace(skillId, "body", body);
+  return `arena_skill_runtime_${namespace}_${clamped}`;
 }
 
 export function getArenaSkillRuntimeActionBodyFrameAtProgress(
@@ -617,40 +674,78 @@ function getArenaSkillRuntimeActionBodySourceTexture(skillId: ArenaCatalogSkillI
   return `arena_skill_runtime_body_source_${skillId}`;
 }
 
-export function preloadArenaSkillRuntimeTextures(scene: Phaser.Scene) {
-  for (const entry of manifest.entries) {
-    if (!hasArenaSkillRuntimeFrames(entry)) {
-      continue;
+function selectedRuntimeEntries(skillIds?: Iterable<ArenaCatalogSkillId>) {
+  if (!skillIds) {
+    return manifest.entries.filter(hasArenaSkillRuntimeFrames);
+  }
+  const selected = new Set(skillIds);
+  return manifest.entries.filter(
+    (entry): entry is ArenaSkillRuntimeVisualEntry =>
+      selected.has(entry.skillId) && hasArenaSkillRuntimeFrames(entry)
+  );
+}
+
+function queueRuntimeEntrySources(
+  scene: Phaser.Scene,
+  entry: ArenaSkillRuntimeVisualEntry,
+  onlyMissing: boolean
+) {
+  let queued = 0;
+  const queueImage = (key: string, file: string, targetKeys: readonly string[]) => {
+    if (onlyMissing && targetKeys.every((targetKey) => scene.textures.exists(targetKey))) {
+      return;
     }
-    scene.load.image(
-      getArenaSkillRuntimeSourceTexture(entry.skillId),
-      `${entry.file}?v=${entry.outputSha256.slice(0, 12)}`
+    if (onlyMissing && scene.textures.exists(key)) return;
+    scene.load.image(key, file);
+    queued += 1;
+  };
+
+  queueImage(
+    getArenaSkillRuntimeSourceTexture(entry.skillId),
+    `${entry.file}?v=${entry.outputSha256.slice(0, 12)}`,
+    Array.from({ length: entry.frameCount }, (_, frame) =>
+      getArenaSkillRuntimeFrameTexture(entry.skillId, frame)
+    )
+  );
+  if (entry.actionBody) {
+    queueImage(
+      getArenaSkillRuntimeActionBodySourceTexture(entry.skillId),
+      `${entry.actionBody.file}?v=${entry.actionBody.outputSha256.slice(0, 12)}`,
+      Array.from({ length: entry.actionBody.frameCount }, (_, frame) =>
+        getArenaSkillRuntimeActionBodyFrameTexture(entry.skillId, frame)
+      )
     );
-    if (entry.actionBody) {
-      scene.load.image(
-        getArenaSkillRuntimeActionBodySourceTexture(entry.skillId),
-        `${entry.actionBody.file}?v=${entry.actionBody.outputSha256.slice(0, 12)}`
-      );
-    }
-    if (entry.tetherAsset) {
-      scene.load.image(
-        getArenaSkillRuntimeTetherTexture(entry.skillId),
-        `${entry.tetherAsset.file}?v=${entry.tetherAsset.outputSha256.slice(0, 12)}`
-      );
-    }
-    for (const [role, asset] of [
-      ["projectile", entry.projectileAsset],
-      ["impact", entry.impactAsset],
-      ["alternate", entry.alternateEffectAsset]
-    ] as const) {
-      if (!asset) {
-        continue;
-      }
-      scene.load.image(
-        getArenaSkillRuntimeSecondarySourceTexture(entry.skillId, role),
-        `${asset.file}?v=${asset.outputSha256.slice(0, 12)}`
-      );
-    }
+  }
+  if (entry.tetherAsset) {
+    queueImage(
+      getArenaSkillRuntimeTetherTexture(entry.skillId),
+      `${entry.tetherAsset.file}?v=${entry.tetherAsset.outputSha256.slice(0, 12)}`,
+      [getArenaSkillRuntimeTetherTexture(entry.skillId)]
+    );
+  }
+  for (const [role, asset] of [
+    ["projectile", entry.projectileAsset],
+    ["impact", entry.impactAsset],
+    ["alternate", entry.alternateEffectAsset]
+  ] as const) {
+    if (!asset) continue;
+    queueImage(
+      getArenaSkillRuntimeSecondarySourceTexture(entry.skillId, role),
+      `${asset.file}?v=${asset.outputSha256.slice(0, 12)}`,
+      Array.from({ length: asset.frameCount }, (_, frame) =>
+        getArenaSkillRuntimeSecondaryFrameTexture(entry.skillId, role, frame)
+      )
+    );
+  }
+  return queued;
+}
+
+export function preloadArenaSkillRuntimeTextures(
+  scene: Phaser.Scene,
+  skillIds?: Iterable<ArenaCatalogSkillId>
+) {
+  for (const entry of selectedRuntimeEntries(skillIds)) {
+    queueRuntimeEntrySources(scene, entry, false);
   }
   for (const role of ENGINEER_CORE_ANIMATED_ROLES) {
     const asset = getEngineerCoreRuntimeAsset(role);
@@ -731,11 +826,11 @@ function buildFrameTextures(
   }
 }
 
-export function buildArenaSkillRuntimeTextures(scene: Phaser.Scene) {
-  for (const entry of manifest.entries) {
-    if (!hasArenaSkillRuntimeFrames(entry)) {
-      continue;
-    }
+export function buildArenaSkillRuntimeTextures(
+  scene: Phaser.Scene,
+  skillIds?: Iterable<ArenaCatalogSkillId>
+) {
+  for (const entry of selectedRuntimeEntries(skillIds)) {
     const sourceKey = getArenaSkillRuntimeSourceTexture(entry.skillId);
     buildFrameTextures(
       scene,
@@ -811,37 +906,43 @@ export function buildArenaSkillRuntimeTextures(scene: Phaser.Scene) {
   }
 }
 
-export function assertArenaSkillRuntimeTexturesReady(scene: Phaser.Scene) {
+function runtimeEntryTextureKeys(entry: ArenaSkillRuntimeVisualEntry) {
+  const keys: string[] = [];
+  for (let frame = 0; frame < entry.frameCount; frame += 1) {
+    keys.push(getArenaSkillRuntimeFrameTexture(entry.skillId, frame));
+  }
+  if (entry.actionBody) {
+    for (let frame = 0; frame < entry.actionBody.frameCount; frame += 1) {
+      keys.push(getArenaSkillRuntimeActionBodyFrameTexture(entry.skillId, frame));
+    }
+  }
+  if (entry.tetherAsset) {
+    keys.push(getArenaSkillRuntimeTetherTexture(entry.skillId));
+  }
+  for (const [role, asset] of [
+    ["projectile", entry.projectileAsset],
+    ["impact", entry.impactAsset],
+    ["alternate", entry.alternateEffectAsset]
+  ] as const) {
+    if (!asset) continue;
+    for (let frame = 0; frame < asset.frameCount; frame += 1) {
+      keys.push(getArenaSkillRuntimeSecondaryFrameTexture(entry.skillId, role, frame));
+    }
+  }
+  return keys;
+}
+
+export function assertArenaSkillRuntimeTexturesReady(
+  scene: Phaser.Scene,
+  skillIds?: Iterable<ArenaCatalogSkillId>
+) {
   const missing: string[] = [];
   const requireTexture = (key: string) => {
     if (!scene.textures.exists(key)) missing.push(key);
   };
 
-  for (const entry of manifest.entries) {
-    if (!hasArenaSkillRuntimeFrames(entry)) continue;
-    for (let frame = 0; frame < entry.frameCount; frame += 1) {
-      requireTexture(getArenaSkillRuntimeFrameTexture(entry.skillId, frame));
-    }
-    if (entry.actionBody) {
-      for (let frame = 0; frame < entry.actionBody.frameCount; frame += 1) {
-        requireTexture(getArenaSkillRuntimeActionBodyFrameTexture(entry.skillId, frame));
-      }
-    }
-    if (entry.tetherAsset) {
-      requireTexture(getArenaSkillRuntimeTetherTexture(entry.skillId));
-    }
-    for (const [role, asset] of [
-      ["projectile", entry.projectileAsset],
-      ["impact", entry.impactAsset],
-      ["alternate", entry.alternateEffectAsset]
-    ] as const) {
-      if (!asset) continue;
-      for (let frame = 0; frame < asset.frameCount; frame += 1) {
-        requireTexture(
-          getArenaSkillRuntimeSecondaryFrameTexture(entry.skillId, role, frame)
-        );
-      }
-    }
+  for (const entry of selectedRuntimeEntries(skillIds)) {
+    runtimeEntryTextureKeys(entry).forEach(requireTexture);
   }
 
   for (const role of ENGINEER_CORE_ANIMATED_ROLES) {
@@ -859,19 +960,106 @@ export function assertArenaSkillRuntimeTexturesReady(scene: Phaser.Scene) {
   }
 }
 
+const runtimeTextureLoadQueues = new WeakMap<Phaser.Scene, Promise<void>>();
+
+export function ensureArenaSkillRuntimeTextures(
+  scene: Phaser.Scene,
+  skillIds: Iterable<ArenaCatalogSkillId>
+) {
+  const requiredSkillIds = [...new Set(skillIds)];
+  const previous = runtimeTextureLoadQueues.get(scene) ?? Promise.resolve();
+  const queued = previous
+    .catch(() => undefined)
+    .then(() => ensureArenaSkillRuntimeTexturesNow(scene, requiredSkillIds));
+  runtimeTextureLoadQueues.set(scene, queued);
+  const clearQueue = () => {
+    if (runtimeTextureLoadQueues.get(scene) === queued) {
+      runtimeTextureLoadQueues.delete(scene);
+    }
+  };
+  void queued.then(clearQueue, clearQueue);
+  return queued;
+}
+
+export async function prepareAllArenaSkillRuntimeTextures(
+  scene: Phaser.Scene,
+  onProgress?: (loaded: number, total: number) => void
+) {
+  const entries = manifest.entries;
+  onProgress?.(0, entries.length);
+  for (let index = 0; index < entries.length; index += 1) {
+    if (!scene.game.isRunning) {
+      throw new Error("Arena scene stopped before all skill textures were ready.");
+    }
+    const entry = entries[index];
+    if (hasArenaSkillRuntimeFrames(entry)) {
+      await ensureArenaSkillRuntimeTextures(scene, [entry.skillId]);
+    }
+    onProgress?.(index + 1, entries.length);
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  }
+  assertArenaSkillRuntimeTexturesReady(scene);
+}
+
+async function ensureArenaSkillRuntimeTexturesNow(
+  scene: Phaser.Scene,
+  requiredSkillIds: ArenaCatalogSkillId[]
+) {
+  const missingEntries = selectedRuntimeEntries(requiredSkillIds).filter((entry) =>
+    runtimeEntryTextureKeys(entry).some((key) => !scene.textures.exists(key))
+  );
+  if (missingEntries.length === 0) {
+    assertArenaSkillRuntimeTexturesReady(scene, requiredSkillIds);
+    return;
+  }
+  if (scene.load.isLoading()) {
+    throw new Error("Arena runtime texture loader is already active.");
+  }
+
+  let queued = 0;
+  for (const entry of missingEntries) {
+    queued += queueRuntimeEntrySources(scene, entry, true);
+  }
+  if (queued > 0) {
+    await new Promise<void>((resolve, reject) => {
+      const failedKeys: string[] = [];
+      const onLoadError = (file: Phaser.Loader.File) => failedKeys.push(file.key);
+      const onComplete = () => {
+        scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onLoadError);
+        if (failedKeys.length > 0) {
+          reject(
+            new Error(
+              `Arena runtime texture download failed: ${failedKeys.slice(0, 8).join(", ")}`
+            )
+          );
+          return;
+        }
+        resolve();
+      };
+      scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onLoadError);
+      scene.load.once(Phaser.Loader.Events.COMPLETE, onComplete);
+      scene.load.start();
+    });
+  }
+
+  buildArenaSkillRuntimeTextures(scene, requiredSkillIds);
+  releaseArenaSkillRuntimeSourceTextures(scene, requiredSkillIds);
+  assertArenaSkillRuntimeTexturesReady(scene, requiredSkillIds);
+}
+
 /**
  * Runtime skill frames are copied into independent canvas textures. The packed
  * sheets are not rendered after that build step, so retaining them duplicates
  * decoded image memory. Tethers and Engineer static assets stay loaded because
  * those textures are rendered directly.
  */
-export function releaseArenaSkillRuntimeSourceTextures(scene: Phaser.Scene) {
+export function releaseArenaSkillRuntimeSourceTextures(
+  scene: Phaser.Scene,
+  skillIds?: Iterable<ArenaCatalogSkillId>
+) {
   const sourceKeys = new Set<string>();
 
-  for (const entry of manifest.entries) {
-    if (!hasArenaSkillRuntimeFrames(entry)) {
-      continue;
-    }
+  for (const entry of selectedRuntimeEntries(skillIds)) {
     sourceKeys.add(getArenaSkillRuntimeSourceTexture(entry.skillId));
     if (entry.actionBody) {
       sourceKeys.add(getArenaSkillRuntimeActionBodySourceTexture(entry.skillId));

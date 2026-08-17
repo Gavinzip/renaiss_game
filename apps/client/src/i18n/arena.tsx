@@ -116,9 +116,11 @@ export interface ArenaText {
     playerName: string;
     connecting: string;
     preparingAssets: string;
+    preparingAllSkills: (loaded: number, total: number) => string;
     reconnecting: string;
     enterArena: string;
     connectionError: string;
+    assetPreparationError: string;
     loadout: string;
     skillLoadout: string;
     equipped: string;
@@ -570,9 +572,11 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       playerName: "玩家名稱",
       connecting: "連線中",
       preparingAssets: "檢查競技素材中",
+      preparingAllSkills: (loaded, total) => `載入全部技能 ${loaded}/${total}`,
       reconnecting: "重新連線中",
       enterArena: "進入競技場",
       connectionError: "伺服器連線失敗，請啟動遊戲伺服器後重試。",
+      assetPreparationError: "全部技能素材載入失敗，請重新整理後再試。",
       loadout: "配置",
       skillLoadout: "技能配置",
       equipped: "已裝備",
@@ -790,9 +794,11 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       playerName: "Player name",
       connecting: "Connecting",
       preparingAssets: "Verifying arena assets",
+      preparingAllSkills: (loaded, total) => `Loading all skills ${loaded}/${total}`,
       reconnecting: "Reconnecting",
       enterArena: "Enter Arena",
       connectionError: "Server connection failed. Start the game server and retry.",
+      assetPreparationError: "All skill assets failed to load. Refresh and try again.",
       loadout: "Loadout",
       skillLoadout: "Skill Loadout",
       equipped: "Equipped",
@@ -1010,9 +1016,11 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       playerName: "플레이어 이름",
       connecting: "연결 중",
       preparingAssets: "아레나 에셋 확인 중",
+      preparingAllSkills: (loaded, total) => `전체 스킬 불러오는 중 ${loaded}/${total}`,
       reconnecting: "재연결 중",
       enterArena: "아레나 입장",
       connectionError: "서버 연결에 실패했습니다. 게임 서버를 시작한 뒤 다시 시도하세요.",
+      assetPreparationError: "전체 스킬 에셋을 불러오지 못했습니다. 새로고침 후 다시 시도하세요.",
       loadout: "로드아웃",
       skillLoadout: "스킬 설정",
       equipped: "장착됨",

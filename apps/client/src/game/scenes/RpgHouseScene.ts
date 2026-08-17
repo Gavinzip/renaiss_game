@@ -16,6 +16,7 @@ import {
 import { renderVinciHouseRoom, VINCI_HOUSE_WORLD, VINCI_HOUSE_ZONES, type HouseInteractZone } from "../render/vinciHouseRoom";
 import { isDomTextEditingActive } from "../input/domFocus";
 import { useRpgStore, type RpgPlace } from "../../state/rpgStore";
+import { useRpgInputStore } from "../../state/rpgInputStore";
 
 const PLAYER_SPEED = 184;
 const PLAYER_COLLISION_RADIUS = 26;
@@ -82,8 +83,19 @@ export class RpgHouseScene extends Phaser.Scene {
 
     const seconds = delta / 1000;
     const inputBlocked = isDomTextEditingActive();
-    const moveX = inputBlocked ? 0 : (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
-    const moveY = inputBlocked ? 0 : (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const mobileMove = store.screen === "house" ? useRpgInputStore.getState().move : { x: 0, y: 0 };
+    const moveX = inputBlocked ? 0 : Phaser.Math.Clamp(
+      (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) -
+      (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0) + mobileMove.x,
+      -1,
+      1
+    );
+    const moveY = inputBlocked ? 0 : Phaser.Math.Clamp(
+      (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) -
+      (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0) + mobileMove.y,
+      -1,
+      1
+    );
     const length = Math.hypot(moveX, moveY) || 1;
     const moving = moveX !== 0 || moveY !== 0;
 

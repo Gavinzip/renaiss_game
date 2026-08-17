@@ -1,10 +1,15 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import { createWebBuildVersion, webBuildVersionPlugin } from "./vite.webVersion";
 
 const devPort = Number(process.env.VITE_DEV_PORT ?? 5173);
+const webBuildVersion = createWebBuildVersion();
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), webBuildVersionPlugin(webBuildVersion)],
+  define: {
+    __RENAISS_WEB_BUILD_ID__: JSON.stringify(webBuildVersion.buildId)
+  },
   build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {

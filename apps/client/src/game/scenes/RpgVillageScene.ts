@@ -20,6 +20,7 @@ import {
   type VillagePlayerWalkDirection
 } from "../render/villagePlayerAnimation";
 import { useRpgStore, type RpgNavigationTarget, type RpgPlace } from "../../state/rpgStore";
+import { useRpgInputStore } from "../../state/rpgInputStore";
 import { rpgCopy } from "../../i18n/rpg";
 
 interface FollowerView {
@@ -153,8 +154,19 @@ export class RpgVillageScene extends Phaser.Scene {
     const store = useRpgStore.getState();
     const seconds = delta / 1000;
     const inputBlocked = isDomTextEditingActive();
-    const manualMoveX = inputBlocked ? 0 : (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) - (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
-    const manualMoveY = inputBlocked ? 0 : (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) - (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const mobileMove = store.screen === "village" ? useRpgInputStore.getState().move : { x: 0, y: 0 };
+    const manualMoveX = inputBlocked ? 0 : Phaser.Math.Clamp(
+      (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) -
+      (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0) + mobileMove.x,
+      -1,
+      1
+    );
+    const manualMoveY = inputBlocked ? 0 : Phaser.Math.Clamp(
+      (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) -
+      (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0) + mobileMove.y,
+      -1,
+      1
+    );
     const manualMoving = manualMoveX !== 0 || manualMoveY !== 0;
     if (manualMoving && store.villageNavigationTarget) store.clearVillageNavigation();
     let moveX = manualMoveX;
