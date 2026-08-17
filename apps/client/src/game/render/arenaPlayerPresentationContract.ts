@@ -1,6 +1,10 @@
 import type { ClassId } from "@renaiss-game/shared";
+import {
+  ARENA_CHARACTER_RUNTIME_TEXTURE_SCALE,
+  ARENA_CHARACTER_RUNTIME_WALK_CELL
+} from "../assets/arenaCharacterTextureProfile";
 
-export const ARENA_WEB_PLAYER_PRESENTATION_SCHEMA_VERSION = 1;
+export const ARENA_WEB_PLAYER_PRESENTATION_SCHEMA_VERSION = 2;
 export const ARENA_WEB_PLAYER_FALLBACK_USED = false;
 
 export const ARENA_WEB_EIGHT_DIRECTIONS = [
@@ -23,12 +27,8 @@ export const ARENA_WEB_PLAYER = {
   movementVisualGraceMs: 92,
   walkFrameDurationMs: 118,
   walkFrameCount: 7,
-  normalizedWalkCell: {
-    width: 165,
-    height: 194,
-    footY: 174,
-    topInset: 18
-  }
+  runtimeTextureScale: ARENA_CHARACTER_RUNTIME_TEXTURE_SCALE,
+  normalizedWalkCell: ARENA_CHARACTER_RUNTIME_WALK_CELL
 } as const;
 
 export const ARENA_WEB_ARCHER_FULL_DRAW = {

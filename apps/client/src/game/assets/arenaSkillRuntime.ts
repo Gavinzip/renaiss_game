@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import type { ArenaCatalogSkillId } from "@renaiss-game/shared";
 import manifestJson from "./arenaSkillRuntimeManifest.json";
+import { staticAssetUrl } from "./staticAssets";
 
 export type ArenaSkillRuntimeRenderKind =
   | "overlay"
@@ -685,6 +686,46 @@ function selectedRuntimeEntries(skillIds?: Iterable<ArenaCatalogSkillId>) {
   );
 }
 
+interface ArenaSkillRuntimeSourceAsset {
+  url: string;
+}
+
+function runtimeSourceAssetUrl(file: string, sha256: string) {
+  return `${staticAssetUrl(file)}?v=${sha256.slice(0, 12)}`;
+}
+
+function runtimeEntrySourceAssets(entry: ArenaSkillRuntimeVisualEntry) {
+  const assets: ArenaSkillRuntimeSourceAsset[] = [
+    { url: runtimeSourceAssetUrl(entry.file, entry.outputSha256) }
+  ];
+  if (entry.actionBody) {
+    assets.push({
+      url: runtimeSourceAssetUrl(
+        entry.actionBody.file,
+        entry.actionBody.outputSha256
+      )
+    });
+  }
+  if (entry.tetherAsset) {
+    assets.push({
+      url: runtimeSourceAssetUrl(
+        entry.tetherAsset.file,
+        entry.tetherAsset.outputSha256
+      )
+    });
+  }
+  for (const asset of [
+    entry.projectileAsset,
+    entry.impactAsset,
+    entry.alternateEffectAsset
+  ]) {
+    if (asset) {
+      assets.push({ url: runtimeSourceAssetUrl(asset.file, asset.outputSha256) });
+    }
+  }
+  return [...new Map(assets.map((asset) => [asset.url, asset])).values()];
+}
+
 function queueRuntimeEntrySources(
   scene: Phaser.Scene,
   entry: ArenaSkillRuntimeVisualEntry,
@@ -702,7 +743,7 @@ function queueRuntimeEntrySources(
 
   queueImage(
     getArenaSkillRuntimeSourceTexture(entry.skillId),
-    `${entry.file}?v=${entry.outputSha256.slice(0, 12)}`,
+    runtimeSourceAssetUrl(entry.file, entry.outputSha256),
     Array.from({ length: entry.frameCount }, (_, frame) =>
       getArenaSkillRuntimeFrameTexture(entry.skillId, frame)
     )
@@ -710,7 +751,7 @@ function queueRuntimeEntrySources(
   if (entry.actionBody) {
     queueImage(
       getArenaSkillRuntimeActionBodySourceTexture(entry.skillId),
-      `${entry.actionBody.file}?v=${entry.actionBody.outputSha256.slice(0, 12)}`,
+      runtimeSourceAssetUrl(entry.actionBody.file, entry.actionBody.outputSha256),
       Array.from({ length: entry.actionBody.frameCount }, (_, frame) =>
         getArenaSkillRuntimeActionBodyFrameTexture(entry.skillId, frame)
       )
@@ -719,7 +760,7 @@ function queueRuntimeEntrySources(
   if (entry.tetherAsset) {
     queueImage(
       getArenaSkillRuntimeTetherTexture(entry.skillId),
-      `${entry.tetherAsset.file}?v=${entry.tetherAsset.outputSha256.slice(0, 12)}`,
+      runtimeSourceAssetUrl(entry.tetherAsset.file, entry.tetherAsset.outputSha256),
       [getArenaSkillRuntimeTetherTexture(entry.skillId)]
     );
   }
@@ -731,7 +772,7 @@ function queueRuntimeEntrySources(
     if (!asset) continue;
     queueImage(
       getArenaSkillRuntimeSecondarySourceTexture(entry.skillId, role),
-      `${asset.file}?v=${asset.outputSha256.slice(0, 12)}`,
+      runtimeSourceAssetUrl(asset.file, asset.outputSha256),
       Array.from({ length: asset.frameCount }, (_, frame) =>
         getArenaSkillRuntimeSecondaryFrameTexture(entry.skillId, role, frame)
       )
@@ -981,24 +1022,65 @@ export function ensureArenaSkillRuntimeTextures(
   return queued;
 }
 
-export async function prepareAllArenaSkillRuntimeTextures(
+const prefetchedRuntimeSourceUrls = new Set<string>();
+const RUNTIME_SOURCE_PREFETCH_CONCURRENCY = 4;
+
+async function prefetchRuntimeSourceAsset(asset: ArenaSkillRuntimeSourceAsset) {
+  if (prefetchedRuntimeSourceUrls.has(asset.url)) return;
+  const response = await fetch(asset.url, {
+    cache: "force-cache",
+    credentials: "same-origin"
+  });
+  if (!response.ok) {
+    throw new Error(
+      `Arena runtime asset download failed (${response.status}): ${asset.url}`
+    );
+  }
+  // Drain the body so the browser HTTP cache owns a complete response without
+  // allocating one large ArrayBuffer. Decoding and GPU upload happen only for
+  // the skills listed by the server's current match manifest.
+  if (!response.body) {
+    throw new Error(`Arena runtime asset response has no body: ${asset.url}`);
+  }
+  const reader = response.body.getReader();
+  while (!(await reader.read()).done) {
+    // Reading one chunk at a time keeps mobile peak memory bounded.
+  }
+  prefetchedRuntimeSourceUrls.add(asset.url);
+}
+
+export async function prepareAllArenaSkillRuntimeAssets(
   scene: Phaser.Scene,
   onProgress?: (loaded: number, total: number) => void
 ) {
   const entries = manifest.entries;
   onProgress?.(0, entries.length);
-  for (let index = 0; index < entries.length; index += 1) {
-    if (!scene.game.isRunning) {
-      throw new Error("Arena scene stopped before all skill textures were ready.");
+  let nextIndex = 0;
+  let completed = 0;
+  const worker = async () => {
+    while (nextIndex < entries.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      if (!scene.game.isRunning) {
+        throw new Error("Arena scene stopped before all skill assets were downloaded.");
+      }
+      const entry = entries[index];
+      if (hasArenaSkillRuntimeFrames(entry)) {
+        for (const asset of runtimeEntrySourceAssets(entry)) {
+          await prefetchRuntimeSourceAsset(asset);
+        }
+      }
+      completed += 1;
+      onProgress?.(completed, entries.length);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     }
-    const entry = entries[index];
-    if (hasArenaSkillRuntimeFrames(entry)) {
-      await ensureArenaSkillRuntimeTextures(scene, [entry.skillId]);
-    }
-    onProgress?.(index + 1, entries.length);
-    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-  }
-  assertArenaSkillRuntimeTexturesReady(scene);
+  };
+  await Promise.all(
+    Array.from(
+      { length: Math.min(RUNTIME_SOURCE_PREFETCH_CONCURRENCY, entries.length) },
+      () => worker()
+    )
+  );
 }
 
 async function ensureArenaSkillRuntimeTexturesNow(

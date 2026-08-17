@@ -2,12 +2,17 @@ import Phaser from "phaser";
 import {
   ARENA_CONTENT_MANIFEST_V1_SOURCE_SHA256,
   ARENA_PROTOCOL_V1_SCHEMA_SHA256,
+  type ArenaCatalogSkillId,
   type ArenaContentPack,
   type AssetsReadyRequest,
   type MatchAssetManifest
 } from "@renaiss-game/shared";
 import { assertArenaRuntimeTexturesReady } from "../assets/runtimeTextures";
-import { assertArenaSkillRuntimeTexturesReady } from "../assets/arenaSkillRuntime";
+import {
+  assertArenaSkillRuntimeTexturesReady,
+  ensureArenaSkillRuntimeTextures,
+  getArenaSkillRuntimeEntry
+} from "../assets/arenaSkillRuntime";
 
 const REQUIRED_PACK_KINDS = ["character", "core", "match_skill", "optional"] as const;
 
@@ -26,8 +31,10 @@ export async function prepareWebArenaAssets(
     throw new Error("Arena asset readiness ticket already expired.");
   }
   validateLogicalPacks(manifest.packs);
+  const requiredSkillIds = matchSkillIds(manifest);
+  await ensureArenaSkillRuntimeTextures(scene, requiredSkillIds);
   assertArenaRuntimeTexturesReady(scene);
-  assertArenaSkillRuntimeTexturesReady(scene);
+  assertArenaSkillRuntimeTexturesReady(scene, requiredSkillIds);
 
   await nextAnimationFrame();
   assertPhaserTextureSurfaces(scene);
@@ -53,6 +60,25 @@ export async function prepareWebArenaAssets(
       shadersWarmed: true
     }
   };
+}
+
+function matchSkillIds(manifest: MatchAssetManifest) {
+  const skillPack = manifest.packs.find((pack) => pack.kind === "match_skill");
+  if (!skillPack) {
+    throw new Error("Arena match skill pack is missing.");
+  }
+  const skillIds = skillPack.labels.map((label) => {
+    const match = /^arena\.skill\.(.+)$/.exec(label);
+    const skillId = match?.[1] as ArenaCatalogSkillId | undefined;
+    if (!skillId || !getArenaSkillRuntimeEntry(skillId)) {
+      throw new Error(`Arena match skill label is invalid: ${label}`);
+    }
+    return skillId;
+  });
+  if (skillIds.length === 0) {
+    throw new Error("Arena match skill pack is empty.");
+  }
+  return [...new Set(skillIds)];
 }
 
 function validateLogicalPacks(packs: readonly ArenaContentPack[]) {

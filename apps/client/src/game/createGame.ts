@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { VillageArenaScene } from "./scenes/VillageArenaScene";
+import { installGameViewportSync } from "./syncGameViewport";
 
 export function createGame(parent: string) {
   const game = new Phaser.Game({
@@ -21,6 +22,7 @@ export function createGame(parent: string) {
       antialias: false
     }
   });
+  installGameViewportSync(game, parent);
 
   if (new URLSearchParams(window.location.search).get("debugArena") === "1") {
     (window as typeof window & { __renaissArenaGame?: Phaser.Game }).__renaissArenaGame = game;

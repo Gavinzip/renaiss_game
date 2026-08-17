@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { RpgHouseScene } from "./scenes/RpgHouseScene";
 import { RpgVillageScene } from "./scenes/RpgVillageScene";
+import { installGameViewportSync } from "./syncGameViewport";
 
 declare global {
   interface Window {
@@ -28,6 +29,7 @@ export function createRpgGame(parent: string) {
       antialias: false
     }
   });
+  installGameViewportSync(game, parent);
   window.__renaissRpgGame = game;
   return game;
 }

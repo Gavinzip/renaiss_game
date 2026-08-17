@@ -117,7 +117,7 @@ export class RpgVillageScene extends Phaser.Scene {
 
   create() {
     makeMatteTransparent(this, "villageAssets", "villageAssetsClean", "magenta");
-    buildVillageRuntimeTextures(this, { includeLegacyClassTextures: false });
+    buildVillageRuntimeTextures(this);
     buildNewCompatibleWalkTexture(this, "engineer");
     this.textures.get("rpgPetSprites").setFilter(Phaser.Textures.FilterMode.NEAREST);
     this.textures.get("rpgPetDirections").setFilter(Phaser.Textures.FilterMode.NEAREST);

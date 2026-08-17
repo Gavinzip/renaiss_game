@@ -28,7 +28,7 @@ import {
   type SkillKey,
   type TurretState
 } from "@renaiss-game/shared";
-import { copyTexture, makeMatteTransparent } from "../assets/chromaKey";
+import { makeMatteTransparent } from "../assets/chromaKey";
 import {
   ARENA_DECAL_TEXTURES,
   COMBAT_VFX_FRAME_COUNT,
@@ -43,7 +43,6 @@ import {
   getArcherForestRollFrameTexture,
   getArcherStandingFullDrawFrameTexture,
   getAbilityVfxFrameTexture,
-  getClassFrameTexture,
   getCombatVfxFrameTexture,
   getCombatObjectTexture,
   getEngineerActionFrameTexture,
@@ -126,7 +125,7 @@ import {
   getEngineerCoreFrameAtProgress,
   getEngineerCoreFrameTexture,
   getEngineerCoreRuntimeAsset,
-  prepareAllArenaSkillRuntimeTextures,
+  prepareAllArenaSkillRuntimeAssets,
   preloadArenaSkillRuntimeTextures,
   releaseArenaSkillRuntimeSourceTextures,
   type ArenaSkillRuntimePathCore
@@ -402,10 +401,10 @@ export class VillageArenaScene extends Phaser.Scene {
     const hud = useHudStore.getState();
     hud.beginArenaAssetPreparation(ARENA_SKILL_RUNTIME_ENTRY_COUNT);
     // Scene construction uses the duel-realm texture immediately. The other
-    // packages warm sequentially after create() to cap mobile peak memory.
-    preloadArenaSkillRuntimeTextures(this, ["warrior_13"]);
+    // skill sources download with bounded concurrency after create(), while
+    // per-frame GPU textures are built only for the current match manifest.
     if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
-    this.load.image("classSprites", generatedAssetPath("class-sprites"));
+    preloadArenaSkillRuntimeTextures(this, ["warrior_13"]);
     for (const classId of NEW_COMPATIBLE_WALK_CLASS_IDS) {
       this.load.image(
         `newCompatibleWalk_${classId}`,
@@ -421,19 +420,12 @@ export class VillageArenaScene extends Phaser.Scene {
     this.load.image("abilityEffects", generatedAssetPath("ability-effects"));
     this.load.image("warriorVerticalSlash", generatedAssetPath("warrior-vertical-slash"));
     this.load.image("warriorArcherEffects", generatedAssetPath("warrior-archer-effects"));
-    this.load.image("warriorVerdictCombatFx", generatedAssetPath("combat-fx-warrior-verdict"));
-    this.load.image("engineerEffects", generatedAssetPath("engineer-effects"));
-    this.load.image("mageEffects", generatedAssetPath("mage-effects"));
-    this.load.image("mageFieldEffects", generatedAssetPath("mage-field-effects"));
     this.load.image("combatEffects", generatedAssetPath("combat-effects"));
-    this.load.image("rpgSkillProjectiles", generatedAssetPath("rpg-skill-projectiles"));
     this.load.image("arenaDecals", generatedAssetPath("arena-decals"));
-    this.load.image("warriorAttackSprites", generatedAssetPath("warrior-attack-sprites"));
     this.load.image(
       "warriorM1Sprites",
       generatedAssetPath("characters/new-compatible/warrior/melee-m1-8dir")
     );
-    this.load.image("archerAttackSprites", generatedAssetPath("archer-attack-sprites"));
     this.load.image(
       "archerMovingBowSprites",
       generatedAssetPath(
@@ -461,7 +453,6 @@ export class VillageArenaScene extends Phaser.Scene {
 
   create() {
     if (!this.game.isRunning) return;
-    copyTexture(this, "classSprites", "classSpritesClean");
     makeMatteTransparent(this, "villageAssets", "villageAssetsClean", "magenta");
     makeMatteTransparent(this, "skillEffects", "skillEffectsClean", "edgeBlack");
     makeMatteTransparent(this, "combatObjects", "combatObjectsClean", "edgeBlack");
@@ -621,7 +612,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private async prepareAllSkills() {
     const hud = useHudStore.getState();
     try {
-      await prepareAllArenaSkillRuntimeTextures(this, (loaded, total) => {
+      await prepareAllArenaSkillRuntimeAssets(this, (loaded, total) => {
         if (this.game.isRunning) {
           useHudStore.getState().setArenaAssetProgress(loaded, total);
         }
@@ -3256,22 +3247,23 @@ export class VillageArenaScene extends Phaser.Scene {
     const statusDisplay = new PlayerStatusDisplay(this, container, PLAYER_GROUND_Y);
     const shadow = this.add.ellipse(0, PLAYER_GROUND_Y, 62, 20, 0x050505, 0.25);
     const koRune = this.add.image(0, PLAYER_GROUND_Y + 2, ARENA_DECAL_TEXTURES.diamondRune).setOrigin(0.5).setVisible(false);
-    const actionGhost = this.add.image(0, 0, getClassFrameTexture(player.classId, 0)).setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y).setVisible(false);
+    const initialTexture = getNewCompatibleWalkFrameTexture(player.classId, "south", 0);
+    const actionGhost = this.add.image(0, 0, initialTexture).setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y).setVisible(false);
     const actionFxBack = this.add
       .image(0, 0, getAbilityVfxFrameTexture("warriorSlash", 0))
       .setOrigin(0.5)
       .setVisible(false)
       .setBlendMode(Phaser.BlendModes.NORMAL);
-    const sprite = this.add.image(0, 0, getClassFrameTexture(player.classId, 0)).setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y).setDisplaySize(88, 104);
+    const sprite = this.add.image(0, 0, initialTexture).setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y).setDisplaySize(88, 104);
     const poisonOverlay = this.add
-      .image(0, 0, getClassFrameTexture(player.classId, 0))
+      .image(0, 0, initialTexture)
       .setOrigin(0.5, PLAYER_SPRITE_ORIGIN_Y)
       .setDisplaySize(88, 104)
       .setVisible(false)
       .setBlendMode(Phaser.BlendModes.ADD);
     const concealmentOutline = createPlayerConcealmentOutline(
       this,
-      getClassFrameTexture(player.classId, 0)
+      initialTexture
     );
     const actionFxFront = this.add
       .image(0, 0, getAbilityVfxFrameTexture("warriorSlash", 0))
@@ -3802,23 +3794,16 @@ export class VillageArenaScene extends Phaser.Scene {
       return this.getActionRenderFrame(player, moving);
     }
 
-    if (NEW_COMPATIBLE_WALK_CLASS_IDS.includes(player.classId)) {
-      return {
-        texture: getNewCompatibleWalkFrameTexture(
-          player.classId,
-          this.getEightDirection(renderAngle),
-          moving
-            ? Math.floor(this.time.now / ARENA_WEB_PLAYER.walkFrameDurationMs) %
-              NEW_COMPATIBLE_WALK_FRAME_COUNT
-            : 0
-        ),
-        flipX: false
-      };
-    }
-
     return {
-      texture: getClassFrameTexture(player.classId, this.getFrameIndex(player, moving, renderAngle)),
-      flipX: this.isFacingLeft(renderAngle)
+      texture: getNewCompatibleWalkFrameTexture(
+        player.classId,
+        this.getEightDirection(renderAngle),
+        moving
+          ? Math.floor(this.time.now / ARENA_WEB_PLAYER.walkFrameDurationMs) %
+            NEW_COMPATIBLE_WALK_FRAME_COUNT
+          : 0
+      ),
+      flipX: false
     };
   }
 
@@ -4010,39 +3995,6 @@ export class VillageArenaScene extends Phaser.Scene {
       displaySize: MAGE_STAFF_CAST_DISPLAY_SIZE,
       originY: MAGE_STAFF_CAST_ORIGIN_Y
     };
-  }
-
-  private getFrameIndex(player: PublicPlayer, moving: boolean, renderAngle = player.angle) {
-    if (!player.alive) {
-      return 3;
-    }
-
-    if (player.action) {
-      return this.getActionFrameIndex(player, moving);
-    }
-
-    const angle = ((renderAngle % 360) + 360) % 360;
-    const walkFrame = Math.floor(this.time.now / 118) % 3;
-    if (angle > 225 && angle < 315) {
-      return 3;
-    }
-    if (angle > 45 && angle < 135) {
-      return moving ? walkFrame : 0;
-    }
-    return moving ? 4 + walkFrame : 4;
-  }
-
-  private getActionFrameIndex(player: PublicPlayer, moving: boolean) {
-    if (player.action === "skillE" && !moving) {
-      return player.classId === "mage" || player.classId === "engineer" ? 7 : 2;
-    }
-    if (player.action === "skillR") {
-      return 7;
-    }
-    if (player.action === "skillQ") {
-      return player.classId === "warrior" || player.classId === "archer" ? 6 : 7;
-    }
-    return 7;
   }
 
   private getActionProgress(player: PublicPlayer) {

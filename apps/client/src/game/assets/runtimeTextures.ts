@@ -1,10 +1,13 @@
 import Phaser from "phaser";
-import { CLASS_ORDER } from "@renaiss-game/shared";
+import {
+  ARENA_CHARACTER_RUNTIME_CONTENT_SCALE,
+  ARENA_CHARACTER_RUNTIME_EDGE_MARGIN,
+  ARENA_CHARACTER_RUNTIME_TEXTURE_SCALE,
+  ARENA_CHARACTER_RUNTIME_WALK_CELL
+} from "./arenaCharacterTextureProfile";
 import {
   ABILITY_VFX_FRAME_COUNT,
   ABILITY_VFX_KEYS,
-  ARCHER_ATTACK_DIRECTIONS,
-  ARCHER_ATTACK_FRAME_COUNT,
   ARCHER_FOREST_ROLL_FRAME_COUNT,
   ARCHER_MOVING_BOW_FRAME_COUNT,
   ARCHER_MOVING_BOW_DIRECTIONS,
@@ -13,82 +16,79 @@ import {
   ARENA_DECAL_TEXTURES,
   COMBAT_VFX_FRAME_COUNT,
   COMBAT_VFX_KEYS,
-  ENGINEER_VFX_FRAME_COUNT,
-  ENGINEER_VFX_KEYS,
   ENV_CROPS,
   ENV_TEXTURES,
-  COMBAT_OBJECT_KEYS,
   ENGINEER_ACTION_DIRECTIONS,
   ENGINEER_ACTION_FRAME_COUNT,
   getAbilityVfxFrameTexture,
   getAbilityVfxRow,
-  getArcherAttackDirectionRow,
-  getArcherAttackFrameTexture,
   getArcherForestRollFrameTexture,
   getArcherMovingBowFrameTexture,
   getArcherStandingFullDrawFrameTexture,
   getArenaDecalGridPosition,
   getArenaDecalTexturePadding,
   getArenaDecalTextureTrimPadding,
-  getClassFrameCrop,
-  getClassFrameTexture,
   getCombatVfxFrameTexture,
   getCombatVfxRow,
   getCombatObjectGridPosition,
   getCombatObjectTexture,
   getEngineerActionDirectionRow,
   getEngineerActionFrameTexture,
-  getEngineerVfxFrameTexture,
-  getEngineerVfxRow,
   getMageStaffCastDirectionRow,
   getMageStaffCastFrameTexture,
-  getMageFieldVfxFrameTexture,
-  getMageFieldVfxRow,
-  getMageVfxFrameTexture,
-  getMageVfxRow,
-  getRpgSkillProjectileFrameTexture,
-  getRpgSkillProjectileRow,
   getStatusAuraFrameTexture,
   getStatusAuraRow,
   getVfxFrameTexture,
   getVfxRow,
-  getWarriorAttackDirectionRow,
-  getWarriorAttackFrameTexture,
   getWarriorArcherVfxFrameTexture,
   getWarriorArcherVfxRow,
   getWarriorM1FrameTexture,
   getWarriorVerticalSlashFrameTexture,
   getWarriorVerticalSlashRow,
-  getWarriorVerdictVfxFrameTexture,
   MAGE_STAFF_CAST_DIRECTIONS,
   MAGE_STAFF_CAST_FRAME_COUNT,
-  MAGE_FIELD_VFX_FRAME_COUNT,
-  MAGE_FIELD_VFX_KEYS,
-  MAGE_VFX_FRAME_COUNT,
-  MAGE_VFX_KEYS,
-  RPG_SKILL_PROJECTILE_FRAME_COUNT,
-  RPG_SKILL_PROJECTILE_ROW_COUNT,
   shouldTrimArenaDecalTexture,
   STATUS_AURA_FRAME_COUNT,
   STATUS_AURA_KEYS,
   STATUS_AURA_SOURCE_ROWS,
   VFX_FRAME_COUNT,
-  WARRIOR_ATTACK_DIRECTIONS,
-  WARRIOR_ATTACK_FRAME_COUNT,
   WARRIOR_ARCHER_VFX_FRAME_COUNT,
   WARRIOR_ARCHER_VFX_KEYS,
   WARRIOR_M1_DIRECTIONS,
   WARRIOR_M1_FRAME_COUNT,
   WARRIOR_VERTICAL_SLASH_FRAME_COUNT,
   WARRIOR_VERTICAL_SLASH_ROWS,
-  WARRIOR_VERDICT_VFX_FRAME_COUNT,
+  type AbilityVfxKey,
+  type CombatObjectKey,
+  type CombatVfxKey,
   type Crop,
   type TexturePadding,
-  type VfxKey
+  type VfxKey,
+  type WarriorArcherVfxKey
 } from "./crops";
 
 const VFX_KEYS: VfxKey[] = ["shield"];
-const RPG_SKILL_PROJECTILE_ELEMENTS = ["water", "fire", "grass", "dark", "light"] as const;
+// Q/E/R visuals come from the 60-skill runtime catalog. Keep this boot pack
+// limited to effects that gameplay still requests outside that catalog:
+// basic attacks, status feedback, pickups, death, and Engineer core objects.
+const ARENA_ABILITY_VFX_KEYS: AbilityVfxKey[] = ["warriorSlash", "engineerStrike"];
+const ARENA_WARRIOR_ARCHER_VFX_KEYS: WarriorArcherVfxKey[] = ["warriorCharge", "archerRoot"];
+const ARENA_COMBAT_VFX_KEYS: CombatVfxKey[] = [
+  "magicOrbProjectile",
+  "hitImpact",
+  "blockImpact",
+  "healPickup",
+  "deathBurst"
+];
+const ARENA_COMBAT_OBJECT_KEYS: CombatObjectKey[] = [
+  "arrow",
+  "turretBase",
+  "turretHead",
+  "turretHeadFiring",
+  "turretHeadBoosted",
+  "leafSparkle",
+  "groundShadow"
+];
 const PIXELLAB_DIRECTIONS = ["south", "south-east", "east", "north-east", "north", "north-west", "west", "south-west"] as const;
 const MAGIC_TURRET_FRAME_SIZE = 128;
 const MAGIC_TURRET_FRAME_COUNT = 4;
@@ -106,12 +106,11 @@ export const NEW_COMPATIBLE_WALK_FRAME_COUNT = 7;
 export const NEW_COMPATIBLE_WALK_CLASS_IDS = ["warrior", "archer", "engineer", "mage"] as const;
 export type NewCompatibleWalkClassId = (typeof NEW_COMPATIBLE_WALK_CLASS_IDS)[number];
 // PixelLab exports all directions inside a generous square canvas. Normalize
-// those frames into the same aspect ratio as the existing runtime character
-// cells, while preserving native pixel proportions and one shared foot line.
-const NEW_COMPATIBLE_WALK_CELL = { width: 165, height: 194, footY: 174, topInset: 18 };
+// those frames into a smaller runtime surface while preserving native pixel
+// proportions and one shared foot line. The sprite's world display size stays
+// unchanged, so this only reduces decoded/GPU texture cost.
+const NEW_COMPATIBLE_WALK_CELL = ARENA_CHARACTER_RUNTIME_WALK_CELL;
 const ARENA_RUNTIME_SOURCE_TEXTURE_KEYS = [
-  "classSprites",
-  "classSpritesClean",
   "villageAssets",
   "villageAssetsClean",
   "skillEffects",
@@ -119,9 +118,7 @@ const ARENA_RUNTIME_SOURCE_TEXTURE_KEYS = [
   "combatObjects",
   "combatObjectsClean",
   "arenaDecals",
-  "warriorAttackSprites",
   "warriorM1Sprites",
-  "archerAttackSprites",
   "archerMovingBowSprites",
   "archerStandingFullDrawSprites",
   "archerForestRollSprites",
@@ -131,12 +128,7 @@ const ARENA_RUNTIME_SOURCE_TEXTURE_KEYS = [
   "abilityEffects",
   "warriorVerticalSlash",
   "warriorArcherEffects",
-  "warriorVerdictCombatFx",
-  "engineerEffects",
-  "mageEffects",
-  "mageFieldEffects",
   "combatEffects",
-  "rpgSkillProjectiles",
   "engineerMechanicalTurretAtlas",
   "engineerMechanicalTurretAtlasClean",
   "engineerMagicTurretFire"
@@ -235,42 +227,17 @@ function buildArenaDecalRuntimeTextures(scene: Phaser.Scene) {
   }
 }
 
-function buildClassRuntimeTextures(scene: Phaser.Scene) {
-  for (const classId of CLASS_ORDER) {
-    for (let frame = 0; frame < 8; frame += 1) {
-      sliceTexture(scene, "classSpritesClean", getClassFrameTexture(classId, frame), getClassFrameCrop(classId, frame));
-    }
-  }
-}
-
-export function buildVillageRuntimeTextures(scene: Phaser.Scene, options: { includeLegacyClassTextures?: boolean } = {}) {
+export function buildVillageRuntimeTextures(scene: Phaser.Scene) {
   buildEnvironmentRuntimeTextures(scene);
   buildArenaDecalRuntimeTextures(scene);
-  if (options.includeLegacyClassTextures ?? true) {
-    buildClassRuntimeTextures(scene);
-  }
 }
 
 export function buildRuntimeTextures(scene: Phaser.Scene) {
   buildVillageRuntimeTextures(scene);
 
-  for (const direction of WARRIOR_ATTACK_DIRECTIONS) {
-    for (let frame = 0; frame < WARRIOR_ATTACK_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
-        scene,
-        "warriorAttackSprites",
-        getWarriorAttackFrameTexture(direction, frame),
-        WARRIOR_ATTACK_FRAME_COUNT,
-        WARRIOR_ATTACK_DIRECTIONS.length,
-        frame,
-        getWarriorAttackDirectionRow(direction)
-      );
-    }
-  }
-
   for (const [row, direction] of WARRIOR_M1_DIRECTIONS.entries()) {
     for (let frame = 0; frame < WARRIOR_M1_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
+      sliceCharacterGridTexture(
         scene,
         "warriorM1Sprites",
         getWarriorM1FrameTexture(direction, frame),
@@ -282,23 +249,9 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
-  for (const direction of ARCHER_ATTACK_DIRECTIONS) {
-    for (let frame = 0; frame < ARCHER_ATTACK_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
-        scene,
-        "archerAttackSprites",
-        getArcherAttackFrameTexture(direction, frame),
-        ARCHER_ATTACK_FRAME_COUNT,
-        ARCHER_ATTACK_DIRECTIONS.length,
-        frame,
-        getArcherAttackDirectionRow(direction)
-      );
-    }
-  }
-
   for (const [row, direction] of ARCHER_MOVING_BOW_DIRECTIONS.entries()) {
     for (let frame = 0; frame < ARCHER_MOVING_BOW_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
+      sliceCharacterGridTexture(
         scene,
         "archerMovingBowSprites",
         getArcherMovingBowFrameTexture(direction, frame),
@@ -311,7 +264,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
   }
 
   for (const [row, direction] of ARCHER_MOVING_BOW_DIRECTIONS.entries()) {
-    sliceGridTexture(
+    sliceCharacterGridTexture(
       scene,
       "archerStandingFullDrawSprites",
       getArcherStandingFullDrawFrameTexture(direction),
@@ -324,7 +277,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
 
   for (const [row, direction] of ARCHER_MOVING_BOW_DIRECTIONS.entries()) {
     for (let frame = 0; frame < ARCHER_FOREST_ROLL_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
+      sliceCharacterGridTexture(
         scene,
         "archerForestRollSprites",
         getArcherForestRollFrameTexture(direction, frame),
@@ -338,7 +291,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
 
   for (const direction of ENGINEER_ACTION_DIRECTIONS) {
     for (let frame = 0; frame < ENGINEER_ACTION_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
+      sliceCharacterGridTexture(
         scene,
         "engineerActionSprites",
         getEngineerActionFrameTexture(direction, frame),
@@ -352,14 +305,15 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
 
   for (const direction of MAGE_STAFF_CAST_DIRECTIONS) {
     for (let frame = 0; frame < MAGE_STAFF_CAST_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
+      sliceCharacterGridTexture(
         scene,
         "mageStaffCastSprites",
         getMageStaffCastFrameTexture(direction, frame),
         MAGE_STAFF_CAST_FRAME_COUNT,
         MAGE_STAFF_CAST_DIRECTIONS.length,
         frame,
-        getMageStaffCastDirectionRow(direction)
+        getMageStaffCastDirectionRow(direction),
+        224 / 256
       );
     }
   }
@@ -384,7 +338,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
-  for (const vfx of ABILITY_VFX_KEYS) {
+  for (const vfx of ARENA_ABILITY_VFX_KEYS) {
     for (let frame = 0; frame < ABILITY_VFX_FRAME_COUNT; frame += 1) {
       sliceGridTexture(
         scene,
@@ -412,7 +366,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
-  for (const vfx of WARRIOR_ARCHER_VFX_KEYS) {
+  for (const vfx of ARENA_WARRIOR_ARCHER_VFX_KEYS) {
     for (let frame = 0; frame < WARRIOR_ARCHER_VFX_FRAME_COUNT; frame += 1) {
       sliceGridTexture(
         scene,
@@ -429,67 +383,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
-  for (let frame = 0; frame < WARRIOR_VERDICT_VFX_FRAME_COUNT; frame += 1) {
-    sliceGridTexture(
-      scene,
-      "warriorVerdictCombatFx",
-      getWarriorVerdictVfxFrameTexture(frame),
-      WARRIOR_VERDICT_VFX_FRAME_COUNT,
-      1,
-      frame,
-      0,
-      { top: 0, right: 0, bottom: 0, left: 0 },
-      false
-    );
-  }
-
-  for (const vfx of ENGINEER_VFX_KEYS) {
-    for (let frame = 0; frame < ENGINEER_VFX_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
-        scene,
-        "engineerEffects",
-        getEngineerVfxFrameTexture(vfx, frame),
-        ENGINEER_VFX_FRAME_COUNT,
-        ENGINEER_VFX_KEYS.length,
-        frame,
-        getEngineerVfxRow(vfx),
-        { top: 0, right: 0, bottom: 0, left: 0 },
-        true,
-        getEngineerVfxTrimPadding(vfx)
-      );
-    }
-  }
-
-  for (const vfx of MAGE_VFX_KEYS) {
-    for (let frame = 0; frame < MAGE_VFX_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
-        scene,
-        "mageEffects",
-        getMageVfxFrameTexture(vfx, frame),
-        MAGE_VFX_FRAME_COUNT,
-        MAGE_VFX_KEYS.length,
-        frame,
-        getMageVfxRow(vfx),
-        getMageVfxTexturePadding()
-      );
-    }
-  }
-
-  for (const vfx of MAGE_FIELD_VFX_KEYS) {
-    for (let frame = 0; frame < MAGE_FIELD_VFX_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
-        scene,
-        "mageFieldEffects",
-        getMageFieldVfxFrameTexture(vfx, frame),
-        MAGE_FIELD_VFX_FRAME_COUNT,
-        MAGE_FIELD_VFX_KEYS.length,
-        frame,
-        getMageFieldVfxRow(vfx)
-      );
-    }
-  }
-
-  for (const vfx of COMBAT_VFX_KEYS) {
+  for (const vfx of ARENA_COMBAT_VFX_KEYS) {
     for (let frame = 0; frame < COMBAT_VFX_FRAME_COUNT; frame += 1) {
       sliceGridTexture(
         scene,
@@ -506,24 +400,7 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
-  for (const element of RPG_SKILL_PROJECTILE_ELEMENTS) {
-    for (let frame = 0; frame < RPG_SKILL_PROJECTILE_FRAME_COUNT; frame += 1) {
-      sliceGridTexture(
-        scene,
-        "rpgSkillProjectiles",
-        getRpgSkillProjectileFrameTexture(element, frame),
-        RPG_SKILL_PROJECTILE_FRAME_COUNT,
-        RPG_SKILL_PROJECTILE_ROW_COUNT,
-        frame,
-        getRpgSkillProjectileRow(element),
-        { top: 0, right: 0, bottom: 0, left: 0 },
-        true,
-        { top: 6, right: 10, bottom: 6, left: 14 }
-      );
-    }
-  }
-
-  for (const key of COMBAT_OBJECT_KEYS) {
+  for (const key of ARENA_COMBAT_OBJECT_KEYS) {
     const { column, row } = getCombatObjectGridPosition(key);
     sliceGridTexture(
       scene,
@@ -565,7 +442,12 @@ function normalizeEightDirectionWalkGrid(
     const bounds = getPixelLabDirectionBounds(sourceContext, row * cellHeight, cellWidth, cellHeight);
     const sourceHeightToFoot = Math.max(1, bounds.bottom - bounds.top);
     const targetHeight = NEW_COMPATIBLE_WALK_CELL.footY - NEW_COMPATIBLE_WALK_CELL.topInset;
-    const scale = Math.min(1, targetHeight / sourceHeightToFoot);
+    const safeWidth = NEW_COMPATIBLE_WALK_CELL.width - ARENA_CHARACTER_RUNTIME_EDGE_MARGIN * 2;
+    const scale = Math.min(
+      1,
+      targetHeight / sourceHeightToFoot,
+      safeWidth / Math.max(1, bounds.right - bounds.left)
+    );
     const drawWidth = Math.max(1, Math.round((bounds.right - bounds.left) * scale));
     const drawHeight = Math.max(1, Math.round((bounds.bottom - bounds.top) * scale));
     const drawX = Math.round((NEW_COMPATIBLE_WALK_CELL.width - drawWidth) / 2);
@@ -641,6 +523,33 @@ function sliceTexture(scene: Phaser.Scene, sourceKey: string, outputKey: string,
   canvas.refresh();
 }
 
+function sliceCharacterGridTexture(
+  scene: Phaser.Scene,
+  sourceKey: string,
+  outputKey: string,
+  columns: number,
+  rows: number,
+  column: number,
+  row: number,
+  originY = 0.9
+) {
+  sliceGridTexture(
+    scene,
+    sourceKey,
+    outputKey,
+    columns,
+    rows,
+    column,
+    row,
+    { top: 0, right: 0, bottom: 0, left: 0 },
+    false,
+    { top: 0, right: 0, bottom: 0, left: 0 },
+    ARENA_CHARACTER_RUNTIME_TEXTURE_SCALE,
+    ARENA_CHARACTER_RUNTIME_CONTENT_SCALE,
+    { x: 0.5, y: originY }
+  );
+}
+
 function sliceGridTexture(
   scene: Phaser.Scene,
   sourceKey: string,
@@ -651,7 +560,10 @@ function sliceGridTexture(
   row: number,
   padding: TexturePadding = { top: 0, right: 0, bottom: 0, left: 0 },
   trimAlpha = false,
-  trimPadding: TexturePadding = { top: 0, right: 0, bottom: 0, left: 0 }
+  trimPadding: TexturePadding = { top: 0, right: 0, bottom: 0, left: 0 },
+  outputScale = 1,
+  contentScale = outputScale,
+  contentOrigin = { x: 0.5, y: 0.5 }
 ) {
   if (scene.textures.exists(outputKey)) {
     scene.textures.remove(outputKey);
@@ -687,15 +599,35 @@ function sliceGridTexture(
   );
 
   const textureCanvas = trimAlpha ? trimCanvasToAlpha(rawCanvas, trimPadding) : rawCanvas;
-  const canvas = scene.textures.createCanvas(outputKey, textureCanvas.width, textureCanvas.height);
+  const textureWidth = outputScale === 1
+    ? textureCanvas.width
+    : Math.max(1, Math.round(textureCanvas.width * outputScale));
+  const textureHeight = outputScale === 1
+    ? textureCanvas.height
+    : Math.max(1, Math.round(textureCanvas.height * outputScale));
+  const canvas = scene.textures.createCanvas(outputKey, textureWidth, textureHeight);
   if (!canvas) {
     throw new Error(`Unable to create Arena runtime texture ${outputKey}`);
   }
 
   const outputContext = canvas.getContext();
   outputContext.imageSmoothingEnabled = false;
-  outputContext.clearRect(0, 0, textureCanvas.width, textureCanvas.height);
-  outputContext.drawImage(textureCanvas, 0, 0);
+  outputContext.clearRect(0, 0, textureWidth, textureHeight);
+  const contentWidth = Math.max(1, Math.round(textureCanvas.width * contentScale));
+  const contentHeight = Math.max(1, Math.round(textureCanvas.height * contentScale));
+  const contentX = Math.round(textureWidth * contentOrigin.x - contentWidth * contentOrigin.x);
+  const contentY = Math.round(textureHeight * contentOrigin.y - contentHeight * contentOrigin.y);
+  outputContext.drawImage(
+    textureCanvas,
+    0,
+    0,
+    textureCanvas.width,
+    textureCanvas.height,
+    contentX,
+    contentY,
+    contentWidth,
+    contentHeight
+  );
   canvas.refresh();
 }
 
@@ -761,19 +693,6 @@ function getCombatVfxTrimPadding(key: string): TexturePadding {
     return { top: 10, right: 10, bottom: 10, left: 10 };
   }
   return { top: 6, right: 8, bottom: 6, left: 8 };
-}
-
-function getEngineerVfxTrimPadding(key: string): TexturePadding {
-  if (key === "repulsorPulse") {
-    return { top: 10, right: 10, bottom: 10, left: 10 };
-  }
-  return { top: 10, right: 10, bottom: 10, left: 10 };
-}
-
-function getMageVfxTexturePadding(): TexturePadding {
-  // Mage ground effects use 384x256 source cells but render into square radius displays.
-  // Centering them in a square texture preserves the circular VFX shape.
-  return { top: 64, right: 0, bottom: 64, left: 0 };
 }
 
 function getWarriorArcherVfxTrimPadding(key: string): TexturePadding {

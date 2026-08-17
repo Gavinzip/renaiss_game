@@ -122,7 +122,9 @@ const LEGACY_EFFECT_CATALOG_RUNTIME = {
   beam: "mage_00",
   burst: "mage_07",
   mage_miasma_field: "mage_08",
-  ultimate: "mage_12"
+  ultimate: "mage_12",
+  mage_time_astrolabe: "mage_13",
+  mage_blood_altar: "mage_14"
 } as const satisfies Partial<Record<EffectState["type"], ArenaCatalogSkillId>>;
 
 function getArenaCatalogRuntimeSkillId(
@@ -138,12 +140,7 @@ function getArenaCatalogRuntimeSkillId(
   const expected = LEGACY_EFFECT_CATALOG_RUNTIME[
       effect.type as keyof typeof LEGACY_EFFECT_CATALOG_RUNTIME
     ];
-  const isCatalogLegacyEffect =
-    effect.type === "beam" ||
-    effect.type === "burst" ||
-    effect.type === "mage_miasma_field" ||
-    (effect.type === "ultimate" && effect.classId === "mage");
-  if (!expected || !isCatalogLegacyEffect) {
+  if (!expected) {
     return null;
   }
   if (!effect.skillId) {
