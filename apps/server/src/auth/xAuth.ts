@@ -15,6 +15,15 @@ interface XSessionPayload {
   issuedAt: number;
 }
 
+interface ArenaSocketTicketPayload {
+  version: 1;
+  provider: "x" | "dev";
+  userId: string;
+  username: string;
+  issuedAt: number;
+  expiresAt: number;
+}
+
 export interface AuthUser {
   provider: "x" | "dev";
   id: string;
@@ -27,9 +36,11 @@ const X_TOKEN_URL = "https://api.x.com/2/oauth2/token";
 const X_USERINFO_URL = "https://api.x.com/2/users/me";
 const SESSION_COOKIE_NAME = "renaiss_x_session";
 const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+const ARENA_SOCKET_TICKET_MAX_AGE_MS = 15 * 60 * 1000;
 const OAUTH_STATE_MAX_AGE_MS = 10 * 60 * 1000;
 const DEFAULT_X_OAUTH_SCOPE = "users.read tweet.read";
 const oauthStates = new Map<string, XOAuthStateRecord>();
+const localArenaSocketTicketSecret = crypto.randomBytes(32).toString("base64url");
 
 export function installXAuthRoutes(app: Express) {
   app.get("/api/auth/session", (req, res) => {
@@ -38,6 +49,25 @@ export function installXAuthRoutes(app: Express) {
       authenticated: Boolean(user),
       configured: isXAuthConfigured() || isDevAuthEnabled(req),
       user
+    });
+  });
+
+  app.get("/api/auth/arena-socket-ticket", (req, res) => {
+    const user = resolveHttpAuthUser(req);
+    if (!user) {
+      res.status(401).json({ success: false, reason: "arena_auth_required" });
+      return;
+    }
+    const ticket = createArenaSocketTicket(user);
+    if (!ticket) {
+      res.status(503).json({ success: false, reason: "arena_socket_ticket_unavailable" });
+      return;
+    }
+    res.setHeader("Cache-Control", "no-store");
+    res.json({
+      success: true,
+      ticket: ticket.value,
+      expiresAt: ticket.expiresAt
     });
   });
 
@@ -142,6 +172,8 @@ export function resolveArenaSocketAuthUser(
 ): AuthUser | null {
   const signedUser = readXSessionFromHeaders(req.headers);
   if (signedUser) return signedUser;
+  const ticketUser = readArenaSocketTicket(handshakeAuth);
+  if (ticketUser) return ticketUser;
   const hostname = hostnameFromHeaders(req.headers);
   if (!isDevAuthEnabledForHostname(hostname)) return null;
   const override = readArenaDevIdentity(handshakeAuth);
@@ -153,6 +185,81 @@ export function resolveArenaSocketAuthUser(
     username,
     displayName: `@${username}`
   };
+}
+
+function createArenaSocketTicket(user: AuthUser) {
+  const secret = arenaSocketTicketSecret();
+  if (!secret) return null;
+  const issuedAt = Date.now();
+  const expiresAt = issuedAt + ARENA_SOCKET_TICKET_MAX_AGE_MS;
+  const payload: ArenaSocketTicketPayload = {
+    version: 1,
+    provider: user.provider,
+    userId: user.id,
+    username: user.username,
+    issuedAt,
+    expiresAt
+  };
+  const encodedPayload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+  const signature = signArenaSocketTicket(encodedPayload, secret);
+  return { value: `${encodedPayload}.${signature}`, expiresAt };
+}
+
+function readArenaSocketTicket(value: unknown): AuthUser | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const ticket = (value as { arenaSocketTicket?: unknown }).arenaSocketTicket;
+  if (typeof ticket !== "string" || ticket.length > 2048) return null;
+  const [encodedPayload, signature] = ticket.split(".");
+  const secret = arenaSocketTicketSecret();
+  if (!encodedPayload || !signature || !secret) return null;
+  const expectedSignature = signArenaSocketTicket(encodedPayload, secret);
+  const signatureBuffer = Buffer.from(signature);
+  const expectedSignatureBuffer = Buffer.from(expectedSignature);
+  if (
+    signatureBuffer.length !== expectedSignatureBuffer.length ||
+    !crypto.timingSafeEqual(signatureBuffer, expectedSignatureBuffer)
+  ) {
+    return null;
+  }
+  try {
+    const payload = JSON.parse(
+      Buffer.from(encodedPayload, "base64url").toString("utf8")
+    ) as ArenaSocketTicketPayload;
+    const now = Date.now();
+    if (
+      payload.version !== 1 ||
+      (payload.provider !== "x" && payload.provider !== "dev") ||
+      typeof payload.userId !== "string" ||
+      !payload.userId ||
+      typeof payload.username !== "string" ||
+      !payload.username ||
+      !Number.isSafeInteger(payload.issuedAt) ||
+      !Number.isSafeInteger(payload.expiresAt) ||
+      payload.issuedAt > now + 30_000 ||
+      payload.expiresAt <= now ||
+      payload.expiresAt - payload.issuedAt > ARENA_SOCKET_TICKET_MAX_AGE_MS
+    ) {
+      return null;
+    }
+    return {
+      provider: payload.provider,
+      id: payload.userId,
+      username: payload.username,
+      displayName: `@${payload.username}`
+    };
+  } catch {
+    return null;
+  }
+}
+
+function arenaSocketTicketSecret() {
+  const configured = process.env.AUTH_SESSION_SECRET?.trim();
+  if (configured) return configured;
+  return process.env.NODE_ENV === "production" ? null : localArenaSocketTicketSecret;
+}
+
+function signArenaSocketTicket(encodedPayload: string, secret: string) {
+  return crypto.createHmac("sha256", secret).update(`arena-socket-v1.${encodedPayload}`).digest("base64url");
 }
 
 function readXAuthConfig() {

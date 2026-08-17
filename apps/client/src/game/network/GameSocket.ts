@@ -9,6 +9,7 @@ import {
   type PlayerInput
 } from "@renaiss-game/shared";
 import { io, type Socket } from "socket.io-client";
+import { fetchArenaSocketTicket } from "../../api/auth";
 import { gameServerUrl } from "../../api/gameServer";
 import { WEB_ARENA_BUILD_ID } from "./arenaWebReadiness";
 
@@ -42,7 +43,7 @@ export class GameSocket {
   private watchdog: ReturnType<typeof setInterval> | null = null;
   private staleRecoveryStarted = false;
 
-  connect(
+  async connect(
     request: JoinRequest,
     onSnapshot: (snapshot: GameSnapshot) => void,
     callbacks: GameSocketCallbacks
@@ -55,7 +56,10 @@ export class GameSocket {
     this.manualDisconnect = false;
     callbacks.onStatus("connecting");
 
+    const arenaSocketTicket = await fetchArenaSocketTicket();
+
     this.socket = io(gameServerUrl(), {
+      auth: { arenaSocketTicket },
       transports: ["websocket"],
       reconnection: true,
       reconnectionAttempts: 8,
