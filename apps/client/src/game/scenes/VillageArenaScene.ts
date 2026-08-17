@@ -67,6 +67,7 @@ import {
   usesArenaCatalogRuntimeVfx
 } from "../assets/vfxManifest";
 import { GameSocket } from "../network/GameSocket";
+import { subscribeToArenaRequests } from "../network/arenaRequestLifecycle";
 import { prepareWebArenaAssets } from "../network/arenaWebReadiness";
 import { AmbientField } from "../render/ambientField";
 import { TargetingOverlay, type TargetingIntent } from "../render/targetingOverlay";
@@ -509,16 +510,16 @@ export class VillageArenaScene extends Phaser.Scene {
     window.addEventListener("pointerdown", this.handleArenaPointerDown, true);
     window.addEventListener("contextmenu", this.handleArenaContextMenu, true);
 
-    this.unsubscribeJoin = useHudStore.subscribe((state, previous) => {
-      if (state.joinRequest && state.joinRequest !== previous.joinRequest) {
-        void this.joinArena(state.joinRequest);
-      }
-      if (state.classSwitchRequest && state.classSwitchRequest !== previous.classSwitchRequest) {
+    this.unsubscribeJoin = subscribeToArenaRequests({
+      onJoinRequest: (request) => {
+        void this.joinArena(request);
+      },
+      onClassSwitchRequest: (request) => {
         this.socket?.switchClass({
-          classId: state.classSwitchRequest.classId,
-          loadout: state.classSwitchRequest.loadout,
-          catalogLoadout: state.classSwitchRequest.catalogLoadout,
-          engineerTurretKind: state.engineerTurretKind
+          classId: request.classId,
+          loadout: request.loadout,
+          catalogLoadout: request.catalogLoadout,
+          engineerTurretKind: request.engineerTurretKind
         });
       }
     });
