@@ -12,6 +12,7 @@ import {
   type RpgMove
 } from "@renaiss-game/shared";
 import { useCallback, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { playGameUiSound } from "../audio/gameUiSounds";
 import { useArenaI18n, type ArenaLanguage } from "../i18n/arena";
 import { ClassPortrait } from "./ClassPortrait";
 import { RpgPetSprite } from "./RpgPetSprite";
@@ -525,14 +526,19 @@ function TutorialDialog({
   onClose: () => void;
   children: ReactNode;
 }) {
+  const close = useCallback(() => {
+    playGameUiSound("close");
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     if (!open) return undefined;
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") close();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, open]);
+  }, [close, open]);
 
   if (!open) return null;
 
@@ -545,7 +551,7 @@ function TutorialDialog({
             <strong>{title}</strong>
             <em>{subtitle}</em>
           </div>
-          <button type="button" className="tutorial-close-button" title={copy.close} aria-label={copy.close} onClick={onClose}>
+          <button type="button" className="tutorial-close-button" title={copy.close} aria-label={copy.close} onClick={close}>
             <X size={18} weight="bold" />
           </button>
         </header>

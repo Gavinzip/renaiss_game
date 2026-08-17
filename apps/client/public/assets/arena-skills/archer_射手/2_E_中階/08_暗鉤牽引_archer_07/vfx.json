@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_07",
+  "classId": "archer",
+  "name": "暗鉤牽引",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
+  "runtime": {
+    "skillId": "archer_07",
+    "classId": "archer",
+    "name": "暗鉤牽引",
+    "persistent": false,
+    "previewSha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        34,
+        22
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        34,
+        22
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": false,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:8a53678ea44f7bef",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_暗鉤牽引.gif",
+    "configPreviewSourceSha256": "8a53678ea44f7befe6bb944fd2a1b7ace546025d28cfd58a5545e06afa63add8",
+    "configPreviewOutputSha256": "a8ae1e97ba8af2b871f2b8d6a095b409f3a17eaa3fbffcbf46b4f91bfa8c2ea3",
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/primary.png",
+    "frameWidth": 120,
+    "frameHeight": 120,
+    "frameCount": 6,
+    "unionBounds": [
+      0,
+      37,
+      119,
+      83
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/source/primary-source-20a538d0dceae03b.png",
+    "sourceSha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56",
+    "outputSha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "blankFrameIndices": [
+      5
+    ],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          34,
+          49,
+          34,
+          49
+        ],
+        [
+          20,
+          48,
+          20,
+          49
+        ],
+        [
+          5,
+          39,
+          6,
+          39
+        ],
+        [
+          10,
+          49,
+          10,
+          49
+        ],
+        [
+          2,
+          49,
+          3,
+          49
+        ],
+        null
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_暗鉤牽引.png",
+        "sha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_暗鉤牽引-action.png",
+        "sha256": "ab7383737539bcea4dadc1a7ebe5d5d86d027093d5cf35f3e7a02e4db09e98b6"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 40,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/source/body-source-user-directed-existing-extra-action-dark-hook-cast-4f2e67fcc3209beb.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/source/body-source-user-directed-existing-extra-action-dark-hook-cast-4f2e67fcc3209beb.png",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/archer/dark-hook-cast-8dir-v1.png",
+      "originalSourceSha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "sourceSha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "outputSha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 5,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 5,
+        "frameDurationsMs": [
+          100,
+          140,
+          160,
+          160,
+          160
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_07",
+      "acceptedAnimationId": "archer_07:dark-hook-cast:own-folder-v2:4f2e67fcc3209beb",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "fallbackUsed": false
+    },
+    "packagePath": "archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
+    "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
+    "iconFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/icon.png",
+    "iconFileSha256": "d89974a18a735482af6ecba943a540e63d81b334905a040c621a655d38b42ff1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_暗鉤牽引.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/source/primary-source-20a538d0dceae03b.png",
+    "fallbackUsed": false,
+    "tetherPresentation": {
+      "sourceFrameIndex": 2,
+      "leftCapSourcePx": 28,
+      "rightCapSourcePx": 34,
+      "displayHeight": 35,
+      "stretch": "three-slice-distance"
+    },
+    "tetherAsset": {
+      "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/tether.png",
+      "width": 84,
+      "height": 35,
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/primary.png",
+      "sourceSha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        5,
+        39,
+        114,
+        81
+      ],
+      "safeCropBounds": [
+        5,
+        39,
+        114,
+        81
+      ],
+      "normalization": {
+        "kind": "nearest-contain-complete-frame",
+        "contentScale": 0.7380952380952381,
+        "transparentMarginPx": 2
+      },
+      "outputSha256": "52322bcfca178bdcd770acdde7d370dd40a1f689d7e92df9da25590689ff077b",
+      "leftCapSourcePx": 23,
+      "rightCapSourcePx": 27,
+      "displayHeight": 35,
+      "stretch": "three-slice-distance",
+      "acceptedAnimationId": "archer_07:configuration-frame-2:three-slice-distance:52322bcfca178bdc",
+      "pixelSafetyMargin": 2,
+      "fallbackUsed": false
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_07:source-2b6822b9140afe25:output-a7c99e80d47fba12",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_07",
+    "previewSourceSequenceSha256": "2b6822b9140afe25e251693169c3c3c6ac80355068596c8a9d5ffcaa016ca616",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.02,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",
+    "sha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_07:source-2b6822b9140afe25:output-a7c99e80d47fba12",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_07",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.093,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.055,
+      "durationSec": 4.962,
+      "file": "random-archer_07-hq.webm",
+      "bytes": 16294536,
+      "sha256": "2b6822b9140afe25e251693169c3c3c6ac80355068596c8a9d5ffcaa016ca616"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_07-hq.webm",
+    "sourceVideoSha256": "2b6822b9140afe25e251693169c3c3c6ac80355068596c8a9d5ffcaa016ca616",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.163,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      845,
+      360,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1082,
+      555,
+      1504,
+      668
+    ],
+    "contentMargins": [
+      237,
+      195,
+      237,
+      196
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.02,
+    "frameCount": 148,
+    "totalDurationMs": 4930,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 16294536,
+    "outputBytes": 1106898,
+    "reductionRatio": 0.932069,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/icon.png",
+    "sha256": "d89974a18a735482af6ecba943a540e63d81b334905a040c621a655d38b42ff1",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "29535af66a2858aaf354fbecd0e515d56a37209e4bddb2b9c070e2984976ff1f",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_07-vfx.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_07-body.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_07.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_07",
+      "acceptedAnimationId": "archer_07:dark-hook-cast:own-folder-v2:4f2e67fcc3209beb",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/archer/dark-hook-cast-8dir-v1.png",
+      "originalSourceSha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/source/body-source-user-directed-existing-extra-action-dark-hook-cast-4f2e67fcc3209beb.png",
+      "packageSourceSha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/body.png",
+      "packageRuntimeSha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "fallbackUsed": false
+    },
+    "selectedSpatialContract": {
+      "source": "5173-configuration-contract-plus-user-ground-location-correction",
+      "changedFields": [
+        "tetherPresentation"
+      ],
+      "fallbackUsed": false
+    },
+    "selectedTether": {
+      "acceptedAnimationId": "archer_07:configuration-frame-2:three-slice-distance:52322bcfca178bdc",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/tether.png",
+      "packageRuntimeSha256": "52322bcfca178bdcd770acdde7d370dd40a1f689d7e92df9da25590689ff077b",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        5,
+        39,
+        114,
+        81
+      ],
+      "stretch": "three-slice-distance",
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

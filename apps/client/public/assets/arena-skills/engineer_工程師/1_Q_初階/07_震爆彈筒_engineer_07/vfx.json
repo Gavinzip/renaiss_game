@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_07",
+  "classId": "engineer",
+  "name": "震爆彈筒",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07",
+  "runtime": {
+    "skillId": "engineer_07",
+    "classId": "engineer",
+    "name": "震爆彈筒",
+    "persistent": false,
+    "previewSha256": "6a34969387cb72b7728bceda3036532311d6e6f87644a24d6b3186d386679a2c",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "candidate:engineer-concussion-pressure-wave-v4:f124b7d84fe0e1e4",
+    "configPreviewSourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/candidate-v2/preview/animation.webp",
+    "configPreviewSourceSha256": "727258cc0f64580082f42bbcd0b484c3014633d11612b6d6a9dd82f6bbee2329",
+    "configPreviewOutputSha256": "727258cc0f64580082f42bbcd0b484c3014633d11612b6d6a9dd82f6bbee2329",
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 24,
+    "unionBounds": [
+      4,
+      4,
+      161,
+      161
+    ],
+    "sourcePath": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+    "sourceSha256": "f124b7d84fe0e1e4ec89bcc5bfc388f324ac0df74dbac5e2dff9078f0ab6b9bb",
+    "outputSha256": "e91fe0e897d1e905cac03209f3af34429822d8089aba05a9ce326ee45df836cd",
+    "frameDurationsMs": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "minimumTransparentMargin": 4
+    },
+    "frameDurationMs": 90,
+    "candidateOrigin": "review-only-blue-pressure-wave-candidate-01",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+        "sha256": "f124b7d84fe0e1e4ec89bcc5bfc388f324ac0df74dbac5e2dff9078f0ab6b9bb",
+        "status": "review-only-not-formal"
+      }
+    ],
+    "fallbackUsed": false,
+    "packagePath": "engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "6a34969387cb72b7728bceda3036532311d6e6f87644a24d6b3186d386679a2c",
+    "iconFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/icon.png",
+    "iconFileSha256": "f8f71895b9af5886ce5641d89dea01df88e59c25e4baa1bf9ba5e9c0888705a1",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_07:source-7b415935ae0f438d:output-6a34969387cb72b7",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-engineer_07",
+    "previewSourceSequenceSha256": "7b415935ae0f438df5e8b5674525c0a1152f096774ac6684c871a8c6997514c6",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.029,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/preview/gameplay-preview-v1.webm",
+    "sha256": "6a34969387cb72b7728bceda3036532311d6e6f87644a24d6b3186d386679a2c",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_07:source-7b415935ae0f438d:output-6a34969387cb72b7",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_07",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 6.747,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 10.199,
+      "durationSec": 3.452,
+      "file": "random-engineer_07-hq.webm",
+      "bytes": 8238626,
+      "sha256": "7b415935ae0f438df5e8b5674525c0a1152f096774ac6684c871a8c6997514c6"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_07-hq.webm",
+    "sourceVideoSha256": "7b415935ae0f438df5e8b5674525c0a1152f096774ac6684c871a8c6997514c6",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.234,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      791,
+      376,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1377,
+      709
+    ],
+    "contentMargins": [
+      310,
+      171,
+      310,
+      171
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.029,
+    "frameCount": 103,
+    "totalDurationMs": 3430,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8238626,
+    "outputBytes": 469477,
+    "reductionRatio": 0.943015,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/icon.png",
+    "sha256": "f8f71895b9af5886ce5641d89dea01df88e59c25e4baa1bf9ba5e9c0888705a1",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "1d4198035c29fcfc629e4c4d916fd23e5723bff7b7c655fe824eca1237c2e6d7",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/selected-runtime-20260809-engineer-repairs-v2/assets/engineer_07-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/candidate-v2/preview/animation.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

@@ -1,8 +1,13 @@
 import {
   CLASS_STATS,
   COMBAT,
+  WORLD,
   getArcherChargedArrowDamageRange,
+  getEngineerTurretBasicAttackDamage,
+  getEffectiveArenaSkillDamage,
+  getEffectiveBasicAttackDamage,
   getSkillCooldownMs,
+  type ArenaStatusId,
   type ClassId,
   type PlayerActionState,
   type SkillKey
@@ -17,6 +22,73 @@ export const ARENA_LANGUAGES: Array<{ id: ArenaLanguage; label: string; shortLab
   { id: "ko", label: "한국어", shortLabel: "KO" }
 ];
 
+export const ARENA_STATUS_LABELS: Record<ArenaLanguage, Record<ArenaStatusId, string>> = {
+  zh: {
+    stunned: "暈眩",
+    silenced: "沉默",
+    rooted: "定身",
+    dash_locked: "禁移",
+    vulnerable: "易傷",
+    marked: "標記",
+    poisoned: "中毒",
+    slowed: "緩速",
+    duel: "死鬥",
+    counter: "反擊",
+    engineer_support: "支撐",
+    dodging: "閃避",
+    concealed: "隱形",
+    enchanted_attacks: "附魔",
+    steady_aim: "強射",
+    focus_lens: "聚焦",
+    attack_boost: "增傷",
+    speed_boost: "加速"
+  },
+  en: {
+    stunned: "STUNNED",
+    silenced: "SILENCED",
+    rooted: "ROOTED",
+    dash_locked: "DASH LOCK",
+    vulnerable: "VULNERABLE",
+    marked: "MARKED",
+    poisoned: "POISONED",
+    slowed: "SLOWED",
+    duel: "DUEL",
+    counter: "COUNTER",
+    engineer_support: "BRACED",
+    dodging: "DODGE",
+    concealed: "HIDDEN",
+    enchanted_attacks: "ENCHANTED",
+    steady_aim: "POWER SHOT",
+    focus_lens: "FOCUS",
+    attack_boost: "DAMAGE UP",
+    speed_boost: "HASTE"
+  },
+  ko: {
+    stunned: "기절",
+    silenced: "침묵",
+    rooted: "속박",
+    dash_locked: "이동 봉쇄",
+    vulnerable: "취약",
+    marked: "표식",
+    poisoned: "중독",
+    slowed: "감속",
+    duel: "결투",
+    counter: "반격",
+    engineer_support: "지지 태세",
+    dodging: "회피",
+    concealed: "은신",
+    enchanted_attacks: "마법 부여",
+    steady_aim: "강화 사격",
+    focus_lens: "집중",
+    attack_boost: "공격 강화",
+    speed_boost: "가속"
+  }
+};
+
+export function getArenaStatusLabel(statusId: ArenaStatusId, language = resolveArenaLanguage()) {
+  return ARENA_STATUS_LABELS[language][statusId];
+}
+
 type ClassCopy = Record<ClassId, { label: string; role: string }>;
 type SkillCopy = Record<ClassId, Record<SkillKey, string>>;
 type TooltipCopy = Record<ClassId, Record<PlayerActionState, { description: string; facts: string[] }>>;
@@ -28,11 +100,61 @@ export interface ArenaText {
     ruleTime: string;
     ruleScore: string;
     ruleRivals: string;
+    arenaMode: string;
+    freeForAll: string;
+    freeForAllDescription: string;
+    team3v3: string;
+    team3v3Description: string;
+    team3v3Rule: string;
+    turretType: string;
+    mechanicalTurret: string;
+    magicTurret: string;
+    redTeam: string;
+    blueTeam: string;
+    teamStatus: string;
+    teamWon: (team: string) => string;
     playerName: string;
     connecting: string;
+    preparingAssets: string;
+    reconnecting: string;
     enterArena: string;
     connectionError: string;
     loadout: string;
+    skillLoadout: string;
+    equipped: string;
+    openSkillLoadout: string;
+    skillLoadoutTitle: string;
+    skillLoadoutBody: string;
+    tierRule: string;
+    currentLoadout: string;
+    skillLibrary: string;
+    selectSlotHint: string;
+    basicTier: string;
+    intermediateTier: string;
+    ultimateTier: string;
+    fixedToKey: (key: string) => string;
+    skillOptions: string;
+    confirmLoadout: string;
+    backToArenaSetup: string;
+    closeSkillLoadout: string;
+    equippedToKey: (key: string) => string;
+    equipToKey: (key: string) => string;
+    allSkillsVisible: string;
+    skillCountUnit: string;
+    mandatoryCore: string;
+    coreDoesNotUseSlot: string;
+    slotEmpty: string;
+    selectSkill: string;
+    catalogSkillDetail: string;
+    loadoutReady: string;
+    loadoutIncomplete: string;
+    equipBeforeEntry: string;
+    animationPreview: string;
+    damage: string;
+    cooldown: string;
+    duration: string;
+    effect: string;
+    undecided: string;
     classSelection: string;
     arenaRules: string;
     hp: string;
@@ -47,6 +169,12 @@ export interface ArenaText {
     map: string;
     messages: string;
     settings: string;
+    hudScale: string;
+    hudScaleCompact: string;
+    hudScaleStandard: string;
+    hudScaleLarge: string;
+    highContrast: string;
+    reducedMotion: string;
     skills: string;
     attack: string;
     killStreak: string;
@@ -150,6 +278,14 @@ export interface ArenaText {
     safeEntry: string;
     protected: string;
     criticalHp: string;
+    health: string;
+    stamina: string;
+    shielded: string;
+    attackBoosted: string;
+    stunned: string;
+    rooted: string;
+    poisoned: string;
+    slowed: string;
   };
   combat: {
     streakBonus: string;
@@ -272,41 +408,41 @@ const classCopy: Record<ArenaLanguage, ClassCopy> = {
   zh: {
     warrior: { label: "戰士", role: "盾牌前鋒" },
     archer: { label: "射手", role: "牽制遠攻" },
-    engineer: { label: "工程師", role: "砲台控制" },
+    engineer: { label: "工程師", role: "魔導砲台控制" },
     mage: { label: "法師", role: "爆發施法" }
   },
   en: {
     warrior: { label: "Warrior", role: "Shield frontline" },
     archer: { label: "Archer", role: "Root and range" },
-    engineer: { label: "Engineer", role: "Turret control" },
+    engineer: { label: "Engineer", role: "Magic turret control" },
     mage: { label: "Mage", role: "Burst caster" }
   },
   ko: {
     warrior: { label: "전사", role: "방패 선봉" },
     archer: { label: "궁수", role: "속박 원거리" },
-    engineer: { label: "엔지니어", role: "포탑 제어" },
+    engineer: { label: "엔지니어", role: "마도 포탑 제어" },
     mage: { label: "마법사", role: "폭발 주문" }
   }
 };
 
 const skillCopy: Record<ArenaLanguage, SkillCopy> = {
   zh: {
-    warrior: { skillQ: "正義衝鋒", skillE: "和平護盾", skillR: "裁決" },
-    archer: { skillQ: "森林翻滾", skillE: "根縛", skillR: "種子雨" },
-    engineer: { skillQ: "自動砲台", skillE: "斥力脈衝", skillR: "超頻" },
-    mage: { skillQ: "日耀光束", skillE: "復甦爆發", skillR: "淨化風暴" }
+    warrior: { skillF: "戰意怒吼", skillQ: "正義衝鋒", skillE: "和平護盾", skillR: "裁決" },
+    archer: { skillF: "穿心箭", skillQ: "森林翻滾", skillE: "根縛", skillR: "種子雨" },
+    engineer: { skillF: "魔導砲台", skillQ: "同步追跡彈", skillE: "裂星魔彈", skillR: "魔導飛彈矩陣" },
+    mage: { skillF: "星界護幕", skillQ: "日耀光束", skillE: "復甦爆發", skillR: "淨化風暴" }
   },
   en: {
-    warrior: { skillQ: "Justice Charge", skillE: "Peace Shield", skillR: "Verdict" },
-    archer: { skillQ: "Forest Roll", skillE: "Root Bind", skillR: "Seed Rain" },
-    engineer: { skillQ: "Auto Turret", skillE: "Repulsor Pulse", skillR: "Overclock" },
-    mage: { skillQ: "Solar Beam", skillE: "Renewal Burst", skillR: "Clean Storm" }
+    warrior: { skillF: "Battle Cry", skillQ: "Justice Charge", skillE: "Peace Shield", skillR: "Verdict" },
+    archer: { skillF: "Piercing Shot", skillQ: "Forest Roll", skillE: "Root Bind", skillR: "Seed Rain" },
+    engineer: { skillF: "Magic Turret", skillQ: "Synchronized Seeker", skillE: "Splitting Star", skillR: "Magic Missile Matrix" },
+    mage: { skillF: "Astral Ward", skillQ: "Solar Beam", skillE: "Renewal Burst", skillR: "Clean Storm" }
   },
   ko: {
-    warrior: { skillQ: "정의 돌진", skillE: "평화 방패", skillR: "심판" },
-    archer: { skillQ: "숲 구르기", skillE: "뿌리 속박", skillR: "씨앗비" },
-    engineer: { skillQ: "자동 포탑", skillE: "반발 파동", skillR: "오버클록" },
-    mage: { skillQ: "태양 광선", skillE: "재생 폭발", skillR: "정화 폭풍" }
+    warrior: { skillF: "전의의 함성", skillQ: "정의 돌진", skillE: "평화 방패", skillR: "심판" },
+    archer: { skillF: "관통 사격", skillQ: "숲 구르기", skillE: "뿌리 속박", skillR: "씨앗비" },
+    engineer: { skillF: "마도 포탑", skillQ: "동기 추적탄", skillE: "분열성 마탄", skillR: "마도 미사일 매트릭스" },
+    mage: { skillF: "성계 장막", skillQ: "태양 광선", skillE: "재생 폭발", skillR: "정화 폭풍" }
   }
 };
 
@@ -320,80 +456,92 @@ const archerChargeDamage = `${archerChargeDamageRange.min}-${archerChargeDamageR
 const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
   zh: {
     warrior: {
-      attack: { description: "朝準星方向近距離揮劍。", facts: [`${CLASS_STATS.warrior.attackPower} 傷害`, `${CLASS_STATS.warrior.attackCooldownMs / 1000} 秒硬直`] },
+      attack: { description: "朝準星方向近距離揮劍。", facts: [`${getEffectiveBasicAttackDamage("warrior")} 傷害`, `${CLASS_STATS.warrior.attackCooldownMs / 1000} 秒硬直`] },
+      skillF: { description: "發出戰意怒吼，短時間強化自己造成的傷害。", facts: [`+${Math.round((WORLD.attackBoostMultiplier - 1) * 100)}% 傷害`, `${COMBAT.warriorBattleCryDuration / 1000} 秒持續`, zhCooldown("warrior", "skillF")] },
       skillQ: { description: "向前突進並斬過路徑上的敵人。", facts: [`${COMBAT.warriorDashDistance} 距離`, "5 秒冷卻"] },
       skillE: { description: "短時間舉盾，抵擋受到的傷害。", facts: [`${COMBAT.warriorShieldDuration / 1000} 秒護盾`, "8 秒冷卻"] },
-      skillR: { description: "在身邊打出裁決重擊，適合近身收割。", facts: [`${COMBAT.warriorUltimateDamage} 傷害`, `${COMBAT.warriorUltimateRadius} 半徑`, "15 秒冷卻"] }
+      skillR: { description: "在身邊打出裁決重擊，適合近身收割。", facts: [`${COMBAT.warriorUltimateDamage} 傷害`, `${COMBAT.warriorUltimateRadius} 半徑`, "13 秒冷卻"] }
     },
     archer: {
       attack: { description: "按住拉弓，放開射出蓄力箭。", facts: [`${COMBAT.archerChargeStages} 段蓄力`, `${archerChargeDamage} 傷害`, `${COMBAT.arrowDistance} 射程`] },
+      skillF: { description: "射出高速重箭，傷害與射程都高於普通攻擊。", facts: [`${COMBAT.archerPiercingShotDamage} 傷害`, `${COMBAT.archerPiercingShotDistance} 射程`, zhCooldown("archer", "skillF")] },
       skillQ: { description: "向前翻滾，快速拉開位置。", facts: [`${COMBAT.archerRollDistance} 距離`, "5 秒冷卻"] },
       skillE: { description: "在滑鼠位置生成根縛區域，定身範圍內敵人。", facts: [`${COMBAT.archerRootDuration / 1000} 秒定身`, `${COMBAT.archerRootRadius} 半徑`, "8 秒冷卻"] },
       skillR: { description: "在滑鼠位置引爆大範圍種子雨。", facts: [`${COMBAT.archerUltimateDamage} 傷害`, `${COMBAT.archerUltimateRadius} 半徑`, "15 秒冷卻"] }
     },
     engineer: {
-      attack: { description: "朝準星方向做短距離機械打擊。", facts: [`${CLASS_STATS.engineer.attackPower} 傷害`, `${CLASS_STATS.engineer.attackCooldownMs / 1000} 秒硬直`] },
-      skillQ: { description: "部署會追蹤並攻擊附近敵人的自動砲台。", facts: [`最多 ${COMBAT.engineerMaxTurrets} 座`, `${COMBAT.turretRange} 射程`, "5 秒冷卻"] },
-      skillE: { description: "釋放近身斥力脈衝，造成傷害並擊退敵人。", facts: [`${COMBAT.engineerRepulsorPulseDamage} 傷害`, `${COMBAT.engineerKnockback} 擊退`, "8 秒冷卻"] },
-      skillR: { description: "讓砲台網路超頻，提高射速與射程。", facts: [`${COMBAT.turretBoostDuration / 1000} 秒強化`, `${COMBAT.turretBoostedDamage} 砲台傷害`, "15 秒冷卻"] }
+      attack: { description: "朝準星方向做短距離機械打擊。", facts: [`${getEffectiveBasicAttackDamage("engineer")} 傷害`, `${CLASS_STATS.engineer.attackCooldownMs / 1000} 秒硬直`] },
+      skillF: { description: "部署一座滿血、不轉向的魔導飛彈砲台；滿 3 座時讓最舊砲台消失，再建立一座全新的滿血砲台。", facts: [`最多 ${COMBAT.engineerMaxTurrets} 座`, `${COMBAT.magicTurretHealth} HP`, `普攻 ${getEngineerTurretBasicAttackDamage("magic_missile")} 傷害／${COMBAT.magicTurretAttackInterval / 1000} 秒`, zhCooldown("engineer", "skillF")] },
+      skillQ: { description: "每座砲台向射程內最近敵人立即追加一枚必中追跡彈。", facts: [`每座 ${getEffectiveArenaSkillDamage("engineer_12", COMBAT.magicTurretSyncDamage)} 傷害`, `${COMBAT.magicTurretRange} 射程`, zhCooldown("engineer", "skillQ")] },
+      skillE: { description: "每座砲台發射裂星魔彈，命中後分裂追蹤附近另一名敵人。", facts: [`${getEffectiveArenaSkillDamage("engineer_14", COMBAT.magicTurretSplitDamage)} 主傷害`, `${getEffectiveArenaSkillDamage("engineer_14", COMBAT.magicTurretSplitFragmentDamage)} 分裂傷害`, zhCooldown("engineer", "skillE")] },
+      skillR: { description: "每座砲台向自己射程內的每一名敵人各發射兩枚必中飛彈。", facts: [`每枚 ${getEffectiveArenaSkillDamage("engineer_15", COMBAT.magicTurretMatrixDamage)} 傷害`, `每座 +${COMBAT.magicTurretMatrixShield} 護盾`, zhCooldown("engineer", "skillR")] }
     },
     mage: {
-      attack: { description: "朝準星方向發射魔法球。", facts: [`${CLASS_STATS.mage.attackPower} 傷害`, `${COMBAT.magicBallDistance} 射程`] },
-      skillQ: { description: "向前打出明顯的日耀光束。", facts: [`${COMBAT.mageBeamDamage} 傷害`, `${COMBAT.mageBeamLength} 射程`, "5 秒冷卻"] },
-      skillE: { description: "在滑鼠位置引爆復甦能量，傷害周圍敵人；沒死的敵人會被暈眩。", facts: [`${COMBAT.mageBurstDamage} 傷害`, `${COMBAT.mageBurstRadius} 半徑`, `${COMBAT.mageBurstStunDuration / 1000} 秒暈眩`, zhCooldown("mage", "skillE")] },
-      skillR: { description: "在滑鼠位置召喚淨化風暴，以大範圍爆發收割敵人。", facts: [`${COMBAT.mageUltimateDamage} 傷害`, `${COMBAT.mageUltimateRadius} 半徑`, zhCooldown("mage", "skillR")] }
+      attack: { description: "朝準星方向發射魔法球。", facts: [`${getEffectiveBasicAttackDamage("mage")} 傷害`, `${COMBAT.magicBallDistance} 射程`] },
+      skillF: { description: "以星界能量護住自己，短時間抵擋所有傷害。", facts: [`${COMBAT.mageAstralWardDuration / 1000} 秒護盾`, zhCooldown("mage", "skillF")] },
+      skillQ: { description: "向前打出明顯的日耀光束。", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} 傷害`, `${COMBAT.mageBeamLength} 射程`, "5 秒冷卻"] },
+      skillE: { description: "以法師自身為中心引爆復甦能量，傷害周圍敵人；沒死的敵人會被暈眩。", facts: [`${getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage)} 傷害`, `${COMBAT.mageBurstRadius} 半徑`, `${COMBAT.mageBurstStunDuration / 1000} 秒暈眩`, zhCooldown("mage", "skillE")] },
+      skillR: { description: "在滑鼠位置召喚淨化風暴，以大範圍爆發收割敵人。", facts: [`${getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage)} 傷害`, `${COMBAT.mageUltimateRadius} 半徑`, zhCooldown("mage", "skillR")] }
     }
   },
   en: {
     warrior: {
-      attack: { description: "Close sword strike in the facing direction.", facts: [`${CLASS_STATS.warrior.attackPower} damage`, `${CLASS_STATS.warrior.attackCooldownMs / 1000}s recovery`] },
+      attack: { description: "Close sword strike in the facing direction.", facts: [`${getEffectiveBasicAttackDamage("warrior")} damage`, `${CLASS_STATS.warrior.attackCooldownMs / 1000}s recovery`] },
+      skillF: { description: "Unleash a battle cry that empowers your attacks for a short window.", facts: [`+${Math.round((WORLD.attackBoostMultiplier - 1) * 100)}% damage`, `${COMBAT.warriorBattleCryDuration / 1000}s duration`, enCooldown("warrior", "skillF")] },
       skillQ: { description: "Dash forward and cut through rivals in your path.", facts: [`${COMBAT.warriorDashDistance} range`, "5s CD"] },
       skillE: { description: "Raise a short defensive guard that blocks incoming damage.", facts: [`${COMBAT.warriorShieldDuration / 1000}s shield`, "8s CD"] },
-      skillR: { description: "Verdict strike around you, built for finishing close fights.", facts: [`${COMBAT.warriorUltimateDamage} damage`, `${COMBAT.warriorUltimateRadius} radius`, "15s CD"] }
+      skillR: { description: "Verdict strike around you, built for finishing close fights.", facts: [`${COMBAT.warriorUltimateDamage} damage`, `${COMBAT.warriorUltimateRadius} radius`, "13s CD"] }
     },
     archer: {
       attack: { description: "Hold to draw, release to fire a charged arrow.", facts: [`${COMBAT.archerChargeStages} charge stages`, `${archerChargeDamage} damage`, `${COMBAT.arrowDistance} range`] },
+      skillF: { description: "Loose a fast heavy arrow with more damage and range than a normal shot.", facts: [`${COMBAT.archerPiercingShotDamage} damage`, `${COMBAT.archerPiercingShotDistance} range`, enCooldown("archer", "skillF")] },
       skillQ: { description: "Roll forward to reposition and create space.", facts: [`${COMBAT.archerRollDistance} distance`, "5s CD"] },
       skillE: { description: "Bloom Root Bind at the cursor, rooting enemies inside the area.", facts: [`${COMBAT.archerRootDuration / 1000}s root`, `${COMBAT.archerRootRadius} radius`, "8s CD"] },
       skillR: { description: "Burst Seed Rain at the cursor across a wide ground area.", facts: [`${COMBAT.archerUltimateDamage} damage`, `${COMBAT.archerUltimateRadius} radius`, "15s CD"] }
     },
     engineer: {
-      attack: { description: "Short mechanical strike in the facing direction.", facts: [`${CLASS_STATS.engineer.attackPower} damage`, `${CLASS_STATS.engineer.attackCooldownMs / 1000}s recovery`] },
-      skillQ: { description: "Deploy an auto turret that tracks and fires at nearby rivals.", facts: [`${COMBAT.engineerMaxTurrets} max turrets`, `${COMBAT.turretRange} range`, "5s CD"] },
-      skillE: { description: "Release a close repulsor pulse that damages and knocks rivals away.", facts: [`${COMBAT.engineerRepulsorPulseDamage} damage`, `${COMBAT.engineerKnockback} knockback`, "8s CD"] },
-      skillR: { description: "Overclock your turret grid for faster, longer-range shots.", facts: [`${COMBAT.turretBoostDuration / 1000}s boost`, `${COMBAT.turretBoostedDamage} turret damage`, "15s CD"] }
+      attack: { description: "Short mechanical strike in the facing direction.", facts: [`${getEffectiveBasicAttackDamage("engineer")} damage`, `${CLASS_STATS.engineer.attackCooldownMs / 1000}s recovery`] },
+      skillF: { description: "Deploy a full-health static magic turret; at three turrets, the oldest disappears and a new full-health turret is created.", facts: [`${COMBAT.engineerMaxTurrets} max`, `${COMBAT.magicTurretHealth} HP`, `${getEngineerTurretBasicAttackDamage("magic_missile")} basic / ${COMBAT.magicTurretAttackInterval / 1000}s`, enCooldown("engineer", "skillF")] },
+      skillQ: { description: "Every turret immediately launches one guaranteed seeker at its nearest in-range rival.", facts: [`${getEffectiveArenaSkillDamage("engineer_12", COMBAT.magicTurretSyncDamage)} damage each`, `${COMBAT.magicTurretRange} range`, enCooldown("engineer", "skillQ")] },
+      skillE: { description: "Every turret launches a splitting star that seeks a second nearby rival on impact.", facts: [`${getEffectiveArenaSkillDamage("engineer_14", COMBAT.magicTurretSplitDamage)} primary`, `${getEffectiveArenaSkillDamage("engineer_14", COMBAT.magicTurretSplitFragmentDamage)} split`, enCooldown("engineer", "skillE")] },
+      skillR: { description: "Every turret fires two guaranteed missiles at every rival in its own range.", facts: [`${getEffectiveArenaSkillDamage("engineer_15", COMBAT.magicTurretMatrixDamage)} each`, `+${COMBAT.magicTurretMatrixShield} shield per turret`, enCooldown("engineer", "skillR")] }
     },
     mage: {
-      attack: { description: "Launch a magic orb projectile in the facing direction.", facts: [`${CLASS_STATS.mage.attackPower} damage`, `${COMBAT.magicBallDistance} range`] },
-      skillQ: { description: "Fire a readable solar beam in the facing direction.", facts: [`${COMBAT.mageBeamDamage} damage`, `${COMBAT.mageBeamLength} range`, "5s CD"] },
-      skillE: { description: "Detonate Renewal Burst at the cursor, damaging nearby rivals and stunning survivors.", facts: [`${COMBAT.mageBurstDamage} damage`, `${COMBAT.mageBurstRadius} radius`, `${COMBAT.mageBurstStunDuration / 1000}s stun`, enCooldown("mage", "skillE")] },
-      skillR: { description: "Summon Clean Storm at the cursor for a wide-area finishing burst.", facts: [`${COMBAT.mageUltimateDamage} damage`, `${COMBAT.mageUltimateRadius} radius`, enCooldown("mage", "skillR")] }
+      attack: { description: "Launch a magic orb projectile in the facing direction.", facts: [`${getEffectiveBasicAttackDamage("mage")} damage`, `${COMBAT.magicBallDistance} range`] },
+      skillF: { description: "Wrap yourself in an astral barrier that blocks incoming damage.", facts: [`${COMBAT.mageAstralWardDuration / 1000}s shield`, enCooldown("mage", "skillF")] },
+      skillQ: { description: "Fire a readable solar beam in the facing direction.", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} damage`, `${COMBAT.mageBeamLength} range`, "5s CD"] },
+      skillE: { description: "Detonate Renewal Burst around the Mage, damaging nearby rivals and stunning survivors.", facts: [`${getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage)} damage`, `${COMBAT.mageBurstRadius} radius`, `${COMBAT.mageBurstStunDuration / 1000}s stun`, enCooldown("mage", "skillE")] },
+      skillR: { description: "Summon Clean Storm at the cursor for a wide-area finishing burst.", facts: [`${getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage)} damage`, `${COMBAT.mageUltimateRadius} radius`, enCooldown("mage", "skillR")] }
     }
   },
   ko: {
     warrior: {
-      attack: { description: "조준 방향으로 근접 검격을 합니다.", facts: [`${CLASS_STATS.warrior.attackPower} 피해`, `${CLASS_STATS.warrior.attackCooldownMs / 1000}초 후딜`] },
+      attack: { description: "조준 방향으로 근접 검격을 합니다.", facts: [`${getEffectiveBasicAttackDamage("warrior")} 피해`, `${CLASS_STATS.warrior.attackCooldownMs / 1000}초 후딜`] },
+      skillF: { description: "전의의 함성으로 짧은 시간 동안 공격 피해를 강화합니다.", facts: [`피해 +${Math.round((WORLD.attackBoostMultiplier - 1) * 100)}%`, `${COMBAT.warriorBattleCryDuration / 1000}초 지속`, koCooldown("warrior", "skillF")] },
       skillQ: { description: "앞으로 돌진하며 경로의 적을 베어냅니다.", facts: [`${COMBAT.warriorDashDistance} 거리`, "5초 쿨다운"] },
       skillE: { description: "짧은 방어 자세로 들어오는 피해를 막습니다.", facts: [`${COMBAT.warriorShieldDuration / 1000}초 방패`, "8초 쿨다운"] },
-      skillR: { description: "주변에 심판의 일격을 가해 근접전을 마무리합니다.", facts: [`${COMBAT.warriorUltimateDamage} 피해`, `${COMBAT.warriorUltimateRadius} 반경`, "15초 쿨다운"] }
+      skillR: { description: "주변에 심판의 일격을 가해 근접전을 마무리합니다.", facts: [`${COMBAT.warriorUltimateDamage} 피해`, `${COMBAT.warriorUltimateRadius} 반경`, "13초 쿨다운"] }
     },
     archer: {
       attack: { description: "길게 눌러 활을 당기고 놓으면 충전 화살을 발사합니다.", facts: [`${COMBAT.archerChargeStages}단계 차지`, `${archerChargeDamage} 피해`, `${COMBAT.arrowDistance} 사거리`] },
+      skillF: { description: "일반 공격보다 강하고 멀리 날아가는 고속 화살을 발사합니다.", facts: [`${COMBAT.archerPiercingShotDamage} 피해`, `${COMBAT.archerPiercingShotDistance} 사거리`, koCooldown("archer", "skillF")] },
       skillQ: { description: "앞으로 구르며 위치를 다시 잡습니다.", facts: [`${COMBAT.archerRollDistance} 거리`, "5초 쿨다운"] },
       skillE: { description: "커서 위치에 뿌리 속박 구역을 만들어 범위 안 적을 묶습니다.", facts: [`${COMBAT.archerRootDuration / 1000}초 속박`, `${COMBAT.archerRootRadius} 반경`, "8초 쿨다운"] },
       skillR: { description: "커서 위치에 넓은 씨앗비를 터뜨립니다.", facts: [`${COMBAT.archerUltimateDamage} 피해`, `${COMBAT.archerUltimateRadius} 반경`, "15초 쿨다운"] }
     },
     engineer: {
-      attack: { description: "조준 방향으로 짧은 기계 타격을 합니다.", facts: [`${CLASS_STATS.engineer.attackPower} 피해`, `${CLASS_STATS.engineer.attackCooldownMs / 1000}초 후딜`] },
-      skillQ: { description: "근처 적을 추적해 사격하는 자동 포탑을 배치합니다.", facts: [`최대 ${COMBAT.engineerMaxTurrets}개`, `${COMBAT.turretRange} 사거리`, "5초 쿨다운"] },
-      skillE: { description: "근거리 반발 파동으로 피해를 주고 적을 밀어냅니다.", facts: [`${COMBAT.engineerRepulsorPulseDamage} 피해`, `${COMBAT.engineerKnockback} 넉백`, "8초 쿨다운"] },
-      skillR: { description: "포탑망을 오버클록해 사거리와 발사 속도를 올립니다.", facts: [`${COMBAT.turretBoostDuration / 1000}초 강화`, `${COMBAT.turretBoostedDamage} 포탑 피해`, "15초 쿨다운"] }
+      attack: { description: "조준 방향으로 짧은 기계 타격을 합니다.", facts: [`${getEffectiveBasicAttackDamage("engineer")} 피해`, `${CLASS_STATS.engineer.attackCooldownMs / 1000}초 후딜`] },
+      skillF: { description: "회전하지 않는 완전 체력 마도 포탑을 배치합니다. 3개일 때 가장 오래된 포탑이 사라지고 새 완전 체력 포탑이 생성됩니다.", facts: [`최대 ${COMBAT.engineerMaxTurrets}개`, `${COMBAT.magicTurretHealth} HP`, `기본 공격 ${getEngineerTurretBasicAttackDamage("magic_missile")} 피해／${COMBAT.magicTurretAttackInterval / 1000}초`, koCooldown("engineer", "skillF")] },
+      skillQ: { description: "각 포탑이 사거리 안 가장 가까운 적에게 필중 추적탄 한 발을 발사합니다.", facts: [`포탑당 ${getEffectiveArenaSkillDamage("engineer_12", COMBAT.magicTurretSyncDamage)} 피해`, `${COMBAT.magicTurretRange} 사거리`, koCooldown("engineer", "skillQ")] },
+      skillE: { description: "각 포탑이 명중 후 주변의 다른 적을 추적하는 분열성 마탄을 발사합니다.", facts: [`${getEffectiveArenaSkillDamage("engineer_14", COMBAT.magicTurretSplitDamage)} 주 피해`, `${getEffectiveArenaSkillDamage("engineer_14", COMBAT.magicTurretSplitFragmentDamage)} 분열 피해`, koCooldown("engineer", "skillE")] },
+      skillR: { description: "각 포탑이 자기 사거리 안 모든 적에게 필중 미사일을 두 발씩 발사합니다.", facts: [`발당 ${getEffectiveArenaSkillDamage("engineer_15", COMBAT.magicTurretMatrixDamage)} 피해`, `포탑당 +${COMBAT.magicTurretMatrixShield} 방어막`, koCooldown("engineer", "skillR")] }
     },
     mage: {
-      attack: { description: "조준 방향으로 마법 구체를 발사합니다.", facts: [`${CLASS_STATS.mage.attackPower} 피해`, `${COMBAT.magicBallDistance} 사거리`] },
-      skillQ: { description: "조준 방향으로 선명한 태양 광선을 발사합니다.", facts: [`${COMBAT.mageBeamDamage} 피해`, `${COMBAT.mageBeamLength} 사거리`, "5초 쿨다운"] },
-      skillE: { description: "커서 위치에 재생 폭발을 일으켜 주변 적에게 피해를 주고 생존한 적을 기절시킵니다.", facts: [`${COMBAT.mageBurstDamage} 피해`, `${COMBAT.mageBurstRadius} 반경`, `${COMBAT.mageBurstStunDuration / 1000}초 기절`, koCooldown("mage", "skillE")] },
-      skillR: { description: "커서 위치에 정화 폭풍을 소환해 넓은 범위를 마무리합니다.", facts: [`${COMBAT.mageUltimateDamage} 피해`, `${COMBAT.mageUltimateRadius} 반경`, koCooldown("mage", "skillR")] }
+      attack: { description: "조준 방향으로 마법 구체를 발사합니다.", facts: [`${getEffectiveBasicAttackDamage("mage")} 피해`, `${COMBAT.magicBallDistance} 사거리`] },
+      skillF: { description: "성계 장막으로 자신을 감싸 짧은 시간 동안 피해를 막습니다.", facts: [`${COMBAT.mageAstralWardDuration / 1000}초 방패`, koCooldown("mage", "skillF")] },
+      skillQ: { description: "조준 방향으로 선명한 태양 광선을 발사합니다.", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} 피해`, `${COMBAT.mageBeamLength} 사거리`, "5초 쿨다운"] },
+      skillE: { description: "마법사를 중심으로 재생 폭발을 일으켜 주변 적에게 피해를 주고 생존한 적을 기절시킵니다.", facts: [`${getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage)} 피해`, `${COMBAT.mageBurstRadius} 반경`, `${COMBAT.mageBurstStunDuration / 1000}초 기절`, koCooldown("mage", "skillE")] },
+      skillR: { description: "커서 위치에 정화 폭풍을 소환해 넓은 범위를 마무리합니다.", facts: [`${getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage)} 피해`, `${COMBAT.mageUltimateRadius} 반경`, koCooldown("mage", "skillR")] }
     }
   }
 };
@@ -406,11 +554,61 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       ruleTime: "5 分鐘",
       ruleScore: "15 分",
       ruleRivals: "8 位對手",
+      arenaMode: "競技模式",
+      freeForAll: "自由混戰",
+      freeForAllDescription: "個人分數競賽",
+      team3v3: "3V3 團隊戰",
+      team3v3Description: "紅藍各三人・無友傷・Bot 補滿",
+      team3v3Rule: "紅藍各 3 人／Bot 補滿",
+      turretType: "F 砲台",
+      mechanicalTurret: "普通",
+      magicTurret: "魔導",
+      redTeam: "紅隊",
+      blueTeam: "藍隊",
+      teamStatus: "隊伍戰況",
+      teamWon: (team) => `${team}獲勝`,
       playerName: "玩家名稱",
       connecting: "連線中",
+      preparingAssets: "檢查競技素材中",
+      reconnecting: "重新連線中",
       enterArena: "進入競技場",
       connectionError: "伺服器連線失敗，請啟動遊戲伺服器後重試。",
       loadout: "配置",
+      skillLoadout: "技能配置",
+      equipped: "已裝備",
+      openSkillLoadout: "技能配置",
+      skillLoadoutTitle: "競技場技能配置",
+      skillLoadoutBody: "直接點選技能圖示完成裝備；Q／E／R 每排只保留一個勾選，預覽會持續播放目前技能。",
+      tierRule: "Q 初階 · E 中階 · R 高階",
+      currentLoadout: "目前配置",
+      skillLibrary: "技能庫",
+      selectSlotHint: "直接點圖示勾選；每排只會留下一個技能。",
+      basicTier: "初階",
+      intermediateTier: "中階",
+      ultimateTier: "高階",
+      fixedToKey: (key) => `固定 ${key} 鍵`,
+      skillOptions: "可裝備技能",
+      confirmLoadout: "完成配置",
+      backToArenaSetup: "返回競技場準備",
+      closeSkillLoadout: "關閉技能配置",
+      equippedToKey: (key) => `已裝備至 ${key}`,
+      equipToKey: (key) => `裝備至 ${key}`,
+      allSkillsVisible: "完整 15 招 · 7 初階／5 中階／3 高階",
+      skillCountUnit: "招",
+      mandatoryCore: "必帶核心",
+      coreDoesNotUseSlot: "自動生效，不佔用 Q／E／R",
+      slotEmpty: "尚未裝備",
+      selectSkill: "選擇一個技能",
+      catalogSkillDetail: "此處只顯示專案中已審核的技能與特效素材，不編造尚未定案的數值。",
+      loadoutReady: "Q／E／R 已完成裝備",
+      loadoutIncomplete: "請先替 Q／E／R 各裝備一招",
+      equipBeforeEntry: "先完成技能裝備",
+      animationPreview: "實際技能動畫",
+      damage: "傷害",
+      cooldown: "冷卻",
+      duration: "持續／範圍",
+      effect: "技能效果",
+      undecided: "尚未定案",
       classSelection: "職業選擇",
       arenaRules: "競技規則",
       hp: "HP",
@@ -425,6 +623,12 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       map: "地圖",
       messages: "訊息",
       settings: "設定",
+      hudScale: "介面大小",
+      hudScaleCompact: "小",
+      hudScaleStandard: "標準",
+      hudScaleLarge: "大",
+      highContrast: "高對比",
+      reducedMotion: "減少動畫",
       skills: "技能",
       attack: "普攻",
       killStreak: "連殺",
@@ -527,7 +731,15 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
     selfStatus: {
       safeEntry: "安全入場",
       protected: "保護中",
-      criticalHp: "危險血量"
+      criticalHp: "危險血量",
+      health: "生命",
+      stamina: "耐力",
+      shielded: "護盾",
+      attackBoosted: "攻擊強化",
+      stunned: "暈眩",
+      rooted: "定身",
+      poisoned: "中毒",
+      slowed: "緩速"
     },
     combat: {
       streakBonus: "連殺獎勵",
@@ -562,11 +774,61 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       ruleTime: "5 min",
       ruleScore: "15 score",
       ruleRivals: "8 rivals",
+      arenaMode: "Arena mode",
+      freeForAll: "Free for all",
+      freeForAllDescription: "Individual score race",
+      team3v3: "3V3 Team Battle",
+      team3v3Description: "Three per team · no friendly fire · bots fill",
+      team3v3Rule: "Red 3 vs Blue 3 / bots fill",
+      turretType: "F turret",
+      mechanicalTurret: "Mechanical",
+      magicTurret: "Magic",
+      redTeam: "Red",
+      blueTeam: "Blue",
+      teamStatus: "Team status",
+      teamWon: (team) => `${team} wins`,
       playerName: "Player name",
       connecting: "Connecting",
+      preparingAssets: "Verifying arena assets",
+      reconnecting: "Reconnecting",
       enterArena: "Enter Arena",
       connectionError: "Server connection failed. Start the game server and retry.",
       loadout: "Loadout",
+      skillLoadout: "Skill Loadout",
+      equipped: "Equipped",
+      openSkillLoadout: "Configure Skills",
+      skillLoadoutTitle: "Arena Skill Loadout",
+      skillLoadoutBody: "Select skills directly from the icon grid. Each Q, E, and R row keeps one checked skill while the current animation keeps playing.",
+      tierRule: "Q Basic · E Intermediate · R Ultimate",
+      currentLoadout: "Current Loadout",
+      skillLibrary: "Skill Library",
+      selectSlotHint: "Click an icon to check it. Each row keeps one skill.",
+      basicTier: "Basic",
+      intermediateTier: "Intermediate",
+      ultimateTier: "Ultimate",
+      fixedToKey: (key) => `Locked to ${key}`,
+      skillOptions: "Available Skills",
+      confirmLoadout: "Confirm Loadout",
+      backToArenaSetup: "Back to Arena Setup",
+      closeSkillLoadout: "Close Skill Loadout",
+      equippedToKey: (key) => `Equipped to ${key}`,
+      equipToKey: (key) => `Equip to ${key}`,
+      allSkillsVisible: "All 15 skills · 7 basic / 5 intermediate / 3 ultimate",
+      skillCountUnit: "skills",
+      mandatoryCore: "Mandatory core",
+      coreDoesNotUseSlot: "Always active and does not occupy Q, E, or R",
+      slotEmpty: "Not equipped",
+      selectSkill: "Select a skill",
+      catalogSkillDetail: "Only reviewed skill and VFX assets are shown here; unapproved balance values are not invented.",
+      loadoutReady: "Q, E, and R are fully equipped",
+      loadoutIncomplete: "Equip one skill to Q, E, and R first",
+      equipBeforeEntry: "Equip Skills First",
+      animationPreview: "Actual skill animation",
+      damage: "Damage",
+      cooldown: "Cooldown",
+      duration: "Duration / Range",
+      effect: "Effect",
+      undecided: "Not approved yet",
       classSelection: "Class selection",
       arenaRules: "Arena rules",
       hp: "HP",
@@ -581,6 +843,12 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       map: "Map",
       messages: "Messages",
       settings: "Settings",
+      hudScale: "HUD size",
+      hudScaleCompact: "Small",
+      hudScaleStandard: "Standard",
+      hudScaleLarge: "Large",
+      highContrast: "High contrast",
+      reducedMotion: "Reduced motion",
       skills: "Skills",
       attack: "Attack",
       killStreak: "Kill streak",
@@ -683,7 +951,15 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
     selfStatus: {
       safeEntry: "Safe Entry",
       protected: "Protected",
-      criticalHp: "Critical HP"
+      criticalHp: "Critical HP",
+      health: "Health",
+      stamina: "Stamina",
+      shielded: "Shield",
+      attackBoosted: "Attack up",
+      stunned: "Stunned",
+      rooted: "Rooted",
+      poisoned: "Poisoned",
+      slowed: "Slowed"
     },
     combat: {
       streakBonus: "Streak Bonus",
@@ -718,11 +994,61 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       ruleTime: "5분",
       ruleScore: "15점",
       ruleRivals: "상대 8명",
+      arenaMode: "경기 모드",
+      freeForAll: "개인전",
+      freeForAllDescription: "개인 점수 경쟁",
+      team3v3: "3V3 팀전",
+      team3v3Description: "팀당 3명 · 아군 피해 없음 · 봇 충원",
+      team3v3Rule: "레드 3명 vs 블루 3명 / 봇 충원",
+      turretType: "F 포탑",
+      mechanicalTurret: "일반",
+      magicTurret: "마도",
+      redTeam: "레드 팀",
+      blueTeam: "블루 팀",
+      teamStatus: "팀 전황",
+      teamWon: (team) => `${team} 승리`,
       playerName: "플레이어 이름",
       connecting: "연결 중",
+      preparingAssets: "아레나 에셋 확인 중",
+      reconnecting: "재연결 중",
       enterArena: "아레나 입장",
       connectionError: "서버 연결에 실패했습니다. 게임 서버를 시작한 뒤 다시 시도하세요.",
       loadout: "로드아웃",
+      skillLoadout: "스킬 설정",
+      equipped: "장착됨",
+      openSkillLoadout: "스킬 설정",
+      skillLoadoutTitle: "아레나 스킬 설정",
+      skillLoadoutBody: "아이콘 그리드에서 바로 스킬을 선택하세요. Q/E/R 각 줄에는 하나만 체크되고 현재 애니메이션이 계속 재생됩니다.",
+      tierRule: "Q 초급 · E 중급 · R 궁극",
+      currentLoadout: "현재 설정",
+      skillLibrary: "스킬 목록",
+      selectSlotHint: "아이콘을 눌러 체크하세요. 각 줄에는 하나만 남습니다.",
+      basicTier: "초급",
+      intermediateTier: "중급",
+      ultimateTier: "궁극",
+      fixedToKey: (key) => `${key} 키 고정`,
+      skillOptions: "장착 가능 스킬",
+      confirmLoadout: "설정 완료",
+      backToArenaSetup: "아레나 준비로 돌아가기",
+      closeSkillLoadout: "스킬 설정 닫기",
+      equippedToKey: (key) => `${key}에 장착됨`,
+      equipToKey: (key) => `${key}에 장착`,
+      allSkillsVisible: "전체 15개 · 초급 7 / 중급 5 / 궁극 3",
+      skillCountUnit: "개",
+      mandatoryCore: "필수 코어",
+      coreDoesNotUseSlot: "항상 활성화되며 Q/E/R 슬롯을 사용하지 않습니다",
+      slotEmpty: "장착되지 않음",
+      selectSkill: "스킬 선택",
+      catalogSkillDetail: "검토가 완료된 스킬과 VFX 자료만 표시하며 미승인 수치를 임의로 만들지 않습니다.",
+      loadoutReady: "Q/E/R 장착 완료",
+      loadoutIncomplete: "Q/E/R에 스킬을 하나씩 장착하세요",
+      equipBeforeEntry: "스킬 먼저 장착",
+      animationPreview: "실제 스킬 애니메이션",
+      damage: "피해",
+      cooldown: "재사용 대기시간",
+      duration: "지속 / 범위",
+      effect: "스킬 효과",
+      undecided: "미확정",
       classSelection: "직업 선택",
       arenaRules: "아레나 규칙",
       hp: "HP",
@@ -737,6 +1063,12 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       map: "지도",
       messages: "메시지",
       settings: "설정",
+      hudScale: "HUD 크기",
+      hudScaleCompact: "작게",
+      hudScaleStandard: "표준",
+      hudScaleLarge: "크게",
+      highContrast: "고대비",
+      reducedMotion: "동작 줄이기",
       skills: "스킬",
       attack: "기본 공격",
       killStreak: "연속 처치",
@@ -839,7 +1171,15 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
     selfStatus: {
       safeEntry: "안전 입장",
       protected: "보호 중",
-      criticalHp: "위험 HP"
+      criticalHp: "위험 HP",
+      health: "체력",
+      stamina: "스태미나",
+      shielded: "보호막",
+      attackBoosted: "공격 강화",
+      stunned: "기절",
+      rooted: "속박",
+      poisoned: "중독",
+      slowed: "감속"
     },
     combat: {
       streakBonus: "연속 처치 보너스",

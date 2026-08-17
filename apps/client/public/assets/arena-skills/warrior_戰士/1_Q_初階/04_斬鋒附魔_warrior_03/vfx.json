@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_03",
+  "classId": "warrior",
+  "name": "斬鋒附魔",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03",
+  "runtime": {
+    "skillId": "warrior_03",
+    "classId": "warrior",
+    "name": "斬鋒附魔",
+    "persistent": false,
+    "previewSha256": "19ce227477e16edb97c576d314272d14130f0d8da5a223bbcb3a438f3c097d8f",
+    "visualContract": {
+      "enabled": false,
+      "anchor": "owner",
+      "layer": "unit",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        1,
+        1
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": false,
+      "fixedDisplay": true
+    },
+    "packagePath": "warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "19ce227477e16edb97c576d314272d14130f0d8da5a223bbcb3a438f3c097d8f",
+    "iconFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/icon.png",
+    "iconFileSha256": "a0360ef9c8a79025f19c98d4633edafe67d883318c0f03b4624a22e2705f2426",
+    "candidateOrigin": "warrior-state-counter-no-sprite-20260809",
+    "acceptedAnimationId": "warrior-redesign:three-hit-counter:20260809-v2",
+    "runtimeMode": "server-state",
+    "statePresentation": {
+      "kind": "remaining-charges",
+      "playerField": "enchantedMeleeHitsRemaining",
+      "position": "above-head"
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_03:source-a6fe4ec5ada36369:output-19ce227477e16edb",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_03",
+    "previewSourceSequenceSha256": "a6fe4ec5ada3636978c8b671a091a65ddfa0bf4aea00f4b91e4ff5cd9627e460",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/preview/gameplay-preview-v1.webm",
+    "sha256": "19ce227477e16edb97c576d314272d14130f0d8da5a223bbcb3a438f3c097d8f",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_03:source-a6fe4ec5ada36369:output-19ce227477e16edb",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_03",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 6.089,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 10.841,
+      "durationSec": 4.752,
+      "file": "random-warrior_03-hq.webm",
+      "bytes": 8570664,
+      "sha256": "a6fe4ec5ada3636978c8b671a091a65ddfa0bf4aea00f4b91e4ff5cd9627e460"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_03-hq.webm",
+    "sourceVideoSha256": "a6fe4ec5ada3636978c8b671a091a65ddfa0bf4aea00f4b91e4ff5cd9627e460",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 59.958,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      730,
+      358,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1256,
+      673
+    ],
+    "contentMargins": [
+      371,
+      189,
+      370,
+      189
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 141,
+    "totalDurationMs": 4700,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8570664,
+    "outputBytes": 660043,
+    "reductionRatio": 0.922988,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/icon.png",
+    "sha256": "a0360ef9c8a79025f19c98d4633edafe67d883318c0f03b4624a22e2705f2426",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "545d86cae7b782472361f50085d4711dd1e171582ea0bb50f7a64dcb17822cf8",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "retiredRuntimeAssetsDeleted": true,
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_03.webp",
+    "originalPreviewDeleted": false
+  },
+  "fallbackUsed": false
+}

@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_11",
+  "classId": "warrior",
+  "name": "裂地震",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11",
+  "runtime": {
+    "skillId": "warrior_11",
+    "classId": "warrior",
+    "name": "裂地震",
+    "persistent": true,
+    "previewSha256": "3b246caee5b3e4e689e94b8f9160ea389b8b2084283528f81ae6800cd4943d96",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.45,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:c133066db06a4d12",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_裂地震.gif",
+    "configPreviewSourceSha256": "c133066db06a4d12ba0600663131c57a68f58a9d5a69ec2d419463ad721d2edb",
+    "configPreviewOutputSha256": "5cfb42b65f38e21aa187b5831e304382f0a9132c1b6660886f765a586341b0fa",
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/runtime/primary.png",
+    "frameWidth": 220,
+    "frameHeight": 120,
+    "frameCount": 9,
+    "unionBounds": [
+      13,
+      13,
+      207,
+      108
+    ],
+    "sourcePath": "apps/client/public/assets/generated/ability-effects.png",
+    "sourceSha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33",
+    "outputSha256": "9f94c3bf2fa7eeadc33f621f8ad79a1b04b9e4fd0223acb31bc7e13c81ac5ced",
+    "frameDurationsMs": [
+      80,
+      100,
+      120,
+      160,
+      220,
+      260,
+      260,
+      220,
+      80
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          79,
+          44,
+          79,
+          44
+        ],
+        [
+          67,
+          35,
+          67,
+          35
+        ],
+        [
+          55,
+          32,
+          55,
+          32
+        ],
+        [
+          41,
+          26,
+          41,
+          26
+        ],
+        [
+          20,
+          16,
+          19,
+          15
+        ],
+        [
+          15,
+          15,
+          15,
+          14
+        ],
+        [
+          15,
+          16,
+          15,
+          15
+        ],
+        [
+          17,
+          15,
+          17,
+          14
+        ],
+        [
+          24,
+          21,
+          23,
+          20
+        ]
+      ]
+    },
+    "configurationComposition": {
+      "kind": "layered-seismic-burst-v1",
+      "layers": [
+        "impact-core",
+        "inner-fault-ring",
+        "outer-shockwave",
+        "debris-release"
+      ],
+      "sourceRows": [
+        2,
+        8
+      ],
+      "canvasSize": [
+        220,
+        120
+      ],
+      "frameCount": 9,
+      "durationsMs": [
+        80,
+        100,
+        120,
+        160,
+        220,
+        260,
+        260,
+        220,
+        80
+      ],
+      "peakOuterRadius": [
+        88,
+        38
+      ],
+      "gameplayRadius": 200,
+      "resampling": "nearest",
+      "source": "apps/client/public/assets/generated/ability-effects.png"
+    },
+    "frameDurationMs": 80,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "apps/client/public/assets/generated/ability-effects.png",
+        "sha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33"
+      }
+    ],
+    "packagePath": "warrior_戰士/2_E_中階/12_裂地震_warrior_11",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "3b246caee5b3e4e689e94b8f9160ea389b8b2084283528f81ae6800cd4943d96",
+    "iconFile": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/icon.png",
+    "iconFileSha256": "1e4bb194d13491214ae0077cad84409c1fb35828bb4beca9581a09c6ed816c3b",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_11:source-0c4917e00b8c5050:output-3b246caee5b3e4e6",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_11",
+    "previewSourceSequenceSha256": "0c4917e00b8c50506cfca191b4a9954f43619ba2833cb26bdd53f9cc1e837996",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.029,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/preview/gameplay-preview-v1.webm",
+    "sha256": "3b246caee5b3e4e689e94b8f9160ea389b8b2084283528f81ae6800cd4943d96",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_11:source-0c4917e00b8c5050:output-3b246caee5b3e4e6",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_11",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.551,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.004,
+      "durationSec": 3.453,
+      "file": "random-warrior_11-hq.webm",
+      "bytes": 7677993,
+      "sha256": "0c4917e00b8c50506cfca191b4a9954f43619ba2833cb26bdd53f9cc1e837996"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_11-hq.webm",
+    "sourceVideoSha256": "0c4917e00b8c50506cfca191b4a9954f43619ba2833cb26bdd53f9cc1e837996",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.058,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      697,
+      380,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      974,
+      547,
+      1316,
+      718
+    ],
+    "contentMargins": [
+      277,
+      167,
+      277,
+      166
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.029,
+    "frameCount": 103,
+    "totalDurationMs": 3430,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 7677993,
+    "outputBytes": 432943,
+    "reductionRatio": 0.943612,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/icon.png",
+    "sha256": "1e4bb194d13491214ae0077cad84409c1fb35828bb4beca9581a09c6ed816c3b",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "d41b93288cb72f55b0eecf48e132cff006948a926aa77c2847afbffbda7e6cdd",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/warrior_11-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_11.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

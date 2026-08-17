@@ -8,6 +8,7 @@ import React, {
   type ReactNode
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { playGameUiSound } from "../audio/gameUiSounds";
 import "./Stepper.css";
 
 type StepperProps = HTMLAttributes<HTMLDivElement> & {
@@ -71,6 +72,7 @@ export default function Stepper({
     if (currentStep > 1) {
       setDirection(-1);
       updateStep(currentStep - 1);
+      playGameUiSound("back");
     }
   };
 
@@ -78,12 +80,14 @@ export default function Stepper({
     if (!isLastStep) {
       setDirection(1);
       updateStep(currentStep + 1);
+      playGameUiSound("forward");
     }
   };
 
   const handleComplete = () => {
     setDirection(1);
     updateStep(totalSteps + 1);
+    playGameUiSound("complete");
   };
 
   return (
@@ -102,6 +106,7 @@ export default function Stepper({
                     onStepClick: (clicked) => {
                       setDirection(clicked > currentStep ? 1 : -1);
                       updateStep(clicked);
+                      playGameUiSound(clicked > currentStep ? "forward" : "back");
                     }
                   })
                 ) : (
@@ -112,6 +117,7 @@ export default function Stepper({
                     onClickStep={(clicked) => {
                       setDirection(clicked > currentStep ? 1 : -1);
                       updateStep(clicked);
+                      playGameUiSound(clicked > currentStep ? "forward" : "back");
                     }}
                   />
                 )}

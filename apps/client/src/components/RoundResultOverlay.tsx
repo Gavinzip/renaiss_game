@@ -19,15 +19,28 @@ export function RoundResultOverlay({ round, serverTime, leaderboard, selfId }: R
 
   const remaining = Math.max(0, (round.nextRoundAt ?? serverTime) - serverTime);
   const winner = round.winner;
+  const teamWinner = round.winningTeam;
   const podium = leaderboard.slice(0, 3);
 
   return (
     <section className="round-result" aria-label={t.round.roundComplete}>
       <header>
-        <span>{winner ? t.round.arenaWinner : t.round.roundComplete}</span>
-        <strong>{winner?.name ?? t.round.noWinner}</strong>
+        <span>{winner || teamWinner ? t.round.arenaWinner : t.round.roundComplete}</span>
+        <strong>
+          {teamWinner
+            ? t.ui.teamWon(teamWinner === "red" ? t.ui.redTeam : t.ui.blueTeam)
+            : winner?.name ?? t.round.noWinner}
+        </strong>
         <em>{t.round.nextRoundIn(Math.ceil(remaining / 1000))}</em>
       </header>
+
+      {round.mode === "team_3v3" ? (
+        <div className="round-team-result">
+          <span className={teamWinner === "red" ? "is-winner" : ""}>{t.ui.redTeam} {round.teamScores.red}</span>
+          <b>:</b>
+          <span className={teamWinner === "blue" ? "is-winner" : ""}>{t.ui.blueTeam} {round.teamScores.blue}</span>
+        </div>
+      ) : null}
 
       {winner ? (
         <div className="round-winner-card" style={{ "--accent": CLASS_META[winner.classId].accent } as CSSProperties}>

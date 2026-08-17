@@ -6,11 +6,12 @@ interface GameAudioProps {
   snapshot: GameSnapshot | null;
   selfId: string | null;
   enabled: boolean;
+  volume: number;
 }
 
-const SKILL_KEYS: SkillKey[] = ["skillQ", "skillE", "skillR"];
+const SKILL_KEYS: SkillKey[] = ["skillF", "skillQ", "skillE", "skillR"];
 
-export function GameAudio({ snapshot, selfId, enabled }: GameAudioProps) {
+export function GameAudio({ snapshot, selfId, enabled, volume }: GameAudioProps) {
   const engine = useRef(new PixelAudioEngine());
   const seenEvents = useRef<Set<string>>(new Set());
   const previousCooldowns = useRef<Record<SkillKey, number> | null>(null);
@@ -19,7 +20,12 @@ export function GameAudio({ snapshot, selfId, enabled }: GameAudioProps) {
 
   useEffect(() => {
     engine.current.setEnabled(enabled);
-  }, [enabled]);
+    engine.current.setVolume(volume);
+  }, [enabled, volume]);
+
+  useEffect(() => () => {
+    void engine.current.destroy();
+  }, []);
 
   useEffect(() => {
     if (!enabled) {

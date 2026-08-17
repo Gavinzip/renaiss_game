@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_06",
+  "classId": "engineer",
+  "name": "攻城模式",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "20260813-engineer-siege-heavy-crater-visible-body-scale-v4",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06",
+  "runtime": {
+    "skillId": "engineer_06",
+    "classId": "engineer",
+    "name": "攻城模式",
+    "persistent": false,
+    "previewSha256": "a56395866a7293bc0402264740181e926785c68a841548b45bf2d8c85078cf62",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 1,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "accepted:engineer-06-heavy-crater-16f:b2999bb0b46c4500",
+    "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 18,
+    "unionBounds": [
+      3,
+      37,
+      161,
+      127
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/primary.png",
+    "sourceSha256": "bae371670b65894e0b803f21dc4bd7243cb9de719e8c3eaf3c63c1cc27a8e861",
+    "outputSha256": "bae371670b65894e0b803f21dc4bd7243cb9de719e8c3eaf3c63c1cc27a8e861",
+    "frameDurationsMs": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      90
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          34,
+          49,
+          35,
+          49
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ],
+        [
+          5,
+          39,
+          6,
+          40
+        ]
+      ]
+    },
+    "sourceFrameIndices": [
+      2,
+      3
+    ],
+    "frameDurationMs": 90,
+    "candidateOrigin": "user-selected-heavy-crater-16f",
+    "runtimePhases": [
+      {
+        "role": "projectile",
+        "assetRole": "vfx",
+        "startProgress": 0,
+        "endProgress": 0.22,
+        "renderKind": "projectile",
+        "anchor": "source-mechanical-turret-muzzle",
+        "turretYOffset": -18,
+        "effectYOffset": -14,
+        "controlLift": 0,
+        "pathKind": "linear",
+        "lockToMuzzleHeight": true,
+        "travelStart": 0,
+        "launchFrameIndex": 0,
+        "flightFrameIndex": 9,
+        "launchSourceAngleDegrees": -24.70354248957363,
+        "flightSourceAngleDegrees": -27.372528769450874,
+        "displaySize": [
+          96,
+          66
+        ]
+      },
+      {
+        "role": "impact",
+        "assetRole": "impactAsset",
+        "startProgress": 0.22,
+        "endProgress": 1,
+        "renderKind": "field",
+        "anchor": "effect",
+        "radiusAspect": 1,
+        "radiusWidthMultiplier": 2,
+        "fadeOutStartProgress": 0.82
+      }
+    ],
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/primary.png",
+        "sha256": "bae371670b65894e0b803f21dc4bd7243cb9de719e8c3eaf3c63c1cc27a8e861",
+        "historicalSourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/primary.png",
+        "historicalSourceSha256": "bae371670b65894e0b803f21dc4bd7243cb9de719e8c3eaf3c63c1cc27a8e861",
+        "fallbackUsed": false
+      },
+      {
+        "role": "impactAsset",
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/impact.png",
+        "sha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+        "acceptedAnimationId": "accepted:engineer-06-heavy-crater-16f:b2999bb0b46c4500",
+        "selectionEvidencePath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater",
+        "generatedSourcePath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater/raw-alpha.png",
+        "generatedSourceSha256": "00a30a3ef94436de713830ff0a829bf43d484bb465ca3deaa7e8e2f66c038dc9",
+        "fallbackUsed": false
+      },
+      {
+        "role": "actionBody",
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/source/engineer-siege-brace-body-v1.png",
+        "sha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+        "runtimePath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/body.png",
+        "runtimeSha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+        "acceptedAnimationId": "accepted:engineer-siege-brace-body-v1:2761c10d406f6d03",
+        "fallbackUsed": false
+      }
+    ],
+    "impactAsset": {
+      "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/impact.png",
+      "frameWidth": 512,
+      "frameHeight": 512,
+      "frameCount": 16,
+      "unionBounds": [
+        23,
+        26,
+        494,
+        470
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/impact.png",
+      "sourceSha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+      "outputSha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+      "frameDurationsMs": [
+        72,
+        79,
+        86,
+        93,
+        100,
+        107,
+        115,
+        122,
+        136,
+        136,
+        129,
+        129,
+        122,
+        115,
+        100,
+        79
+      ],
+      "blankFrameIndices": [],
+      "pixelSafetyNormalization": {
+        "sharedScale": 1.560655737704918,
+        "resampling": "NEAREST",
+        "safeMargin": 18,
+        "perFrameTranslation": false,
+        "sourcePixelsDiscarded": false,
+        "normalizationReportPath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater/normalized/normalization-report.json",
+        "generatedReplacement": true,
+        "formalPromotionPendingUserSelection": false,
+        "fallbackUsed": false,
+        "applied": true,
+        "method": "authored-slot-center-candidate-shared-scale-nearest",
+        "selectedCandidate": "candidate-3-heavy-crater",
+        "timelineReportPath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater/pixel-debug/detailed-timeline-report.json",
+        "circleReportPath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater/pixel-debug/topdown-circle/topdown-circle-report.json",
+        "timingOnlyChange": true,
+        "pixelsModifiedDuringFastRetiming": false
+      },
+      "semanticAnchor": [
+        256,
+        256
+      ],
+      "acceptedAnimationId": "accepted:engineer-06-heavy-crater-16f:b2999bb0b46c4500",
+      "fallbackUsed": false
+    },
+    "packagePath": "engineer_工程師/3_R_高階/06_攻城模式_engineer_06",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06",
+    "sourceSelection": "20260813-engineer-siege-heavy-crater-visible-body-scale-v4",
+    "previewFile": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "a56395866a7293bc0402264740181e926785c68a841548b45bf2d8c85078cf62",
+    "iconFile": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/icon.png",
+    "iconFileSha256": "e77ee98021699387dda094bc235a7edf4316280fdacfd73e4a0f8440d1a9acb5",
+    "runtimeCompositionVersion": "20260813-engineer-siege-heavy-crater-visible-body-scale-v4",
+    "fallbackUsed": false,
+    "actionBody": {
+      "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/body.png",
+      "frameWidth": 165,
+      "frameHeight": 194,
+      "frameCount": 24,
+      "frameDurationsMs": [
+        280,
+        360,
+        280
+      ],
+      "unionBounds": [
+        28,
+        16,
+        136,
+        176
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/source/engineer-siege-brace-body-v1.png",
+      "sourceSha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/source/engineer-siege-brace-body-v1.png",
+      "outputSha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+      "semanticAnchor": [
+        82,
+        174
+      ],
+      "grid": {
+        "columns": 3,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 3,
+        "frameDurationsMs": [
+          280,
+          360,
+          280
+        ]
+      },
+      "displayHeightMultiplier": 0.8247422680412371,
+      "acceptedAnimationId": "accepted:engineer-siege-brace-body-v1:2761c10d406f6d03",
+      "fallbackUsed": false
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_06:source-a9632fb13daba6b2:output-a56395866a7293bc",
+    "previewRuntimeImpactSha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewFallbackUsed": false,
+    "effectDurationMs": 2200,
+    "timingVersion": "20260812-engineer-siege-heavy-crater-16f-fast-v2",
+    "previewSourceScenario": "random-engineer_06",
+    "previewSourceSequenceSha256": "a9632fb13daba6b2b0ad333959a3f091373a6b5674a86ebe956d3d4db5b724d3",
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.018,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/preview/gameplay-preview-v1.webm",
+    "sha256": "a56395866a7293bc0402264740181e926785c68a841548b45bf2d8c85078cf62",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_06:source-a9632fb13daba6b2:output-a56395866a7293bc",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_06",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.464,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 11.12,
+      "durationSec": 5.656,
+      "file": "random-engineer_06-hq.webm",
+      "bytes": 14490045,
+      "sha256": "a9632fb13daba6b2b0ad333959a3f091373a6b5674a86ebe956d3d4db5b724d3"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_06-hq.webm",
+    "sourceVideoSha256": "a9632fb13daba6b2b0ad333959a3f091373a6b5674a86ebe956d3d4db5b724d3",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.142,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      790,
+      391,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      963,
+      413,
+      1512,
+      873
+    ],
+    "contentMargins": [
+      173,
+      22,
+      174,
+      22
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.018,
+    "frameCount": 169,
+    "totalDurationMs": 5630,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 14490045,
+    "outputBytes": 1233939,
+    "reductionRatio": 0.914842,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/icon.png",
+    "sha256": "e77ee98021699387dda094bc235a7edf4316280fdacfd73e4a0f8440d1a9acb5",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "4fdae18dc869d7fd6c0e81a3dfc7790e5ce6c6a32480837b9b36cf623099bbbe",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/engineer_06-vfx.png",
+      "impactAsset": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/engineer_06-impactAsset.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_06.webp",
+    "originalsDeleted": false,
+    "heavyCraterSelection": {
+      "selectedBy": "Gavin",
+      "selectedCandidate": "3・熔岩重砲坑",
+      "selectedAt": "2026-08-12T19:47:35.763929+08:00",
+      "candidatePath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater",
+      "candidateOutputSha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+      "acceptedAnimationId": "accepted:engineer-06-heavy-crater-16f:b2999bb0b46c4500",
+      "previousFormalHashes": {
+        "impact.png": "569fb2a52d72f0b40038e959152e935aec855fba85191849e71cd4e60520e053",
+        "vfx.json": "de19ef89607fa0d7836486ed8baff6f7c3c5af24c298f3dff23bc3a385e19174",
+        "runtime-entry.json": "b6674f5821e15489b298949d3bcf08da39b86df9e907bd2e32cfb1bbc562522d",
+        "package-entry.json": "f5824f49f3579506cc49079e3bb7965ff93937c654e59164ad02560e364f5e00",
+        "config-candidate-entry.json": "aa21f3a90be2fa8b6dc0fb1d37ee899d1f3e74c4fcd4edc7eb1e6618bbb7b653"
+      },
+      "configurationCandidatePreserved": true,
+      "originalsDeleted": false,
+      "fallbackUsed": false
+    },
+    "bodyBinding": {
+      "version": "20260810-engineer-siege-body-v1",
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/source/engineer-siege-brace-body-v1.png",
+      "sourceSha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+      "runtimePath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/body.png",
+      "runtimeSha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+      "acceptedAnimationId": "accepted:engineer-siege-brace-body-v1:2761c10d406f6d03",
+      "pixelsModifiedDuringHeavyCraterPromotion": false,
+      "fallbackUsed": false
+    },
+    "formalPreviewPromotion": {
+      "sourcePhase": "engineer-siege-visible-body-scale-fixed-20260813-v10",
+      "sourceReport": "docs/design/arena-dynamic-gameplay-review/engineer-siege-visible-body-scale-fixed-20260813-v10/report.json",
+      "sourceWebm": "docs/design/arena-dynamic-gameplay-review/engineer-siege-visible-body-scale-fixed-20260813-v10/random-engineer_06.webm",
+      "sourceWebmSha256": "a5864cb524659c53201eaa5685f7947bf4729ad74cfc109ae7f0714efe0d9908",
+      "sourceH264": "docs/design/arena-dynamic-gameplay-review/engineer-siege-visible-body-scale-fixed-20260813-v10/random-engineer_06.mp4",
+      "sourceH264Sha256": "2e3e91c8e7347d2db821ee0b6b62fe6c4f0d6d4b58f179b8e73bb5ce74307e49",
+      "priorPreviewEvidence": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater/formal-promotion-evidence/before/preview-animation.webp",
+      "priorPreviewSha256": "98084381a94b65b1e59a7ac4e0909bd3223ab8a8e11f261862de004bf83fada6",
+      "reviewAssetOverride": null,
+      "runtimeVariant": "canonical",
+      "fallbackUsed": false
+    },
+    "fastTimingSelection": {
+      "version": "20260812-engineer-siege-heavy-crater-16f-fast-v2",
+      "previousRuntimeCompositionVersion": "20260812-engineer-siege-heavy-crater-16f-v1",
+      "previousFrameDurationsMs": [
+        100,
+        110,
+        120,
+        130,
+        140,
+        150,
+        160,
+        170,
+        190,
+        190,
+        180,
+        180,
+        170,
+        160,
+        140,
+        110
+      ],
+      "frameDurationsMs": [
+        72,
+        79,
+        86,
+        93,
+        100,
+        107,
+        115,
+        122,
+        136,
+        136,
+        129,
+        129,
+        122,
+        115,
+        100,
+        79
+      ],
+      "previousEffectDurationMs": 3000,
+      "effectDurationMs": 2200,
+      "timingScale": 0.716,
+      "impactPixelsSha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+      "pixelsModified": false,
+      "priorFormalPreviewPath": "work/generated-images/2026-08-12-engineer-06-detailed-16f/candidate-3-heavy-crater/formal-promotion-evidence/fast-timing-v2/before-preview-animation.webp",
+      "priorFormalPreviewSha256": "ac5679c09f8f2039a676146647ab15f068d1fdf9f3af6ccb185a3f6fde1e79c7",
+      "acceptedAnimationId": "accepted:engineer-06-heavy-crater-16f:b2999bb0b46c4500",
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

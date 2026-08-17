@@ -171,11 +171,32 @@ export function getWarriorAttackDirectionRow(direction: WarriorAttackDirection) 
   return WARRIOR_ATTACK_ROWS[direction];
 }
 
+export const WARRIOR_M1_FRAME_COUNT = 5;
+
+export const WARRIOR_M1_DIRECTIONS = ["e", "se", "s", "sw", "w", "nw", "n", "ne"] as const;
+
+export type WarriorM1Direction = (typeof WARRIOR_M1_DIRECTIONS)[number];
+
+export function getWarriorM1FrameTexture(direction: WarriorM1Direction, frame: number) {
+  return `warrior_m1_${direction}_${Math.max(0, Math.min(WARRIOR_M1_FRAME_COUNT - 1, frame))}`;
+}
+
 export const ARCHER_ATTACK_FRAME_COUNT = 3;
+export const ARCHER_MOVING_BOW_FRAME_COUNT = 5;
+export const ARCHER_STANDING_FULL_DRAW_FRAME_COUNT = 1;
+export const ARCHER_FOREST_ROLL_FRAME_COUNT = 6;
 
 export const ARCHER_ATTACK_DIRECTIONS = ["right", "down", "left", "up"] as const;
 
 export type ArcherAttackDirection = (typeof ARCHER_ATTACK_DIRECTIONS)[number];
+
+// Walking while drawing is the one Archer action that needs a distinct pose
+// for every octant; four-way cardinal art makes diagonal kiting look snapped.
+export const ARCHER_MOVING_BOW_DIRECTIONS = ["e", "se", "s", "sw", "w", "nw", "n", "ne"] as const;
+
+export type ArcherMovingBowDirection = (typeof ARCHER_MOVING_BOW_DIRECTIONS)[number];
+export type ArcherStandingFullDrawDirection = ArcherMovingBowDirection;
+export type ArcherForestRollDirection = ArcherMovingBowDirection;
 
 const ARCHER_ATTACK_ROWS: Record<ArcherAttackDirection, number> = {
   right: 0,
@@ -190,6 +211,18 @@ export function getArcherAttackFrameTexture(direction: ArcherAttackDirection, fr
 
 export function getArcherAttackDirectionRow(direction: ArcherAttackDirection) {
   return ARCHER_ATTACK_ROWS[direction];
+}
+
+export function getArcherMovingBowFrameTexture(direction: ArcherMovingBowDirection, frame: number) {
+  return `archer_moving_bow_${direction}_${Math.max(0, Math.min(ARCHER_MOVING_BOW_FRAME_COUNT - 1, frame))}`;
+}
+
+export function getArcherStandingFullDrawFrameTexture(direction: ArcherStandingFullDrawDirection) {
+  return `archer_standing_full_draw_${direction}`;
+}
+
+export function getArcherForestRollFrameTexture(direction: ArcherForestRollDirection, frame: number) {
+  return `archer_forest_roll_${direction}_${Math.max(0, Math.min(ARCHER_FOREST_ROLL_FRAME_COUNT - 1, frame))}`;
 }
 
 export const RPG_SKILL_PROJECTILE_FRAME_COUNT = 10;
@@ -232,25 +265,41 @@ export function getEngineerActionDirectionRow(direction: EngineerActionDirection
   return ENGINEER_ACTION_ROWS[direction];
 }
 
-export const MAGE_ATTACK_FRAME_COUNT = 3;
+export const MAGE_STAFF_CAST_FRAME_COUNT = 3;
 
-export const MAGE_ATTACK_DIRECTIONS = ["right", "down", "left", "up"] as const;
+// This ordering is authored into the approved 3×8 source atlas. Keep it in
+// lockstep with the Mage action compiler; directions are never mirrored by the
+// renderer because the staff hand, braid and robe all carry facing information.
+export const MAGE_STAFF_CAST_DIRECTIONS = [
+  "south",
+  "south-east",
+  "east",
+  "north-east",
+  "north",
+  "north-west",
+  "west",
+  "south-west"
+] as const;
 
-export type MageAttackDirection = (typeof MAGE_ATTACK_DIRECTIONS)[number];
+export type MageStaffCastDirection = (typeof MAGE_STAFF_CAST_DIRECTIONS)[number];
 
-const MAGE_ATTACK_ROWS: Record<MageAttackDirection, number> = {
-  right: 0,
-  down: 1,
-  left: 2,
-  up: 3
+const MAGE_STAFF_CAST_ROWS: Record<MageStaffCastDirection, number> = {
+  south: 0,
+  "south-east": 1,
+  east: 2,
+  "north-east": 3,
+  north: 4,
+  "north-west": 5,
+  west: 6,
+  "south-west": 7
 };
 
-export function getMageAttackFrameTexture(direction: MageAttackDirection, frame: number) {
-  return `mage_attack_${direction}_${Math.max(0, Math.min(MAGE_ATTACK_FRAME_COUNT - 1, frame))}`;
+export function getMageStaffCastFrameTexture(direction: MageStaffCastDirection, frame: number) {
+  return `mage_staff_cast_${direction}_${Math.max(0, Math.min(MAGE_STAFF_CAST_FRAME_COUNT - 1, frame))}`;
 }
 
-export function getMageAttackDirectionRow(direction: MageAttackDirection) {
-  return MAGE_ATTACK_ROWS[direction];
+export function getMageStaffCastDirectionRow(direction: MageStaffCastDirection) {
+  return MAGE_STAFF_CAST_ROWS[direction];
 }
 
 export type SkillIconSlot = SkillKey | "attack";
@@ -263,9 +312,10 @@ const SKILL_ICON_ROWS: Record<ClassId, number> = {
 };
 
 const SKILL_ICON_COLUMNS: Record<SkillIconSlot, number> = {
-  skillQ: 0,
-  skillE: 1,
-  skillR: 2,
+  skillF: 0,
+  skillQ: 1,
+  skillE: 2,
+  skillR: 3,
   attack: 3
 };
 
@@ -443,6 +493,39 @@ export function getMageVfxFrameTexture(vfx: MageVfxKey, frame: number) {
 
 export function getMageVfxRow(vfx: MageVfxKey) {
   return MAGE_VFX_ROWS[vfx];
+}
+
+export type MageFieldVfxKey =
+  | "miasmaCrucible"
+  | "forbiddenAstrolabe"
+  | "bloodMoonAltar";
+
+// The v8 continuous atlas uses 24 columns; shorter authored loops leave their
+// unused cells transparent and expose their real counts through vfxManifest.
+export const MAGE_FIELD_VFX_FRAME_COUNT = 24;
+
+const MAGE_FIELD_VFX_ROWS: Record<MageFieldVfxKey, number> = {
+  miasmaCrucible: 0,
+  forbiddenAstrolabe: 1,
+  bloodMoonAltar: 2
+};
+
+export const MAGE_FIELD_VFX_KEYS = Object.keys(
+  MAGE_FIELD_VFX_ROWS
+) as MageFieldVfxKey[];
+
+export function getMageFieldVfxFrameTexture(
+  vfx: MageFieldVfxKey,
+  frame: number
+) {
+  return `mage_field_vfx_${vfx}_${Math.max(
+    0,
+    Math.min(MAGE_FIELD_VFX_FRAME_COUNT - 1, frame)
+  )}`;
+}
+
+export function getMageFieldVfxRow(vfx: MageFieldVfxKey) {
+  return MAGE_FIELD_VFX_ROWS[vfx];
 }
 
 export type CombatVfxKey =

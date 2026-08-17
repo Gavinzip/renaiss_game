@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_10",
+  "classId": "engineer",
+  "name": "破陣鉤彈",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10",
+  "runtime": {
+    "skillId": "engineer_10",
+    "classId": "engineer",
+    "name": "破陣鉤彈",
+    "persistent": false,
+    "previewSha256": "0528c50e5ff64c357745a8b98db329eb6cf887b62e57f67d18e56149b107dbed",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        90,
+        48
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        90,
+        48
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:550e56466ad538a1",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-10-破陣鉤彈.gif",
+    "configPreviewSourceSha256": "550e56466ad538a1885ff3ed84590d40d37c4647e1f048cf8947be74cc1dbbcd",
+    "configPreviewOutputSha256": "80ee88c7a06992066f05fded4ecb5fcdef7f1711d49833b0cb986a1c53b7c1fe",
+    "file": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 24,
+    "unionBounds": [
+      37,
+      51,
+      128,
+      113
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-breach-hook-v2-normalized.png",
+    "sourceSha256": "528f93af377323b09dcc17a40e29e381ed5753ac5cdc0574303b85f79db00886",
+    "outputSha256": "2e736fdd105564c535043fd4a4522795d117e3bf68a6d06f7fbf42a99494fbcc",
+    "frameDurationsMs": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          50,
+          70,
+          50,
+          71
+        ],
+        [
+          50,
+          70,
+          50,
+          71
+        ],
+        [
+          50,
+          70,
+          50,
+          71
+        ],
+        [
+          39,
+          62,
+          39,
+          63
+        ],
+        [
+          39,
+          62,
+          39,
+          63
+        ],
+        [
+          39,
+          62,
+          39,
+          63
+        ],
+        [
+          39,
+          62,
+          39,
+          63
+        ],
+        [
+          42,
+          63,
+          43,
+          63
+        ],
+        [
+          42,
+          63,
+          43,
+          63
+        ],
+        [
+          42,
+          63,
+          43,
+          63
+        ],
+        [
+          42,
+          63,
+          43,
+          63
+        ],
+        [
+          42,
+          63,
+          43,
+          63
+        ],
+        [
+          40,
+          53,
+          40,
+          54
+        ],
+        [
+          40,
+          53,
+          40,
+          54
+        ],
+        [
+          40,
+          53,
+          40,
+          54
+        ],
+        [
+          40,
+          53,
+          40,
+          54
+        ],
+        [
+          40,
+          53,
+          40,
+          54
+        ],
+        [
+          39,
+          65,
+          39,
+          65
+        ],
+        [
+          39,
+          65,
+          39,
+          65
+        ],
+        [
+          39,
+          65,
+          39,
+          65
+        ],
+        [
+          39,
+          65,
+          39,
+          65
+        ],
+        [
+          60,
+          66,
+          61,
+          67
+        ],
+        [
+          60,
+          66,
+          61,
+          67
+        ],
+        [
+          60,
+          66,
+          61,
+          67
+        ]
+      ]
+    },
+    "frameDurationMs": 90,
+    "candidateOrigin": "configuration-engineer-final-board-logical-runtime",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-breach-hook-v2-normalized.png",
+        "sha256": "528f93af377323b09dcc17a40e29e381ed5753ac5cdc0574303b85f79db00886"
+      }
+    ],
+    "packagePath": "engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "0528c50e5ff64c357745a8b98db329eb6cf887b62e57f67d18e56149b107dbed",
+    "iconFile": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/icon.png",
+    "iconFileSha256": "ac449f9bdf49f61e2b59f9f11e8f6f84fa5096b3b5983e1e1bccdded0ce05062",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_10:source-1eff17d0ca3c1a81:output-0528c50e5ff64c35",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-engineer_10",
+    "previewSourceSequenceSha256": "1eff17d0ca3c1a81b1d0ebbba99f6acc53b84d15196dc0413f7bcc58866a3fd8",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.027,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/preview/gameplay-preview-v1.webm",
+    "sha256": "0528c50e5ff64c357745a8b98db329eb6cf887b62e57f67d18e56149b107dbed",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_10:source-1eff17d0ca3c1a81:output-0528c50e5ff64c35",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_10",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.336,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.1,
+      "durationSec": 3.764,
+      "file": "random-engineer_10-hq.webm",
+      "bytes": 8256707,
+      "sha256": "1eff17d0ca3c1a81b1d0ebbba99f6acc53b84d15196dc0413f7bcc58866a3fd8"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_10-hq.webm",
+    "sourceVideoSha256": "1eff17d0ca3c1a81b1d0ebbba99f6acc53b84d15196dc0413f7bcc58866a3fd8",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.054,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      837,
+      354,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1469,
+      664
+    ],
+    "contentMargins": [
+      264,
+      193,
+      264,
+      194
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.027,
+    "frameCount": 112,
+    "totalDurationMs": 3730,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8256707,
+    "outputBytes": 489738,
+    "reductionRatio": 0.940686,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/icon.png",
+    "sha256": "ac449f9bdf49f61e2b59f9f11e8f6f84fa5096b3b5983e1e1bccdded0ce05062",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "086864091ba28743fa43eda69eb1ccac4c13030034d0d31ca7a3c587ab34697c",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/engineer_10-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_10.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

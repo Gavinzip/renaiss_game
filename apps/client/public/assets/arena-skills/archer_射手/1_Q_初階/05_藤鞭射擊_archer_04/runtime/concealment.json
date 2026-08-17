@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_04",
+  "name": "隱形",
+  "durationMs": 2000,
+  "serverStateField": "concealmentEndsAt",
+  "selfPresentation": {
+    "bodyAlpha": 0.34,
+    "outlineTint": "#c8fff1",
+    "outlineAlpha": [0.305, 0.375],
+    "outlineExpansionPx": 6
+  },
+  "otherViewerPresentation": {
+    "snapshotPolicy": "omit-player"
+  },
+  "retiredRuntime": {
+    "projectile": false,
+    "damage": 0,
+    "pull": 0
+  },
+  "acceptedAnimationId": "archer_04:self-concealment-outline:v1",
+  "fallbackUsed": false
+}

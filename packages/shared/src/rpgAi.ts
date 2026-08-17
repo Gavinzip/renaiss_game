@@ -44,7 +44,7 @@ export const RPG_AI_DIFFICULTY_CONFIGS: Record<RpgAiDifficulty, RpgAiDifficultyC
     moveLoadouts: {
       pet_dark_nyxcat: ["dark_basic_01", "dark_intermediate_02", "dark_ultimate_01", "dark_ultimate_04"],
       pet_light_lumibun: ["light_basic_01", "light_intermediate_04", "light_ultimate_03", "light_ultimate_05"],
-      pet_water_tidefin: ["water_basic_01", "water_intermediate_04", "water_ultimate_03", "water_ultimate_05"]
+      pet_water_tidefin: ["water_basic_01", "water_intermediate_04", "water_ultimate_01", "water_ultimate_05"]
     }
   }
 };

@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_12",
+  "classId": "engineer",
+  "name": "同步追跡彈",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12",
+  "runtime": {
+    "skillId": "engineer_12",
+    "classId": "engineer",
+    "name": "同步追跡彈",
+    "persistent": false,
+    "previewSha256": "b03878d102731b235918abf5829d27e9f059abb53240b044aa08a881aee6eedf",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        48,
+        34
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "add",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        48,
+        34
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "accepted:engineer-magic-sync-flight-v3:af43a0a6b6a6f899",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/evidence/20260809-engineer-selected-repairs/engineer_12-flight-only-preview.webp",
+    "configPreviewSourceSha256": "f8791d4e46be0b96eb028fad14241c0e3ef90b8737b254538b4daa0eab8f4c76",
+    "configPreviewOutputSha256": "f8791d4e46be0b96eb028fad14241c0e3ef90b8737b254538b4daa0eab8f4c76",
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 16,
+    "unionBounds": [
+      63,
+      73,
+      104,
+      92
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+    "sourceSha256": "af43a0a6b6a6f899c2ab0106e632f378fd7e8e13907fda2c8bcfb447e970a1f3",
+    "outputSha256": "c5adfd2ef91763ad6865fe0211e8039e86baf1c0101645a0cfe55e6323a4ab87",
+    "frameDurationsMs": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          71,
+          78,
+          72,
+          78
+        ],
+        [
+          71,
+          78,
+          72,
+          78
+        ],
+        [
+          71,
+          78,
+          72,
+          78
+        ],
+        [
+          71,
+          78,
+          72,
+          78
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          69,
+          75,
+          70,
+          75
+        ],
+        [
+          65,
+          78,
+          63,
+          79
+        ],
+        [
+          65,
+          78,
+          63,
+          79
+        ],
+        [
+          65,
+          78,
+          63,
+          79
+        ],
+        [
+          65,
+          78,
+          63,
+          79
+        ]
+      ]
+    },
+    "frameDurationMs": 90,
+    "candidateOrigin": "engineer-magic-sync-flight-only-v3",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+        "sha256": "af43a0a6b6a6f899c2ab0106e632f378fd7e8e13907fda2c8bcfb447e970a1f3",
+        "semanticSourceFrameIndices": [
+          0,
+          1,
+          2
+        ],
+        "flightOnly": true
+      }
+    ],
+    "fallbackUsed": false,
+    "sourceFrameIndices": [
+      0,
+      1,
+      2
+    ],
+    "semanticSourceFrameIndices": [
+      0,
+      1,
+      2
+    ],
+    "flightOnly": true,
+    "packagePath": "engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "b03878d102731b235918abf5829d27e9f059abb53240b044aa08a881aee6eedf",
+    "iconFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/icon.png",
+    "iconFileSha256": "e096f00f28f683d55d27e704b8330d145fe4449b32699ee74d405c6ffe279a46",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_12:source-7a1a5fe1df591293:output-b03878d102731b23",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-engineer_12",
+    "previewSourceSequenceSha256": "7a1a5fe1df591293673b76f9c122fd58c467f81608012efd9628c01c59fd0bb9",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.025,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview/gameplay-preview-v1.webm",
+    "sha256": "b03878d102731b235918abf5829d27e9f059abb53240b044aa08a881aee6eedf",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_12:source-7a1a5fe1df591293:output-b03878d102731b23",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_12",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.645,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.617,
+      "durationSec": 3.972,
+      "file": "random-engineer_12-hq.webm",
+      "bytes": 8454199,
+      "sha256": "7a1a5fe1df591293673b76f9c122fd58c467f81608012efd9628c01c59fd0bb9"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_12-hq.webm",
+    "sourceVideoSha256": "7a1a5fe1df591293673b76f9c122fd58c467f81608012efd9628c01c59fd0bb9",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.0,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      826,
+      353,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1447,
+      663
+    ],
+    "contentMargins": [
+      275,
+      194,
+      275,
+      194
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.025,
+    "frameCount": 118,
+    "totalDurationMs": 3930,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8454199,
+    "outputBytes": 467111,
+    "reductionRatio": 0.944748,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/icon.png",
+    "sha256": "e096f00f28f683d55d27e704b8330d145fe4449b32699ee74d405c6ffe279a46",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "c2eb9c152264059e77fc8b1e75a1d5e8e0c272c62c4010811fe9cda8bcc3e157",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/selected-runtime-20260809-engineer-repairs/assets/engineer_12-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview-v2/animation.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

@@ -10,6 +10,7 @@ const CLASS_ROOTS: Record<ClassId, number> = {
 };
 
 const SKILL_INTERVALS: Record<SkillKey, number[]> = {
+  skillF: [0.75, 1, 1.25],
   skillQ: [1, 1.25, 1.5],
   skillE: [1, 1.333, 1.667],
   skillR: [0.75, 1, 1.5, 2]
@@ -19,12 +20,20 @@ export class PixelAudioEngine {
   private context: AudioContext | null = null;
   private master: GainNode | null = null;
   private enabled = true;
+  private volume = 1;
   private lastCueAt = new Map<string, number>();
 
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
     if (this.master) {
-      this.master.gain.setTargetAtTime(enabled ? 0.14 : 0, this.context?.currentTime ?? 0, 0.018);
+      this.master.gain.setTargetAtTime(this.masterVolume(), this.context?.currentTime ?? 0, 0.018);
+    }
+  }
+
+  setVolume(volume: number) {
+    this.volume = Math.max(0, Math.min(1, volume));
+    if (this.master) {
+      this.master.gain.setTargetAtTime(this.masterVolume(), this.context?.currentTime ?? 0, 0.018);
     }
   }
 
@@ -35,6 +44,16 @@ export class PixelAudioEngine {
     const context = this.ensureContext();
     if (context?.state === "suspended") {
       await context.resume();
+    }
+  }
+
+  async destroy() {
+    const context = this.context;
+    this.context = null;
+    this.master = null;
+    this.lastCueAt.clear();
+    if (context && context.state !== "closed") {
+      await context.close();
     }
   }
 
@@ -129,10 +148,14 @@ export class PixelAudioEngine {
     if (!this.context) {
       this.context = new AudioContext({ latencyHint: "interactive" });
       this.master = this.context.createGain();
-      this.master.gain.value = this.enabled ? 0.14 : 0;
+      this.master.gain.value = this.masterVolume();
       this.master.connect(this.context.destination);
     }
     return this.context;
+  }
+
+  private masterVolume() {
+    return this.enabled ? 0.14 * this.volume : 0;
   }
 
   private tone(

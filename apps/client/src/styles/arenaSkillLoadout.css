@@ -1,0 +1,1867 @@
+.arena-loadout-summary,
+.arena-skill-loadout-screen,
+.arena-skill-loadout-screen * {
+  box-sizing: border-box;
+  font-family: "ArenaPixel", "PingFang TC", "Noto Sans TC", sans-serif;
+}
+
+/* Arena entry */
+.start-panel {
+  width: min(1180px, calc(100vw - 36px));
+  max-height: calc(100dvh - 28px);
+  grid-template-columns: minmax(210px, 0.72fr) minmax(250px, 0.82fr) minmax(360px, 1.18fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "banner banner banner"
+    "mode mode mode"
+    "classes stage loadout"
+    "footer footer footer";
+  grid-auto-flow: row;
+  align-content: start;
+  align-items: stretch;
+  gap: 12px;
+  overflow: auto;
+}
+
+.start-panel > .arena-loadout-banner {
+  grid-area: banner;
+}
+
+.start-panel > .arena-mode-selector {
+  grid-area: mode;
+}
+
+.start-panel > .class-command {
+  grid-area: classes;
+}
+
+.start-panel > .class-stage {
+  grid-area: stage;
+}
+
+.start-panel > .arena-loadout-summary {
+  grid-area: loadout;
+}
+
+.start-panel > .start-copy {
+  grid-area: footer;
+}
+
+.arena-loadout-summary {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  align-content: start;
+  gap: 10px;
+  padding: 12px;
+  color: var(--arena-chrome-copy);
+  background: var(--arena-chrome-plum);
+  border: 10px solid transparent;
+  border-image: var(--arena-chrome-panel) 14 fill / 10px / 0 stretch;
+  box-shadow: 4px 5px 0 rgba(10, 4, 12, 0.42);
+  image-rendering: pixelated;
+}
+
+.arena-loadout-summary > header,
+.arena-skill-icon-picker > header,
+.arena-loadout-class-rail > header {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--arena-chrome-plum-deep);
+  border: 7px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 7px / 0 stretch;
+}
+
+.arena-loadout-summary > header span,
+.arena-skill-icon-picker > header span,
+.arena-loadout-class-rail > header span {
+  color: #c99a4c;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.arena-loadout-summary > header strong,
+.arena-skill-icon-picker > header strong,
+.arena-loadout-class-rail > header strong {
+  color: var(--arena-chrome-gold-text);
+  font-size: 18px;
+  line-height: 1.1;
+  text-shadow: 3px 3px 0 var(--arena-chrome-ink);
+}
+
+.arena-loadout-summary > header small,
+.arena-skill-icon-picker > header small {
+  color: #d9bd87;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.arena-loadout-summary-slots {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.arena-loadout-summary-slot {
+  position: relative;
+  min-width: 0;
+}
+
+.arena-loadout-summary-slot > button {
+  width: 100%;
+  min-height: 128px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 6px;
+  padding: 14px 6px 8px;
+  color: var(--arena-chrome-copy);
+  background: var(--arena-chrome-plum-deep);
+  border: 7px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 7px / 0 stretch;
+  box-shadow: 3px 4px 0 rgba(9, 4, 11, 0.42);
+  text-align: center;
+}
+
+.arena-loadout-summary-slot > button:hover:not(:disabled),
+.arena-loadout-summary-slot.is-inspecting > button {
+  filter: brightness(1.12);
+}
+
+.arena-loadout-summary-slot > button:disabled {
+  cursor: default;
+}
+
+.arena-loadout-summary-slot > button > b {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  z-index: 2;
+  min-width: 28px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  color: var(--arena-chrome-gold-ink);
+  background: #d99d3e;
+  border: 6px solid transparent;
+  border-image: var(--arena-chrome-gold) 14 fill / 6px / 0 stretch;
+  font-size: 11px;
+}
+
+.arena-loadout-summary-slot .arena-skill-icon {
+  width: 62px;
+  height: 62px;
+}
+
+.arena-loadout-summary-slot > button > span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  text-align: center;
+}
+
+.arena-loadout-summary-slot small {
+  color: #c99a4c;
+  font-size: 7px;
+}
+
+.arena-loadout-summary-slot strong {
+  max-width: 100%;
+  color: #ffe194;
+  font-size: 9px;
+  line-height: 1.25;
+}
+
+.arena-loadout-summary-tooltip {
+  position: absolute;
+  top: calc(100% + 7px);
+  z-index: 40;
+  width: min(380px, calc(100vw - 40px));
+  display: grid;
+  gap: 9px;
+  padding: 14px 15px;
+  visibility: hidden;
+  opacity: 0;
+  color: var(--arena-chrome-copy);
+  background: #201326;
+  border: 8px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 8px / 0 stretch;
+  box-shadow: 6px 7px 0 rgba(9, 4, 11, 0.64);
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 80ms steps(2, end),
+    transform 80ms steps(2, end);
+}
+
+.arena-loadout-summary-tooltip.align-q {
+  left: 0;
+}
+
+.arena-loadout-summary-tooltip.align-e {
+  left: 50%;
+  transform: translate(-50%, -4px);
+}
+
+.arena-loadout-summary-tooltip.align-r {
+  right: 0;
+}
+
+.arena-loadout-summary-slot.is-inspecting .arena-loadout-summary-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.arena-loadout-summary-slot.is-inspecting .arena-loadout-summary-tooltip.align-e {
+  transform: translate(-50%, 0);
+}
+
+.arena-loadout-summary-tooltip > header {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(217, 157, 62, 0.36);
+}
+
+.arena-loadout-summary-tooltip > header span {
+  color: #d9aa57;
+  font-size: 9px;
+  line-height: 1.25;
+}
+
+.arena-loadout-summary-tooltip > header strong {
+  color: #ffe194;
+  font-size: 15px;
+  line-height: 1.2;
+  text-shadow: 2px 2px 0 #120a16;
+}
+
+.arena-loadout-summary-tooltip > p {
+  margin: 0;
+  color: #f0ddb1;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.arena-loadout-summary-tooltip > p b {
+  margin-right: 8px;
+  color: #e3ac4d;
+  font-weight: 700;
+}
+
+.arena-loadout-summary-tooltip > dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(217, 157, 62, 0.22);
+}
+
+.arena-loadout-summary-tooltip > dl > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 0 9px;
+  border-right: 1px solid rgba(217, 157, 62, 0.22);
+}
+
+.arena-loadout-summary-tooltip > dl > div:first-child {
+  padding-left: 0;
+}
+
+.arena-loadout-summary-tooltip > dl > div:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.arena-loadout-summary-tooltip dt {
+  color: #d1bd91;
+  font-size: 8px;
+  line-height: 1.25;
+}
+
+.arena-loadout-summary-tooltip dd {
+  min-width: 0;
+  margin: 0;
+  color: #fff3b0;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.arena-loadout-summary > p {
+  margin: 0;
+  color: #d8c193;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.arena-configure-skills-button,
+.arena-loadout-back-button,
+.arena-skill-loadout-footer > button {
+  min-height: 46px;
+  padding: 6px 14px;
+  color: #f7efb8;
+  background: #487b26;
+  border: 9px solid transparent;
+  border-image: var(--arena-chrome-primary) 14 fill / 9px / 0 stretch;
+  box-shadow: 4px 5px 0 var(--arena-chrome-shadow);
+  font-size: 11px;
+  text-shadow: 2px 2px 0 #20300f;
+  image-rendering: pixelated;
+}
+
+.arena-configure-skills-button:hover,
+.arena-loadout-back-button:hover,
+.arena-skill-loadout-footer > button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Skill icon board */
+.arena-skill-loadout-screen {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  top: 14px;
+  width: min(1440px, calc(100vw - 28px));
+  height: calc(100dvh - 28px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "header"
+    "classes"
+    "board"
+    "footer";
+  gap: 10px;
+  padding: 12px;
+  overflow: hidden;
+  color: var(--arena-chrome-copy);
+  background: var(--arena-chrome-plum);
+  border: 14px solid transparent;
+  border-image: var(--arena-chrome-panel) 14 fill / 14px / 0 stretch;
+  box-shadow: 9px 11px 0 var(--arena-chrome-shadow);
+  image-rendering: pixelated;
+}
+
+.arena-skill-loadout-header {
+  grid-area: header;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) auto 40px;
+  grid-template-areas: "back title rule close";
+  align-items: center;
+  gap: 15px;
+  padding: 6px 4px 11px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid rgba(217, 157, 62, 0.42);
+  box-shadow: none;
+}
+
+.arena-loadout-back-button {
+  grid-area: back;
+  min-height: 40px;
+  color: var(--arena-chrome-copy);
+  background: var(--arena-chrome-plum);
+  border-image-source: var(--arena-chrome-square);
+  text-shadow: 2px 2px 0 var(--arena-chrome-ink);
+}
+
+.arena-skill-loadout-header > div {
+  grid-area: title;
+  min-width: 0;
+}
+
+.arena-skill-loadout-header span {
+  color: #d0a251;
+  font-size: 8px;
+}
+
+.arena-skill-loadout-header h1 {
+  margin: 3px 0 4px;
+  color: var(--arena-chrome-gold-text);
+  font-size: clamp(23px, 2.2vw, 34px);
+  line-height: 1;
+  text-shadow: 4px 4px 0 var(--arena-chrome-ink);
+}
+
+.arena-skill-loadout-header p {
+  max-width: 760px;
+  margin: 0;
+  color: #dcc89c;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.arena-skill-loadout-header > strong {
+  grid-area: rule;
+  min-height: 32px;
+  display: grid;
+  place-items: center;
+  padding: 4px 0 4px 12px;
+  color: #d7b861;
+  background: transparent;
+  border: 0;
+  border-left: 3px solid #d99d3e;
+  font-size: 8px;
+  text-align: center;
+}
+
+.arena-skill-loadout-close-button {
+  grid-area: close;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: #ffe194;
+  background: #482939;
+  border: 7px solid transparent;
+  border-image: var(--arena-chrome-square) 14 fill / 7px / 0 stretch;
+  box-shadow: 3px 4px 0 var(--arena-chrome-shadow);
+}
+
+.arena-skill-loadout-close-button:hover {
+  color: #fff3ba;
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.arena-loadout-class-rail,
+.arena-skill-preview-dock,
+.arena-skill-icon-picker,
+.arena-skill-loadout-footer {
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.arena-loadout-class-rail {
+  grid-area: classes;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+  padding: 0 0 10px;
+  border-bottom: 2px solid rgba(217, 157, 62, 0.3);
+  overflow: hidden;
+}
+
+.arena-loadout-class-rail > header {
+  padding: 6px 8px;
+  background: rgba(24, 14, 29, 0.44);
+  border: 0;
+  border-left: 3px solid #d99d3e;
+}
+
+.arena-loadout-class-rail > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.arena-loadout-class-rail > div > button {
+  min-width: 0;
+  min-height: 60px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 6px;
+  color: var(--arena-chrome-copy);
+  background: rgba(31, 19, 37, 0.58);
+  border: 0;
+  border-bottom: 3px solid transparent;
+  box-shadow: none;
+}
+
+.arena-loadout-class-rail > div > button:hover,
+.arena-loadout-class-rail > div > button.is-selected {
+  background: rgba(74, 45, 67, 0.82);
+  border-bottom-color: var(--accent, #d99d3e);
+}
+
+.arena-loadout-class-rail .class-portrait {
+  width: 36px;
+  height: 44px;
+}
+
+.arena-loadout-class-rail button > span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.arena-loadout-class-rail button strong {
+  color: var(--arena-chrome-gold-text);
+  font-size: 9px;
+}
+
+.arena-loadout-class-rail button small {
+  color: #c8b183;
+  font-size: 6px;
+  line-height: 1.35;
+}
+
+.arena-skill-selection-board {
+  grid-area: board;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 642px minmax(0, 1fr);
+  gap: 16px;
+  overflow: hidden;
+}
+
+.arena-skill-preview-dock {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: start;
+  gap: 10px;
+  padding: 0 16px 0 0;
+  border-right: 2px solid rgba(217, 157, 62, 0.34);
+  overflow: auto;
+}
+
+.arena-skill-animation-preview {
+  position: relative;
+  width: 624px;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #0e0912;
+  border: 8px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 8px / 0 stretch;
+  box-shadow: 3px 4px 0 rgba(9, 4, 11, 0.5);
+}
+
+.arena-skill-animation-preview > .arena-skill-preview-media {
+  width: 608px;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+
+.arena-skill-animation-preview > .engineer-turret-preview-media {
+  width: 608px;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.engineer-turret-preview-media {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 68%, rgba(58, 157, 137, 0.22), transparent 34%),
+    linear-gradient(180deg, #15131c 0 62%, #243330 62% 64%, #11151b 64% 100%);
+  image-rendering: pixelated;
+}
+
+.engineer-turret-preview-grid {
+  position: absolute;
+  inset: 62% 0 0;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(90deg, rgba(114, 218, 204, 0.35) 1px, transparent 1px),
+    linear-gradient(rgba(114, 218, 204, 0.28) 1px, transparent 1px);
+  background-size: 24px 16px;
+  transform: perspective(150px) rotateX(56deg) scale(1.45);
+  transform-origin: top center;
+}
+
+.engineer-turret-preview-range {
+  position: absolute;
+  left: 50%;
+  top: 75%;
+  width: 330px;
+  height: 106px;
+  border: 2px dashed rgba(122, 224, 202, 0.58);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: arena-turret-range-pulse 2.4s steps(4, end) infinite;
+}
+
+.engineer-turret-preview-media.is-magic_missile .engineer-turret-preview-range {
+  border-color: rgba(196, 141, 255, 0.7);
+  box-shadow: 0 0 18px rgba(173, 102, 255, 0.18);
+}
+
+.engineer-turret-preview-spawn {
+  position: absolute;
+  left: 50%;
+  top: 67%;
+  width: 1px;
+  height: 1px;
+}
+
+.engineer-turret-preview-deploy {
+  position: absolute;
+  z-index: 3;
+  left: var(--turret-frame-left);
+  top: var(--turret-frame-top);
+  width: var(--turret-frame-width);
+  height: var(--turret-frame-height);
+  background-image: var(--turret-deploy-image);
+  background-repeat: no-repeat;
+  background-size: var(--turret-sheet-width) var(--turret-sheet-height);
+  animation: arena-turret-deploy-strip 2.4s steps(13, end) infinite;
+}
+
+.engineer-turret-preview-machine,
+.engineer-turret-preview-magic {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 128px;
+  height: 128px;
+  transform: translate(-50%, -72%);
+  animation: arena-turret-arrive 2.4s steps(8, end) infinite;
+}
+
+.engineer-turret-preview-machine > span {
+  position: absolute;
+  inset: 0;
+  background-image: var(--mechanical-atlas);
+  background-size: 400% 400%;
+  background-repeat: no-repeat;
+}
+
+.engineer-turret-preview-machine > .is-base {
+  background-position: 0 33.333%;
+}
+
+.engineer-turret-preview-machine > .is-head {
+  background-position: 33.333% 33.333%;
+  transform-origin: 50% 56%;
+  animation: arena-turret-head-recoil 2.4s steps(2, end) infinite;
+}
+
+.engineer-turret-preview-magic {
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(180, 104, 255, 0.52));
+}
+
+.engineer-turret-preview-shot {
+  position: absolute;
+  z-index: 4;
+  left: 42px;
+  top: -60px;
+  width: 14px;
+  height: 8px;
+  opacity: 0;
+  background: #76efff;
+  border: 2px solid #fff0a4;
+  box-shadow: 10px 0 0 rgba(94, 200, 255, 0.28);
+  animation: arena-turret-preview-shot 2.4s steps(8, end) infinite;
+}
+
+.is-magic_missile .engineer-turret-preview-shot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #b573ff;
+  box-shadow: 0 0 12px #9b5cff;
+}
+
+.engineer-turret-preview-caption {
+  position: absolute;
+  z-index: 6;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  color: #ffe6a0;
+  background: rgba(22, 12, 26, 0.9);
+  border: 1px solid rgba(226, 170, 77, 0.65);
+  font-size: 8px;
+}
+
+.engineer-turret-preview-caption b {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  color: #20120c;
+  background: #efb84e;
+}
+
+@keyframes arena-turret-deploy-strip {
+  0% { background-position: 0 0; opacity: 0; }
+  8% { opacity: 1; }
+  58%, 88% { background-position: var(--turret-sheet-end) 0; opacity: 1; }
+  100% { background-position: var(--turret-sheet-end) 0; opacity: 0; }
+}
+
+@keyframes arena-turret-arrive {
+  0%, 20% { opacity: 0; transform: translate(-50%, -60%) scale(0.72); }
+  38%, 90% { opacity: 1; transform: translate(-50%, -72%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -72%) scale(1); }
+}
+
+@keyframes arena-turret-range-pulse {
+  0%, 18%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(0.86); }
+  42%, 88% { opacity: 0.78; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes arena-turret-head-recoil {
+  0%, 62%, 100% { transform: translateX(0); }
+  68% { transform: translateX(-5px); }
+  76% { transform: translateX(0); }
+}
+
+@keyframes arena-turret-preview-shot {
+  0%, 62% { opacity: 0; transform: translateX(0); }
+  66% { opacity: 1; transform: translateX(0); }
+  86% { opacity: 0.92; transform: translateX(210px); }
+  87%, 100% { opacity: 0; transform: translateX(210px); }
+}
+
+.arena-skill-preview-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #0e0912;
+}
+
+.arena-skill-preview-media > video,
+.arena-skill-preview-media > img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: fill;
+  image-rendering: auto;
+}
+
+.arena-skill-preview-media > img {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.arena-skill-animation-preview > .arena-skill-icon {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.arena-skill-animation-preview figcaption {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 6px;
+  color: #ffe9a6;
+  background: rgba(18, 10, 22, 0.9);
+  border: 4px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 4px / 0 stretch;
+  font-size: 6px;
+}
+
+.arena-skill-animation-preview figcaption > span {
+  width: 6px;
+  height: 6px;
+  background: #79dc66;
+  box-shadow: 0 0 0 2px #183513;
+}
+
+.arena-skill-preview-copy {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 12px 4px 4px;
+  background: transparent;
+  border: 0;
+  border-top: 2px solid rgba(217, 157, 62, 0.32);
+}
+
+.arena-skill-preview-copy > span {
+  color: #d1a34f;
+  font-size: 8px;
+}
+
+.arena-skill-preview-copy > strong {
+  color: var(--arena-chrome-gold-text);
+  font-size: 21px;
+  text-shadow: 3px 3px 0 var(--arena-chrome-ink);
+}
+
+.arena-skill-preview-copy > p {
+  margin: 0;
+  color: #d7c398;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.arena-skill-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 4px 0 0;
+  padding: 7px 0;
+  background: rgba(26, 15, 31, 0.56);
+}
+
+.arena-skill-facts > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 2px 9px;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid rgba(217, 157, 62, 0.28);
+}
+
+.arena-skill-facts > div:last-child {
+  border-right: 0;
+}
+
+.arena-skill-facts dt {
+  color: #bca77c;
+  font-size: 6px;
+}
+
+.arena-skill-facts dd {
+  min-width: 0;
+  margin: 0;
+  color: #ffe194;
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.arena-skill-icon-picker {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  align-content: start;
+  gap: 8px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.arena-skill-icon-picker > header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 4px 2px 9px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid rgba(217, 157, 62, 0.32);
+}
+
+.arena-skill-icon-picker > header > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.arena-selected-skill-strip {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  background: rgba(30, 18, 36, 0.6);
+}
+
+.arena-selected-skill-strip > button {
+  min-width: 0;
+  min-height: 66px;
+  display: grid;
+  grid-template-columns: 28px 46px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  color: var(--arena-chrome-copy);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid rgba(217, 157, 62, 0.28);
+  text-align: left;
+}
+
+.arena-selected-skill-strip > button:last-child {
+  border-right: 0;
+}
+
+.arena-selected-skill-strip > button:hover:not(:disabled) {
+  background: rgba(74, 45, 67, 0.62);
+}
+
+.arena-selected-skill-strip > button:disabled {
+  opacity: 0.7;
+}
+
+.arena-selected-skill-strip > button > b {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  color: var(--arena-chrome-gold-ink);
+  background: #d99d3e;
+  border: 0;
+  box-shadow:
+    inset 0 0 0 2px #f0c65e,
+    2px 2px 0 #5b351d;
+  font-size: 9px;
+}
+
+.arena-selected-skill-strip .arena-skill-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.arena-selected-skill-strip > button > span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.arena-selected-skill-strip small {
+  color: #c99a4c;
+  font-size: 6px;
+}
+
+.arena-selected-skill-strip strong {
+  color: #ffe194;
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.arena-loadout-core-skill {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px 6px 12px;
+  background: rgba(84, 59, 32, 0.35);
+  border: 0;
+  border-left: 3px solid #d99d3e;
+}
+
+.arena-loadout-core-skill .arena-skill-icon {
+  width: 46px;
+  height: 46px;
+}
+
+.arena-loadout-core-skill > div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.arena-loadout-core-skill span,
+.arena-loadout-core-skill small {
+  color: #d7b861;
+  font-size: 7px;
+}
+
+.arena-loadout-core-skill strong {
+  color: #fff0a2;
+  font-size: 10px;
+}
+
+.arena-skill-icon-groups {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-right: 4px;
+  overflow: auto;
+}
+
+.arena-skill-icon-group {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 6px;
+}
+
+.arena-skill-icon-group > header {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 5px;
+  padding: 4px;
+  background: rgba(27, 16, 33, 0.48);
+  border: 0;
+  border-left: 2px solid rgba(217, 157, 62, 0.45);
+}
+
+.arena-skill-icon-group > header > b {
+  width: 34px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: #291625;
+  background: #d99d3e;
+  border: 0;
+  box-shadow:
+    inset 0 0 0 2px #f0c65e,
+    2px 2px 0 #5b351d;
+  font-size: 10px;
+}
+
+.arena-skill-icon-group > header > div {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+}
+
+.arena-skill-icon-group > header strong {
+  color: #ffe194;
+  font-size: 8px;
+}
+
+.arena-skill-icon-group > header small {
+  color: #bda77c;
+  font-size: 6px;
+}
+
+.arena-skill-icon-group > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  background: rgba(25, 15, 31, 0.42);
+}
+
+.arena-skill-icon-group > div > button {
+  position: relative;
+  min-width: 0;
+  min-height: 88px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  color: var(--arena-chrome-copy);
+  background: transparent;
+  border: 0;
+  box-shadow: inset 0 0 0 2px transparent;
+}
+
+.arena-skill-icon-group > div > button:hover {
+  background: rgba(74, 45, 67, 0.76);
+  transform: translateY(-1px);
+}
+
+.arena-skill-icon-group > div > button.is-equipped {
+  background: rgba(217, 157, 62, 0.14);
+  box-shadow:
+    inset 0 0 0 3px #d99d3e,
+    inset 0 0 0 5px rgba(78, 45, 26, 0.86);
+}
+
+.arena-skill-icon-group .arena-skill-icon {
+  width: 54px;
+  height: 54px;
+}
+
+.arena-skill-icon-group button > strong {
+  width: 100%;
+  min-width: 0;
+  color: #e8d398;
+  font-size: 7px;
+  line-height: 1.25;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arena-skill-check {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: #291625;
+  background: #d99d3e;
+  border: 0;
+  box-shadow: inset 0 0 0 2px #f0c65e;
+}
+
+.arena-skill-check:empty {
+  display: none;
+}
+
+.arena-skill-loadout-footer {
+  grid-area: footer;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 2px 0;
+  border-top: 2px solid rgba(217, 157, 62, 0.42);
+}
+
+.arena-loadout-class-rail > div > button:focus-visible,
+.arena-selected-skill-strip > button:focus-visible,
+.arena-skill-loadout-close-button:focus-visible,
+.arena-skill-icon-group > div > button:focus-visible,
+.arena-loadout-summary-slot > button:focus-visible {
+  outline: 3px solid #f0c65e;
+  outline-offset: -3px;
+}
+
+.arena-skill-loadout-footer > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.arena-skill-loadout-footer > div > strong {
+  color: #ffe194;
+  font-size: 10px;
+}
+
+.arena-skill-loadout-footer > div > small {
+  color: #bca77c;
+  font-size: 7px;
+}
+
+.arena-skill-loadout-footer > button:disabled {
+  filter: grayscale(0.7) brightness(0.7);
+  cursor: not-allowed;
+}
+
+.arena-skill-icon.is-empty {
+  position: relative;
+  background: #160d1b;
+  border: 5px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 5px / 0 stretch;
+}
+
+@media (min-width: 1101px) and (min-height: 700px) {
+  .arena-skill-loadout-header p {
+    font-size: 10px;
+  }
+
+  .arena-skill-loadout-header > strong {
+    font-size: 10px;
+  }
+
+  .arena-loadout-class-rail {
+    grid-template-columns: 174px minmax(0, 1fr);
+  }
+
+  .arena-loadout-class-rail > div > button {
+    min-height: 72px;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 9px;
+    padding: 8px;
+  }
+
+  .arena-loadout-class-rail .class-portrait {
+    width: 44px;
+    height: 54px;
+  }
+
+  .arena-loadout-class-rail button strong {
+    font-size: 11px;
+  }
+
+  .arena-loadout-class-rail button small {
+    font-size: 8px;
+  }
+
+  .arena-skill-selection-board {
+    grid-template-columns: 642px minmax(0, 1fr);
+  }
+
+  .arena-skill-preview-copy > span {
+    font-size: 10px;
+  }
+
+  .arena-skill-preview-copy > strong {
+    font-size: 25px;
+  }
+
+  .arena-skill-preview-copy > p {
+    font-size: 11px;
+  }
+
+  .arena-skill-facts dt {
+    font-size: 8px;
+  }
+
+  .arena-skill-facts dd {
+    font-size: 10px;
+  }
+
+  .arena-skill-icon-picker > header span {
+    font-size: 8px;
+  }
+
+  .arena-skill-icon-picker > header strong {
+    font-size: 20px;
+  }
+
+  .arena-skill-icon-picker > header small {
+    font-size: 9px;
+  }
+
+  .arena-selected-skill-strip > button {
+    min-height: 80px;
+    grid-template-columns: 32px 54px minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  .arena-selected-skill-strip > button > b {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+  }
+
+  .arena-selected-skill-strip .arena-skill-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .arena-selected-skill-strip small {
+    font-size: 8px;
+  }
+
+  .arena-selected-skill-strip strong {
+    font-size: 10px;
+  }
+
+  .arena-loadout-core-skill {
+    min-height: 58px;
+    grid-template-columns: 54px minmax(0, 1fr);
+  }
+
+  .arena-loadout-core-skill .arena-skill-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .arena-loadout-core-skill span,
+  .arena-loadout-core-skill small {
+    font-size: 8px;
+  }
+
+  .arena-loadout-core-skill strong {
+    font-size: 11px;
+  }
+
+  .arena-skill-icon-groups {
+    gap: 12px;
+  }
+
+  .arena-skill-icon-group {
+    grid-template-columns: 70px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .arena-skill-icon-group > header > b {
+    width: 40px;
+    height: 38px;
+    font-size: 12px;
+  }
+
+  .arena-skill-icon-group > header strong {
+    font-size: 9px;
+  }
+
+  .arena-skill-icon-group > header small {
+    font-size: 8px;
+  }
+
+  .arena-skill-icon-group > div > button {
+    min-height: 108px;
+    gap: 6px;
+    padding: 8px 5px;
+  }
+
+  .arena-skill-icon-group .arena-skill-icon {
+    width: 66px;
+    height: 66px;
+  }
+
+  .arena-skill-icon-group button > strong {
+    font-size: 9px;
+  }
+
+  .arena-skill-loadout-footer > div > strong {
+    font-size: 12px;
+  }
+
+  .arena-skill-loadout-footer > div > small {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .start-panel {
+    left: 50%;
+    top: 14px;
+    width: calc(100vw - 28px);
+    max-height: calc(100dvh - 28px);
+    transform: translateX(-50%);
+    grid-template-columns: minmax(220px, 0.75fr) minmax(280px, 1fr);
+    grid-template-rows: auto auto minmax(360px, max-content) auto auto;
+    grid-template-areas:
+      "banner banner"
+      "mode mode"
+      "classes stage"
+      "loadout loadout"
+      "footer footer";
+  }
+
+  .start-panel > .class-stage {
+    min-height: 360px;
+  }
+
+  .start-panel > .class-stage .class-portrait {
+    width: 128px;
+    height: 152px;
+  }
+
+  .start-panel > .class-stage .class-stage-name strong {
+    font-size: 24px;
+  }
+
+  .start-panel > .class-stage .stat-stack {
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .arena-loadout-summary-slot > button {
+    min-height: 104px;
+    grid-template-columns: 58px minmax(0, 1fr);
+    justify-items: start;
+    text-align: left;
+  }
+
+  .arena-loadout-summary-slot > button > span {
+    text-align: left;
+  }
+
+  .arena-loadout-summary-slot .arena-skill-icon {
+    width: 54px;
+    height: 54px;
+  }
+
+  .arena-skill-loadout-screen {
+    grid-template-rows:
+      auto
+      minmax(96px, max-content)
+      minmax(980px, max-content)
+      minmax(78px, max-content);
+    overflow: auto;
+  }
+
+  .arena-skill-selection-board {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    overflow: visible;
+  }
+
+  .arena-skill-preview-dock {
+    grid-template-columns: 624px minmax(0, 1fr);
+    grid-template-rows: auto;
+    overflow: visible;
+  }
+
+  .arena-skill-icon-picker {
+    min-height: 590px;
+    overflow: visible;
+  }
+
+  .arena-skill-icon-groups {
+    overflow: visible;
+  }
+}
+
+/*
+ * Desktop and tablet landscape entry screens must remain a single coherent
+ * board. The main stylesheet's generous showcase sizing is useful on tall
+ * displays, but it overflows browser panes below 900px high.
+ */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .start-panel {
+    grid-template-columns: minmax(180px, 0.7fr) minmax(220px, 0.82fr) minmax(320px, 1.18fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "banner banner banner"
+      "mode mode mode"
+      "classes stage loadout"
+      "footer footer footer";
+  }
+}
+
+@media (min-width: 901px) and (max-height: 900px) {
+  .start-panel {
+    height: calc(100dvh - 24px);
+    max-height: calc(100dvh - 24px);
+    grid-template-rows: 72px 58px minmax(0, 1fr) 58px;
+    gap: 8px;
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  .start-panel > .arena-loadout-banner {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 10px;
+    padding: 6px 12px;
+  }
+
+  .arena-loadout-banner .start-brand-logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .arena-loadout-banner .start-brand-row {
+    min-width: 0;
+  }
+
+  .arena-loadout-banner .start-brand-row span {
+    margin-bottom: 1px;
+    font-size: 8px;
+  }
+
+  .arena-loadout-banner h1,
+  .start-panel h1 {
+    font-size: clamp(25px, 2.5vw, 34px);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .arena-loadout-banner .arena-tags span {
+    min-height: 28px;
+    padding: 3px 7px;
+    font-size: 7px;
+  }
+
+  .arena-mode-selector {
+    grid-template-columns: minmax(128px, 0.28fr) minmax(0, 1fr);
+    gap: 8px;
+    padding: 5px 8px;
+  }
+
+  .arena-mode-selector header {
+    gap: 1px;
+  }
+
+  .arena-mode-selector header span,
+  .arena-mode-selector button small {
+    font-size: 8px;
+  }
+
+  .arena-mode-selector header strong {
+    font-size: 11px;
+  }
+
+  .arena-mode-selector button {
+    min-height: 38px;
+    gap: 1px;
+    padding: 4px 8px;
+  }
+
+  .arena-mode-selector button strong {
+    font-size: 10px;
+  }
+
+  .start-panel > .class-command,
+  .start-panel > .class-stage,
+  .start-panel > .arena-loadout-summary {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .start-panel > .class-command {
+    padding: 7px;
+  }
+
+  .start-panel > .class-command header {
+    gap: 1px;
+    margin: 1px 3px 5px;
+  }
+
+  .start-panel > .class-command header strong {
+    font-size: 20px;
+  }
+
+  .start-panel > .class-command header em,
+  .start-panel > .class-command header span {
+    font-size: 8px;
+  }
+
+  .start-panel .class-grid {
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .start-panel .class-card {
+    min-height: 0;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 5px;
+    padding: 3px 5px;
+  }
+
+  .start-panel .class-card .class-portrait {
+    width: 40px;
+    height: 48px;
+  }
+
+  .start-panel .class-card strong {
+    font-size: 10px;
+  }
+
+  .start-panel .class-card em {
+    font-size: 8px;
+  }
+
+  .start-panel > .class-stage {
+    gap: 4px;
+    align-content: center;
+    padding: 7px 9px;
+  }
+
+  .start-panel > .class-stage .class-portrait {
+    width: 116px;
+    height: 138px;
+  }
+
+  .start-panel .class-stage-name strong {
+    font-size: 19px;
+  }
+
+  .start-panel .class-stage-name span {
+    font-size: 7px;
+  }
+
+  .start-panel .class-skill-icons {
+    gap: 4px;
+    margin: 2px 0;
+  }
+
+  .start-panel .skill-glyph {
+    width: 38px;
+    height: 38px;
+  }
+
+  .start-panel .skill-glyph i {
+    width: 32px;
+    height: 32px;
+  }
+
+  .start-panel > .class-stage .stat-stack {
+    margin-top: 3px;
+  }
+
+  .start-panel .stat-row {
+    grid-template-columns: 28px 1fr 28px;
+    gap: 4px;
+    font-size: 7px;
+  }
+
+  .arena-loadout-summary {
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .arena-loadout-summary > header {
+    gap: 2px;
+    padding: 5px 7px;
+  }
+
+  .arena-loadout-summary > header span,
+  .arena-loadout-summary > header small {
+    font-size: 7px;
+  }
+
+  .arena-loadout-summary > header strong {
+    font-size: 15px;
+  }
+
+  .arena-loadout-summary-slots {
+    gap: 5px;
+  }
+
+  .arena-loadout-summary-slot > button {
+    min-height: 94px;
+    gap: 3px;
+    padding: 9px 4px 5px;
+  }
+
+  .arena-loadout-summary-slot .arena-skill-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .arena-loadout-summary-slot > button > b {
+    min-width: 23px;
+    height: 22px;
+    font-size: 8px;
+  }
+
+  .arena-loadout-summary-slot small {
+    font-size: 6px;
+  }
+
+  .arena-loadout-summary-slot strong {
+    font-size: 8px;
+  }
+
+  .arena-loadout-summary > p {
+    align-self: end;
+    margin: 0;
+    font-size: 7px;
+  }
+
+  .arena-configure-skills-button {
+    min-height: 36px;
+    padding: 4px 10px;
+    font-size: 8px;
+  }
+
+  .start-panel > .start-copy {
+    grid-template-columns: minmax(180px, 1fr) minmax(220px, 320px) auto;
+    gap: 7px;
+    align-items: center;
+    padding: 5px 8px;
+    overflow: hidden;
+  }
+
+  .start-panel > .start-copy label {
+    gap: 1px;
+    font-size: 6px;
+  }
+
+  .start-panel > .start-copy input,
+  .start-panel > .start-copy .enter-button,
+  .start-panel > .start-copy .arena-tutorial-button {
+    height: 36px;
+    min-height: 36px;
+  }
+
+  .start-panel > .start-copy .enter-button {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 700px) {
+  .start-panel {
+    left: 10px;
+    top: 10px;
+    width: calc(100vw - 20px);
+    max-height: calc(100dvh - 20px);
+    transform: none;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto minmax(300px, max-content) auto auto;
+    grid-template-areas:
+      "banner"
+      "mode"
+      "classes"
+      "stage"
+      "loadout"
+      "footer";
+  }
+
+  .arena-loadout-banner {
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    gap: 10px;
+  }
+
+  .arena-loadout-banner .start-brand-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+  }
+
+  .arena-loadout-banner .start-brand-logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .arena-loadout-banner h1,
+  .start-panel h1 {
+    font-size: clamp(19px, 5.8vw, 24px);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .arena-loadout-banner .language-switcher {
+    justify-content: center;
+  }
+
+  .arena-loadout-summary-slots {
+    grid-template-columns: 1fr;
+  }
+
+  .arena-loadout-summary {
+    overflow: hidden;
+  }
+
+  .arena-loadout-summary-slot > button {
+    min-height: 76px;
+  }
+
+  .arena-loadout-summary-tooltip,
+  .arena-loadout-summary-tooltip.align-e,
+  .arena-loadout-summary-tooltip.align-r {
+    position: fixed;
+    left: 50%;
+    right: auto;
+    top: 50%;
+    bottom: auto;
+    width: min(360px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
+    transform: translate(-50%, calc(-50% - 4px));
+  }
+
+  .arena-loadout-summary-slot.is-inspecting .arena-loadout-summary-tooltip,
+  .arena-loadout-summary-slot.is-inspecting .arena-loadout-summary-tooltip.align-e {
+    transform: translate(-50%, -50%);
+  }
+
+  .start-panel > .start-copy {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .start-panel > .start-copy .enter-button,
+  .start-panel > .start-copy .arena-tutorial-button {
+    width: 100%;
+  }
+
+  .arena-skill-loadout-screen {
+    left: 8px;
+    top: 8px;
+    width: calc(100vw - 16px);
+    height: calc(100dvh - 16px);
+    transform: none;
+    grid-template-rows:
+      auto
+      minmax(136px, max-content)
+      minmax(1540px, max-content)
+      minmax(96px, max-content);
+  }
+
+  .arena-skill-loadout-header {
+    grid-template-columns: minmax(0, 1fr) 40px;
+    grid-template-areas:
+      "back close"
+      "title title";
+    gap: 8px;
+  }
+
+  .arena-skill-loadout-header > strong {
+    display: none;
+  }
+
+  .arena-loadout-class-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .arena-loadout-class-rail > header {
+    display: none;
+  }
+
+  .arena-loadout-class-rail > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow-x: visible;
+  }
+
+  .arena-skill-preview-dock {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .arena-selected-skill-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .arena-selected-skill-strip > button {
+    min-height: 58px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(217, 157, 62, 0.28);
+  }
+
+  .arena-selected-skill-strip > button:last-child {
+    border-bottom: 0;
+  }
+
+  .arena-skill-icon-group {
+    grid-template-columns: 1fr;
+  }
+
+  .arena-skill-icon-group > header {
+    grid-template-columns: 34px minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+  }
+
+  .arena-skill-icon-group > header > div {
+    justify-items: start;
+  }
+
+  .arena-skill-icon-group > div {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .arena-skill-loadout-footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  .arena-skill-icon-group > div {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.arena-core-turret-choice {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.arena-loadout-core-skill > .arena-core-turret-choice {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.arena-core-turret-choice button {
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid rgba(224, 168, 79, 0.34);
+  background: #24182d;
+  color: #c9baa8;
+}
+
+.arena-core-turret-choice button.is-selected {
+  border-color: #f0b95a;
+  background: #402a34;
+  color: #ffe6a8;
+}

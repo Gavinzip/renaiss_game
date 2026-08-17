@@ -1,4 +1,4 @@
-import { CLASS_META, CLASS_ORDER, CLASS_STATS, WORLD, type ClassId, type PublicPlayer } from "@renaiss-game/shared";
+import { CLASS_META, CLASS_ORDER, CLASS_STATS, WORLD, getEffectiveBasicAttackDamage, type ClassId, type PublicPlayer } from "@renaiss-game/shared";
 import type { CSSProperties } from "react";
 import { useHudStore } from "../state/hudStore";
 import { ClassPortrait } from "./ClassPortrait";
@@ -74,7 +74,7 @@ function ClassSwitchButton({
       <span>
         <strong>{t.classes[classId].label}</strong>
         <small>{t.classes[classId].role}</small>
-        <b>{t.death.hpAtk(stats.maxHealth, stats.attackPower)}</b>
+        <b>{t.death.hpAtk(stats.maxHealth, getEffectiveBasicAttackDamage(classId))}</b>
       </span>
     </button>
   );

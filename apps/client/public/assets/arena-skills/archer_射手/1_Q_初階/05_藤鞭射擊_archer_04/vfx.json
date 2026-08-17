@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_04",
+  "classId": "archer",
+  "name": "隱形",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "server-state-self-only",
+  "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04",
+  "runtime": {
+    "skillId": "archer_04",
+    "classId": "archer",
+    "name": "隱形",
+    "persistent": true,
+    "previewSha256": "170c8617d0e502e2df100c36fde341963c2f2189eeb2378ff7e947ad6db95682",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        48,
+        20
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        48,
+        20
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": false,
+      "fixedDisplay": false,
+      "enabled": false
+    },
+    "contractSource": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/runtime/concealment.json",
+    "acceptedAnimationId": "archer_04:self-concealment-outline:v1",
+    "packagePath": "archer_射手/1_Q_初階/05_藤鞭射擊_archer_04",
+    "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04",
+    "sourceSelection": "server-state-self-only",
+    "previewFile": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "170c8617d0e502e2df100c36fde341963c2f2189eeb2378ff7e947ad6db95682",
+    "iconFile": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/icon.png",
+    "iconFileSha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
+    "fallbackUsed": false,
+    "runtimeMode": "server-state",
+    "statePresentation": {
+      "kind": "concealment",
+      "playerField": "concealmentEndsAt",
+      "position": "self-body",
+      "bodyAlpha": 0.34,
+      "outlineTint": "#c8fff1",
+      "outlineAlpha": [
+        0.305,
+        0.375
+      ],
+      "outlineExpansionPx": 6
+    },
+    "iconSource": {
+      "path": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/source/invisibility-icon-source.png",
+      "sha256": "8b3110728abe461945d25323e0ea885120904f23308af1300e5cca9a840d7be0",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 1,
+      "reason": "accepted Archer core body with the exact self-concealment alpha and outline semantics"
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_04:source-59a7012d95712351:output-170c8617d0e502e2",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_04",
+    "previewSourceSequenceSha256": "59a7012d95712351cdd0411b62d8c1f0b96bac34f8b15068808d74d4a8aff34a",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/preview/gameplay-preview-v1.webm",
+    "sha256": "170c8617d0e502e2df100c36fde341963c2f2189eeb2378ff7e947ad6db95682",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_04:source-59a7012d95712351:output-170c8617d0e502e2",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_04",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.465,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 8.417,
+      "durationSec": 3.952,
+      "file": "random-archer_04-hq.webm",
+      "bytes": 13108992,
+      "sha256": "59a7012d95712351cdd0411b62d8c1f0b96bac34f8b15068808d74d4a8aff34a"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_04-hq.webm",
+    "sourceVideoSha256": "59a7012d95712351cdd0411b62d8c1f0b96bac34f8b15068808d74d4a8aff34a",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.256,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      948,
+      366,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1082,
+      572,
+      1710,
+      665
+    ],
+    "contentMargins": [
+      134,
+      206,
+      134,
+      205
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 117,
+    "totalDurationMs": 3900,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 13108992,
+    "outputBytes": 1288333,
+    "reductionRatio": 0.901721,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/icon.png",
+    "sha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+    "sourceCellSha256": "8b3110728abe461945d25323e0ea885120904f23308af1300e5cca9a840d7be0",
+    "resampling": "nearest-derived-self-concealment"
+  },
+  "provenance": {
+    "originalsDeleted": false,
+    "retiredVineWhip": {
+      "preview": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/evidence/retired-vine-whip/6a9d4361f6cbc406/preview-animation.webp",
+      "previewSha256": "6a9d4361f6cbc4066cf4a497dda1998b5f8c80947278f11117c355f7978268c2",
+      "contract": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/evidence/retired-vine-whip/6a9d4361f6cbc406/vfx.json",
+      "originalsDeleted": false,
+      "activeRuntime": false
+    },
+    "concealmentContract": {
+      "file": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/runtime/concealment.json",
+      "sha256": "9e879ff0b756fbc89b9f18a4930c6f6afe30c05eb7e9b35843268323dd62891f",
+      "runtimePhase": "archer-04-invisibility-20260812-v2",
+      "directRuntimeFrameCount": 40,
+      "acceptedAnimationId": "archer_04:self-concealment-outline:v1",
+      "fallbackUsed": false
+    },
+    "concealmentIcon": {
+      "file": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/icon.png",
+      "sha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
+      "source": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/source/invisibility-icon-source.png",
+      "sourceSha256": "8b3110728abe461945d25323e0ea885120904f23308af1300e5cca9a840d7be0",
+      "acceptedCoreAtlas": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "acceptedCoreAtlasSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "sourceFrameBounds": [
+        63,
+        62,
+        192,
+        224
+      ],
+      "outputBounds": [
+        10,
+        7,
+        56,
+        59
+      ],
+      "transparentSafetyMarginPx": 5,
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

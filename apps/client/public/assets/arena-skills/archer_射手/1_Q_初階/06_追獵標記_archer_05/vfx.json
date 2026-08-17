@@ -1,0 +1,359 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_05",
+  "classId": "archer",
+  "name": "追獵標記",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05",
+  "runtime": {
+    "skillId": "archer_05",
+    "classId": "archer",
+    "name": "追獵標記",
+    "persistent": false,
+    "previewSha256": "7a37d9c722ff2474c880cc2fec7c060edb4461af9e9c13f691de03f7e0b23179",
+    "visualContract": {
+      "anchor": "target",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        36,
+        36
+      ],
+      "referenceOffset": [
+        0,
+        -48
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:26ff455202d5b695",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_追獵標記.gif",
+    "configPreviewSourceSha256": "26ff455202d5b695bbdcb476233bc339f35f58c1de579bcead4e0d5dd2a941f8",
+    "configPreviewOutputSha256": "f33a523a8360ad5ef9e02134b9ad213224e2d2e677b75b9a45ffcbe0268f71c2",
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/primary.png",
+    "frameWidth": 362,
+    "frameHeight": 724,
+    "frameCount": 6,
+    "unionBounds": [
+      121,
+      297,
+      241,
+      418
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/source/primary-source-d0514855e057e4fb.png",
+    "sourceSha256": "d0514855e057e4fb2bb01071b79f7862943ed467c04b50ec363156351f1b7577",
+    "outputSha256": "55cebf9aac51c855dd2dcf8160e5082ceeb48846ecc4e7b33c19df90687173c9",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          128,
+          307,
+          129,
+          316
+        ],
+        [
+          126,
+          306,
+          126,
+          315
+        ],
+        [
+          126,
+          307,
+          127,
+          315
+        ],
+        [
+          123,
+          299,
+          123,
+          308
+        ],
+        [
+          127,
+          305,
+          127,
+          313
+        ],
+        [
+          127,
+          305,
+          127,
+          313
+        ]
+      ]
+    },
+    "semanticVfxAlignment": {
+      "applied": true,
+      "method": "semantic-static-vfx-bbox-centre-translation",
+      "beforeAnchors": [
+        [
+          260,
+          358
+        ],
+        [
+          231,
+          357
+        ],
+        [
+          198,
+          357
+        ],
+        [
+          163,
+          358
+        ],
+        [
+          135,
+          356
+        ],
+        [
+          104,
+          356
+        ]
+      ],
+      "afterAnchor": [
+        180,
+        357
+      ],
+      "frameTranslations": [
+        [
+          -80,
+          -1
+        ],
+        [
+          -51,
+          0
+        ],
+        [
+          -18,
+          0
+        ],
+        [
+          17,
+          -1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          76,
+          1
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_追獵標記.png",
+        "sha256": "d0514855e057e4fb2bb01071b79f7862943ed467c04b50ec363156351f1b7577"
+      }
+    ],
+    "packagePath": "archer_射手/1_Q_初階/06_追獵標記_archer_05",
+    "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "7a37d9c722ff2474c880cc2fec7c060edb4461af9e9c13f691de03f7e0b23179",
+    "iconFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/icon.png",
+    "iconFileSha256": "ea4ffa1e5edf9a6b96d51565d55acaa215f106103999e96a1e09065c0279b36a",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_追獵標記.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/source/primary-source-d0514855e057e4fb.png",
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 8,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "originalSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "sourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "outputSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 1,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 1,
+        "frameDurationsMs": [
+          500
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_05",
+      "acceptedAnimationId": "archer_05:neutral:own-folder-v1:80c9fa8f2a6d185e",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "fallbackUsed": false
+    },
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_05:source-4a25dd4fe77d2618:output-7a37d9c722ff2474",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_05",
+    "previewSourceSequenceSha256": "4a25dd4fe77d26184835c092e10b8c7aa0ed4cd5496d3eaa72865c6ae94d2374",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/preview/gameplay-preview-v1.webm",
+    "sha256": "7a37d9c722ff2474c880cc2fec7c060edb4461af9e9c13f691de03f7e0b23179",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_05:source-4a25dd4fe77d2618:output-7a37d9c722ff2474",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_05",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.115,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 10.77,
+      "durationSec": 6.655,
+      "file": "random-archer_05-hq.webm",
+      "bytes": 11987189,
+      "sha256": "4a25dd4fe77d26184835c092e10b8c7aa0ed4cd5496d3eaa72865c6ae94d2374"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_05-hq.webm",
+    "sourceVideoSha256": "4a25dd4fe77d26184835c092e10b8c7aa0ed4cd5496d3eaa72865c6ae94d2374",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.152,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      836,
+      360,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1082,
+      555,
+      1486,
+      668
+    ],
+    "contentMargins": [
+      246,
+      195,
+      246,
+      196
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 198,
+    "totalDurationMs": 6600,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 11987189,
+    "outputBytes": 720044,
+    "reductionRatio": 0.939932,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/icon.png",
+    "sha256": "ea4ffa1e5edf9a6b96d51565d55acaa215f106103999e96a1e09065c0279b36a",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "9ae92a50083eb4860913c7b6b1d0e4bd5cf0a855531d61eb8f8437143827081b",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_05-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_05.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_05",
+      "acceptedAnimationId": "archer_05:neutral:own-folder-v1:80c9fa8f2a6d185e",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "originalSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "packageSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/body.png",
+      "packageRuntimeSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

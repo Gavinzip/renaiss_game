@@ -1,0 +1,832 @@
+.arena-skill-forge,
+.arena-skill-forge * {
+  box-sizing: border-box;
+}
+
+.arena-skill-forge {
+  --forge-ink: #120b18;
+  --forge-panel: #211426;
+  --forge-panel-soft: #2d1b2e;
+  --forge-gold: #e8b44d;
+  --forge-paper: #f5dfab;
+  position: fixed;
+  inset: 18px;
+  z-index: 160;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  width: min(1480px, calc(100vw - 36px));
+  height: min(940px, calc(100dvh - 36px));
+  margin: auto;
+  overflow: hidden;
+  color: var(--forge-paper);
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
+    radial-gradient(circle at 50% -20%, color-mix(in srgb, var(--class-accent) 20%, transparent), transparent 48%),
+    #150d19;
+  background-size: 8px 8px, 8px 8px, auto, auto;
+  border: 3px solid #09060b;
+  outline: 2px solid #b3732e;
+  box-shadow: 0 0 0 5px #2d1728, 16px 18px 0 rgba(7, 4, 10, .58);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  image-rendering: pixelated;
+}
+
+.arena-skill-forge::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  z-index: -1;
+  border: 1px solid rgba(232, 180, 77, .28);
+  pointer-events: none;
+}
+
+.arena-skill-forge button {
+  font: inherit;
+}
+
+.arena-skill-forge-header {
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, #321b2d, #20121f);
+  border-bottom: 3px solid #09060b;
+  box-shadow: inset 0 -2px #9d642b;
+}
+
+.arena-skill-forge-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: #2b151b;
+  background: var(--forge-gold);
+  border: 3px solid #0c070d;
+  box-shadow: inset -3px -3px #9b5a23, 3px 3px 0 #09060b;
+}
+
+.arena-skill-forge-header > div:nth-child(2) {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.arena-skill-forge-header span,
+.arena-skill-collection-grid > header span {
+  color: var(--forge-gold);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.arena-skill-forge-header h1 {
+  margin: 0;
+  color: #ffe6a5;
+  font-size: clamp(20px, 2vw, 31px);
+  line-height: 1;
+  letter-spacing: .04em;
+  text-shadow: 3px 3px 0 #0c070d;
+}
+
+.arena-skill-forge-header p {
+  max-width: 760px;
+  margin: 0;
+  color: #c7b78e;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.arena-skill-forge-close {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: #d9bd82;
+  background: #1a0f1c;
+  border: 2px solid #70412f;
+  box-shadow: 3px 3px 0 #09060b;
+  cursor: pointer;
+}
+
+.arena-skill-forge-classes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  padding: 8px 10px;
+  background: #0d080f;
+  border-bottom: 2px solid #6f4428;
+}
+
+.arena-skill-forge-classes > button {
+  min-width: 0;
+  height: 58px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  padding: 5px 10px;
+  color: #9f9378;
+  text-align: left;
+  background: #1c111e;
+  border: 2px solid #352034;
+  cursor: pointer;
+}
+
+.arena-skill-forge-classes > button:hover:not(:disabled),
+.arena-skill-forge-classes > button.is-selected {
+  color: #ffe7ab;
+  background: color-mix(in srgb, var(--accent) 16%, #241423);
+  border-color: var(--accent);
+  box-shadow: inset 0 -3px color-mix(in srgb, var(--accent) 68%, #000), 3px 3px 0 #09060b;
+}
+
+.arena-skill-forge-classes .class-portrait {
+  width: 40px;
+  height: 46px;
+  overflow: hidden;
+  filter: drop-shadow(2px 2px 0 #09060b);
+}
+
+.arena-skill-forge-classes > button > span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.arena-skill-forge-classes strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arena-skill-forge-classes small {
+  color: #b88c48;
+  font-size: 9px;
+}
+
+.arena-skill-forge-body {
+  min-height: 0;
+  padding: 10px;
+}
+
+.arena-skill-showcase {
+  min-width: 0;
+  height: 100%;
+  min-height: 330px;
+  overflow: hidden;
+  background: #08070a;
+  border: 2px solid #09060b;
+  box-shadow: inset 0 0 0 1px #5e382e, 4px 4px 0 rgba(6, 3, 8, .6);
+}
+
+.arena-skill-showcase-media {
+  position: relative;
+  container-type: size;
+  width: 100%;
+  height: 100%;
+  min-height: 330px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(232, 180, 77, .04) 1px, transparent 1px),
+    radial-gradient(circle at 50% 48%, #221421, #08070a 72%);
+  background-size: 24px 100%, auto;
+}
+
+.arena-skill-showcase-media > .arena-skill-preview-media {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(100cqw, calc(100cqh * var(--arena-preview-ratio, 1.7777778)));
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+
+.arena-skill-showcase.is-detail .arena-skill-showcase-media {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 30cqw, 360px);
+}
+
+.arena-skill-showcase.is-detail .arena-skill-showcase-media > .arena-skill-preview-media {
+  position: relative;
+  top: auto;
+  left: auto;
+  grid-column: 1;
+  grid-row: 1;
+  place-self: center;
+  width: min(100%, calc(100cqh * var(--arena-preview-ratio, 1.7777778)));
+  transform: none;
+}
+
+.arena-skill-reveal-video {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  opacity: 0;
+  background: #08070a;
+  image-rendering: auto;
+  pointer-events: none;
+}
+
+.arena-skill-showcase.is-video .arena-skill-reveal-video,
+.arena-skill-showcase.is-name .arena-skill-reveal-video {
+  opacity: 1;
+}
+
+.arena-skill-reveal-idle {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 5px;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(232, 180, 77, .14) 50%, transparent 51%),
+    radial-gradient(circle, color-mix(in srgb, var(--class-accent) 28%, #1b1020), #08070b 68%);
+}
+
+.arena-skill-reveal-idle .class-portrait {
+  width: 132px;
+  height: 142px;
+  filter: drop-shadow(5px 6px 0 #09060b);
+}
+
+.arena-skill-reveal-idle span {
+  color: #ffe4a0;
+  font-size: 16px;
+  font-weight: 900;
+  text-shadow: 3px 3px 0 #09060b;
+}
+
+.arena-skill-reveal-idle strong {
+  color: var(--forge-gold);
+  font-size: 11px;
+}
+
+.arena-skill-reveal-idle small {
+  max-width: 420px;
+  margin-top: 7px;
+  color: #8f8069;
+  font-size: 9px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.arena-skill-name-reveal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  z-index: 3;
+  color: #261729;
+  background: rgba(255, 254, 246, .92);
+}
+
+.arena-skill-name-reveal > span {
+  min-height: 1.2em;
+  color: #20121e;
+  font-size: clamp(28px, 4vw, 58px);
+  font-weight: 1000;
+  letter-spacing: .16em;
+  text-shadow: 3px 3px 0 #d7b45f;
+}
+
+.arena-skill-name-reveal > span::after {
+  content: "_";
+  color: #b7792b;
+  animation: forge-cursor 480ms steps(1) infinite;
+}
+
+@keyframes forge-cursor {
+  50% { opacity: 0; }
+}
+
+.tier-basic,
+.tier-intermediate,
+.tier-ultimate {
+  font-weight: 900;
+}
+
+.tier-basic { color: #7ee7a4; }
+.tier-intermediate { color: #73c7ff; }
+.tier-ultimate { color: #ffb85c; }
+
+.arena-skill-name-reveal > strong,
+.arena-skill-showcase-card > header > strong {
+  padding: 5px 9px;
+  color: #20121e;
+  background: #e8b44d;
+  border: 2px solid #20121e;
+  box-shadow: 3px 3px 0 rgba(32, 18, 30, .24);
+}
+
+.arena-skill-name-reveal > strong.tier-basic,
+.arena-skill-showcase-card > header > strong.tier-basic { background: #7ee7a4; }
+.arena-skill-name-reveal > strong.tier-intermediate,
+.arena-skill-showcase-card > header > strong.tier-intermediate { background: #73c7ff; }
+.arena-skill-name-reveal > strong.tier-ultimate,
+.arena-skill-showcase-card > header > strong.tier-ultimate { background: #ffb85c; }
+
+.arena-skill-footer-draw > button,
+.arena-skill-equip-button,
+.arena-skill-footer-nav > button,
+.arena-skill-forge-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 15px;
+  color: #28131b;
+  font-weight: 1000;
+  background: #e5ad43;
+  border: 2px solid #0b070c;
+  box-shadow: inset -3px -3px #9b5b23, 3px 3px 0 #09060b;
+  cursor: pointer;
+}
+
+.arena-start-secondary-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+}
+
+.start-panel > .start-copy .arena-start-secondary-actions > button {
+  min-height: 42px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Isolate the Arena forge from the legacy RPG button atlas applied to every .rpg-layer button. */
+.rpg-layer .arena-skill-forge button:not(.rpg-field-pet) {
+  color: var(--forge-button-color, #d8c18d);
+  background: var(--forge-button-background, #251729);
+  border: var(--forge-button-border, 2px solid #3e2737);
+  border-image: none;
+  box-shadow: var(--forge-button-shadow, 3px 3px 0 #09060b);
+  text-shadow: none;
+  opacity: 1;
+}
+
+.arena-skill-forge-close {
+  --forge-button-color: #d9bd82;
+  --forge-button-background: #1a0f1c;
+  --forge-button-border: 2px solid #70412f;
+}
+
+.arena-skill-forge-classes > button {
+  --forge-button-color: #9f9378;
+  --forge-button-background: #1c111e;
+  --forge-button-border: 2px solid #352034;
+}
+
+.arena-skill-forge-classes > button:hover:not(:disabled),
+.arena-skill-forge-classes > button.is-selected {
+  --forge-button-color: #ffe7ab;
+  --forge-button-background: color-mix(in srgb, var(--accent) 16%, #241423);
+  --forge-button-border: 2px solid var(--accent);
+  --forge-button-shadow: inset 0 -3px color-mix(in srgb, var(--accent) 68%, #000), 3px 3px 0 #09060b;
+}
+
+.arena-skill-footer-draw > button.is-draw,
+.arena-skill-equip-button,
+.arena-skill-footer-nav > button.is-primary {
+  --forge-button-color: #28131b;
+  --forge-button-background: #e5ad43;
+  --forge-button-border: 2px solid #0b070c;
+  --forge-button-shadow: inset -3px -3px #9b5b23, 3px 3px 0 #09060b;
+}
+
+.arena-skill-footer-draw {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+}
+
+.arena-skill-footer-draw > button {
+  min-height: 36px;
+  padding: 6px 10px;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.arena-skill-footer-draw > button.is-draw small {
+  min-width: 34px;
+  padding-left: 7px;
+  color: rgba(40, 19, 27, .72);
+  border-left: 1px solid rgba(40, 19, 27, .3);
+  font-size: 8px;
+}
+
+.rpg-layer .arena-skill-footer-draw > button.is-demo {
+  --forge-button-color: #ffe8a8;
+  --forge-button-background: #4a294f;
+  --forge-button-border: 2px solid #d7a94a;
+  --forge-button-shadow: inset -3px -3px #25132a, 3px 3px 0 #09060b;
+  --forge-button-hover-shadow: inset -3px -3px #25132a, 5px 5px 0 #09060b;
+}
+
+.arena-skill-collection-tier button {
+  --forge-button-color: #d8c18d;
+  --forge-button-background: #251629;
+  --forge-button-border: 1px solid #5d3d42;
+}
+
+.arena-skill-collection-tier button.is-locked {
+  --forge-button-color: #594d50;
+  --forge-button-background: #130d16;
+  --forge-button-border: 1px solid #2b202a;
+}
+
+.arena-skill-collection-tier button.is-equipped {
+  --forge-button-color: #fff0bd;
+  --forge-button-background: #3a2930;
+  --forge-button-border: 2px solid #e8b44d;
+  --forge-button-shadow: inset 0 0 0 1px #7ee7a4, 3px 3px 0 #09060b;
+}
+
+.arena-skill-equip-button.is-equipped {
+  --forge-button-color: #102014;
+  --forge-button-background: #7ee7a4;
+  --forge-button-border: 2px solid #0b160e;
+  --forge-button-shadow: inset -3px -3px #3d9c65, 3px 3px 0 #09060b;
+  --forge-button-hover-shadow: inset -3px -3px #3d9c65, 5px 5px 0 #09060b;
+}
+
+.arena-skill-footer-nav > button {
+  --forge-button-color: #c5ae83;
+  --forge-button-background: #251729;
+  --forge-button-border: 2px solid #0b070c;
+  --forge-button-shadow: inset -3px -3px #120b16, 3px 3px 0 #09060b;
+}
+
+.arena-skill-footer-draw > button:hover:not(:disabled),
+.arena-skill-equip-button:hover,
+.arena-skill-footer-nav > button:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  filter: brightness(1.08);
+  box-shadow: var(--forge-button-hover-shadow, inset -3px -3px #9b5b23, 5px 5px 0 #09060b);
+}
+
+.arena-skill-forge button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(.65) brightness(.58);
+}
+
+.arena-skill-forge-message {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 4px 8px;
+  color: #f2d59d;
+  background: rgba(22, 13, 25, .72);
+  border-left: 3px solid #b47734;
+  font-size: 8px;
+}
+
+.arena-skill-forge-message.is-error { border-color: #e35e62; }
+.arena-skill-forge-message.is-success { border-color: #7ee7a4; color: #b9f3cd; }
+.arena-skill-forge-message small { color: #a98e7c; }
+
+.arena-skill-showcase-card {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  margin: 12px;
+  z-index: 3;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 11px;
+  overflow: auto;
+  background: linear-gradient(90deg, rgba(24, 13, 27, .97), rgba(33, 20, 38, .93));
+  border: 2px solid #09060b;
+  outline: 1px solid rgba(178, 111, 48, .72);
+  box-shadow: 5px 5px 0 rgba(6, 3, 8, .68);
+}
+
+.arena-skill-showcase-card > header {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.arena-skill-showcase-card .arena-skill-icon {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #ad7134;
+  box-shadow: 3px 3px 0 #09060b;
+}
+
+.arena-skill-showcase-card > header > div {
+  display: grid;
+  gap: 3px;
+}
+
+.arena-skill-showcase-card > header small { color: #b78e50; font-size: 9px; }
+.arena-skill-showcase-card h2 { margin: 0; color: #ffe3a1; font-size: 20px; text-shadow: 2px 2px #09060b; }
+.arena-skill-showcase-card > header > strong { padding: 4px 8px; font-size: 9px; }
+.arena-skill-showcase-card > p { margin: 0; color: #d0c099; font-size: 9px; line-height: 1.5; }
+
+.arena-skill-showcase-actions {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 9px;
+}
+
+.arena-skill-showcase-actions dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: #0b070d;
+  border: 1px solid #0b070d;
+}
+
+.arena-skill-showcase-actions dl > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  background: #1a101d;
+}
+
+.arena-skill-showcase-actions dt { color: #9f8c6d; font-size: 8px; }
+.arena-skill-showcase-actions dd { margin: 0; overflow: hidden; color: #f3d58f; font-size: 9px; text-overflow: ellipsis; }
+.arena-skill-equip-button { width: 100%; min-height: 36px; font-size: 10px; }
+
+.arena-skill-collection-grid {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 10px;
+  padding: 8px 10px 10px;
+  background: #100a13;
+  border-top: 2px solid #70432a;
+}
+
+.arena-skill-collection-grid > header {
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  padding: 6px;
+}
+
+.arena-skill-collection-grid > header strong { color: #f4d38c; font-size: 13px; }
+.arena-skill-collection-grid > div { min-width: 0; display: grid; grid-template-columns: 7fr 5fr 3fr; gap: 8px; }
+
+.arena-skill-collection-tier {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 5px;
+  padding: 5px;
+  background: #1a101c;
+  border: 1px solid #3e2737;
+}
+
+.arena-skill-collection-tier > header {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+}
+
+.arena-skill-collection-tier-label { display: grid; gap: 2px; }
+.arena-skill-collection-tier > header strong { font-size: 9px; }
+.arena-skill-collection-tier > header small { color: #8e7964; font-size: 8px; }
+.arena-skill-equipped-summary {
+  min-width: 0;
+  height: 26px;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  color: #6f6264;
+  background: #100b12;
+  border: 1px solid #30222d;
+}
+
+.arena-skill-equipped-summary.has-skill {
+  grid-template-columns: 20px 12px minmax(0, 1fr);
+  color: #ffe2a0;
+  background: #2b1c26;
+  border-color: #b77a39;
+  box-shadow: inset 2px 0 var(--forge-gold);
+}
+
+.arena-skill-equipped-summary > span {
+  display: grid;
+  place-items: center;
+  height: 18px;
+  color: #1b1018;
+  background: #9d865a;
+  font-size: 8px;
+  font-weight: 1000;
+  border: 1px solid #09060b;
+}
+
+.arena-skill-equipped-summary.has-skill > span { background: var(--forge-gold); }
+.arena-skill-equipped-summary > svg { color: #7ee7a4; filter: drop-shadow(1px 1px #09060b); }
+.arena-skill-equipped-summary > em {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 8px;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arena-skill-collection-tier > div { min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(54px, 1fr)); gap: 4px; }
+
+.arena-skill-collection-tier button {
+  position: relative;
+  min-width: 0;
+  height: 43px;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  color: #d8c18d;
+  text-align: left;
+  background: #251629;
+  border: 1px solid #5d3d42;
+  cursor: pointer;
+}
+
+.arena-skill-collection-tier button:hover:not(:disabled) { border-color: var(--forge-gold); background: #322033; }
+.arena-skill-collection-tier button.is-locked { grid-template-columns: 1fr; justify-items: center; color: #594d50; background: #130d16; border-color: #2b202a; }
+.arena-skill-collection-tier button.is-locked span { display: none; }
+.arena-skill-collection-tier .arena-skill-icon { width: 29px; height: 29px; }
+.arena-skill-collection-tier button > span:not(.arena-skill-equipped-badge) { overflow: hidden; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+
+.arena-skill-collection-tier .arena-skill-equipped-badge {
+  position: absolute;
+  top: -5px;
+  right: -4px;
+  z-index: 2;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  color: #102014;
+  background: #7ee7a4;
+  border: 2px solid #09060b;
+  box-shadow: 2px 2px 0 rgba(6, 3, 8, .72);
+  font-size: 7px;
+}
+
+.arena-skill-equipped-badge b { font-size: 7px; }
+
+.arena-skill-forge-footer {
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #1a101b;
+  border-top: 2px solid #09060b;
+}
+
+.arena-skill-footer-notices {
+  min-width: 0;
+  max-height: 42px;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  overflow: auto;
+}
+
+.arena-skill-footer-nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.arena-skill-footer-nav > button { min-height: 34px; color: #c5ae83; background: #251729; box-shadow: inset -3px -3px #120b16, 3px 3px 0 #09060b; font-size: 10px; }
+.arena-skill-footer-nav > button.is-primary { color: #28131b; background: #e5ad43; box-shadow: inset -3px -3px #9b5b23, 3px 3px 0 #09060b; }
+
+.arena-skill-icon-group button.is-locked {
+  opacity: .54;
+  color: #685d65;
+  background: #171019;
+}
+
+.arena-skill-locked-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: #6f5e67;
+  background: #100b12;
+  border: 1px solid #3a2b36;
+}
+
+.arena-skill-forge-link {
+  min-height: 34px;
+  color: #e5ca8e;
+  background: #26162a;
+  box-shadow: inset -3px -3px #120b16, 3px 3px 0 #09060b;
+  font-size: 9px;
+}
+
+@media (max-width: 980px), (max-height: 720px) {
+  .arena-skill-forge {
+    inset: 8px;
+    width: calc(100vw - 16px);
+    height: calc(100dvh - 16px);
+    overflow-y: auto;
+    grid-template-rows: auto auto auto auto auto;
+  }
+
+  .arena-skill-forge-header { min-height: 72px; padding: 10px 12px; }
+  .arena-skill-forge-header p { display: none; }
+  .arena-skill-forge-body { min-height: 420px; }
+  .arena-skill-forge-classes > button { grid-template-columns: 1fr; justify-items: center; height: 52px; padding: 4px; text-align: center; }
+  .arena-skill-forge-classes .class-portrait { display: none; }
+  .arena-skill-collection-grid { grid-template-columns: 1fr; }
+  .arena-skill-collection-grid > header { grid-template-columns: 1fr auto; }
+}
+
+@media (min-width: 981px) and (max-height: 720px) {
+  .arena-skill-forge-classes > button {
+    grid-template-columns: 42px minmax(0, 1fr);
+    justify-items: stretch;
+    text-align: left;
+  }
+
+  .arena-skill-forge-classes .class-portrait {
+    display: block;
+    width: 36px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 720px) {
+  .arena-skill-forge { inset: 0; width: 100vw; height: 100dvh; outline: 0; border-width: 0; box-shadow: none; }
+  .arena-skill-forge-header { grid-template-columns: 36px minmax(0, 1fr) 36px; gap: 8px; }
+  .arena-skill-forge-mark, .arena-skill-forge-close { width: 34px; height: 34px; }
+  .arena-skill-forge-header h1 { font-size: 18px; }
+  .arena-skill-forge-body { min-height: 470px; }
+  .arena-skill-showcase,
+  .arena-skill-showcase-media { min-height: 450px; }
+  .arena-skill-showcase.is-detail .arena-skill-showcase-media { display: block; }
+  .arena-skill-showcase.is-detail .arena-skill-showcase-media > .arena-skill-preview-media {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(100cqw, calc(100cqh * var(--arena-preview-ratio, 1.7777778)));
+    transform: translate(-50%, -50%);
+  }
+  .arena-skill-showcase-card {
+    position: absolute;
+    top: auto;
+    right: 7px;
+    bottom: 7px;
+    left: 7px;
+    width: auto;
+    max-height: 48%;
+    margin: 0;
+  }
+  .arena-skill-showcase-actions { grid-template-columns: 1fr; }
+  .arena-skill-equip-button { justify-self: start; }
+  .arena-skill-collection-grid > div { grid-template-columns: 1fr; }
+  .arena-skill-collection-tier { grid-template-columns: 1fr; }
+  .arena-skill-forge-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 4;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .arena-skill-footer-draw { min-width: 0; }
+  .arena-skill-footer-draw > button { min-width: 0; padding: 6px 8px; }
+  .arena-skill-footer-draw > button.is-demo span { display: none; }
+  .arena-skill-footer-notices { grid-column: 1 / -1; grid-row: 2; }
+  .arena-skill-footer-nav { grid-column: 2; grid-row: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arena-skill-name-reveal > span::after { animation: none; }
+  .arena-skill-forge button { transition: none !important; }
+}

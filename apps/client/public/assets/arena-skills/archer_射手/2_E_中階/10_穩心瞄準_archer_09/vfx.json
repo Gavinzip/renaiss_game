@@ -1,0 +1,346 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_09",
+  "classId": "archer",
+  "name": "穩心瞄準",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09",
+  "runtime": {
+    "skillId": "archer_09",
+    "classId": "archer",
+    "name": "穩心瞄準",
+    "persistent": false,
+    "previewSha256": "e429367d92a852eb5dc4934dd658fe8aea81fdde4866c327c0ad0ff6491da531",
+    "visualContract": {
+      "anchor": "owner",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        44,
+        44
+      ],
+      "referenceOffset": [
+        21,
+        -45
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:11e19bc8f0f060e8",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_穩心瞄準.gif",
+    "configPreviewSourceSha256": "11e19bc8f0f060e863e6cb26b64794c64a6f4fbadaffa5d172a15cb9218b1f09",
+    "configPreviewOutputSha256": "9a742efba8b51895de3fe3d6bf2a57b95357c39ecc3b57c7bd9a0163353a2836",
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      1,
+      10,
+      165,
+      165
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/source/primary-source-0a78b178dbb4f54f.png",
+    "sourceSha256": "0a78b178dbb4f54f2860c27d40ac43bcc940020603bd99fdc1f63f91523f594c",
+    "outputSha256": "803b718b6701a5dc94ea7f4e5ca69c146c9ccd17156f32f0a3ed5742db348963",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      650,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": true,
+      "method": "nearest-full-frame-containment",
+      "scale": 0.9757575757575757,
+      "preserveBottomGroundLine": false,
+      "beforeEdgeMargins": [
+        [
+          1,
+          118,
+          0,
+          0
+        ],
+        [
+          6,
+          10,
+          6,
+          0
+        ],
+        [
+          5,
+          13,
+          6,
+          0
+        ],
+        [
+          5,
+          12,
+          5,
+          0
+        ],
+        [
+          5,
+          11,
+          6,
+          0
+        ],
+        [
+          10,
+          21,
+          12,
+          0
+        ]
+      ],
+      "afterEdgeMargins": [
+        [
+          3,
+          117,
+          2,
+          2
+        ],
+        [
+          8,
+          12,
+          8,
+          2
+        ],
+        [
+          7,
+          15,
+          8,
+          2
+        ],
+        [
+          7,
+          14,
+          7,
+          2
+        ],
+        [
+          7,
+          13,
+          8,
+          2
+        ],
+        [
+          12,
+          22,
+          14,
+          2
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_穩心瞄準.png",
+        "sha256": "0a78b178dbb4f54f2860c27d40ac43bcc940020603bd99fdc1f63f91523f594c"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_穩心瞄準-action.png",
+        "sha256": "c5fda6c09961ecf57b24e6f8ff25a1dd5e82d4dfe4c4bfbcbfce25ec0de27dbe"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 8,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/source/body-source-accepted-current-archer-standing-full-draw-8dir-v1-8e2c0a981d9a0574.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/source/body-source-accepted-current-archer-standing-full-draw-8dir-v1-8e2c0a981d9a0574.png",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/standing-full-draw-8dir.png",
+      "originalSourceSha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "sourceSha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "outputSha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 1,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 1,
+        "frameDurationsMs": [
+          500
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_09",
+      "acceptedAnimationId": "archer_09:standing-full-draw:own-folder-v1:8e2c0a981d9a0574",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "fallbackUsed": false
+    },
+    "packagePath": "archer_射手/2_E_中階/10_穩心瞄準_archer_09",
+    "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "e429367d92a852eb5dc4934dd658fe8aea81fdde4866c327c0ad0ff6491da531",
+    "iconFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/icon.png",
+    "iconFileSha256": "bbca43007a44e9e44124bfc314b27b38eb8a0f25928c92b607a5dc858ddfb5bd",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_穩心瞄準.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/source/primary-source-0a78b178dbb4f54f.png",
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_09:source-5cebf9b7e33621ea:output-e429367d92a852eb",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_09",
+    "previewSourceSequenceSha256": "5cebf9b7e33621eaa77cc799ee0d122daa00d4e8228699f078d88210468208d9",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/preview/gameplay-preview-v1.webm",
+    "sha256": "e429367d92a852eb5dc4934dd658fe8aea81fdde4866c327c0ad0ff6491da531",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_09:source-5cebf9b7e33621ea:output-e429367d92a852eb",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_09",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.186,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 13.549,
+      "durationSec": 9.363,
+      "file": "random-archer_09-hq.webm",
+      "bytes": 25548461,
+      "sha256": "5cebf9b7e33621eaa77cc799ee0d122daa00d4e8228699f078d88210468208d9"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_09-hq.webm",
+    "sourceVideoSha256": "5cebf9b7e33621eaa77cc799ee0d122daa00d4e8228699f078d88210468208d9",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.043,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      880,
+      434,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1053,
+      544,
+      1602,
+      827
+    ],
+    "contentMargins": [
+      173,
+      110,
+      174,
+      111
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 279,
+    "totalDurationMs": 9300,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 25548461,
+    "outputBytes": 2955751,
+    "reductionRatio": 0.884308,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/icon.png",
+    "sha256": "bbca43007a44e9e44124bfc314b27b38eb8a0f25928c92b607a5dc858ddfb5bd",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "8460c3f31a24c1d2105cd34d0197a3bf0268ff32ea45eaf352154c84fe7ce689",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_09-vfx.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_09-body.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_09.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_09",
+      "acceptedAnimationId": "archer_09:standing-full-draw:own-folder-v1:8e2c0a981d9a0574",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/standing-full-draw-8dir.png",
+      "originalSourceSha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/source/body-source-accepted-current-archer-standing-full-draw-8dir-v1-8e2c0a981d9a0574.png",
+      "packageSourceSha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/body.png",
+      "packageRuntimeSha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

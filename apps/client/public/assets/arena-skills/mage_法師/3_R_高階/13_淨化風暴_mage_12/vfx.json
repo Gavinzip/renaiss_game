@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_12",
+  "classId": "mage",
+  "name": "淨化風暴",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12",
+  "runtime": {
+    "skillId": "mage_12",
+    "classId": "mage",
+    "name": "淨化風暴",
+    "persistent": false,
+    "previewSha256": "95537e1887201db290f8fe6181b972e90dc21ec92a86820472c308815b97b392",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:5491f8bbe8b3607f",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-高等-淨化風暴.gif",
+    "configPreviewSourceSha256": "5491f8bbe8b3607fa4a50646a029b607dbb5929ee14fac2778c5ea1b7f74019e",
+    "configPreviewOutputSha256": "9e301927001ab7198c10a855a9dd7a1b54f66c84b705e50d2aca5168ee5f2b63",
+    "file": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      7,
+      32,
+      157,
+      143
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png",
+    "sourceSha256": "708ce416ac2b8ac2f285d592d9333398b4df134c78c76e0fffefcec029e9b04a",
+    "outputSha256": "8075b63523b61a9671eba5b479e362b05f711bbf077d3e56bb6fd544e2ccbeec",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          9,
+          39,
+          10,
+          29
+        ],
+        [
+          9,
+          36,
+          10,
+          26
+        ],
+        [
+          9,
+          36,
+          10,
+          26
+        ],
+        [
+          9,
+          34,
+          10,
+          24
+        ],
+        [
+          9,
+          40,
+          10,
+          31
+        ],
+        [
+          10,
+          37,
+          10,
+          28
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png",
+        "sha256": "708ce416ac2b8ac2f285d592d9333398b4df134c78c76e0fffefcec029e9b04a"
+      }
+    ],
+    "packagePath": "mage_法師/3_R_高階/13_淨化風暴_mage_12",
+    "packageUrl": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "95537e1887201db290f8fe6181b972e90dc21ec92a86820472c308815b97b392",
+    "iconFile": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/icon.png",
+    "iconFileSha256": "7774710d5e9ed33518658dfc7ad3d1dc8388afe008d9676645e60b6c1cfbee29",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_12:source-5da058eea43b5d12:output-95537e1887201db2",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_12",
+    "previewSourceSequenceSha256": "5da058eea43b5d12ee96424c2f3a92cf5a514a19dc6bff121bdfa28076401520",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.025,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/preview/gameplay-preview-v1.webm",
+    "sha256": "95537e1887201db290f8fe6181b972e90dc21ec92a86820472c308815b97b392",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_12:source-5da058eea43b5d12:output-95537e1887201db2",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_12",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.077,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.041,
+      "durationSec": 3.964,
+      "file": "random-mage_12-hq.webm",
+      "bytes": 9687024,
+      "sha256": "5da058eea43b5d12ee96424c2f3a92cf5a514a19dc6bff121bdfa28076401520"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_12-hq.webm",
+    "sourceVideoSha256": "5da058eea43b5d12ee96424c2f3a92cf5a514a19dc6bff121bdfa28076401520",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.051,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      842,
+      381,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1075,
+      539,
+      1506,
+      727
+    ],
+    "contentMargins": [
+      233,
+      158,
+      232,
+      158
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.025,
+    "frameCount": 118,
+    "totalDurationMs": 3930,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 9687024,
+    "outputBytes": 737361,
+    "reductionRatio": 0.923882,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/icon.png",
+    "sha256": "7774710d5e9ed33518658dfc7ad3d1dc8388afe008d9676645e60b6c1cfbee29",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "ff5fd8a0111275854b6b17637739dedb226be41918b88f9ba1a3b4a21af6dec5",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_12.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

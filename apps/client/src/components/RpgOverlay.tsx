@@ -23,6 +23,7 @@ import {
 import type { CSSProperties, RefObject } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { ClassPortrait } from "./ClassPortrait";
+import { ArenaSkillDrawShop } from "./ArenaSkillDrawShop";
 import { RpgBattleVfx, buildBattleReplaySequence, floatingEntriesForPet, type RpgBattleFloatingEntry, type RpgBattleReplay } from "./RpgBattleVfx";
 import { RpgPetSprite } from "./RpgPetSprite";
 import { RpgPixelCardImage } from "./RpgPixelCardImage";
@@ -32,6 +33,7 @@ import { GymTutorialModal, useFirstRunTutorial } from "./RpgTutorial";
 import { RpgOnboardingGuide } from "./RpgOnboardingGuide";
 import { RPG_DEFAULT_WALLET_ADDRESS, type RpgWalletCard } from "../api/rpgWalletCards";
 import { staticAssetUrl } from "../game/assets/staticAssets";
+import { playGameUiSound } from "../audio/gameUiSounds";
 import { RPG_MAX_EQUIPPED_MOVES, useRpgStore, type RpgDrawHistoryEntry, type RpgVersusConnection, type RpgVersusRoomStatus } from "../state/rpgStore";
 import { ARENA_LANGUAGES, useArenaI18n } from "../i18n/arena";
 import {
@@ -108,23 +110,47 @@ export function RpgOverlay() {
   const { language } = useArenaI18n();
   const copy = RPG_TEXT[language].profile;
   const screen = useRpgStore((state) => state.screen);
-  const activeLocation = useRpgStore((state) => state.activeLocation);
   const nearPlace = useRpgStore((state) => state.nearPlace);
   const playerName = useRpgStore((state) => state.playerName);
+  const openShop = useRpgStore((state) => state.openShop);
   const openProfile = useRpgStore((state) => state.openProfile);
   const openBag = useRpgStore((state) => state.openBag);
-  const openGym = useRpgStore((state) => state.openGym);
   const openArena = useRpgStore((state) => state.openArena);
   const closePanel = useRpgStore((state) => state.closePanel);
   const exitHouse = useRpgStore((state) => state.exitHouse);
   const inBattle = screen === "battle";
-  const returnHome = activeLocation === "house" ? exitHouse : closePanel;
+  const skillShopLabel = copy.skillForge;
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("skillShop") === "1") openShop();
+  }, [openShop]);
+
+  const closeSkillShop = () => {
+    playGameUiSound("close");
+    const url = new URL(window.location.href);
+    url.searchParams.delete("skillShop");
+    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    closePanel();
+  };
+  const openSkillShop = () => {
+    playGameUiSound("open");
+    openShop();
+  };
+  const openArenaScreen = () => {
+    playGameUiSound("forward");
+    openArena();
+  };
   const openNearPlace = () => {
-    if (nearPlace === "shop" || nearPlace === "cabinet") openBag();
-    if (nearPlace === "gym") openGym();
-    if (nearPlace === "arena") openArena();
-    if (nearPlace === "house") useRpgStore.getState().enterHouse();
-    if (nearPlace === "houseExit") exitHouse();
+    if (nearPlace === "shop") openSkillShop();
+    if (nearPlace === "cabinet") {
+      playGameUiSound("open");
+      openBag();
+    }
+    if (nearPlace === "arena") openArenaScreen();
+    if (nearPlace === "houseExit") {
+      playGameUiSound("back");
+      exitHouse();
+    }
   };
 
   return (
@@ -140,16 +166,10 @@ export function RpgOverlay() {
           </button>
 
           <nav className="rpg-top-nav" aria-label={copy.navLabel}>
-            <button type="button" title={copy.village} aria-label={copy.village} onClick={returnHome}>
-              <HouseLine size={24} weight="fill" />
+            <button type="button" className={screen === "shop" ? "is-active" : ""} title={skillShopLabel} aria-label={skillShopLabel} onClick={openSkillShop}>
+              <Storefront size={24} weight="fill" />
             </button>
-            <button type="button" className={screen === "bag" ? "is-active" : ""} title={copy.cards} aria-label={copy.cards} onClick={openBag}>
-              <Cards size={24} weight="fill" />
-            </button>
-            <button type="button" className={screen === "gym" ? "is-active" : ""} title={copy.gym} aria-label={copy.gym} data-rpg-guide-target="gym-nav" onClick={openGym}>
-              <FlagBanner size={24} weight="fill" />
-            </button>
-            <button type="button" title={copy.arena} aria-label={copy.arena} data-rpg-guide-target="arena-nav" onClick={openArena}>
+            <button type="button" title={copy.arena} aria-label={copy.arena} data-rpg-guide-target="arena-nav" onClick={openArenaScreen}>
               <Sword size={24} weight="fill" />
             </button>
           </nav>
@@ -158,8 +178,8 @@ export function RpgOverlay() {
 
       {nearPlace && screen === "village" ? (
         <button className="rpg-interact-prompt" type="button" onClick={openNearPlace}>
-          {nearPlace === "shop" ? <Storefront size={18} weight="fill" /> : nearPlace === "gym" ? <FlagBanner size={18} weight="fill" /> : nearPlace === "house" ? <HouseLine size={18} weight="fill" /> : <Sword size={18} weight="fill" />}
-          <span>{nearPlace === "shop" ? copy.cardBag : nearPlace === "gym" ? copy.gym : nearPlace === "house" ? copy.house : copy.arena}</span>
+          {nearPlace === "shop" ? <Storefront size={18} weight="fill" /> : <Sword size={18} weight="fill" />}
+          <span>{nearPlace === "shop" ? skillShopLabel : copy.arena}</span>
           <kbd>E</kbd>
         </button>
       ) : null}
@@ -173,7 +193,8 @@ export function RpgOverlay() {
       ) : null}
 
       {screen === "profile" ? <ProfileHomePanel /> : null}
-      {screen === "bag" || screen === "shop" ? <ProfilePanel /> : null}
+      {screen === "bag" ? <ProfilePanel /> : null}
+      {screen === "shop" ? <ArenaSkillDrawShop onClose={closeSkillShop} /> : null}
       {screen === "gym" ? <GymPanel /> : null}
       {screen === "battle" ? <BattlePanel /> : null}
       <RpgOnboardingGuide />
@@ -186,7 +207,10 @@ function PanelCloseButton() {
   const { language } = useArenaI18n();
   const copy = RPG_TEXT[language].common;
   return (
-    <button className="rpg-panel-close" type="button" title={copy.close} aria-label={copy.close} onClick={closePanel}>
+    <button className="rpg-panel-close" type="button" title={copy.close} aria-label={copy.close} onClick={() => {
+      playGameUiSound("close");
+      closePanel();
+    }}>
       <X size={18} weight="bold" />
     </button>
   );
@@ -196,8 +220,7 @@ function ProfileHomePanel() {
   const playerName = useRpgStore((state) => state.playerName);
   const setPlayerName = useRpgStore((state) => state.setPlayerName);
   const walletAddress = useRpgStore((state) => state.walletAddress);
-  const openBag = useRpgStore((state) => state.openBag);
-  const openGym = useRpgStore((state) => state.openGym);
+  const openShop = useRpgStore((state) => state.openShop);
   const openArena = useRpgStore((state) => state.openArena);
   const { language, setLanguage } = useArenaI18n();
   const copy = RPG_TEXT[language].profile;
@@ -257,15 +280,10 @@ function ProfileHomePanel() {
           <span>{copy.entryHint}</span>
         </header>
         <div className="rpg-profile-entry-grid">
-          <button type="button" onClick={openBag}>
-            <Cards size={24} weight="fill" />
-            <strong>{copy.cabinet}</strong>
-            <span>{copy.cabinetHint}</span>
-          </button>
-          <button type="button" onClick={openGym}>
-            <FlagBanner size={24} weight="fill" />
-            <strong>{copy.gym}</strong>
-            <span>{copy.gymHint}</span>
+          <button type="button" onClick={openShop}>
+            <Storefront size={24} weight="fill" />
+            <strong>{copy.skillForge}</strong>
+            <span>{copy.skillForgeHint}</span>
           </button>
           <button type="button" onClick={openArena}>
             <Sword size={24} weight="fill" />
@@ -1546,7 +1564,7 @@ function PartySelection({
             <button
               key={pet.id}
               type="button"
-              className={selected ? "is-selected" : ""}
+              className={[selected ? "is-selected" : "", editingPetId === pet.id ? "is-editing" : ""].filter(Boolean).join(" ")}
               data-pet-id={pet.id}
               onClick={() => {
                 if (selected && onEditPet) {
@@ -1560,7 +1578,7 @@ function PartySelection({
               <RpgPetSprite element={pet.element} pose="idle" animate />
               <span>{rpgElementLabel(pet.element, language)}</span>
               <strong>{petName}</strong>
-              <em>{editingPetId === pet.id ? copy.editSlots : selected ? copy.formationSlots[selectedIndex]?.label ?? copy.fieldSlot(selectedIndex) : copy.standby}</em>
+              <em>{selected ? copy.formationSlots[selectedIndex]?.label ?? copy.fieldSlot(selectedIndex) : copy.standby}</em>
             </button>
           );
         })}

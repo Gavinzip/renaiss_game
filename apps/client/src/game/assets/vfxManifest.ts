@@ -1,4 +1,9 @@
-import type { ClassId, EffectState } from "@renaiss-game/shared";
+import {
+  getArenaSkillSpec,
+  type ArenaCatalogSkillId,
+  type ClassId,
+  type EffectState
+} from "@renaiss-game/shared";
 import {
   ABILITY_VFX_FRAME_COUNT,
   COMBAT_VFX_FRAME_COUNT,
@@ -7,22 +12,42 @@ import {
   getAbilityVfxFrameTexture,
   getCombatVfxFrameTexture,
   getEngineerVfxFrameTexture,
+  getMageFieldVfxFrameTexture,
   getMageVfxFrameTexture,
   getVfxFrameTexture,
   getWarriorArcherVfxFrameTexture,
   getWarriorVerdictVfxFrameTexture,
   MAGE_VFX_FRAME_COUNT,
+  MAGE_FIELD_VFX_FRAME_COUNT,
   VFX_FRAME_COUNT,
   WARRIOR_ARCHER_VFX_FRAME_COUNT,
   WARRIOR_VERDICT_VFX_FRAME_COUNT,
   type AbilityVfxKey,
   type CombatVfxKey,
   type EngineerVfxKey,
+  type MageFieldVfxKey,
   type MageVfxKey,
   type WarriorVerdictVfxKey,
   type WarriorArcherVfxKey,
   type VfxKey
 } from "./crops";
+import {
+  ARENA_RUNTIME_ACTOR_DISPLAY_HEIGHT,
+  getArenaSkillRuntimeEntry,
+  getArenaSkillRuntimeFrameAtEffectElapsed,
+  getArenaSkillRuntimeFrameAtElapsed,
+  getArenaSkillRuntimeFrameAtProgress,
+  getArenaSkillRuntimeFrameTexture,
+  getArenaSkillRuntimeOrigin,
+  getArenaSkillRuntimeReferenceDisplay,
+  getArenaSkillRuntimeSecondaryFrameTexture,
+  getArenaSkillRuntimeVisualContract,
+  hasArenaSkillRuntimeFrames,
+  getEngineerCoreFrameAtProgress,
+  getEngineerCoreFrameTexture,
+  getEngineerCoreRuntimeAsset,
+  type ArenaSkillRuntimePathCore
+} from "./arenaSkillRuntime";
 
 export interface VfxDisplaySpec {
   width: number;
@@ -43,10 +68,19 @@ interface BaseVfxSpec {
   fadeIn?: number;
   fadeOut?: number;
   scaleCurve?: (progress: number) => number;
+  alphaCurve?: (progress: number) => number;
+  offset?: { x: number; y: number };
+  loopFrameMs?: number;
+  loopMode?: "repeat" | "pingpong";
+  pathCore?: ArenaSkillRuntimePathCore;
   display: (effect: EffectState, progress: number) => VfxDisplaySpec;
 }
 
 export type RenderVfxSpec =
+  | (BaseVfxSpec & {
+      source: "catalog";
+      key: ArenaCatalogSkillId;
+    })
   | (BaseVfxSpec & {
       source: "standard";
       key: VfxKey;
@@ -72,9 +106,62 @@ export type RenderVfxSpec =
       key: EngineerVfxKey;
     })
   | (BaseVfxSpec & {
+      source: "engineerCore";
+      key: "deployMechanical" | "deployMagic";
+    })
+  | (BaseVfxSpec & {
       source: "mage";
       key: MageVfxKey;
+    })
+  | (BaseVfxSpec & {
+      source: "mageField";
+      key: MageFieldVfxKey;
     });
+
+const LEGACY_EFFECT_CATALOG_RUNTIME = {
+  beam: "mage_00",
+  burst: "mage_07",
+  mage_miasma_field: "mage_08",
+  ultimate: "mage_12"
+} as const satisfies Partial<Record<EffectState["type"], ArenaCatalogSkillId>>;
+
+function getArenaCatalogRuntimeSkillId(
+  effect: EffectState
+): ArenaCatalogSkillId | null {
+  if (effect.type === "catalog_skill") {
+    if (!effect.skillId) {
+      throw new Error("Arena catalog effect is missing its skillId");
+    }
+    return effect.skillId;
+  }
+
+  const expected = LEGACY_EFFECT_CATALOG_RUNTIME[
+      effect.type as keyof typeof LEGACY_EFFECT_CATALOG_RUNTIME
+    ];
+  const isCatalogLegacyEffect =
+    effect.type === "beam" ||
+    effect.type === "burst" ||
+    effect.type === "mage_miasma_field" ||
+    (effect.type === "ultimate" && effect.classId === "mage");
+  if (!expected || !isCatalogLegacyEffect) {
+    return null;
+  }
+  if (!effect.skillId) {
+    throw new Error(
+      `Arena ${effect.type} effect is missing required skillId ${expected}`
+    );
+  }
+  if (effect.skillId !== expected) {
+    throw new Error(
+      `Arena ${effect.type} effect expected ${expected}, received ${effect.skillId}`
+    );
+  }
+  return expected;
+}
+
+export function usesArenaCatalogRuntimeVfx(effect: EffectState): boolean {
+  return getArenaCatalogRuntimeSkillId(effect) !== null;
+}
 
 const STANDARD_VFX: Record<VfxKey, RenderVfxSpec> = {
   shield: {
@@ -93,7 +180,7 @@ const COMBAT_VFX: Record<CombatVfxKey, RenderVfxSpec> = {
     frameCount: COMBAT_VFX_FRAME_COUNT,
     layer: "air",
     rotated: true,
-    origin: { x: 0.04, y: 0.5 },
+    origin: { x: 0.023, y: 0.5 },
     blendMode: "add",
     fadeIn: 0.1,
     fadeOut: 0.28,
@@ -101,7 +188,7 @@ const COMBAT_VFX: Record<CombatVfxKey, RenderVfxSpec> = {
     display: (effect, progress) => {
       const extension = mageBeamExtension(progress);
       return {
-        width: Math.max(72, Math.min(680, effect.radius * (0.08 + extension * 0.94))),
+        width: Math.max(32, effect.radius * 1.06 * extension),
         height: 38 + Math.sin(progress * Math.PI) * 18,
         alpha: 0.46 + extension * 0.42
       };
@@ -361,15 +448,13 @@ const MAGE_VFX: Record<MageVfxKey, RenderVfxSpec> = {
   renewalBurst: {
     source: "mage",
     key: "renewalBurst",
-    frameCount: MAGE_VFX_FRAME_COUNT,
+    frameCount: 9,
     layer: "ground",
-    blendMode: "add",
     fadeIn: 0.04,
     fadeOut: 0.18,
-    scaleCurve: mageGroundBloom,
     display: (effect) => ({
       width: effect.radius * 2,
-      height: effect.radius * 2,
+      height: effect.radius * 0.94,
       alpha: 0.96
     })
   },
@@ -383,9 +468,79 @@ const MAGE_VFX: Record<MageVfxKey, RenderVfxSpec> = {
     scaleCurve: mageStormBloom,
     display: (effect) => ({
       width: effect.radius * 2,
-      height: effect.radius * 2,
+      height: effect.radius * 0.94,
       alpha: 0.96
     })
+  }
+};
+
+// The atlas cells include authored transparent space. These scales fit each
+// field's stable, high-alpha footprint to the server-owned circular radius so
+// the animation itself communicates the gameplay boundary.
+const MAGE_FIELD_RANGE_DISPLAY = {
+  miasmaCrucible: {
+    widthScale: 2.065,
+    heightScale: 0.963
+  },
+  forbiddenAstrolabe: {
+    widthScale: 2.065,
+    heightScale: 0.963
+  },
+  bloodMoonAltar: {
+    widthScale: 2.065,
+    heightScale: 0.963
+  }
+} as const;
+
+function radiusAlignedMageFieldDisplay(
+  effect: EffectState,
+  key: keyof typeof MAGE_FIELD_RANGE_DISPLAY,
+  alpha: number
+): VfxDisplaySpec {
+  const scale = MAGE_FIELD_RANGE_DISPLAY[key];
+  return {
+    width: effect.radius * scale.widthScale,
+    height: effect.radius * scale.heightScale,
+    alpha
+  };
+}
+
+const MAGE_FIELD_VFX: Record<MageFieldVfxKey, RenderVfxSpec> = {
+  miasmaCrucible: {
+    source: "mageField",
+    key: "miasmaCrucible",
+    frameCount: 24,
+    loopFrameMs: 70,
+    loopMode: "repeat",
+    layer: "ground",
+    fadeIn: 0.08,
+    fadeOut: 0.1,
+    display: (effect) =>
+      radiusAlignedMageFieldDisplay(effect, "miasmaCrucible", 0.92)
+  },
+  forbiddenAstrolabe: {
+    source: "mageField",
+    key: "forbiddenAstrolabe",
+    frameCount: 4,
+    loopFrameMs: 100,
+    loopMode: "repeat",
+    layer: "ground",
+    fadeIn: 0.08,
+    fadeOut: 0.1,
+    display: (effect) =>
+      radiusAlignedMageFieldDisplay(effect, "forbiddenAstrolabe", 0.9)
+  },
+  bloodMoonAltar: {
+    source: "mageField",
+    key: "bloodMoonAltar",
+    frameCount: 5,
+    loopFrameMs: 100,
+    loopMode: "repeat",
+    layer: "ground",
+    fadeIn: 0.08,
+    fadeOut: 0.1,
+    display: (effect) =>
+      radiusAlignedMageFieldDisplay(effect, "bloodMoonAltar", 0.94)
   }
 };
 
@@ -406,6 +561,11 @@ const WARRIOR_VERDICT_VFX: Record<WarriorVerdictVfxKey, RenderVfxSpec> = {
 };
 
 export function getEffectVfxSpec(effect: EffectState): RenderVfxSpec | null {
+  const catalogSkillId = getArenaCatalogRuntimeSkillId(effect);
+  if (catalogSkillId) {
+    return getCatalogSkillVfx(effect, catalogSkillId);
+  }
+
   if (effect.type === "attack_arc") {
     if (effect.classId === "engineer") {
       return ABILITY_VFX.engineerStrike;
@@ -417,7 +577,10 @@ export function getEffectVfxSpec(effect: EffectState): RenderVfxSpec | null {
   }
 
   if (effect.type === "ultimate") {
-    if (effect.classId === "mage" || !effect.classId) {
+    if (!effect.classId) {
+      throw new Error("Arena ultimate effect is missing its classId");
+    }
+    if (effect.classId === "mage") {
       return MAGE_VFX.cleanStorm;
     }
     return getUltimateVfx(effect.classId);
@@ -429,6 +592,18 @@ export function getEffectVfxSpec(effect: EffectState): RenderVfxSpec | null {
 
   if (effect.type === "beam") {
     return COMBAT_VFX.mageSolarBeam;
+  }
+
+  if (effect.type === "mage_miasma_field") {
+    return MAGE_FIELD_VFX.miasmaCrucible;
+  }
+
+  if (effect.type === "mage_time_astrolabe") {
+    return MAGE_FIELD_VFX.forbiddenAstrolabe;
+  }
+
+  if (effect.type === "mage_blood_altar") {
+    return MAGE_FIELD_VFX.bloodMoonAltar;
   }
 
   if (effect.type === "death") {
@@ -451,7 +626,11 @@ export function getEffectVfxSpec(effect: EffectState): RenderVfxSpec | null {
   }
 
   if (effect.type === "damage_number") {
-    return COMBAT_VFX.hitImpact;
+    // Damage text is independent from the player-owned 320 ms health-impact
+    // burst. Replaying hitImpact here produced two overlapping explosions for
+    // one damage event and extended the apparent impact well past the quick
+    // player response.
+    return null;
   }
 
   if (effect.type === "heal_pickup") {
@@ -475,11 +654,39 @@ export function getEffectVfxSpec(effect: EffectState): RenderVfxSpec | null {
   }
 
   if (effect.type === "turret_deploy") {
-    return ENGINEER_VFX.turretDeploy;
-  }
-
-  if (effect.type === "repulsor_pulse") {
-    return ENGINEER_VFX.repulsorPulse;
+    const key =
+      effect.turretKind === "magic_missile"
+        ? "deployMagic"
+        : "deployMechanical";
+    const asset = getEngineerCoreRuntimeAsset(key);
+    const display = asset.displaySize;
+    const origin = asset.origin;
+    const offset = asset.referenceOffset;
+    const frameCount = asset.frameCount ?? asset.logicalFrameCount;
+    if (!display || !origin || !offset || !frameCount) {
+      throw new Error(`Engineer core ${key} display contract is incomplete`);
+    }
+    const scale = ARENA_RUNTIME_ACTOR_DISPLAY_HEIGHT / 66;
+    return {
+      source: "engineerCore",
+      key,
+      frameCount,
+      layer: "ground",
+      origin: { x: origin[0], y: origin[1] },
+      offset: { x: offset[0] * scale, y: offset[1] * scale },
+      alphaCurve:
+        key === "deployMechanical"
+          ? (progress) =>
+              Math.min(1, progress / 0.12) *
+              Math.max(0, Math.min(1, (0.74 - progress) / 0.22)) *
+              0.72
+          : (progress) => Math.min(1, Math.max(0, (1 - progress) / 0.24)),
+      display: () => ({
+        width: display[0] * scale,
+        height: display[1] * scale,
+        alpha: 1
+      })
+    };
   }
 
   const standardKey = EFFECT_VFX[effect.type];
@@ -487,6 +694,9 @@ export function getEffectVfxSpec(effect: EffectState): RenderVfxSpec | null {
 }
 
 export function getRenderedVfxTexture(spec: RenderVfxSpec, frame: number) {
+  if (spec.source === "catalog") {
+    return getArenaSkillRuntimeFrameTexture(spec.key, frame);
+  }
   if (spec.source === "standard") {
     return getVfxFrameTexture(spec.key, frame);
   }
@@ -495,6 +705,9 @@ export function getRenderedVfxTexture(spec: RenderVfxSpec, frame: number) {
   }
   if (spec.source === "mage") {
     return getMageVfxFrameTexture(spec.key, frame);
+  }
+  if (spec.source === "mageField") {
+    return getMageFieldVfxFrameTexture(spec.key, frame);
   }
   if (spec.source === "warriorArcher") {
     return getWarriorArcherVfxFrameTexture(spec.key, frame);
@@ -505,10 +718,132 @@ export function getRenderedVfxTexture(spec: RenderVfxSpec, frame: number) {
   if (spec.source === "engineer") {
     return getEngineerVfxFrameTexture(spec.key, frame);
   }
+  if (spec.source === "engineerCore") {
+    return getEngineerCoreFrameTexture(spec.key, frame);
+  }
   return getAbilityVfxFrameTexture(spec.key, frame);
 }
 
-export function getRenderedVfxFrame(spec: RenderVfxSpec, progress: number) {
+function getCatalogSkillVfx(
+  effect: EffectState,
+  skillId: ArenaCatalogSkillId
+): RenderVfxSpec | null {
+  const runtime = getArenaSkillRuntimeEntry(skillId);
+  const combat = getArenaSkillSpec(skillId);
+  if (!runtime) {
+    throw new Error(`Arena skill ${skillId} is missing its runtime VFX package`);
+  }
+  if (!combat) {
+    throw new Error(`Arena skill ${skillId} is missing its combat specification`);
+  }
+
+  const contract = getArenaSkillRuntimeVisualContract(runtime);
+  if (!hasArenaSkillRuntimeFrames(runtime)) {
+    return null;
+  }
+  const asset = runtime;
+  if (
+    contract.renderKind === "projectile" ||
+    contract.renderKind === "body"
+  ) {
+    return null;
+  }
+
+  const loopingFocus = skillId === "mage_09";
+  const loopingTether = skillId === "mage_11";
+  const loopForActiveState = runtime.persistent || loopingFocus || loopingTether;
+  const referenceDisplay = getArenaSkillRuntimeReferenceDisplay(
+    runtime,
+    ARENA_RUNTIME_ACTOR_DISPLAY_HEIGHT
+  );
+
+  return {
+    source: "catalog",
+    key: skillId,
+    frameCount: asset.frameCount,
+    layer: contract.layer,
+    rotated: contract.rotate,
+    origin: getArenaSkillRuntimeOrigin(asset),
+    blendMode: contract.blendMode,
+    fadeIn: asset.playback ? undefined : loopForActiveState ? 0.06 : 0.04,
+    fadeOut: asset.playback ? undefined : loopForActiveState ? 0.08 : 0.16,
+    loopFrameMs: loopForActiveState
+      ? asset.frameDurationMs
+      : undefined,
+    loopMode: loopForActiveState ? "repeat" : undefined,
+    pathCore: contract.pathCore ?? undefined,
+    display: (effect) => {
+      if (contract.renderKind === "field") {
+        if (contract.fixedDisplay) {
+          return {
+            width: referenceDisplay.width,
+            height: referenceDisplay.height,
+            alpha: 0.96
+          };
+        }
+        const width =
+          effect.radius * (contract.radiusWidthMultiplier ?? 2);
+        return {
+          width,
+          height: width * (contract.radiusAspect ?? 1),
+          alpha: 0.96
+        };
+      }
+      if (contract.renderKind === "segment") {
+        return {
+          width:
+            effect.radius * (contract.radiusWidthMultiplier ?? 1),
+          height: referenceDisplay.height,
+          alpha: 0.96
+        };
+      }
+      return {
+        width: referenceDisplay.width,
+        height: referenceDisplay.height,
+        alpha: 0.96
+      };
+    }
+  };
+}
+
+export function getRenderedVfxFrame(
+  spec: RenderVfxSpec,
+  progress: number,
+  elapsedMs = 0,
+  effectDurationMs = 0
+) {
+  if (spec.source === "catalog") {
+    const runtime = getArenaSkillRuntimeEntry(spec.key);
+    if (!runtime || !hasArenaSkillRuntimeFrames(runtime)) {
+      throw new Error(`Arena skill ${spec.key} is missing its runtime playback data`);
+    }
+    if (runtime.playback) {
+      return getArenaSkillRuntimeFrameAtEffectElapsed(
+        runtime,
+        elapsedMs,
+        effectDurationMs
+      );
+    }
+    return spec.loopFrameMs
+      ? getArenaSkillRuntimeFrameAtElapsed(runtime, elapsedMs)
+      : getArenaSkillRuntimeFrameAtProgress(runtime, progress);
+  }
+  if (spec.source === "engineerCore") {
+    return getEngineerCoreFrameAtProgress(spec.key, progress);
+  }
+  if (spec.loopFrameMs) {
+    const elapsedFrame = Math.floor(Math.max(0, elapsedMs) / spec.loopFrameMs);
+    const pingpongLength = Math.max(1, spec.frameCount * 2 - 2);
+    const cycleFrame =
+      spec.loopMode === "pingpong"
+        ? elapsedFrame % pingpongLength
+        : elapsedFrame % spec.frameCount;
+    const localFrame =
+      spec.loopMode === "pingpong" && cycleFrame >= spec.frameCount
+        ? pingpongLength - cycleFrame
+        : cycleFrame;
+    return localFrame + (spec.frameOffset ?? 0);
+  }
   const localFrame = Math.min(spec.frameCount - 1, Math.floor(progress * spec.frameCount));
   return localFrame + (spec.frameOffset ?? 0);
 }
@@ -518,21 +853,40 @@ export function getRenderedVfxDisplay(effect: EffectState, spec: RenderVfxSpec, 
   const fadeIn = spec.fadeIn ? easeOutCubic(clamp01(progress / spec.fadeIn)) : 1;
   const fadeOut = spec.fadeOut ? easeInCubic(clamp01((1 - progress) / spec.fadeOut)) : 1;
   const scale = spec.scaleCurve ? spec.scaleCurve(progress) : 1;
+  const alpha = spec.alphaCurve ? spec.alphaCurve(progress) : 1;
   return {
     ...display,
     width: display.width * scale,
     height: display.height * scale,
-    alpha: Math.max(0, display.alpha * fadeIn * fadeOut)
+    alpha: Math.max(0, display.alpha * fadeIn * fadeOut * alpha)
   };
+}
+
+export function getRenderedVfxOffset(spec: RenderVfxSpec) {
+  return spec.offset ?? { x: 0, y: 0 };
 }
 
 export function getRenderedVfxOrigin(spec: RenderVfxSpec) {
   return spec.origin ?? { x: 0.5, y: 0.5 };
 }
 
-export function getRenderedVfxDepth(effect: EffectState, spec: RenderVfxSpec) {
+export function getRenderedVfxPathCore(spec: RenderVfxSpec) {
+  return spec.pathCore ?? null;
+}
+
+export function getRenderedVfxDepth(
+  effect: EffectState,
+  spec: RenderVfxSpec,
+  progress = 0
+) {
   if (spec.layer === "ground") {
-    return effect.y + 2;
+    // Ground effects cover an area around their semantic anchor. Sorting them
+    // from the centre lets the upper half of a wide field jump in front of
+    // actors whose feet are still inside that field. Use the visual footprint's
+    // top edge as the depth anchor so the whole field stays on the floor while
+    // actors within it remain in front.
+    const groundFootprint = getRenderedVfxDisplay(effect, spec, progress);
+    return effect.y - groundFootprint.height / 2 - 2;
   }
   if (spec.layer === "unit") {
     return effect.y + 26;
@@ -572,12 +926,12 @@ function beamExtension(progress: number) {
 
 function mageBeamExtension(progress: number) {
   if (progress < 0.54) {
-    return smoothStep(progress / 0.54) * 0.95;
+    return smoothStep(progress / 0.54);
   }
   if (progress > 0.64) {
-    return Math.max(0.08, 0.95 - easeInCubic((progress - 0.64) / 0.36) * 0.87);
+    return Math.max(0.06, 1 - easeInCubic((progress - 0.64) / 0.36) * 0.94);
   }
-  return 0.95 + Math.sin((progress - 0.54) * Math.PI * 2) * 0.016;
+  return 1;
 }
 
 function quickStrikePop(progress: number) {
@@ -595,16 +949,6 @@ function dashRibbonPop(progress: number) {
     return 1.02 - easeInCubic((progress - 0.7) / 0.3) * 0.2;
   }
   return 1.02;
-}
-
-function mageGroundBloom(progress: number) {
-  if (progress < 0.2) {
-    return 0.68 + easeOutCubic(progress / 0.2) * 0.34;
-  }
-  if (progress > 0.72) {
-    return 1.02 - easeInCubic((progress - 0.72) / 0.28) * 0.12;
-  }
-  return 1.02 + Math.sin((progress - 0.2) * Math.PI * 2.4) * 0.025;
 }
 
 function mageStormBloom(progress: number) {

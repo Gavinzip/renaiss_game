@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_10",
+  "classId": "archer",
+  "name": "藤網收束",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "user-directed-5173-runtime-repair-own-folder-v3",
+  "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10",
+  "runtime": {
+    "skillId": "archer_10",
+    "classId": "archer",
+    "name": "藤網收束",
+    "persistent": true,
+    "previewSha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:efc885314b3a6ebc",
+    "configPreviewSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/gameplay-clean-v3.webp",
+    "configPreviewSourceSha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+    "configPreviewOutputSha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/primary.png",
+    "frameWidth": 120,
+    "frameHeight": 120,
+    "frameCount": 4,
+    "unionBounds": [
+      7,
+      34,
+      112,
+      86
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-derived-vine-net-alpha-key-v3-from-79d8334d2aecd30a.png",
+    "sourceSha256": "7c30cd7d1608adfb3f2e8cefe0b20ad036693c998da4bba87a71e7c9f458f3f5",
+    "outputSha256": "7c30cd7d1608adfb3f2e8cefe0b20ad036693c998da4bba87a71e7c9f458f3f5",
+    "frameDurationsMs": [
+      70,
+      70,
+      1790,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "tool": "tools/repair_archer_reported_skill_vfx.py",
+      "version": "v3",
+      "transform": "vine-net-alpha-key-v3",
+      "resampling": "nearest",
+      "fallbackUsed": false
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_藤網收束.png",
+        "sha256": "03905da872e6607566371811e65a86788670cb0f74b8b4fc408811fe20ca45bb"
+      },
+      {
+        "role": "derived-formal-runtime",
+        "path": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-derived-vine-net-alpha-key-v2-from-a6c5911b61097f75.png",
+        "sha256": "79d8334d2aecd30adb6f8d0700e884179b30305d6abe7082bc378b7a085324d2",
+        "transform": "vine-net-alpha-key-v2",
+        "inputPath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-selected-runtime-before-repair-a6c5911b61097f75.png",
+        "inputSha256": "a6c5911b61097f75d7db075d2f49344ba6e120b0c9ecf8474a7f184a9ac1e004",
+        "resampling": "nearest"
+      },
+      {
+        "role": "derived-formal-runtime",
+        "path": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-derived-vine-net-alpha-key-v3-from-79d8334d2aecd30a.png",
+        "sha256": "7c30cd7d1608adfb3f2e8cefe0b20ad036693c998da4bba87a71e7c9f458f3f5",
+        "transform": "vine-net-alpha-key-v3",
+        "inputPath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-selected-runtime-before-repair-79d8334d2aecd30a.png",
+        "inputSha256": "79d8334d2aecd30adb6f8d0700e884179b30305d6abe7082bc378b7a085324d2",
+        "resampling": "nearest"
+      }
+    ],
+    "packagePath": "archer_射手/2_E_中階/11_藤網收束_archer_10",
+    "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10",
+    "sourceSelection": "user-directed-5173-runtime-repair-own-folder-v3",
+    "previewFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/gameplay-clean-v3.webp",
+    "previewFileSha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+    "iconFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/icon.png",
+    "iconFileSha256": "fe55ff6c33408f2ae8f1b8c853258be8352a1c407c19c774d0b7e7b52e602b7d",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_藤網收束.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-derived-vine-net-alpha-key-v3-from-79d8334d2aecd30a.png",
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 8,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "originalSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "sourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "outputSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 1,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 1,
+        "frameDurationsMs": [
+          500
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_10",
+      "acceptedAnimationId": "archer_10:neutral:own-folder-v1:80c9fa8f2a6d185e",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "fallbackUsed": false
+    },
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5176-gameplay-sequence:local-5176-vine-net-v3-20260814:6895855d5002bbb5",
+    "previewSourceRecording": "local-5176-vine-net-v3-20260814",
+    "previewSourceScenario": "manual-archer_10",
+    "previewSourceSequenceSha256": "b6840c70f4dbe2e6b54e2f7158d5b8c461978f438c9e0b88a397e0dbdb19b22f",
+    "previewFallbackUsed": false,
+    "previewMediaType": "image/webp",
+    "previewFrameRate": 9.901,
+    "previewSourceSize": [
+      1100,
+      964
+    ],
+    "previewCrop": [
+      102,
+      130,
+      896,
+      504
+    ]
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/gameplay-clean-v3.webp",
+    "sha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+    "kind": "actual-5176-gameplay-image-sequence",
+    "mediaType": "image/webp",
+    "sourceVersion": "vine-net-alpha-key-v3",
+    "acceptedAnimationId": "actual-5176-gameplay-sequence:local-5176-vine-net-v3-20260814:6895855d5002bbb5",
+    "sourceCapture": "browser-screenshot-sequence",
+    "sourceCaptureEvidence": {
+      "source": "browser-screenshot-sequence",
+      "frameCount": 28,
+      "durationsMs": [
+        105,
+        103,
+        99,
+        97,
+        100,
+        105,
+        101,
+        93,
+        103,
+        95,
+        105,
+        95,
+        111,
+        110,
+        115,
+        102,
+        100,
+        101,
+        100,
+        101,
+        100,
+        94,
+        99,
+        107,
+        102,
+        91,
+        106,
+        101
+      ],
+      "averageFrameIntervalMs": 101.464,
+      "sourceSize": [
+        1100,
+        964
+      ],
+      "crop": [
+        102,
+        130,
+        896,
+        504
+      ],
+      "previewSize": [
+        448,
+        252
+      ],
+      "sequenceSha256": "b6840c70f4dbe2e6b54e2f7158d5b8c461978f438c9e0b88a397e0dbdb19b22f",
+      "rawFramesRetained": false,
+      "interpolatedFrames": false,
+      "fallbackUsed": false
+    },
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/icon.png",
+    "sha256": "fe55ff6c33408f2ae8f1b8c853258be8352a1c407c19c774d0b7e7b52e602b7d",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "5b97c5d1fc2cdd4b79d852637199c7c4ef903bc95fc4597beff1ef2d4be9547b",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_10-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/animation.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_10",
+      "acceptedAnimationId": "archer_10:neutral:own-folder-v1:80c9fa8f2a6d185e",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "originalSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "packageSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/body.png",
+      "packageRuntimeSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "fallbackUsed": false
+    },
+    "reportedIssueRepair": {
+      "transform": "vine-net-alpha-key-v3",
+      "inputPath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-selected-runtime-before-repair-79d8334d2aecd30a.png",
+      "inputSha256": "79d8334d2aecd30adb6f8d0700e884179b30305d6abe7082bc378b7a085324d2",
+      "derivedSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-derived-vine-net-alpha-key-v3-from-79d8334d2aecd30a.png",
+      "derivedSourceSha256": "7c30cd7d1608adfb3f2e8cefe0b20ad036693c998da4bba87a71e7c9f458f3f5",
+      "runtimePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/primary.png",
+      "runtimeSha256": "7c30cd7d1608adfb3f2e8cefe0b20ad036693c998da4bba87a71e7c9f458f3f5",
+      "previewPath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/gameplay-clean-v3.webp",
+      "previewSha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+      "previewRegenerated": true,
+      "originalsDeleted": false,
+      "fallbackUsed": false,
+      "previewSourceSequenceSha256": "b6840c70f4dbe2e6b54e2f7158d5b8c461978f438c9e0b88a397e0dbdb19b22f",
+      "previewRawFramesRetained": false
+    }
+  },
+  "fallbackUsed": false
+}

@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_03",
+  "classId": "engineer",
+  "name": "穿甲鐵芯",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03",
+  "runtime": {
+    "skillId": "engineer_03",
+    "classId": "engineer",
+    "name": "穿甲鐵芯",
+    "persistent": false,
+    "previewSha256": "b2698f5471bf4ef861225111f753eb3f244eb85398edd8f68223aa062e257c26",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        44,
+        34
+      ],
+      "referenceOffset": [
+        0,
+        -24
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        54,
+        36
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:932a672fdc4d47d3",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-03-穿甲鐵芯.gif",
+    "configPreviewSourceSha256": "932a672fdc4d47d34430fa3d7accb37fb19f779fa58d88b21ac23a005d18141c",
+    "configPreviewOutputSha256": "3eeb1806ca38c6c36e6f640079ed20b305d84d98ee3b6f0bd998ec1039db6d90",
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 14,
+    "unionBounds": [
+      58,
+      64,
+      108,
+      101
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png",
+    "sourceSha256": "926e76695a33e3ddb0b9c00a146b89f02735432a2ee8ec3e92593d7aba1021e3",
+    "outputSha256": "0b42745ccd38ab815b192a951d301e6af93f68425307f9b059c3860cf1e9fc41",
+    "frameDurationsMs": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          71,
+          76,
+          72,
+          77
+        ],
+        [
+          71,
+          76,
+          72,
+          77
+        ],
+        [
+          68,
+          76,
+          68,
+          77
+        ],
+        [
+          68,
+          76,
+          68,
+          77
+        ],
+        [
+          60,
+          76,
+          59,
+          76
+        ],
+        [
+          60,
+          76,
+          59,
+          76
+        ],
+        [
+          60,
+          76,
+          59,
+          76
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          68,
+          66,
+          69,
+          66
+        ],
+        [
+          68,
+          66,
+          69,
+          66
+        ],
+        [
+          70,
+          72,
+          70,
+          72
+        ],
+        [
+          70,
+          72,
+          70,
+          72
+        ]
+      ]
+    },
+    "frameDurationMs": 90,
+    "candidateOrigin": "configuration-engineer-final-board-logical-runtime",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png",
+        "sha256": "926e76695a33e3ddb0b9c00a146b89f02735432a2ee8ec3e92593d7aba1021e3"
+      }
+    ],
+    "packagePath": "engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "b2698f5471bf4ef861225111f753eb3f244eb85398edd8f68223aa062e257c26",
+    "iconFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/icon.png",
+    "iconFileSha256": "92140ffa5843d996817079ef0dd5bd92a8d1359fd64cc5c64747cbc203430e46",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_03:source-d3dec6702b18b06c:output-b2698f5471bf4ef8",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-engineer_03",
+    "previewSourceSequenceSha256": "d3dec6702b18b06c94312c4f2d38845396b65f199d151f8078eb542e77993bd5",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.022,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/preview/gameplay-preview-v1.webm",
+    "sha256": "b2698f5471bf4ef861225111f753eb3f244eb85398edd8f68223aa062e257c26",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_03:source-d3dec6702b18b06c:output-b2698f5471bf4ef8",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_03",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.501,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 10.054,
+      "durationSec": 4.553,
+      "file": "random-engineer_03-hq.webm",
+      "bytes": 8522292,
+      "sha256": "d3dec6702b18b06c94312c4f2d38845396b65f199d151f8078eb542e77993bd5"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_03-hq.webm",
+    "sourceVideoSha256": "d3dec6702b18b06c94312c4f2d38845396b65f199d151f8078eb542e77993bd5",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.31,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      826,
+      353,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1447,
+      663
+    ],
+    "contentMargins": [
+      275,
+      194,
+      275,
+      194
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.022,
+    "frameCount": 136,
+    "totalDurationMs": 4530,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8522292,
+    "outputBytes": 597863,
+    "reductionRatio": 0.929847,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/icon.png",
+    "sha256": "92140ffa5843d996817079ef0dd5bd92a8d1359fd64cc5c64747cbc203430e46",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "d107f26a36e8eadb456b5bfbed1720604ca40fba4cd6595fb57edca41efc1f48",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/engineer_03-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_03.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

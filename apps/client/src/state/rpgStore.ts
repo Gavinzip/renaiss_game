@@ -30,7 +30,7 @@ import { rpgAiDifficultyCopy, rpgCopy, rpgElementLabel, rpgMoveName, rpgNotice, 
 
 export type RpgLocation = "village" | "house";
 export type RpgPlace = "shop" | "gym" | "arena" | "house" | "cabinet" | "houseExit";
-export type RpgNavigationTarget = Extract<RpgPlace, "gym" | "arena">;
+export type RpgNavigationTarget = Extract<RpgPlace, "arena">;
 export type RpgScreen = RpgLocation | "profile" | "shop" | "bag" | "gym" | "battle";
 export type RpgBattleMode = "ai" | "versus";
 export type RpgVersusConnection = "idle" | "connecting" | "waiting" | "connected" | "reconnecting" | "error";
@@ -505,7 +505,7 @@ export const useRpgStore = create<RpgStore>()(persist((set, get) => ({
     }),
   clearVillageNavigation: () => set({ villageNavigationTarget: null }),
   openProfile: () => set({ screen: "profile", battleNotice: null }),
-  openShop: () => set({ screen: "bag", battleNotice: null }),
+  openShop: () => set({ screen: "shop", battleNotice: null }),
   openBag: () => set({ screen: "bag", battleNotice: null }),
   openGym: () => set({ screen: "gym", battleNotice: null }),
   openCardEquipForElement: (element) =>

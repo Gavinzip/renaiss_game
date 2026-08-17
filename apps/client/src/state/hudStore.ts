@@ -1,8 +1,28 @@
 import { create } from "zustand";
-import type { ClassId, GameSnapshot, JoinRequest } from "@renaiss-game/shared";
+import {
+  isArenaCatalogSkillAllowedInSlot,
+  isArenaSkillAllowedInSlot,
+  type ArenaCatalogSkillId,
+  type ArenaGameMode,
+  type ArenaLoadout,
+  type ArenaLoadoutSlot,
+  type ClassId,
+  type ClassSwitchRequest,
+  type EngineerTurretKind,
+  type GameSnapshot,
+  type JoinRequest,
+  type SkillKey
+} from "@renaiss-game/shared";
+import {
+  loadArenaCatalogLoadouts,
+  saveArenaCatalogLoadouts,
+  type ArenaCatalogLoadouts
+} from "./arenaCatalogLoadoutStorage";
+import { loadArenaLoadouts, saveArenaLoadouts, type ArenaLoadouts } from "./arenaLoadoutStorage";
+import type { ArenaConnectionStatus } from "../game/network/GameSocket";
 
-type ConnectionState = "idle" | "connecting" | "connected" | "error";
-export type HudAction = "attack" | "skillQ" | "skillE" | "skillR";
+export type ConnectionState = "idle" | ArenaConnectionStatus;
+export type HudAction = "attack" | "skillF" | "skillQ" | "skillE" | "skillR";
 export type HudSkillAction = Exclude<HudAction, "attack">;
 export interface MobileMoveInput {
   x: number;
@@ -15,7 +35,8 @@ export interface MobileAimInput {
   action: HudSkillAction | null;
 }
 
-const emptySkillReleaseQueue = (): Record<HudSkillAction, number> => ({
+const emptySkillArmQueue = (): Record<HudSkillAction, number> => ({
+  skillF: 0,
   skillQ: 0,
   skillE: 0,
   skillR: 0
@@ -32,12 +53,17 @@ interface HudStore {
   joined: boolean;
   connection: ConnectionState;
   selectedClass: ClassId;
+  selectedMode: ArenaGameMode;
+  engineerTurretKind: EngineerTurretKind;
+  arenaLoadouts: ArenaLoadouts;
+  arenaCatalogLoadouts: ArenaCatalogLoadouts;
   selfId: string | null;
   joinRequest: JoinRequest | null;
-  classSwitchRequest: { classId: ClassId; requestedAt: number } | null;
+  classSwitchRequest: ClassSwitchRequest & { requestedAt: number } | null;
   snapshot: GameSnapshot | null;
   hudInput: {
     attack: boolean;
+    skillF: boolean;
     skillQ: boolean;
     skillE: boolean;
     skillR: boolean;
@@ -45,8 +71,18 @@ interface HudStore {
   mobileMove: MobileMoveInput;
   mobileAim: MobileAimInput;
   mobileControlsActive: boolean;
-  hudSkillReleaseQueue: Record<HudSkillAction, number>;
+  armedSkillAction: HudSkillAction | null;
+  hudSkillArmQueue: Record<HudSkillAction, number>;
   setSelectedClass: (classId: ClassId) => void;
+  setSelectedMode: (mode: ArenaGameMode) => void;
+  setEngineerTurretKind: (kind: EngineerTurretKind) => void;
+  setLoadoutSkill: (classId: ClassId, slot: ArenaLoadoutSlot, skill: SkillKey) => void;
+  setCatalogLoadoutSkill: (
+    classId: ClassId,
+    slot: ArenaLoadoutSlot,
+    skill: ArenaCatalogSkillId
+  ) => void;
+  reconcileCatalogLoadouts: (unlockedSkillIds: readonly ArenaCatalogSkillId[]) => void;
   requestJoin: (request: JoinRequest) => void;
   requestClassSwitch: (classId: ClassId) => void;
   setConnection: (connection: ConnectionState) => void;
@@ -58,8 +94,9 @@ interface HudStore {
   setMobileAim: (action: HudSkillAction, viewportX: number, viewportY: number) => void;
   resetMobileAim: () => void;
   setMobileControlsActive: (active: boolean) => void;
-  queueHudSkillRelease: (action: HudSkillAction) => void;
-  consumeHudSkillReleases: () => Record<HudSkillAction, number>;
+  setArmedSkillAction: (action: HudSkillAction | null) => void;
+  queueHudSkillArm: (action: HudSkillAction) => void;
+  consumeHudSkillArms: () => Record<HudSkillAction, number>;
   leaveArena: () => void;
 }
 
@@ -67,12 +104,17 @@ export const useHudStore = create<HudStore>((set, get) => ({
   joined: false,
   connection: "idle",
   selectedClass: "warrior",
+  selectedMode: loadArenaMode(),
+  engineerTurretKind: loadEngineerTurretKind(),
+  arenaLoadouts: loadArenaLoadouts(),
+  arenaCatalogLoadouts: loadArenaCatalogLoadouts(),
   selfId: null,
   joinRequest: null,
   classSwitchRequest: null,
   snapshot: null,
   hudInput: {
     attack: false,
+    skillF: false,
     skillQ: false,
     skillE: false,
     skillR: false
@@ -80,10 +122,74 @@ export const useHudStore = create<HudStore>((set, get) => ({
   mobileMove: { x: 0, y: 0 },
   mobileAim: emptyMobileAim(),
   mobileControlsActive: false,
-  hudSkillReleaseQueue: emptySkillReleaseQueue(),
+  armedSkillAction: null,
+  hudSkillArmQueue: emptySkillArmQueue(),
   setSelectedClass: (classId) => set({ selectedClass: classId }),
+  setSelectedMode: (selectedMode) => {
+    window.localStorage.setItem("renaiss.arena.mode", selectedMode);
+    set({ selectedMode });
+  },
+  setEngineerTurretKind: (engineerTurretKind) => {
+    window.localStorage.setItem("renaiss.engineer.turret-kind", engineerTurretKind);
+    set({ engineerTurretKind });
+  },
+  setLoadoutSkill: (classId, slot, skill) =>
+    set((state) => {
+      if (!isArenaSkillAllowedInSlot(slot, skill)) {
+        return state;
+      }
+      const current = state.arenaLoadouts[classId];
+      const nextLoadout: ArenaLoadout = { ...current, [slot]: skill };
+      const arenaLoadouts = {
+        ...state.arenaLoadouts,
+        [classId]: nextLoadout
+      };
+      saveArenaLoadouts(arenaLoadouts);
+      return { arenaLoadouts };
+    }),
+  setCatalogLoadoutSkill: (classId, slot, skill) =>
+    set((state) => {
+      if (!isArenaCatalogSkillAllowedInSlot(classId, slot, skill)) {
+        return state;
+      }
+      const arenaCatalogLoadouts = {
+        ...state.arenaCatalogLoadouts,
+        [classId]: {
+          ...state.arenaCatalogLoadouts[classId],
+          [slot]: skill
+        }
+      };
+      saveArenaCatalogLoadouts(arenaCatalogLoadouts);
+      return { arenaCatalogLoadouts };
+    }),
+  reconcileCatalogLoadouts: (unlockedSkillIds) =>
+    set((state) => {
+      const unlocked = new Set(unlockedSkillIds);
+      const arenaCatalogLoadouts = Object.fromEntries(
+        Object.entries(state.arenaCatalogLoadouts).map(([classId, loadout]) => [
+          classId,
+          {
+            skillQ: loadout.skillQ && unlocked.has(loadout.skillQ) ? loadout.skillQ : null,
+            skillE: loadout.skillE && unlocked.has(loadout.skillE) ? loadout.skillE : null,
+            skillR: loadout.skillR && unlocked.has(loadout.skillR) ? loadout.skillR : null
+          }
+        ])
+      ) as ArenaCatalogLoadouts;
+      saveArenaCatalogLoadouts(arenaCatalogLoadouts);
+      return { arenaCatalogLoadouts };
+    }),
   requestJoin: (request) => set({ joinRequest: request, selectedClass: request.classId, connection: "connecting" }),
-  requestClassSwitch: (classId) => set({ classSwitchRequest: { classId, requestedAt: Date.now() }, selectedClass: classId }),
+  requestClassSwitch: (classId) =>
+    set((state) => ({
+      classSwitchRequest: {
+        classId,
+        loadout: { ...state.arenaLoadouts[classId] },
+        catalogLoadout: { ...state.arenaCatalogLoadouts[classId] },
+        engineerTurretKind: state.engineerTurretKind,
+        requestedAt: Date.now()
+      },
+      selectedClass: classId
+    })),
   setConnection: (connection) => set({ connection }),
   setJoined: (playerId) => set({ joined: true, selfId: playerId, connection: "connected" }),
   setSnapshot: (snapshot) => set({ snapshot, selfId: snapshot.selfId }),
@@ -97,16 +203,17 @@ export const useHudStore = create<HudStore>((set, get) => ({
     }),
   resetMobileAim: () => set({ mobileAim: emptyMobileAim() }),
   setMobileControlsActive: (active) => set({ mobileControlsActive: active }),
-  queueHudSkillRelease: (action) =>
+  setArmedSkillAction: (armedSkillAction) => set({ armedSkillAction }),
+  queueHudSkillArm: (action) =>
     set((state) => ({
-      hudSkillReleaseQueue: {
-        ...state.hudSkillReleaseQueue,
-        [action]: state.hudSkillReleaseQueue[action] + 1
+      hudSkillArmQueue: {
+        ...state.hudSkillArmQueue,
+        [action]: state.hudSkillArmQueue[action] + 1
       }
     })),
-  consumeHudSkillReleases: () => {
-    const queue = get().hudSkillReleaseQueue;
-    set({ hudSkillReleaseQueue: emptySkillReleaseQueue() });
+  consumeHudSkillArms: () => {
+    const queue = get().hudSkillArmQueue;
+    set({ hudSkillArmQueue: emptySkillArmQueue() });
     return queue;
   },
   leaveArena: () => set({
@@ -118,6 +225,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
     snapshot: null,
     hudInput: {
       attack: false,
+      skillF: false,
       skillQ: false,
       skillE: false,
       skillR: false
@@ -125,6 +233,19 @@ export const useHudStore = create<HudStore>((set, get) => ({
     mobileMove: { x: 0, y: 0 },
     mobileAim: emptyMobileAim(),
     mobileControlsActive: false,
-    hudSkillReleaseQueue: emptySkillReleaseQueue()
+    armedSkillAction: null,
+    hudSkillArmQueue: emptySkillArmQueue()
   })
 }));
+
+function loadArenaMode(): ArenaGameMode {
+  return window.localStorage.getItem("renaiss.arena.mode") === "team_3v3"
+    ? "team_3v3"
+    : "free_for_all";
+}
+
+function loadEngineerTurretKind(): EngineerTurretKind {
+  return window.localStorage.getItem("renaiss.engineer.turret-kind") === "magic_missile"
+    ? "magic_missile"
+    : "mechanical";
+}

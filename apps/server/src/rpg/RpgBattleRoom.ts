@@ -123,8 +123,19 @@ export class RpgBattleRoom {
       this.lastMessage = validation.message;
       return;
     }
-    this.resolveTurn(validation.actions);
-    this.lastMessage = this.battle?.winner ? "戰鬥結束。" : `${player.name} 已完成行動。`;
+    if (this.submissions.has(player.id)) {
+      this.lastMessage = `${player.name} 已送出本回合選招。`;
+      return;
+    }
+
+    this.submissions.set(player.id, validation.actions);
+    if (this.players.some((candidate) => !this.submissions.has(candidate.id))) {
+      this.lastMessage = `${player.name} 已送出選招，等待另一方。`;
+      return;
+    }
+
+    this.resolveSubmittedRound();
+    this.lastMessage = this.battle?.winner ? "戰鬥結束。" : "雙方選招已結算，開始下一回合。";
   }
 
   requestRematch(socketId: string) {
@@ -190,9 +201,21 @@ export class RpgBattleRoom {
     this.lastMessage = "雙方已到齊，開始選招。";
   }
 
-  private resolveTurn(actions: readonly RpgBattleAction[]) {
+  private resolveSubmittedRound() {
     if (!this.battle) return;
-    this.battle = resolveRpgBattleTurn(this.battle, actions);
+    const left = this.players.find((player) => player.side === "left");
+    const right = this.players.find((player) => player.side === "right");
+    if (!left || !right) return;
+
+    const leftActions = this.submissions.get(left.id);
+    const rightActions = this.submissions.get(right.id);
+    if (!leftActions || !rightActions) return;
+
+    let resolved = resolveRpgBattleTurn(this.battle, leftActions);
+    if (!resolved.winner && resolved.activeSide === "right") {
+      resolved = resolveRpgBattleTurn(resolved, rightActions);
+    }
+    this.battle = resolved;
     this.submissions.clear();
   }
 
@@ -210,10 +233,6 @@ export class RpgBattleRoom {
 
   private validateSubmittedActions(player: RpgRoomPlayer, actions: readonly RpgBattleAction[]) {
     if (!this.battle) return { ok: false as const, message: "戰鬥尚未開始。" };
-    const activeSide = this.battle.activeSide ?? "left";
-    if (activeSide !== player.side) {
-      return { ok: false as const, message: `還沒輪到 ${player.name}。` };
-    }
     if (actions.length <= 0) {
       return { ok: false as const, message: `${player.name} 需要至少選擇一個行動。` };
     }
@@ -255,7 +274,8 @@ export class RpgBattleRoom {
 
   private battleFor(player: RpgRoomPlayer): RpgBattleState | null {
     if (!this.battle) return null;
-    return presentRpgBattleForSide(this.battle, player.side);
+    const presented = presentRpgBattleForSide(this.battle, player.side);
+    return presented.winner ? presented : { ...presented, activeSide: "left" };
   }
 }
 

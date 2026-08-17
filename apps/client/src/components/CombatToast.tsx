@@ -1,4 +1,13 @@
-import { type ClassId, type CombatEvent, type GameSnapshot, type SkillKey } from "@renaiss-game/shared";
+import {
+  ARENA_LOADOUT_SLOTS,
+  getArenaCatalogSkill,
+  type ArenaCatalogLoadout,
+  type ArenaLoadout,
+  type ClassId,
+  type CombatEvent,
+  type GameSnapshot,
+  type SkillKey
+} from "@renaiss-game/shared";
 import { useEffect, useRef, useState } from "react";
 import { useArenaI18n } from "../i18n/arena";
 
@@ -11,17 +20,11 @@ interface ToastState {
   id: string;
   title: string;
   detail: string;
-  tone: "skill" | "heal" | "danger" | "streak" | "round";
+  tone: "skill" | "heal" | "danger" | "victory" | "assist" | "streak" | "round";
   scoreDelta?: number;
 }
 
-const SKILL_KEYS: SkillKey[] = ["skillQ", "skillE", "skillR"];
-const SKILL_KEY_LABELS: Record<SkillKey, string> = {
-  skillQ: "Q",
-  skillE: "E",
-  skillR: "R"
-};
-
+const SKILL_KEYS: SkillKey[] = ["skillF", "skillQ", "skillE", "skillR"];
 export function CombatToast({ snapshot, selfId }: CombatToastProps) {
   const { t } = useArenaI18n();
   const [toast, setToast] = useState<ToastState | null>(null);
@@ -43,7 +46,15 @@ export function CombatToast({ snapshot, selfId }: CombatToastProps) {
       return;
     }
 
-    const skillToast = getSkillToast(self.classId, self.cooldowns, previousCooldowns.current, snapshot.serverTime, t);
+    const skillToast = getSkillToast(
+      self.classId,
+      self.loadout,
+      self.catalogLoadout,
+      self.cooldowns,
+      previousCooldowns.current,
+      snapshot.serverTime,
+      t
+    );
     previousCooldowns.current = { ...self.cooldowns };
     if (skillToast) {
       setToast(skillToast);
@@ -79,6 +90,8 @@ export function CombatToast({ snapshot, selfId }: CombatToastProps) {
 
 function getSkillToast(
   classId: ClassId,
+  loadout: ArenaLoadout,
+  catalogLoadout: ArenaCatalogLoadout,
   cooldowns: Record<SkillKey, number>,
   previousCooldowns: Record<SkillKey, number> | null,
   serverTime: number,
@@ -93,10 +106,17 @@ function getSkillToast(
     return null;
   }
 
+  const loadoutSlot = ARENA_LOADOUT_SLOTS.find((slot) => loadout[slot] === triggered);
+  const selectedSkill = loadoutSlot ? getArenaCatalogSkill(catalogLoadout[loadoutSlot]) : null;
+  if (loadoutSlot && !selectedSkill) {
+    return null;
+  }
+  const title = loadoutSlot && selectedSkill ? selectedSkill.name : t.skills[classId][triggered];
+
   return {
     id: `skill-${triggered}-${serverTime}`,
-    title: t.skills[classId][triggered],
-    detail: `${SKILL_KEY_LABELS[triggered]} ${t.combat.skill}`,
+    title,
+    detail: `${loadoutSlot?.slice(-1) ?? ""} ${t.combat.skill}`.trim(),
     tone: triggered === "skillR" ? "streak" : "skill"
   };
 }
@@ -131,26 +151,26 @@ function mapEventToToast(event: CombatEvent, selfId: string, serverTime: number,
       tone: "heal"
     };
   }
-  if (event.type === "kill" && event.actorId === selfId) {
-    return { id: `kill-${event.id}-${serverTime}`, title: t.combat.rivalDown, detail: "KO", tone: "streak", scoreDelta: event.scoreDelta };
-  }
   if (event.type === "kill" && event.targetId === selfId) {
     return { id: `down-${event.id}-${serverTime}`, title: t.combat.respawning, detail: t.combat.defeated, tone: "danger" };
   }
-  if (event.type === "assist" && event.participantIds?.includes(selfId)) {
-    return { id: `assist-${event.id}-${serverTime}`, title: t.combat.assist, detail: t.combat.teamCredit, tone: "skill", scoreDelta: event.scoreDelta };
-  }
-  if (event.type === "streak") {
+  if (event.type === "kill" && event.actorId === selfId) {
     return {
-      id: `streak-${event.id}-${serverTime}`,
-      title: t.ui.killStreak,
-      detail: t.combat.killRun(event.streak),
-      tone: "streak",
+      id: `kill-${event.id}-${serverTime}`,
+      title: t.combat.elimination,
+      detail: event.targetName ?? t.combat.rivalDown,
+      tone: "victory",
       scoreDelta: event.scoreDelta
     };
   }
-  if (event.type === "round") {
-    return { id: `round-${event.id}-${serverTime}`, title: t.combat.newRound, detail: t.combat.arena, tone: "round" };
+  if (event.type === "assist" && event.participantIds?.includes(selfId)) {
+    return {
+      id: `assist-${event.id}-${serverTime}`,
+      title: t.combat.assist,
+      detail: event.targetName ?? t.combat.sharedElimination,
+      tone: "assist",
+      scoreDelta: event.scoreDelta
+    };
   }
   return null;
 }

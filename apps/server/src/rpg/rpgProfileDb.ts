@@ -1,7 +1,19 @@
 import { DatabaseSync } from "node:sqlite";
-import { RPG_STARTER_PETS, getRpgMoveById, type RpgElement } from "@renaiss-game/shared";
+import {
+  ARENA_LOADOUT_SLOTS,
+  ARENA_SKILL_CATALOG,
+  RPG_STARTER_PETS,
+  getArenaCatalogSkillsForClass,
+  getRpgMoveById,
+  type ArenaCatalogLoadout,
+  type ArenaCatalogSkill,
+  type ArenaCatalogSkillId,
+  type ClassId,
+  type RpgElement
+} from "@renaiss-game/shared";
 import { loadServerEnv } from "../env";
 import { ensureParentDirectory, renaissGameStorageInfo, resolveRpgProfileDbPath, warnIfProductionDataVolumeMissing } from "../storagePaths";
+import { drawWeightedArenaSkill } from "./arenaSkillDrawPolicy";
 import type { RpgWalletCollectible } from "./walletCards";
 
 loadServerEnv();
@@ -11,6 +23,8 @@ ensureParentDirectory(dbPath);
 warnIfProductionDataVolumeMissing(dbPath);
 
 const db = new DatabaseSync(dbPath);
+const ARENA_SKILL_DRAW_MIN_INTERVAL_MS = 5_500;
+export const ARENA_SKILL_DRAW_LIMIT = 40;
 db.exec("PRAGMA journal_mode = WAL");
 db.exec("PRAGMA foreign_keys = ON");
 db.exec("PRAGMA busy_timeout = 5000");
@@ -64,6 +78,22 @@ db.exec(`
       REFERENCES rpg_wallet_cards(wallet_address, card_id)
       ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS arena_skill_unlocks (
+    owner_key TEXT NOT NULL,
+    skill_id TEXT NOT NULL,
+    class_id TEXT NOT NULL,
+    unlocked_at INTEGER NOT NULL,
+    PRIMARY KEY (owner_key, skill_id)
+  );
+
+  CREATE INDEX IF NOT EXISTS arena_skill_unlocks_owner_class
+    ON arena_skill_unlocks (owner_key, class_id, unlocked_at);
+
+  CREATE TABLE IF NOT EXISTS arena_skill_draw_state (
+    owner_key TEXT PRIMARY KEY,
+    last_draw_at INTEGER NOT NULL
+  );
 `);
 
 interface BindingRow {
@@ -83,6 +113,14 @@ interface CardRow {
 interface StoredCardRow {
   card_json: string;
   last_seen_at: number;
+}
+
+interface ArenaSkillUnlockRow {
+  skill_id: string;
+}
+
+interface ArenaSkillDrawStateRow {
+  last_draw_at: number;
 }
 
 function now() {
@@ -110,6 +148,105 @@ export function rpgProfileDbPath() {
 
 export function rpgProfileStorageInfo() {
   return renaissGameStorageInfo(dbPath);
+}
+
+export function arenaProgressionOwnerKey(provider: "x" | "dev", userId: string) {
+  const normalizedUserId = userId.trim();
+  if (!normalizedUserId) throw new Error("Arena progression requires a non-empty authenticated user id.");
+  return `arena-v3:${provider}:${normalizedUserId}`;
+}
+
+export function getArenaUnlockedSkillIds(ownerKey: string): ArenaCatalogSkillId[] {
+  const rows = db.prepare(`
+    SELECT skill_id
+    FROM arena_skill_unlocks
+    WHERE owner_key = ?
+    ORDER BY unlocked_at ASC, skill_id ASC
+  `).all(ownerKey) as unknown as ArenaSkillUnlockRow[];
+  return rows.map((row) => row.skill_id as ArenaCatalogSkillId);
+}
+
+export function getArenaSkillDrawAllowance(ownerKey: string) {
+  const drawsUsed = getArenaUnlockedSkillIds(ownerKey).length;
+  return {
+    drawLimit: ARENA_SKILL_DRAW_LIMIT,
+    drawsRemaining: Math.max(0, ARENA_SKILL_DRAW_LIMIT - drawsUsed)
+  };
+}
+
+export function drawArenaSkill(ownerKey: string, classId: ClassId) {
+  let drawnSkill: ArenaCatalogSkill | null = null;
+  let classComplete = false;
+  let drawLimitReached = false;
+  let retryAfterMs = 0;
+  runTransaction(() => {
+    const owned = new Set(getArenaUnlockedSkillIds(ownerKey));
+    if (owned.size >= ARENA_SKILL_DRAW_LIMIT) {
+      drawLimitReached = true;
+      return;
+    }
+    const candidates = getArenaCatalogSkillsForClass(classId).filter((skill) => !owned.has(skill.id));
+    if (candidates.length === 0) {
+      classComplete = true;
+      return;
+    }
+    const timestamp = now();
+    const drawState = db.prepare(`
+      SELECT last_draw_at
+      FROM arena_skill_draw_state
+      WHERE owner_key = ?
+    `).get(ownerKey) as ArenaSkillDrawStateRow | undefined;
+    retryAfterMs = Math.max(0, ARENA_SKILL_DRAW_MIN_INTERVAL_MS - (timestamp - (drawState?.last_draw_at ?? 0)));
+    if (retryAfterMs > 0) return;
+    drawnSkill = drawWeightedArenaSkill(candidates);
+    if (!drawnSkill) return;
+    db.prepare(`
+      INSERT INTO arena_skill_unlocks (owner_key, skill_id, class_id, unlocked_at)
+      VALUES (?, ?, ?, ?)
+    `).run(ownerKey, drawnSkill.id, classId, timestamp);
+    db.prepare(`
+      INSERT INTO arena_skill_draw_state (owner_key, last_draw_at)
+      VALUES (?, ?)
+      ON CONFLICT(owner_key) DO UPDATE SET last_draw_at = excluded.last_draw_at
+    `).run(ownerKey, timestamp);
+  });
+  const allowance = getArenaSkillDrawAllowance(ownerKey);
+  return {
+    skill: drawnSkill,
+    unlockedSkillIds: getArenaUnlockedSkillIds(ownerKey),
+    classComplete,
+    drawLimitReached,
+    ...allowance,
+    retryAfterMs
+  };
+}
+
+export function unlockAllArenaSkills(ownerKey: string) {
+  runTransaction(() => {
+    const insert = db.prepare(`
+      INSERT OR IGNORE INTO arena_skill_unlocks (owner_key, skill_id, class_id, unlocked_at)
+      VALUES (?, ?, ?, ?)
+    `);
+    const timestamp = now();
+    ARENA_SKILL_CATALOG.filter((skill) => !skill.core).forEach((skill, index) => {
+      insert.run(ownerKey, skill.id, skill.classId, timestamp + index);
+    });
+  });
+  return {
+    unlockedSkillIds: getArenaUnlockedSkillIds(ownerKey),
+    ...getArenaSkillDrawAllowance(ownerKey)
+  };
+}
+
+export function isArenaCatalogLoadoutUnlocked(
+  ownerKey: string,
+  loadout: ArenaCatalogLoadout
+) {
+  const owned = new Set(getArenaUnlockedSkillIds(ownerKey));
+  return ARENA_LOADOUT_SLOTS.every((slot) => {
+    const skillId = loadout[slot];
+    return typeof skillId === "string" && owned.has(skillId);
+  });
 }
 
 export function walletCardKey(card: Pick<RpgWalletCollectible, "tokenId" | "id">) {

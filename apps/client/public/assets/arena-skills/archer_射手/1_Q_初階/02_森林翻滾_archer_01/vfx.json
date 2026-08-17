@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_01",
+  "classId": "archer",
+  "name": "森林翻滾",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01",
+  "runtime": {
+    "skillId": "archer_01",
+    "classId": "archer",
+    "name": "森林翻滾",
+    "persistent": false,
+    "previewSha256": "e44b195b1235aa7918fbc526ac962ab57590060967cc2f90594fd18fdab69550",
+    "visualContract": {
+      "anchor": "owner_forward",
+      "layer": "ground",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        72,
+        28
+      ],
+      "referenceOffset": [
+        -24,
+        -14
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:477b761d0b847ca4",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_森林翻滾.gif",
+    "configPreviewSourceSha256": "477b761d0b847ca45f70a9ae45d3c5900a24de9dbdb9a87140ad8467b0fce50c",
+    "configPreviewOutputSha256": "bf728527b6b4f0f42e52d34ca6f38ca29ab05cda84eebfb56b68222eeba369ed",
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/primary.png",
+    "frameWidth": 240,
+    "frameHeight": 224,
+    "frameCount": 12,
+    "unionBounds": [
+      51,
+      57,
+      189,
+      167
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/source/primary-source-934fbe23772103bf.png",
+    "sourceSha256": "934fbe23772103bf7e393f5843dbbf4233d1c6c2c14a928d54439e9c43d33984",
+    "outputSha256": "ff73edfb74ed5f90253954d80bd3f27e2416ae30f0fb0029b65646677add120e",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          75,
+          72,
+          76,
+          72
+        ],
+        [
+          86,
+          75,
+          87,
+          76
+        ],
+        [
+          53,
+          59,
+          53,
+          59
+        ],
+        [
+          60,
+          59,
+          61,
+          59
+        ],
+        [
+          90,
+          84,
+          90,
+          84
+        ],
+        [
+          55,
+          59,
+          56,
+          59
+        ],
+        [
+          55,
+          59,
+          56,
+          59
+        ],
+        [
+          89,
+          59,
+          89,
+          59
+        ],
+        [
+          58,
+          59,
+          58,
+          59
+        ],
+        [
+          59,
+          60,
+          60,
+          60
+        ],
+        [
+          90,
+          61,
+          90,
+          61
+        ],
+        [
+          89,
+          60,
+          89,
+          60
+        ]
+      ]
+    },
+    "semanticVfxAlignment": {
+      "applied": true,
+      "method": "semantic-static-vfx-bbox-centre-translation",
+      "beforeAnchors": [
+        [
+          159,
+          111
+        ],
+        [
+          206,
+          128
+        ],
+        [
+          33,
+          111
+        ],
+        [
+          79,
+          111
+        ],
+        [
+          159,
+          111
+        ],
+        [
+          209,
+          136
+        ],
+        [
+          29,
+          111
+        ],
+        [
+          79,
+          111
+        ],
+        [
+          159,
+          111
+        ],
+        [
+          208,
+          140
+        ],
+        [
+          30,
+          111
+        ],
+        [
+          79,
+          111
+        ],
+        [
+          159,
+          111
+        ],
+        [
+          209,
+          147
+        ],
+        [
+          29,
+          110
+        ],
+        [
+          79,
+          111
+        ]
+      ],
+      "afterAnchor": [
+        119,
+        111
+      ],
+      "frameTranslations": [
+        [
+          -40,
+          0
+        ],
+        [
+          -87,
+          -17
+        ],
+        [
+          86,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          -40,
+          0
+        ],
+        [
+          -90,
+          -25
+        ],
+        [
+          90,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          -40,
+          0
+        ],
+        [
+          -89,
+          -29
+        ],
+        [
+          89,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          -40,
+          0
+        ],
+        [
+          -90,
+          -36
+        ],
+        [
+          90,
+          1
+        ],
+        [
+          40,
+          0
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_森林翻滾.png",
+        "sha256": "934fbe23772103bf7e393f5843dbbf4233d1c6c2c14a928d54439e9c43d33984"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_森林翻滾-action.png",
+        "sha256": "def0bec602bed0fb4ddbc9f40940b5fcd94b7c49470c32623ae8f51331f32968"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/body.png",
+      "frameWidth": 165,
+      "frameHeight": 194,
+      "frameCount": 48,
+      "unionBounds": [
+        0,
+        0,
+        165,
+        194
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/source/body-source-user-directed-existing-extra-action-forest-roll-1b08ef4e29d44733.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/source/body-source-user-directed-existing-extra-action-forest-roll-1b08ef4e29d44733.png",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/archer/forest-roll-8dir-v2.png",
+      "originalSourceSha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "sourceSha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "outputSha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "semanticAnchor": [
+        82,
+        174
+      ],
+      "grid": {
+        "columns": 6,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 6,
+        "frameDurationsMs": [
+          90,
+          80,
+          80,
+          80,
+          80,
+          110
+        ]
+      },
+      "displayHeightMultiplier": 1.0,
+      "actionSkillId": "archer_01",
+      "acceptedAnimationId": "archer_01:forest-roll:own-folder-v2:1b08ef4e29d44733",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "fallbackUsed": false
+    },
+    "packagePath": "archer_射手/1_Q_初階/02_森林翻滾_archer_01",
+    "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "e44b195b1235aa7918fbc526ac962ab57590060967cc2f90594fd18fdab69550",
+    "iconFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/icon.png",
+    "iconFileSha256": "707fe660387fa5cfe39e97590580ed917eb385298538dd6b972043d4daf7a7a2",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_森林翻滾.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/source/primary-source-934fbe23772103bf.png",
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_01:source-29f1fa9c45fd8f64:output-e44b195b1235aa79",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_01",
+    "previewSourceSequenceSha256": "29f1fa9c45fd8f64abc81472f8c1f5b6b31d77808db8d2ba1f2d74d89d2c1ec9",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/preview/gameplay-preview-v1.webm",
+    "sha256": "e44b195b1235aa7918fbc526ac962ab57590060967cc2f90594fd18fdab69550",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_01:source-29f1fa9c45fd8f64:output-e44b195b1235aa79",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_01",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.584,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 7.731,
+      "durationSec": 3.147,
+      "file": "random-archer_01-hq.webm",
+      "bytes": 8448575,
+      "sha256": "29f1fa9c45fd8f64abc81472f8c1f5b6b31d77808db8d2ba1f2d74d89d2c1ec9"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_01-hq.webm",
+    "sourceVideoSha256": "29f1fa9c45fd8f64abc81472f8c1f5b6b31d77808db8d2ba1f2d74d89d2c1ec9",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.129,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      786,
+      372,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1060,
+      568,
+      1408,
+      680
+    ],
+    "contentMargins": [
+      274,
+      196,
+      274,
+      196
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 93,
+    "totalDurationMs": 3100,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8448575,
+    "outputBytes": 925549,
+    "reductionRatio": 0.890449,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/icon.png",
+    "sha256": "707fe660387fa5cfe39e97590580ed917eb385298538dd6b972043d4daf7a7a2",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "493378c58316ca04ec4156066ba1bf66c90ce7ede6748f3bfdc642edb999a0f9",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_01-vfx.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_01-body.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_01.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_01",
+      "acceptedAnimationId": "archer_01:forest-roll:own-folder-v2:1b08ef4e29d44733",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/archer/forest-roll-8dir-v2.png",
+      "originalSourceSha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/source/body-source-user-directed-existing-extra-action-forest-roll-1b08ef4e29d44733.png",
+      "packageSourceSha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/body.png",
+      "packageRuntimeSha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

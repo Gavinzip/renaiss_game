@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_02",
+  "classId": "mage",
+  "name": "汲魂之手",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02",
+  "runtime": {
+    "skillId": "mage_02",
+    "classId": "mage",
+    "name": "汲魂之手",
+    "persistent": false,
+    "previewSha256": "c796878e59446879a08c3a87a267b732381dff077da98d31dc4d00f506da80bf",
+    "visualContract": {
+      "anchor": "target",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        38,
+        34
+      ],
+      "referenceOffset": [
+        0,
+        -22
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": {
+        "kind": "effect-to-owner",
+        "outerColor": 7613846,
+        "outerWidth": 2,
+        "innerColor": 15618478,
+        "innerWidth": 1,
+        "ownerOffset": [
+          22,
+          -34
+        ],
+        "activeProgress": [
+          0.2,
+          0.9
+        ],
+        "moteColor": 16747469,
+        "moteSize": 3,
+        "moteTravelProgress": [
+          0.2,
+          0.82
+        ]
+      },
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:670c89554e15b8e6",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-汲魂之手.gif",
+    "configPreviewSourceSha256": "670c89554e15b8e61bc0006a723da98e2554922bd137061376124aec62366785",
+    "configPreviewOutputSha256": "7fb009426af7b81b6f2ebfa79ece0cd99b43dbda4e50aedd96e3c9a6352d9d9a",
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      30,
+      33,
+      135,
+      131
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png",
+    "sourceSha256": "564eed7871b145e4c35f7c617f12a8158e674eb6a6190367931f04b5d0c473b2",
+    "outputSha256": "369b2e11581f8f320c41b0e917eab9ee06207abc14c73de443ecfd9618b7b0ca",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          33,
+          35,
+          34,
+          36
+        ],
+        [
+          32,
+          35,
+          33,
+          36
+        ],
+        [
+          40,
+          35,
+          41,
+          36
+        ],
+        [
+          36,
+          35,
+          36,
+          36
+        ],
+        [
+          41,
+          36,
+          41,
+          36
+        ],
+        [
+          32,
+          35,
+          32,
+          36
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png",
+        "sha256": "564eed7871b145e4c35f7c617f12a8158e674eb6a6190367931f04b5d0c473b2"
+      }
+    ],
+    "packagePath": "mage_法師/1_Q_初階/03_汲魂之手_mage_02",
+    "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "c796878e59446879a08c3a87a267b732381dff077da98d31dc4d00f506da80bf",
+    "iconFile": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/icon.png",
+    "iconFileSha256": "b9883681c8d364c28b1c9be548f2095e3695e132d8ced62b6084e0d3ee431073",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_02:source-646217e51f5bafe5:output-c796878e59446879",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_02",
+    "previewSourceSequenceSha256": "646217e51f5bafe597fc1f3690143d06df56406f682658821320796bfc2591b5",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/preview/gameplay-preview-v1.webm",
+    "sha256": "c796878e59446879a08c3a87a267b732381dff077da98d31dc4d00f506da80bf",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_02:source-646217e51f5bafe5:output-c796878e59446879",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_02",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.525,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 8.071,
+      "durationSec": 3.546,
+      "file": "random-mage_02-hq.webm",
+      "bytes": 7765621,
+      "sha256": "646217e51f5bafe597fc1f3690143d06df56406f682658821320796bfc2591b5"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_02-hq.webm",
+    "sourceVideoSha256": "646217e51f5bafe597fc1f3690143d06df56406f682658821320796bfc2591b5",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.114,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      820,
+      356,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1081,
+      548,
+      1454,
+      668
+    ],
+    "contentMargins": [
+      261,
+      192,
+      262,
+      192
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 105,
+    "totalDurationMs": 3500,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 7765621,
+    "outputBytes": 415526,
+    "reductionRatio": 0.946492,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/icon.png",
+    "sha256": "b9883681c8d364c28b1c9be548f2095e3695e132d8ced62b6084e0d3ee431073",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "a6171640a83bd27fb910c73eb9ce9ae773d3503f2ef06b3ee772425a9b5d46fd",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_02.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

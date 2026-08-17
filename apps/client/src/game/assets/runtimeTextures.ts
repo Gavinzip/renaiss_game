@@ -5,6 +5,10 @@ import {
   ABILITY_VFX_KEYS,
   ARCHER_ATTACK_DIRECTIONS,
   ARCHER_ATTACK_FRAME_COUNT,
+  ARCHER_FOREST_ROLL_FRAME_COUNT,
+  ARCHER_MOVING_BOW_FRAME_COUNT,
+  ARCHER_MOVING_BOW_DIRECTIONS,
+  ARCHER_STANDING_FULL_DRAW_FRAME_COUNT,
   ARENA_DECAL_KEYS,
   ARENA_DECAL_TEXTURES,
   COMBAT_VFX_FRAME_COUNT,
@@ -20,6 +24,9 @@ import {
   getAbilityVfxRow,
   getArcherAttackDirectionRow,
   getArcherAttackFrameTexture,
+  getArcherForestRollFrameTexture,
+  getArcherMovingBowFrameTexture,
+  getArcherStandingFullDrawFrameTexture,
   getArenaDecalGridPosition,
   getArenaDecalTexturePadding,
   getArenaDecalTextureTrimPadding,
@@ -33,8 +40,10 @@ import {
   getEngineerActionFrameTexture,
   getEngineerVfxFrameTexture,
   getEngineerVfxRow,
-  getMageAttackDirectionRow,
-  getMageAttackFrameTexture,
+  getMageStaffCastDirectionRow,
+  getMageStaffCastFrameTexture,
+  getMageFieldVfxFrameTexture,
+  getMageFieldVfxRow,
   getMageVfxFrameTexture,
   getMageVfxRow,
   getRpgSkillProjectileFrameTexture,
@@ -47,11 +56,14 @@ import {
   getWarriorAttackFrameTexture,
   getWarriorArcherVfxFrameTexture,
   getWarriorArcherVfxRow,
+  getWarriorM1FrameTexture,
   getWarriorVerticalSlashFrameTexture,
   getWarriorVerticalSlashRow,
   getWarriorVerdictVfxFrameTexture,
-  MAGE_ATTACK_DIRECTIONS,
-  MAGE_ATTACK_FRAME_COUNT,
+  MAGE_STAFF_CAST_DIRECTIONS,
+  MAGE_STAFF_CAST_FRAME_COUNT,
+  MAGE_FIELD_VFX_FRAME_COUNT,
+  MAGE_FIELD_VFX_KEYS,
   MAGE_VFX_FRAME_COUNT,
   MAGE_VFX_KEYS,
   RPG_SKILL_PROJECTILE_FRAME_COUNT,
@@ -65,6 +77,8 @@ import {
   WARRIOR_ATTACK_FRAME_COUNT,
   WARRIOR_ARCHER_VFX_FRAME_COUNT,
   WARRIOR_ARCHER_VFX_KEYS,
+  WARRIOR_M1_DIRECTIONS,
+  WARRIOR_M1_FRAME_COUNT,
   WARRIOR_VERTICAL_SLASH_FRAME_COUNT,
   WARRIOR_VERTICAL_SLASH_ROWS,
   WARRIOR_VERDICT_VFX_FRAME_COUNT,
@@ -75,12 +89,135 @@ import {
 
 const VFX_KEYS: VfxKey[] = ["shield"];
 const RPG_SKILL_PROJECTILE_ELEMENTS = ["water", "fire", "grass", "dark", "light"] as const;
+const PIXELLAB_DIRECTIONS = ["south", "south-east", "east", "north-east", "north", "north-west", "west", "south-west"] as const;
+const MAGIC_TURRET_FRAME_SIZE = 128;
+const MAGIC_TURRET_FRAME_COUNT = 4;
+// Pixel Debug union bounds are x=16..111 and y=24..94. Keep two transparent
+// safety pixels on every side so the authored firing frames remain intact
+// while runtime sizing no longer includes the unused 128×128 canvas.
+const MAGIC_TURRET_SAFE_CROP = { x: 14, y: 22, width: 100, height: 75 } satisfies Crop;
+const ENGINEER_MECHANICAL_TURRET_OBJECTS = new Set([
+  "turretBase",
+  "turretHead",
+  "turretHeadFiring",
+  "turretHeadBoosted"
+]);
+export const NEW_COMPATIBLE_WALK_FRAME_COUNT = 7;
+export const NEW_COMPATIBLE_WALK_CLASS_IDS = ["warrior", "archer", "engineer", "mage"] as const;
+export type NewCompatibleWalkClassId = (typeof NEW_COMPATIBLE_WALK_CLASS_IDS)[number];
+// PixelLab exports all directions inside a generous square canvas. Normalize
+// those frames into the same aspect ratio as the existing runtime character
+// cells, while preserving native pixel proportions and one shared foot line.
+const NEW_COMPATIBLE_WALK_CELL = { width: 165, height: 194, footY: 174, topInset: 18 };
+const ARENA_RUNTIME_SOURCE_TEXTURE_KEYS = [
+  "classSprites",
+  "classSpritesClean",
+  "villageAssets",
+  "villageAssetsClean",
+  "skillEffects",
+  "skillEffectsClean",
+  "combatObjects",
+  "combatObjectsClean",
+  "arenaDecals",
+  "warriorAttackSprites",
+  "warriorM1Sprites",
+  "archerAttackSprites",
+  "archerMovingBowSprites",
+  "archerStandingFullDrawSprites",
+  "archerForestRollSprites",
+  "engineerActionSprites",
+  "mageStaffCastSprites",
+  "statusEffects",
+  "abilityEffects",
+  "warriorVerticalSlash",
+  "warriorArcherEffects",
+  "warriorVerdictCombatFx",
+  "engineerEffects",
+  "mageEffects",
+  "mageFieldEffects",
+  "combatEffects",
+  "rpgSkillProjectiles",
+  "engineerMechanicalTurretAtlas",
+  "engineerMechanicalTurretAtlasClean",
+  "engineerMagicTurretFire"
+] as const;
+const arenaRuntimeBuildGroups = new WeakMap<Phaser.Scene, Set<string>>();
 
-export function buildRuntimeTextures(scene: Phaser.Scene) {
+export type PixelLabDirection = (typeof PIXELLAB_DIRECTIONS)[number];
+
+export function getNewCompatibleWalkFrameTexture(classId: string, direction: PixelLabDirection, frame: number) {
+  return `new_compatible_walk_${classId}_${direction}_${Math.max(0, Math.min(NEW_COMPATIBLE_WALK_FRAME_COUNT - 1, frame))}`;
+}
+
+export function getMagicTurretFrameTexture(frame: number) {
+  return `engineer_magic_turret_fire_${Math.max(0, Math.min(MAGIC_TURRET_FRAME_COUNT - 1, frame))}`;
+}
+
+export function buildMagicTurretRuntimeTextures(scene: Phaser.Scene) {
+  for (let frame = 0; frame < MAGIC_TURRET_FRAME_COUNT; frame += 1) {
+    sliceTexture(
+      scene,
+      "engineerMagicTurretFire",
+      getMagicTurretFrameTexture(frame),
+      {
+        ...MAGIC_TURRET_SAFE_CROP,
+        x: frame * MAGIC_TURRET_FRAME_SIZE + MAGIC_TURRET_SAFE_CROP.x
+      }
+    );
+  }
+  markArenaRuntimeGroup(scene, "magic-turret");
+}
+
+export function buildNewCompatibleWalkTextures(scene: Phaser.Scene) {
+  for (const classId of NEW_COMPATIBLE_WALK_CLASS_IDS) {
+    buildNewCompatibleWalkTexture(scene, classId);
+  }
+  markArenaRuntimeGroup(scene, "compatible-walks");
+}
+
+export function buildNewCompatibleWalkTexture(scene: Phaser.Scene, classId: NewCompatibleWalkClassId) {
+  normalizeEightDirectionWalkGrid(
+    scene,
+    `newCompatibleWalk_${classId}`,
+    (direction, frame) => getNewCompatibleWalkFrameTexture(classId, direction, frame)
+  );
+}
+
+export function assertArenaRuntimeTexturesReady(scene: Phaser.Scene) {
+  const groups = arenaRuntimeBuildGroups.get(scene);
+  const requiredGroups = ["base", "magic-turret", "compatible-walks"];
+  const missing = requiredGroups.filter((group) => !groups?.has(group));
+  if (missing.length > 0) {
+    throw new Error(`Arena runtime texture build is incomplete: ${missing.join(", ")}`);
+  }
+}
+
+/**
+ * Arena-only cleanup for sheets copied into independent runtime textures during
+ * scene creation. Direct-render assets such as healthLogo, attackMushroom,
+ * Engineer statics, and skill tethers are deliberately absent from this list.
+ */
+export function releaseArenaRuntimeSourceTextures(scene: Phaser.Scene) {
+  for (const sourceKey of ARENA_RUNTIME_SOURCE_TEXTURE_KEYS) {
+    if (scene.textures.exists(sourceKey)) {
+      scene.textures.remove(sourceKey);
+    }
+  }
+  for (const classId of NEW_COMPATIBLE_WALK_CLASS_IDS) {
+    const sourceKey = `newCompatibleWalk_${classId}`;
+    if (scene.textures.exists(sourceKey)) {
+      scene.textures.remove(sourceKey);
+    }
+  }
+}
+
+function buildEnvironmentRuntimeTextures(scene: Phaser.Scene) {
   for (const [name, crop] of Object.entries(ENV_CROPS)) {
     sliceTexture(scene, "villageAssetsClean", ENV_TEXTURES[name as keyof typeof ENV_TEXTURES], crop);
   }
+}
 
+function buildArenaDecalRuntimeTextures(scene: Phaser.Scene) {
   for (const key of ARENA_DECAL_KEYS) {
     const { column, row } = getArenaDecalGridPosition(key);
     sliceGridTexture(
@@ -96,12 +233,26 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
       getArenaDecalTextureTrimPadding(key)
     );
   }
+}
 
+function buildClassRuntimeTextures(scene: Phaser.Scene) {
   for (const classId of CLASS_ORDER) {
     for (let frame = 0; frame < 8; frame += 1) {
       sliceTexture(scene, "classSpritesClean", getClassFrameTexture(classId, frame), getClassFrameCrop(classId, frame));
     }
   }
+}
+
+export function buildVillageRuntimeTextures(scene: Phaser.Scene, options: { includeLegacyClassTextures?: boolean } = {}) {
+  buildEnvironmentRuntimeTextures(scene);
+  buildArenaDecalRuntimeTextures(scene);
+  if (options.includeLegacyClassTextures ?? true) {
+    buildClassRuntimeTextures(scene);
+  }
+}
+
+export function buildRuntimeTextures(scene: Phaser.Scene) {
+  buildVillageRuntimeTextures(scene);
 
   for (const direction of WARRIOR_ATTACK_DIRECTIONS) {
     for (let frame = 0; frame < WARRIOR_ATTACK_FRAME_COUNT; frame += 1) {
@@ -113,6 +264,20 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
         WARRIOR_ATTACK_DIRECTIONS.length,
         frame,
         getWarriorAttackDirectionRow(direction)
+      );
+    }
+  }
+
+  for (const [row, direction] of WARRIOR_M1_DIRECTIONS.entries()) {
+    for (let frame = 0; frame < WARRIOR_M1_FRAME_COUNT; frame += 1) {
+      sliceGridTexture(
+        scene,
+        "warriorM1Sprites",
+        getWarriorM1FrameTexture(direction, frame),
+        WARRIOR_M1_FRAME_COUNT,
+        WARRIOR_M1_DIRECTIONS.length,
+        frame,
+        row
       );
     }
   }
@@ -131,6 +296,46 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
+  for (const [row, direction] of ARCHER_MOVING_BOW_DIRECTIONS.entries()) {
+    for (let frame = 0; frame < ARCHER_MOVING_BOW_FRAME_COUNT; frame += 1) {
+      sliceGridTexture(
+        scene,
+        "archerMovingBowSprites",
+        getArcherMovingBowFrameTexture(direction, frame),
+        ARCHER_MOVING_BOW_FRAME_COUNT,
+        ARCHER_MOVING_BOW_DIRECTIONS.length,
+        frame,
+        row
+      );
+    }
+  }
+
+  for (const [row, direction] of ARCHER_MOVING_BOW_DIRECTIONS.entries()) {
+    sliceGridTexture(
+      scene,
+      "archerStandingFullDrawSprites",
+      getArcherStandingFullDrawFrameTexture(direction),
+      ARCHER_STANDING_FULL_DRAW_FRAME_COUNT,
+      ARCHER_MOVING_BOW_DIRECTIONS.length,
+      0,
+      row
+    );
+  }
+
+  for (const [row, direction] of ARCHER_MOVING_BOW_DIRECTIONS.entries()) {
+    for (let frame = 0; frame < ARCHER_FOREST_ROLL_FRAME_COUNT; frame += 1) {
+      sliceGridTexture(
+        scene,
+        "archerForestRollSprites",
+        getArcherForestRollFrameTexture(direction, frame),
+        ARCHER_FOREST_ROLL_FRAME_COUNT,
+        ARCHER_MOVING_BOW_DIRECTIONS.length,
+        frame,
+        row
+      );
+    }
+  }
+
   for (const direction of ENGINEER_ACTION_DIRECTIONS) {
     for (let frame = 0; frame < ENGINEER_ACTION_FRAME_COUNT; frame += 1) {
       sliceGridTexture(
@@ -145,16 +350,16 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
-  for (const direction of MAGE_ATTACK_DIRECTIONS) {
-    for (let frame = 0; frame < MAGE_ATTACK_FRAME_COUNT; frame += 1) {
+  for (const direction of MAGE_STAFF_CAST_DIRECTIONS) {
+    for (let frame = 0; frame < MAGE_STAFF_CAST_FRAME_COUNT; frame += 1) {
       sliceGridTexture(
         scene,
-        "mageAttackSprites",
-        getMageAttackFrameTexture(direction, frame),
-        MAGE_ATTACK_FRAME_COUNT,
-        MAGE_ATTACK_DIRECTIONS.length,
+        "mageStaffCastSprites",
+        getMageStaffCastFrameTexture(direction, frame),
+        MAGE_STAFF_CAST_FRAME_COUNT,
+        MAGE_STAFF_CAST_DIRECTIONS.length,
         frame,
-        getMageAttackDirectionRow(direction)
+        getMageStaffCastDirectionRow(direction)
       );
     }
   }
@@ -270,6 +475,20 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     }
   }
 
+  for (const vfx of MAGE_FIELD_VFX_KEYS) {
+    for (let frame = 0; frame < MAGE_FIELD_VFX_FRAME_COUNT; frame += 1) {
+      sliceGridTexture(
+        scene,
+        "mageFieldEffects",
+        getMageFieldVfxFrameTexture(vfx, frame),
+        MAGE_FIELD_VFX_FRAME_COUNT,
+        MAGE_FIELD_VFX_KEYS.length,
+        frame,
+        getMageFieldVfxRow(vfx)
+      );
+    }
+  }
+
   for (const vfx of COMBAT_VFX_KEYS) {
     for (let frame = 0; frame < COMBAT_VFX_FRAME_COUNT; frame += 1) {
       sliceGridTexture(
@@ -308,7 +527,9 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
     const { column, row } = getCombatObjectGridPosition(key);
     sliceGridTexture(
       scene,
-      "combatObjectsClean",
+      ENGINEER_MECHANICAL_TURRET_OBJECTS.has(key)
+        ? "engineerMechanicalTurretAtlasClean"
+        : "combatObjectsClean",
       getCombatObjectTexture(key),
       4,
       4,
@@ -319,7 +540,87 @@ export function buildRuntimeTextures(scene: Phaser.Scene) {
       getCombatObjectTrimPadding(key)
     );
   }
+  markArenaRuntimeGroup(scene, "base");
+}
 
+function normalizeEightDirectionWalkGrid(
+  scene: Phaser.Scene,
+  sourceKey: string,
+  outputKeyFor: (direction: PixelLabDirection, frame: number) => string
+) {
+  const source = scene.textures.get(sourceKey).getSourceImage() as HTMLCanvasElement | HTMLImageElement;
+  const cellWidth = Math.floor(source.width / NEW_COMPATIBLE_WALK_FRAME_COUNT);
+  const cellHeight = Math.floor(source.height / PIXELLAB_DIRECTIONS.length);
+  const sourceCanvas = document.createElement("canvas");
+  sourceCanvas.width = source.width;
+  sourceCanvas.height = source.height;
+  const sourceContext = sourceCanvas.getContext("2d", { willReadFrequently: true });
+  if (!sourceContext) {
+    throw new Error(`Unable to inspect Arena walk source ${sourceKey}`);
+  }
+  sourceContext.imageSmoothingEnabled = false;
+  sourceContext.drawImage(source, 0, 0);
+
+  for (const [row, direction] of PIXELLAB_DIRECTIONS.entries()) {
+    const bounds = getPixelLabDirectionBounds(sourceContext, row * cellHeight, cellWidth, cellHeight);
+    const sourceHeightToFoot = Math.max(1, bounds.bottom - bounds.top);
+    const targetHeight = NEW_COMPATIBLE_WALK_CELL.footY - NEW_COMPATIBLE_WALK_CELL.topInset;
+    const scale = Math.min(1, targetHeight / sourceHeightToFoot);
+    const drawWidth = Math.max(1, Math.round((bounds.right - bounds.left) * scale));
+    const drawHeight = Math.max(1, Math.round((bounds.bottom - bounds.top) * scale));
+    const drawX = Math.round((NEW_COMPATIBLE_WALK_CELL.width - drawWidth) / 2);
+    const drawY = NEW_COMPATIBLE_WALK_CELL.footY - drawHeight;
+
+    for (let frame = 0; frame < NEW_COMPATIBLE_WALK_FRAME_COUNT; frame += 1) {
+      const outputKey = outputKeyFor(direction, frame);
+      if (scene.textures.exists(outputKey)) {
+        scene.textures.remove(outputKey);
+      }
+      const canvas = scene.textures.createCanvas(outputKey, NEW_COMPATIBLE_WALK_CELL.width, NEW_COMPATIBLE_WALK_CELL.height);
+      if (!canvas) {
+        throw new Error(`Unable to create Arena walk texture ${outputKey}`);
+      }
+      const context = canvas.getContext();
+      context.imageSmoothingEnabled = false;
+      context.clearRect(0, 0, NEW_COMPATIBLE_WALK_CELL.width, NEW_COMPATIBLE_WALK_CELL.height);
+      context.drawImage(
+        source,
+        frame * cellWidth + bounds.left,
+        row * cellHeight + bounds.top,
+        bounds.right - bounds.left,
+        bounds.bottom - bounds.top,
+        drawX,
+        drawY,
+        drawWidth,
+        drawHeight
+      );
+      canvas.refresh();
+    }
+  }
+}
+
+function getPixelLabDirectionBounds(context: CanvasRenderingContext2D, sourceY: number, cellWidth: number, cellHeight: number) {
+  let left = cellWidth;
+  let top = cellHeight;
+  let right = 0;
+  let bottom = 0;
+
+  for (let frame = 0; frame < NEW_COMPATIBLE_WALK_FRAME_COUNT; frame += 1) {
+    const pixels = context.getImageData(frame * cellWidth, sourceY, cellWidth, cellHeight).data;
+    for (let y = 0; y < cellHeight; y += 1) {
+      for (let x = 0; x < cellWidth; x += 1) {
+        if (pixels[(y * cellWidth + x) * 4 + 3] === 0) {
+          continue;
+        }
+        left = Math.min(left, x);
+        top = Math.min(top, y);
+        right = Math.max(right, x + 1);
+        bottom = Math.max(bottom, y + 1);
+      }
+    }
+  }
+
+  return right > left && bottom > top ? { left, top, right, bottom } : { left: 0, top: 0, right: cellWidth, bottom: cellHeight };
 }
 
 function sliceTexture(scene: Phaser.Scene, sourceKey: string, outputKey: string, crop: Crop) {
@@ -330,7 +631,7 @@ function sliceTexture(scene: Phaser.Scene, sourceKey: string, outputKey: string,
   const source = scene.textures.get(sourceKey).getSourceImage() as HTMLCanvasElement | HTMLImageElement;
   const canvas = scene.textures.createCanvas(outputKey, crop.width, crop.height);
   if (!canvas) {
-    return;
+    throw new Error(`Unable to create Arena runtime texture ${outputKey}`);
   }
 
   const context = canvas.getContext();
@@ -369,7 +670,7 @@ function sliceGridTexture(
 
   const context = rawCanvas.getContext("2d");
   if (!context) {
-    return;
+    throw new Error(`Unable to slice Arena runtime texture ${outputKey}`);
   }
   context.imageSmoothingEnabled = false;
   context.clearRect(0, 0, outputWidth, outputHeight);
@@ -388,7 +689,7 @@ function sliceGridTexture(
   const textureCanvas = trimAlpha ? trimCanvasToAlpha(rawCanvas, trimPadding) : rawCanvas;
   const canvas = scene.textures.createCanvas(outputKey, textureCanvas.width, textureCanvas.height);
   if (!canvas) {
-    return;
+    throw new Error(`Unable to create Arena runtime texture ${outputKey}`);
   }
 
   const outputContext = canvas.getContext();
@@ -396,6 +697,12 @@ function sliceGridTexture(
   outputContext.clearRect(0, 0, textureCanvas.width, textureCanvas.height);
   outputContext.drawImage(textureCanvas, 0, 0);
   canvas.refresh();
+}
+
+function markArenaRuntimeGroup(scene: Phaser.Scene, group: string) {
+  const groups = arenaRuntimeBuildGroups.get(scene) ?? new Set<string>();
+  groups.add(group);
+  arenaRuntimeBuildGroups.set(scene, groups);
 }
 
 function trimCanvasToAlpha(canvas: HTMLCanvasElement, padding: TexturePadding) {

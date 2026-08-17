@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_10",
+  "classId": "mage",
+  "name": "重力井",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10",
+  "runtime": {
+    "skillId": "mage_10",
+    "classId": "mage",
+    "name": "重力井",
+    "persistent": false,
+    "playback": {
+      "introFrameIndices": [
+        0,
+        1
+      ],
+      "loopFrameIndices": [
+        2,
+        3,
+        4
+      ],
+      "recoveryFrameIndices": [
+        5
+      ]
+    },
+    "previewSha256": "14465a2a199c47e80d40d6b3ebb9f6a407624fcbdc2443a0bd0a2de1406217aa",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:44dedfccadbb0766",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-重力井.gif",
+    "configPreviewSourceSha256": "44dedfccadbb0766e6ed0a03186fea18c0f49801e91121c6b2f88ef0fa6a0c3f",
+    "configPreviewOutputSha256": "e2c41e2240b451f5ddc41a88d1ed7a660a14a1c78c041674e63f63d3cd288619",
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      15,
+      39,
+      149,
+      125
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-gravity-well.png",
+    "sourceSha256": "8065527879d9680485b6a34d37358432409e621157323322639abdde206363e3",
+    "outputSha256": "45f9954fd07c1e499ed19165a10f785e3705c15293f654b3998aed6b9614e672",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          17,
+          47,
+          18,
+          48
+        ],
+        [
+          21,
+          41,
+          21,
+          43
+        ],
+        [
+          34,
+          41,
+          34,
+          42
+        ],
+        [
+          29,
+          41,
+          29,
+          42
+        ],
+        [
+          17,
+          42,
+          18,
+          42
+        ],
+        [
+          17,
+          47,
+          19,
+          48
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-gravity-well.png",
+        "sha256": "8065527879d9680485b6a34d37358432409e621157323322639abdde206363e3"
+      }
+    ],
+    "packagePath": "mage_法師/2_E_中階/11_重力井_mage_10",
+    "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "14465a2a199c47e80d40d6b3ebb9f6a407624fcbdc2443a0bd0a2de1406217aa",
+    "iconFile": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/icon.png",
+    "iconFileSha256": "670c82f1bcc23354fa5cff3939ab81d1f9826e8e3960d5de8d3c91293489f292",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_10:source-80a612fd410c2bed:output-14465a2a199c47e8",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_10",
+    "previewSourceSequenceSha256": "80a612fd410c2bed6132c5dfe2d7256fff62b4556527db9c2925ca2496e6c8ee",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/preview/gameplay-preview-v1.webm",
+    "sha256": "14465a2a199c47e80d40d6b3ebb9f6a407624fcbdc2443a0bd0a2de1406217aa",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_10:source-80a612fd410c2bed:output-14465a2a199c47e8",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_10",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.948,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.896,
+      "durationSec": 4.948,
+      "file": "random-mage_10-hq.webm",
+      "bytes": 9213754,
+      "sha256": "80a612fd410c2bed6132c5dfe2d7256fff62b4556527db9c2925ca2496e6c8ee"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_10-hq.webm",
+    "sourceVideoSha256": "80a612fd410c2bed6132c5dfe2d7256fff62b4556527db9c2925ca2496e6c8ee",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.081,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      767,
+      378,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1046,
+      542,
+      1384,
+      719
+    ],
+    "contentMargins": [
+      279,
+      164,
+      279,
+      163
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 147,
+    "totalDurationMs": 4900,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 9213754,
+    "outputBytes": 722597,
+    "reductionRatio": 0.921574,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/icon.png",
+    "sha256": "670c82f1bcc23354fa5cff3939ab81d1f9826e8e3960d5de8d3c91293489f292",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "b605665a7dc1c038803a358d04dacb629984dfad9b01c729558d08df82534b90",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_10.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

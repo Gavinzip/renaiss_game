@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_07",
+  "classId": "warrior",
+  "name": "反擊姿態",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07",
+  "runtime": {
+    "skillId": "warrior_07",
+    "classId": "warrior",
+    "name": "反擊姿態",
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/runtime/primary.png",
+    "frameWidth": 340,
+    "frameHeight": 340,
+    "frameCount": 6,
+    "frameDurationMs": 120,
+    "unionBounds": [
+      27,
+      18,
+      332,
+      301
+    ],
+    "persistent": true,
+    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-counter-magic-shield-v2-normalized.png",
+    "sourceSha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
+    "outputSha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
+    "previewSha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
+    "visualContract": {
+      "anchor": "owner",
+      "layer": "unit",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        68,
+        68
+      ],
+      "referenceOffset": [
+        0,
+        -33
+      ],
+      "blendMode": "add",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "packagePath": "warrior_戰士/2_E_中階/08_反擊姿態_warrior_07",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
+    "iconFile": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/icon.png",
+    "iconFileSha256": "e9c7f1f2eb956e6007836cf3cc0a6b68ce664b41f4868c868605964a48eb7c06",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_07:source-c848003001784f2e:output-6dde6c95e90246c6",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_07",
+    "previewSourceSequenceSha256": "c848003001784f2e5639c35db223167471c623949aaeae5cf917dc410ca6a0ba",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/preview/gameplay-preview-v1.webm",
+    "sha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_07:source-c848003001784f2e:output-6dde6c95e90246c6",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_07",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.829,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.277,
+      "durationSec": 3.448,
+      "file": "random-warrior_07-hq.webm",
+      "bytes": 7198670,
+      "sha256": "c848003001784f2e5639c35db223167471c623949aaeae5cf917dc410ca6a0ba"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_07-hq.webm",
+    "sourceVideoSha256": "c848003001784f2e5639c35db223167471c623949aaeae5cf917dc410ca6a0ba",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 59.942,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      732,
+      356,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1097,
+      553,
+      1264,
+      663
+    ],
+    "contentMargins": [
+      365,
+      197,
+      364,
+      197
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 102,
+    "totalDurationMs": 3400,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 7198670,
+    "outputBytes": 382177,
+    "reductionRatio": 0.94691,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/icon.png",
+    "sha256": "e9c7f1f2eb956e6007836cf3cc0a6b68ce664b41f4868c868605964a48eb7c06",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "a55d33f89a238a5d63540b868630ac0ce521e25f3eb816ce405f40aa5628c753",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_07.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

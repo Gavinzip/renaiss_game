@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_14",
+  "classId": "engineer",
+  "name": "裂星魔彈",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14",
+  "runtime": {
+    "skillId": "engineer_14",
+    "classId": "engineer",
+    "name": "裂星魔彈",
+    "persistent": false,
+    "previewSha256": "2b1942db1f8adcb77042453f254d729a0f064066c86666ba311adb423c2de12e",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        58,
+        42
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "add",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        58,
+        42
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:fbbc2783a889ab3b",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-14-裂星魔彈.gif",
+    "configPreviewSourceSha256": "fbbc2783a889ab3bd713ada1777103a9f256689c61af010c24f1f39fbe455e5d",
+    "configPreviewOutputSha256": "bea42e888d64c5e3225e0721100f6a818946fd7e3cfc7f5075761396520d3d2d",
+    "file": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 18,
+    "unionBounds": [
+      51,
+      59,
+      113,
+      105
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png",
+    "sourceSha256": "d4603e911841594dfa4b8c933d0ddb87f4373efde095f08929475bfa33a31a6c",
+    "outputSha256": "8abdd4e18f2049841326c15bfb93c200f38bbb3f46a333c37d87481f29350faa",
+    "frameDurationsMs": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          64,
+          71,
+          65,
+          72
+        ],
+        [
+          64,
+          71,
+          65,
+          72
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          60,
+          68,
+          61,
+          68
+        ],
+        [
+          57,
+          67,
+          58,
+          68
+        ],
+        [
+          57,
+          67,
+          58,
+          68
+        ],
+        [
+          57,
+          67,
+          58,
+          68
+        ],
+        [
+          53,
+          61,
+          54,
+          62
+        ],
+        [
+          53,
+          61,
+          54,
+          62
+        ],
+        [
+          53,
+          61,
+          54,
+          62
+        ],
+        [
+          55,
+          68,
+          56,
+          68
+        ],
+        [
+          55,
+          68,
+          56,
+          68
+        ],
+        [
+          55,
+          68,
+          56,
+          68
+        ],
+        [
+          55,
+          68,
+          56,
+          68
+        ],
+        [
+          69,
+          72,
+          67,
+          73
+        ],
+        [
+          69,
+          72,
+          67,
+          73
+        ]
+      ]
+    },
+    "frameDurationMs": 90,
+    "candidateOrigin": "configuration-engineer-final-board-logical-runtime",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png",
+        "sha256": "d4603e911841594dfa4b8c933d0ddb87f4373efde095f08929475bfa33a31a6c"
+      }
+    ],
+    "packagePath": "engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "2b1942db1f8adcb77042453f254d729a0f064066c86666ba311adb423c2de12e",
+    "iconFile": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/icon.png",
+    "iconFileSha256": "d9c16a35988488b72d4eaeb133282f0676b357fcb32968b3bd16fbcb382d0e56",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_14:source-7a6db705bd6856a6:output-2b1942db1f8adcb7",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-engineer_14",
+    "previewSourceSequenceSha256": "7a6db705bd6856a68357e34c924864d6e2246c2a1e332e1159a4687b0ea2a49e",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.023,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/preview/gameplay-preview-v1.webm",
+    "sha256": "2b1942db1f8adcb77042453f254d729a0f064066c86666ba311adb423c2de12e",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_14:source-7a6db705bd6856a6:output-2b1942db1f8adcb7",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_14",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.55,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.899,
+      "durationSec": 4.349,
+      "file": "random-engineer_14-hq.webm",
+      "bytes": 8770998,
+      "sha256": "7a6db705bd6856a68357e34c924864d6e2246c2a1e332e1159a4687b0ea2a49e"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_14-hq.webm",
+    "sourceVideoSha256": "7a6db705bd6856a68357e34c924864d6e2246c2a1e332e1159a4687b0ea2a49e",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.185,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      866,
+      376,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1526,
+      709
+    ],
+    "contentMargins": [
+      235,
+      171,
+      236,
+      171
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.023,
+    "frameCount": 130,
+    "totalDurationMs": 4330,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8770998,
+    "outputBytes": 695220,
+    "reductionRatio": 0.920736,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/icon.png",
+    "sha256": "d9c16a35988488b72d4eaeb133282f0676b357fcb32968b3bd16fbcb382d0e56",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "aa8cc28f9ad55bfcc3a960f316b15c3afed901b4d1625971e55e81d271c8c880",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/engineer_14-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_14.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

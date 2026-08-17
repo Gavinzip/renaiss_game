@@ -14,9 +14,8 @@ const GROUND_TILE_INDEX = {
   stoneAlt: 2
 } as const;
 
-export function renderVillageMap(scene: Phaser.Scene) {
+export function renderVillageMap(scene: Phaser.Scene, mapProps: MapProp[] = getRenderableMapProps()) {
   const center = WORLD.width / 2;
-  const mapProps = getRenderableMapProps();
   const roadEdges = scene.add.graphics().setDepth(-2700);
   const groundLayer = createGroundTileLayer(scene);
 

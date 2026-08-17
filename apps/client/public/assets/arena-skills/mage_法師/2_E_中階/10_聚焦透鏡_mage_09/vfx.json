@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_09",
+  "classId": "mage",
+  "name": "聚焦透鏡",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09",
+  "runtime": {
+    "skillId": "mage_09",
+    "classId": "mage",
+    "name": "聚焦透鏡",
+    "persistent": false,
+    "previewSha256": "f37c28afba8d1ef8690c6bdf33c8d7d402406ce0c6fc1bc587843674ac01209c",
+    "visualContract": {
+      "anchor": "owner",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        31,
+        31
+      ],
+      "referenceOffset": [
+        24,
+        -43
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:89d8a822fad60b3f",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-聚焦透鏡.gif",
+    "configPreviewSourceSha256": "89d8a822fad60b3f8c6aa25e49e815c8561f193fcda81f323daa464b03acdd7b",
+    "configPreviewOutputSha256": "0accefda771bda106d53c4c429eca2816f2f819106e62ef7416565d87187ffd9",
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      24,
+      24,
+      140,
+      140
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-focus-lens.png",
+    "sourceSha256": "77878a29de813fbd871ed395b947eff5fd2ac6b4c420119f2af8b3288ddf1a1b",
+    "outputSha256": "f5971d255d0e38a6c5aba14b7fad0870e7a1049c68cd066ac2ff2045c8737183",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          26,
+          26,
+          27,
+          27
+        ],
+        [
+          26,
+          26,
+          27,
+          27
+        ],
+        [
+          26,
+          27,
+          27,
+          27
+        ],
+        [
+          26,
+          29,
+          27,
+          30
+        ],
+        [
+          26,
+          27,
+          27,
+          28
+        ],
+        [
+          26,
+          26,
+          27,
+          27
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-focus-lens.png",
+        "sha256": "77878a29de813fbd871ed395b947eff5fd2ac6b4c420119f2af8b3288ddf1a1b"
+      }
+    ],
+    "packagePath": "mage_法師/2_E_中階/10_聚焦透鏡_mage_09",
+    "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "f37c28afba8d1ef8690c6bdf33c8d7d402406ce0c6fc1bc587843674ac01209c",
+    "iconFile": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/icon.png",
+    "iconFileSha256": "8fdb6221036a4a1e8e3b4f5f3f558ea7d06f30773e2c74d6925090bca74ad54b",
+    "playback": {
+      "introFrameIndices": [
+        0,
+        1
+      ],
+      "loopFrameIndices": [
+        2,
+        3,
+        4
+      ],
+      "recoveryFrameIndices": [
+        5
+      ]
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_09:source-9ffaa5007c5f05be:output-f37c28afba8d1ef8",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_09",
+    "previewSourceSequenceSha256": "9ffaa5007c5f05be58ffa4de61212c43519691a3cc57cbb5e5a4ec03e049e753",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/preview/gameplay-preview-v1.webm",
+    "sha256": "f37c28afba8d1ef8690c6bdf33c8d7d402406ce0c6fc1bc587843674ac01209c",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_09:source-9ffaa5007c5f05be:output-f37c28afba8d1ef8",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_09",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.157,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 11.199,
+      "durationSec": 7.042,
+      "file": "random-mage_09-hq.webm",
+      "bytes": 14972196,
+      "sha256": "9ffaa5007c5f05be58ffa4de61212c43519691a3cc57cbb5e5a4ec03e049e753"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_09-hq.webm",
+    "sourceVideoSha256": "9ffaa5007c5f05be58ffa4de61212c43519691a3cc57cbb5e5a4ec03e049e753",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.0,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      836,
+      353,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1078,
+      542,
+      1490,
+      668
+    ],
+    "contentMargins": [
+      242,
+      189,
+      242,
+      189
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 210,
+    "totalDurationMs": 7000,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 14972196,
+    "outputBytes": 821772,
+    "reductionRatio": 0.945113,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/icon.png",
+    "sha256": "8fdb6221036a4a1e8e3b4f5f3f558ea7d06f30773e2c74d6925090bca74ad54b",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "13a295100a1424937b527112036f0256336ce2259d5beb6401c81c91001c6d77",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_09.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

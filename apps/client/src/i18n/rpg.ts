@@ -42,6 +42,8 @@ type RpgCopy = {
     language: string;
     entry: string;
     entryHint: string;
+    skillForge: string;
+    skillForgeHint: string;
     cabinet: string;
     cabinetHint: string;
     gym: string;
@@ -296,7 +298,7 @@ export const RPG_TEXT: Record<RpgLanguage, RpgCopy> = {
     profile: {
       panelLabel: "個人設定",
       title: "個人與設定",
-      subtitle: "先調整基本設定，再進收藏櫃或道館。",
+      subtitle: "調整基本設定後，前往競技技能鍛造所或競技場。",
       playerName: "玩家名稱",
       wallet: "錢包",
       demoData: "體驗資料",
@@ -304,7 +306,9 @@ export const RPG_TEXT: Record<RpgLanguage, RpgCopy> = {
       languageHint: "語言可以隨時切換。",
       language: "語言",
       entry: "入口",
-      entryHint: "收藏櫃和個人資料分開，不會混在同一頁。",
+      entryHint: "抽取並裝備技能，再進入競技場。",
+      skillForge: "競技技能鍛造所",
+      skillForgeHint: "抽取、查看並裝備競技技能",
       cabinet: "收藏櫃",
       cabinetHint: "卡片展示、抽技能、前往插槽",
       gym: "道館",
@@ -599,7 +603,7 @@ export const RPG_TEXT: Record<RpgLanguage, RpgCopy> = {
     profile: {
       panelLabel: "Profile settings",
       title: "Profile & Settings",
-      subtitle: "Adjust your setup, then open the cabinet or gym.",
+      subtitle: "Adjust your setup, then enter the Arena Skill Forge or Arena.",
       playerName: "Player Name",
       wallet: "Wallet",
       demoData: "Demo data",
@@ -607,7 +611,9 @@ export const RPG_TEXT: Record<RpgLanguage, RpgCopy> = {
       languageHint: "You can change language anytime.",
       language: "Language",
       entry: "Destinations",
-      entryHint: "The cabinet is separate from profile settings.",
+      entryHint: "Draw and equip skills, then enter the Arena.",
+      skillForge: "Arena Skill Forge",
+      skillForgeHint: "Draw, inspect, and equip arena skills",
       cabinet: "Cabinet",
       cabinetHint: "View cards, draw skills, jump to slots",
       gym: "Gym",
@@ -902,7 +908,7 @@ export const RPG_TEXT: Record<RpgLanguage, RpgCopy> = {
     profile: {
       panelLabel: "프로필 설정",
       title: "프로필 및 설정",
-      subtitle: "기본 설정을 조정한 뒤 수집장이나 도장으로 이동하세요.",
+      subtitle: "기본 설정을 조정한 뒤 아레나 스킬 대장간이나 경기장으로 이동하세요.",
       playerName: "플레이어 이름",
       wallet: "지갑",
       demoData: "체험 데이터",
@@ -910,7 +916,9 @@ export const RPG_TEXT: Record<RpgLanguage, RpgCopy> = {
       languageHint: "언어는 언제든 변경할 수 있습니다.",
       language: "언어",
       entry: "이동 메뉴",
-      entryHint: "수집장은 프로필 설정과 분리되어 있습니다.",
+      entryHint: "스킬을 추첨하고 장착한 뒤 경기장에 입장하세요.",
+      skillForge: "아레나 스킬 대장간",
+      skillForgeHint: "경기장 스킬 추첨, 확인 및 장착",
       cabinet: "수집장",
       cabinetHint: "카드 보기, 스킬 추첨, 슬롯 이동",
       gym: "도장",

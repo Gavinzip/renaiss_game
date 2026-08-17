@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_14",
+  "classId": "warrior",
+  "name": "裁決",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14",
+  "runtime": {
+    "skillId": "warrior_14",
+    "classId": "warrior",
+    "name": "裁決",
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/runtime/primary.png",
+    "frameWidth": 916,
+    "frameHeight": 1717,
+    "frameCount": 1,
+    "frameDurationMs": 90,
+    "unionBounds": [
+      199,
+      82,
+      713,
+      1631
+    ],
+    "persistent": false,
+    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-judgment-sword-v1.png",
+    "sourceSha256": "0a2618b0aeec326e28966ad1728ad95c52ea948730a3648fd9ce45a4f4688b2c",
+    "outputSha256": "b2dfaf0a4cdffaf34c8a9623ef24703435cf6059c277c01468b32d8d29eff697",
+    "previewSha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
+    "visualContract": {
+      "anchor": "target",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        44,
+        86
+      ],
+      "referenceOffset": [
+        0,
+        -43
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "packagePath": "warrior_戰士/3_R_高階/15_裁決_warrior_14",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
+    "iconFile": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/icon.png",
+    "iconFileSha256": "c57442080f44be016ba2b01f64840c204a341fd0f0090f090d0fda8683984f6d",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_14:source-c17d6d1369cd7000:output-078de3c353f97e60",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_14",
+    "previewSourceSequenceSha256": "c17d6d1369cd7000f5394fafc0b5b2dc5a7f971c6c9b7c6e7bd931cef23532fb",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.027,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/preview/gameplay-preview-v1.webm",
+    "sha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_14:source-c17d6d1369cd7000:output-078de3c353f97e60",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_14",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.112,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 8.876,
+      "durationSec": 3.764,
+      "file": "random-warrior_14-hq.webm",
+      "bytes": 9589140,
+      "sha256": "c17d6d1369cd7000f5394fafc0b5b2dc5a7f971c6c9b7c6e7bd931cef23532fb"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_14-hq.webm",
+    "sourceVideoSha256": "c17d6d1369cd7000f5394fafc0b5b2dc5a7f971c6c9b7c6e7bd931cef23532fb",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.215,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      786,
+      345,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1102,
+      531,
+      1367,
+      663
+    ],
+    "contentMargins": [
+      316,
+      186,
+      315,
+      186
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.027,
+    "frameCount": 112,
+    "totalDurationMs": 3730,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 9589140,
+    "outputBytes": 688208,
+    "reductionRatio": 0.92823,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/icon.png",
+    "sha256": "c57442080f44be016ba2b01f64840c204a341fd0f0090f090d0fda8683984f6d",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "64b536f3ddc805925c8c2758ed88aa9653e3bffdff1cae683a90b4430af15bd7",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_14.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

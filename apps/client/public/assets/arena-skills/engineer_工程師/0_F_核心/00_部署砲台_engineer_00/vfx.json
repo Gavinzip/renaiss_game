@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_00",
+  "classId": "engineer",
+  "name": "部署砲台",
+  "key": "F",
+  "tier": "core",
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00",
+  "runtimeAssets": {
+    "deployMechanical": {
+      "kind": "animated-strip",
+      "frameWidth": 48,
+      "frameHeight": 36,
+      "sourceFrameCount": 6,
+      "semanticFrameIndices": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "logicalFrameCount": 14,
+      "frameDurationMs": 90,
+      "sourceFrameSequence": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5
+      ],
+      "displaySize": [
+        48,
+        36
+      ],
+      "origin": [
+        0.5,
+        0.5
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "acceptedAnimationId": "engineer_00:deployMechanical:5173-config:a749cfc743bd:alignment-v2",
+      "placementVersion": "engineer-00-mechanical-deploy-alignment-v2",
+      "fitMode": "semantic-union-safe-recenter",
+      "frameCount": 14,
+      "unionBounds": [
+        0,
+        0,
+        48,
+        36
+      ],
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/deploy-mechanical.png",
+      "sha256": "a749cfc743bd040c6cc90bf95ea6c734a7ccb1913e759d10f8c0fac9e15ae50e",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-deploy-mechanical-v2-normalized.png",
+      "sourceSha256": "89420f0e2d1a7ed4cbcd583644899a19afda5e931dd20f1c7729ede093ce9b53",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-mechanical-v2-normalized.png"
+    },
+    "deployMagic": {
+      "kind": "animated-strip",
+      "frameWidth": 112,
+      "frameHeight": 96,
+      "sourceFrameCount": 6,
+      "semanticFrameIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "logicalFrameCount": 14,
+      "frameDurationMs": 90,
+      "sourceFrameSequence": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5
+      ],
+      "displaySize": [
+        112,
+        96
+      ],
+      "origin": [
+        0.5,
+        1.0
+      ],
+      "referenceOffset": [
+        0,
+        4
+      ],
+      "fitMode": "visible-contain-bottom-center",
+      "frameCount": 14,
+      "unionBounds": [
+        0,
+        0,
+        112,
+        96
+      ],
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/deploy-magic.png",
+      "sha256": "44e6670b22d5c2f349870436a49dbdbbfc050fea581da0a3cdb1c47973e3578b",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-deploy-magic-v1-normalized.png",
+      "sourceSha256": "9de31cf9d8909d7bb3966bce0521ce31602bcdd6d36894a66b6abf5b3b76396b",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-magic-v1-normalized.png"
+    },
+    "mechanicalBasicShot": {
+      "kind": "animated-strip",
+      "frameWidth": 48,
+      "frameHeight": 34,
+      "sourceFrameCount": 6,
+      "semanticFrameIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "logicalFrameCount": 12,
+      "frameDurationMs": 90,
+      "sourceFrameSequence": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5
+      ],
+      "displaySize": [
+        48,
+        34
+      ],
+      "origin": [
+        0.5,
+        0.5
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "fitMode": "visible-contain-center",
+      "frameCount": 12,
+      "unionBounds": [
+        0,
+        0,
+        48,
+        34
+      ],
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/basic-shot-mechanical.png",
+      "sha256": "dd4d0e7a9306611c07db0c2988521f8b9ad0a107fdd538bc0d6f0e3c9a8ff724",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png",
+      "sourceSha256": "9ff998bd6cba68b09ef32093445b7f64e6659fa76bcb46ad501f4c660f58ad66",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-basic-shot-v1-normalized.png"
+    },
+    "magicBasicShot": {
+      "kind": "animated-strip",
+      "frameWidth": 48,
+      "frameHeight": 34,
+      "sourceFrameCount": 6,
+      "semanticFrameIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "logicalFrameCount": 12,
+      "frameDurationMs": 90,
+      "sourceFrameSequence": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5
+      ],
+      "displaySize": [
+        48,
+        34
+      ],
+      "origin": [
+        0.5,
+        0.5
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "fitMode": "visible-contain-center",
+      "frameCount": 12,
+      "unionBounds": [
+        0,
+        0,
+        48,
+        34
+      ],
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/basic-shot-magic.png",
+      "sha256": "888f1adb619307c237692be78b6219e2db493e152993ab35768254bb5170d446",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png",
+      "sourceSha256": "88f0d796fffd5419dc9672b7937edbfb8130b416fafd3beaf67254af35161c2f",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-basic-v2-normalized.png"
+    },
+    "mechanicalTurretAtlas": {
+      "kind": "production-atlas",
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/mechanical-turret-atlas.png",
+      "sha256": "a4333048ae7b54326a7378a622aaf59ee70ba2ee577612dc13e758a4ca9c5101",
+      "sourcePath": "apps/client/public/assets/generated/combat-objects.png",
+      "sourceSha256": "a4333048ae7b54326a7378a622aaf59ee70ba2ee577612dc13e758a4ca9c5101",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/combat-objects.png"
+    },
+    "magicTurret": {
+      "kind": "production-image",
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret.png",
+      "sha256": "d890969d7f992975c0d023567229b17050da9feaba67d10afe2e1e1d97cb7d7d",
+      "sourcePath": "apps/client/public/assets/generated/engineer-magic-turret.png",
+      "sourceSha256": "d890969d7f992975c0d023567229b17050da9feaba67d10afe2e1e1d97cb7d7d",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret.png"
+    },
+    "magicTurretFire": {
+      "kind": "production-strip",
+      "frameWidth": 128,
+      "frameHeight": 128,
+      "sourceFrameCount": 4,
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret-fire.png",
+      "sha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
+      "sourcePath": "apps/client/public/assets/generated/engineer-magic-turret-fire.png",
+      "sourceSha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret-fire.png"
+    },
+    "magicMuzzle": {
+      "kind": "production-strip",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "sourceFrameCount": 8,
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-muzzle.png",
+      "sha256": "623e83cec146896559181eb0b8546688732c2654dcd171662225bea53f91feef",
+      "sourcePath": "apps/client/public/assets/generated/engineer-magic-muzzle.png",
+      "sourceSha256": "623e83cec146896559181eb0b8546688732c2654dcd171662225bea53f91feef",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-muzzle.png"
+    },
+    "magicShield": {
+      "kind": "production-strip",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "sourceFrameCount": 6,
+      "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-shield.png",
+      "sha256": "d89c82820a1468bfecbd6a9cb57843f9ccc9ffd7f8a3369e76d8c3a67f7a7bf6",
+      "sourcePath": "apps/client/public/assets/generated/engineer-magic-shield.png",
+      "sourceSha256": "d89c82820a1468bfecbd6a9cb57843f9ccc9ffd7f8a3369e76d8c3a67f7a7bf6",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-shield.png"
+    }
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/icon.png",
+    "sha256": "4a0c8bc53af7b46249e175c1db27128a80e8f0c3e79fd9a06be2360e7794ff41",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "c28ad983dfdaab81cba92596eb769d9d39c9ddfb1c102b1de0d21dbd20faeaa3",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "reviewSpec": "tools/engineer_final_review_spec.py#SYSTEM_WITNESSES",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

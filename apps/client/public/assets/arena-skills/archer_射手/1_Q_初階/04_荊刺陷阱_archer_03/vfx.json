@@ -1,0 +1,418 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_03",
+  "classId": "archer",
+  "name": "荊刺陷阱",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03",
+  "runtime": {
+    "skillId": "archer_03",
+    "classId": "archer",
+    "name": "荊刺陷阱",
+    "persistent": true,
+    "previewSha256": "798607b4baeca8c5d278ee870e683c486b281480a1f631fffcb0c89809a950f4",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:26a694637f0585c9",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_荊刺陷阱.gif",
+    "configPreviewSourceSha256": "26a694637f0585c9816ebc0dbc6aaaa90f14560c0d2e9eb9a317fd72a29c5db3",
+    "configPreviewOutputSha256": "3d87d808ca40b2d1e516bb6cc29b7a6d608ce564ebc6196e7a6f1edd6d3df275",
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/primary.png",
+    "frameWidth": 110,
+    "frameHeight": 112,
+    "frameCount": 3,
+    "unionBounds": [
+      14,
+      14,
+      96,
+      103
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/source/primary-source-dac0eef7a529089c.png",
+    "sourceSha256": "dac0eef7a529089cb3e646b26ad2d8506efe6142171da8b0a290917c231c90ac",
+    "outputSha256": "0072c92cec1bdf09975d58173a00b0c7bb46107f568b4bc73feb106259381659",
+    "frameDurationsMs": [
+      140,
+      590,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          16,
+          21,
+          16,
+          16
+        ],
+        [
+          36,
+          20,
+          36,
+          15
+        ],
+        [
+          19,
+          16,
+          19,
+          11
+        ]
+      ]
+    },
+    "semanticVfxAlignment": {
+      "applied": true,
+      "method": "semantic-static-vfx-bbox-centre-translation",
+      "beforeAnchors": [
+        [
+          70,
+          58
+        ],
+        [
+          54,
+          58
+        ],
+        [
+          33,
+          58
+        ],
+        [
+          68,
+          58
+        ],
+        [
+          54,
+          61
+        ],
+        [
+          25,
+          58
+        ],
+        [
+          59,
+          58
+        ],
+        [
+          89,
+          59
+        ],
+        [
+          19,
+          57
+        ],
+        [
+          49,
+          58
+        ],
+        [
+          84,
+          58
+        ],
+        [
+          54,
+          56
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          78,
+          58
+        ],
+        [
+          54,
+          62
+        ],
+        [
+          35,
+          58
+        ]
+      ],
+      "afterAnchor": [
+        54,
+        58
+      ],
+      "frameTranslations": [
+        [
+          -16,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          21,
+          0
+        ],
+        [
+          -14,
+          0
+        ],
+        [
+          0,
+          -3
+        ],
+        [
+          29,
+          0
+        ],
+        [
+          -5,
+          0
+        ],
+        [
+          -35,
+          -1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          -30,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          14,
+          0
+        ],
+        [
+          -24,
+          0
+        ],
+        [
+          0,
+          -4
+        ],
+        [
+          19,
+          0
+        ]
+      ]
+    },
+    "frameDurationMs": 140,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_荊刺陷阱.png",
+        "sha256": "dac0eef7a529089cb3e646b26ad2d8506efe6142171da8b0a290917c231c90ac"
+      }
+    ],
+    "packagePath": "archer_射手/1_Q_初階/04_荊刺陷阱_archer_03",
+    "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "798607b4baeca8c5d278ee870e683c486b281480a1f631fffcb0c89809a950f4",
+    "iconFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/icon.png",
+    "iconFileSha256": "8c762135aa0fca1c9d4fbc69a209ede43124638fc21410da7465c7fa44539204",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_荊刺陷阱.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/source/primary-source-dac0eef7a529089c.png",
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 8,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "originalSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "sourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "outputSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 1,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 1,
+        "frameDurationsMs": [
+          500
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_03",
+      "acceptedAnimationId": "archer_03:neutral:own-folder-v1:80c9fa8f2a6d185e",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "fallbackUsed": false
+    },
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_03:source-eda3347ea5c22b21:output-798607b4baeca8c5",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_03",
+    "previewSourceSequenceSha256": "eda3347ea5c22b21b0f413ad6eeb2a93194e4e474ff32a878af23ea2ab0e174f",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.013,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/preview/gameplay-preview-v1.webm",
+    "sha256": "798607b4baeca8c5d278ee870e683c486b281480a1f631fffcb0c89809a950f4",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_03:source-eda3347ea5c22b21:output-798607b4baeca8c5",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_03",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.248,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 12.904,
+      "durationSec": 7.656,
+      "file": "random-archer_03-hq.webm",
+      "bytes": 14123787,
+      "sha256": "eda3347ea5c22b21b0f413ad6eeb2a93194e4e474ff32a878af23ea2ab0e174f"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_03-hq.webm",
+    "sourceVideoSha256": "eda3347ea5c22b21b0f413ad6eeb2a93194e4e474ff32a878af23ea2ab0e174f",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 59.974,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      767,
+      360,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1082,
+      547,
+      1348,
+      676
+    ],
+    "contentMargins": [
+      315,
+      187,
+      315,
+      188
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.013,
+    "frameCount": 229,
+    "totalDurationMs": 7630,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 14123787,
+    "outputBytes": 844897,
+    "reductionRatio": 0.940179,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/icon.png",
+    "sha256": "8c762135aa0fca1c9d4fbc69a209ede43124638fc21410da7465c7fa44539204",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "a74e7c80d490c1572d2905afa614389fd756475256d29bbda50876cf1e0570aa",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_03-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_03.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_03",
+      "acceptedAnimationId": "archer_03:neutral:own-folder-v1:80c9fa8f2a6d185e",
+      "selectionPolicy": "accepted-current-identity-explicit-skill-pose",
+      "originalSourcePath": "apps/client/public/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "originalSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/source/body-source-accepted-current-archer-walk-8dir-700f2e2bcb486ae5.png",
+      "packageSourceSha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/body.png",
+      "packageRuntimeSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

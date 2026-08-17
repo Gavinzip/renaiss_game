@@ -1,0 +1,597 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_12",
+  "classId": "archer",
+  "name": "星痕狙殺",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12",
+  "runtime": {
+    "skillId": "archer_12",
+    "classId": "archer",
+    "name": "星痕狙殺",
+    "persistent": false,
+    "previewSha256": "01f18227b7d10180ffc2dfd13a438cd89077484820b65334bf551f8d4ee8e118",
+    "visualContract": {
+      "anchor": "target",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        70,
+        60
+      ],
+      "referenceOffset": [
+        -7,
+        -52
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:761aa54e1a971c35",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_星痕狙殺.gif",
+    "configPreviewSourceSha256": "761aa54e1a971c3549c84fb286ef3e5cf809430beaf6f98ee886fc49a2b77d6b",
+    "configPreviewOutputSha256": "4df6410920670437b60a10d16dbb89df401f934b32a87adc6557c3d2888c3848",
+    "runtimeMotion": {
+      "kind": "effect-source-to-target-shot",
+      "durationMs": 1100,
+      "warningEndProgress": 0.18,
+      "travelEndProgress": 0.59,
+      "visibleEndProgress": 1.0,
+      "targetOffset": [
+        -7,
+        -52
+      ],
+      "travelDisplaySize": [
+        70,
+        60
+      ],
+      "impactDisplaySize": [
+        70,
+        60
+      ],
+      "warningFrameIndices": [
+        0,
+        1
+      ],
+      "travelFrameIndices": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "impactFrameIndices": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "sourceAngleDegrees": -45,
+      "easing": "linear"
+    },
+    "file": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 13,
+    "unionBounds": [
+      19,
+      0,
+      146,
+      165
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/primary-source-0f6ffcdd819d2444.png",
+    "sourceSha256": "0f6ffcdd819d2444467a1df9d9188cd9b0604635480fe5e44406d735d429f6df",
+    "outputSha256": "4ade56414e1d3fbc53000876bedf5a620f29636df5a10212bf6901f0cfb482d5",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      140
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": true,
+      "method": "nearest-full-frame-containment",
+      "scale": 0.9757575757575757,
+      "preserveBottomGroundLine": false,
+      "beforeEdgeMargins": [
+        [
+          55,
+          115,
+          56,
+          0
+        ],
+        [
+          55,
+          115,
+          56,
+          0
+        ],
+        [
+          27,
+          0,
+          28,
+          0
+        ],
+        [
+          27,
+          0,
+          28,
+          0
+        ],
+        [
+          19,
+          58,
+          19,
+          0
+        ],
+        [
+          19,
+          58,
+          19,
+          0
+        ],
+        [
+          19,
+          58,
+          19,
+          0
+        ],
+        [
+          25,
+          42,
+          26,
+          1
+        ],
+        [
+          25,
+          42,
+          26,
+          1
+        ],
+        [
+          27,
+          44,
+          28,
+          0
+        ],
+        [
+          27,
+          44,
+          28,
+          0
+        ],
+        [
+          31,
+          94,
+          32,
+          0
+        ],
+        [
+          31,
+          94,
+          32,
+          0
+        ]
+      ],
+      "afterEdgeMargins": [
+        [
+          56,
+          114,
+          57,
+          2
+        ],
+        [
+          56,
+          114,
+          57,
+          2
+        ],
+        [
+          28,
+          2,
+          29,
+          2
+        ],
+        [
+          28,
+          2,
+          29,
+          2
+        ],
+        [
+          21,
+          59,
+          21,
+          2
+        ],
+        [
+          21,
+          59,
+          21,
+          2
+        ],
+        [
+          21,
+          59,
+          21,
+          2
+        ],
+        [
+          26,
+          43,
+          27,
+          3
+        ],
+        [
+          26,
+          43,
+          27,
+          3
+        ],
+        [
+          28,
+          45,
+          29,
+          2
+        ],
+        [
+          28,
+          45,
+          29,
+          2
+        ],
+        [
+          32,
+          94,
+          33,
+          2
+        ],
+        [
+          32,
+          94,
+          33,
+          2
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_星痕狙殺.png",
+        "sha256": "0f6ffcdd819d2444467a1df9d9188cd9b0604635480fe5e44406d735d429f6df"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_星痕狙殺-action-e.png",
+        "sha256": "c50310ad1c1cd2d0b3056fc27d3aab0aca996d185e84143b0fbbb7af9c6dbc06"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 40,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-source-accepted-catalog-v2-star-snipe-8dir-own-folder-v2.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-source-accepted-catalog-v2-star-snipe-8dir-own-folder-v2.png",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-e.png",
+      "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+      "sourceSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "outputSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 5,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 5,
+        "frameDurationsMs": [
+          120,
+          180,
+          220,
+          200,
+          200
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_12",
+      "acceptedAnimationId": "archer_12:star-snipe:own-folder-v2:ad817d98bf3596a5",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "fallbackUsed": false,
+      "originalSources": [
+        {
+          "direction": "east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-e.png",
+          "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/east-7680df52454c4d9d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/east-7680df52454c4d9d.png"
+        },
+        {
+          "direction": "south-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-se.png",
+          "originalSourceSha256": "b9373c7b18b4858d9c6ee06853cd495bcdb816f287f9bde2606ae592a8b161bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-east-b9373c7b18b4858d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-east-b9373c7b18b4858d.png"
+        },
+        {
+          "direction": "south",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-s.png",
+          "originalSourceSha256": "67c66ec8dedcbda5016a8954a8cc4dbb76872527a2bcd7e821debb3b5e3c77c8",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-67c66ec8dedcbda5.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-67c66ec8dedcbda5.png"
+        },
+        {
+          "direction": "south-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-sw.png",
+          "originalSourceSha256": "4b3f88e2954f7acc0353f32777644569fa93b5c62c08a1497708f24204399741",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-west-4b3f88e2954f7acc.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-west-4b3f88e2954f7acc.png"
+        },
+        {
+          "direction": "west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-w.png",
+          "originalSourceSha256": "2472bb1c270266ba0d6a911b5202ab3f4f4250a581d30b97f4ab134e461729bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/west-2472bb1c270266ba.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/west-2472bb1c270266ba.png"
+        },
+        {
+          "direction": "north-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-nw.png",
+          "originalSourceSha256": "01c311b3ee7ce320a985b3e755de1bf416801b86b2e0a2e875c06e89d3215ea4",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-west-01c311b3ee7ce320.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-west-01c311b3ee7ce320.png"
+        },
+        {
+          "direction": "north",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-n.png",
+          "originalSourceSha256": "9c380311a9739a08ec36d485b1e123afcf2e5c2d7c932bc2d849e87953434d65",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-9c380311a9739a08.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-9c380311a9739a08.png"
+        },
+        {
+          "direction": "north-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-ne.png",
+          "originalSourceSha256": "5088035604cc78830b24d412d38dece12108f5211a8700ddf5696a831980e88d",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-east-5088035604cc7883.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-east-5088035604cc7883.png"
+        }
+      ]
+    },
+    "packagePath": "archer_射手/3_R_高階/13_星痕狙殺_archer_12",
+    "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "01f18227b7d10180ffc2dfd13a438cd89077484820b65334bf551f8d4ee8e118",
+    "iconFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/icon.png",
+    "iconFileSha256": "5327a2bcac8720f48d47aba6e7e953ba3a7e142aa06ad4ed43e26ed5a913bfd8",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_星痕狙殺.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/primary-source-0f6ffcdd819d2444.png",
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_12:source-cc620184e47a4fb3:output-01f18227b7d10180",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_12",
+    "previewSourceSequenceSha256": "cc620184e47a4fb35f7142f4995663ff8dca213010432fea610770e2f26293e7",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/preview/gameplay-preview-v1.webm",
+    "sha256": "01f18227b7d10180ffc2dfd13a438cd89077484820b65334bf551f8d4ee8e118",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_12:source-cc620184e47a4fb3:output-01f18227b7d10180",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_12",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.318,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 8.164,
+      "durationSec": 3.846,
+      "file": "random-archer_12-hq.webm",
+      "bytes": 9661318,
+      "sha256": "cc620184e47a4fb35f7142f4995663ff8dca213010432fea610770e2f26293e7"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_12-hq.webm",
+    "sourceVideoSha256": "cc620184e47a4fb35f7142f4995663ff8dca213010432fea610770e2f26293e7",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 59.948,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      852,
+      352,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1081,
+      536,
+      1519,
+      672
+    ],
+    "contentMargins": [
+      229,
+      184,
+      229,
+      184
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 114,
+    "totalDurationMs": 3800,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 9661318,
+    "outputBytes": 557119,
+    "reductionRatio": 0.942335,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/icon.png",
+    "sha256": "5327a2bcac8720f48d47aba6e7e953ba3a7e142aa06ad4ed43e26ed5a913bfd8",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "60492bd8d1a15d13e0580ad6c1a987536ab083eef4c05e513f266a4301c3eb57",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_12-vfx.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_12-body.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_12.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_12",
+      "acceptedAnimationId": "archer_12:star-snipe:own-folder-v2:ad817d98bf3596a5",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-e.png",
+      "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-source-accepted-catalog-v2-star-snipe-8dir-own-folder-v2.png",
+      "packageSourceSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/runtime/body.png",
+      "packageRuntimeSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "fallbackUsed": false,
+      "originalSources": [
+        {
+          "direction": "east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-e.png",
+          "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/east-7680df52454c4d9d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/east-7680df52454c4d9d.png"
+        },
+        {
+          "direction": "south-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-se.png",
+          "originalSourceSha256": "b9373c7b18b4858d9c6ee06853cd495bcdb816f287f9bde2606ae592a8b161bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-east-b9373c7b18b4858d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-east-b9373c7b18b4858d.png"
+        },
+        {
+          "direction": "south",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-s.png",
+          "originalSourceSha256": "67c66ec8dedcbda5016a8954a8cc4dbb76872527a2bcd7e821debb3b5e3c77c8",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-67c66ec8dedcbda5.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-67c66ec8dedcbda5.png"
+        },
+        {
+          "direction": "south-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-sw.png",
+          "originalSourceSha256": "4b3f88e2954f7acc0353f32777644569fa93b5c62c08a1497708f24204399741",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-west-4b3f88e2954f7acc.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/south-west-4b3f88e2954f7acc.png"
+        },
+        {
+          "direction": "west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-w.png",
+          "originalSourceSha256": "2472bb1c270266ba0d6a911b5202ab3f4f4250a581d30b97f4ab134e461729bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/west-2472bb1c270266ba.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/west-2472bb1c270266ba.png"
+        },
+        {
+          "direction": "north-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-nw.png",
+          "originalSourceSha256": "01c311b3ee7ce320a985b3e755de1bf416801b86b2e0a2e875c06e89d3215ea4",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-west-01c311b3ee7ce320.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-west-01c311b3ee7ce320.png"
+        },
+        {
+          "direction": "north",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-n.png",
+          "originalSourceSha256": "9c380311a9739a08ec36d485b1e123afcf2e5c2d7c932bc2d849e87953434d65",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-9c380311a9739a08.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-9c380311a9739a08.png"
+        },
+        {
+          "direction": "north-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/3_星痕狙殺-action-ne.png",
+          "originalSourceSha256": "5088035604cc78830b24d412d38dece12108f5211a8700ddf5696a831980e88d",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-east-5088035604cc7883.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/body-directions-v2/north-east-5088035604cc7883.png"
+        }
+      ]
+    }
+  },
+  "fallbackUsed": false
+}

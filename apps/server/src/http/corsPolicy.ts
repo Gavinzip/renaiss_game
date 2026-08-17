@@ -6,7 +6,7 @@ export function resolveCorsOrigin(origin: string | undefined, callback: (error: 
     return;
   }
 
-  if (isAllowedOrigin(origin)) {
+  if (isAllowedGameOrigin(origin)) {
     callback(null, origin);
     return;
   }
@@ -18,7 +18,7 @@ export function allowedOriginList() {
   return [...configuredOrigins()];
 }
 
-function isAllowedOrigin(origin: string) {
+export function isAllowedGameOrigin(origin: string) {
   const normalized = normalizeOrigin(origin);
   if (!normalized) return false;
   if (configuredOrigins().has(normalized)) return true;

@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_01",
+  "classId": "warrior",
+  "name": "烈焰狂行",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "warrior-rage-self-burn-20260811-v12",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01",
+  "runtime": {
+    "skillId": "warrior_01",
+    "classId": "warrior",
+    "name": "烈焰狂行",
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/runtime/primary.png",
+    "frameWidth": 160,
+    "frameHeight": 112,
+    "frameCount": 16,
+    "frameDurationMs": 100,
+    "unionBounds": [
+      48,
+      37,
+      108,
+      106
+    ],
+    "persistent": true,
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-aura-composite.png",
+    "sourceSha256": "e9bbc8f921061e10d2107dc39d9a8515e4c63679fcb2a4a5a53d60a769cd8824",
+    "outputSha256": "e9bbc8f921061e10d2107dc39d9a8515e4c63679fcb2a4a5a53d60a769cd8824",
+    "previewSha256": "f6fe0f29c6ca800a810a5fb0f9505a846f18e17c81b0614ff347d39d47dc9aa1",
+    "visualContract": {
+      "enabled": true,
+      "anchor": "owner",
+      "layer": "unit",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        72,
+        82
+      ],
+      "referenceOffset": [
+        0,
+        -60
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": true
+    },
+    "packagePath": "warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01",
+    "sourceSelection": "warrior-rage-self-burn-20260811-v12",
+    "previewFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/preview/animation.webp",
+    "previewFileSha256": "f6fe0f29c6ca800a810a5fb0f9505a846f18e17c81b0614ff347d39d47dc9aa1",
+    "iconFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/icon.png",
+    "iconFileSha256": "447b5b096c67e3caa9df0251a88a240a6159914ba1456f8eec6c0c847dfda5e7",
+    "frameDurationsMs": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "playback": {
+      "introFrameIndices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "loopFrameIndices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "recoveryFrameIndices": [
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "candidateOrigin": "canonical-project-fire-atlas-row09",
+    "acceptedAnimationId": "warrior-redesign:blazing-rampage-aura:e9bbc8f921061e10",
+    "sourceLineage": [
+      {
+        "role": "acceptedComposite",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-aura-composite.png",
+        "sha256": "e9bbc8f921061e10d2107dc39d9a8515e4c63679fcb2a4a5a53d60a769cd8824"
+      },
+      {
+        "role": "bodyFlameSource",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-flame-row09.png",
+        "sha256": "c38cad2119ceaecead58730ad3b7ceeb5435900f802fb8f7cbeb8a5ac25302ba"
+      },
+      {
+        "role": "retainedInactiveReference",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/fire-aura-row10.png",
+        "sha256": "5fc776fa58ad4de4109628272924461cc4a2103d6d3e3b4b2a47e63f0e0cfcf3"
+      },
+      {
+        "role": "retainedInactiveReference",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/self-burn-flameburst.png",
+        "sha256": "92a3c04c52c49aa1e580124e72e99edaa6b939cdef773bccb270988aa24b336a"
+      },
+      {
+        "role": "retainedInactiveReference",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-ring-row19.png",
+        "sha256": "aa36c425d4f5b6baff5819f60c11f59c2e16c2776acc2da185fc517c1a14d650"
+      },
+      {
+        "role": "retainedInactiveReference",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-floor-row18.png",
+        "sha256": "cf6e5c36c693d24b948e9bd20caebb1a4638d8aec5dfe13c52f6bd66e1333b3f"
+      },
+      {
+        "role": "retainedInactiveReference",
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/hammer-action.png",
+        "sha256": "2235460eeafb49cf898528a28ce699d83c1c14b8f0aff982dc8d99121abaa241"
+      }
+    ]
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/preview/animation.webp",
+    "sha256": "f6fe0f29c6ca800a810a5fb0f9505a846f18e17c81b0614ff347d39d47dc9aa1",
+    "kind": "actual-5173-gameplay-canvas",
+    "sourceVersion": "actual-5173-gameplay-canvas-warrior-rage-self-burn-v12-clean-20260811",
+    "frameCount": 66,
+    "durationsMs": [
+      100,
+      116,
+      111,
+      104,
+      94,
+      93,
+      92,
+      93,
+      104,
+      93,
+      93,
+      97,
+      100,
+      112,
+      93,
+      101,
+      101,
+      103,
+      103,
+      108,
+      94,
+      103,
+      97,
+      110,
+      102,
+      99,
+      96,
+      95,
+      106,
+      94,
+      113,
+      111,
+      101,
+      94,
+      95,
+      98,
+      113,
+      99,
+      106,
+      109,
+      103,
+      93,
+      92,
+      92,
+      95,
+      95,
+      100,
+      108,
+      96,
+      109,
+      99,
+      93,
+      106,
+      94,
+      100,
+      97,
+      105,
+      97,
+      104,
+      106,
+      106,
+      111,
+      101,
+      92,
+      104,
+      100
+    ]
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/icon.png",
+    "sha256": "447b5b096c67e3caa9df0251a88a240a6159914ba1456f8eec6c0c847dfda5e7",
+    "width": 64,
+    "height": 64,
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-aura-composite.png",
+    "sourceFrameIndex": 7,
+    "resampling": "nearest"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_01.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

@@ -1,0 +1,444 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_14",
+  "classId": "archer",
+  "name": "隼影處刑",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14",
+  "runtime": {
+    "skillId": "archer_14",
+    "classId": "archer",
+    "name": "隼影處刑",
+    "persistent": false,
+    "previewSha256": "6b859d24041df8c1c7a82c99ba23cc3a94382dcf8924f9ab65f80611ab0ca6d9",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        94,
+        82
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:4e86186c2a575d3d",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_隼影處刑.gif",
+    "configPreviewSourceSha256": "4e86186c2a575d3dc2a2d6f4d79d21cfb63bdbcf3d8035b80ea018fd4cd92c61",
+    "configPreviewOutputSha256": "72072900b7bfefda2302f654b7f91d9fad89950827923f652b600b797ee1e84c",
+    "runtimeMotion": {
+      "kind": "effect-target-dive",
+      "durationMs": 700,
+      "travelEndProgress": 0.88,
+      "visibleEndProgress": 1.01,
+      "impactFrameSwitchProgress": 0.96,
+      "startOffset": [
+        39,
+        -134
+      ],
+      "impactOffset": [
+        0,
+        -30
+      ],
+      "travelDisplaySize": [
+        82,
+        76
+      ],
+      "impactDisplaySize": [
+        94,
+        82
+      ],
+      "travelFrameIndices": [
+        0,
+        1,
+        3,
+        5
+      ],
+      "impactFrameIndices": [
+        7,
+        9
+      ],
+      "easing": "quadratic-in"
+    },
+    "file": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 10,
+    "unionBounds": [
+      8,
+      0,
+      156,
+      165
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/source/primary-source-c56b29cc0d36d720.png",
+    "sourceSha256": "c56b29cc0d36d720dfbcab85389923fcb1b2888466808d2d7ef5b4c22152fcb1",
+    "outputSha256": "8ff034620978e341ca001ae885c08583da54f2c2343907645cad970e3ab0a42b",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": true,
+      "method": "nearest-full-frame-containment",
+      "scale": 0.9757575757575757,
+      "preserveBottomGroundLine": false,
+      "beforeEdgeMargins": [
+        [
+          37,
+          66,
+          37,
+          0
+        ],
+        [
+          12,
+          24,
+          13,
+          0
+        ],
+        [
+          12,
+          24,
+          13,
+          0
+        ],
+        [
+          20,
+          0,
+          20,
+          0
+        ],
+        [
+          20,
+          0,
+          20,
+          0
+        ],
+        [
+          20,
+          36,
+          21,
+          0
+        ],
+        [
+          20,
+          36,
+          21,
+          0
+        ],
+        [
+          8,
+          0,
+          9,
+          0
+        ],
+        [
+          8,
+          0,
+          9,
+          0
+        ],
+        [
+          18,
+          46,
+          19,
+          0
+        ]
+      ],
+      "afterEdgeMargins": [
+        [
+          38,
+          66,
+          38,
+          2
+        ],
+        [
+          14,
+          25,
+          15,
+          2
+        ],
+        [
+          14,
+          25,
+          15,
+          2
+        ],
+        [
+          22,
+          2,
+          22,
+          2
+        ],
+        [
+          22,
+          2,
+          22,
+          2
+        ],
+        [
+          22,
+          37,
+          22,
+          2
+        ],
+        [
+          22,
+          37,
+          22,
+          2
+        ],
+        [
+          10,
+          2,
+          11,
+          2
+        ],
+        [
+          10,
+          2,
+          11,
+          2
+        ],
+        [
+          20,
+          47,
+          21,
+          2
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_隼影處刑.png",
+        "sha256": "c56b29cc0d36d720dfbcab85389923fcb1b2888466808d2d7ef5b4c22152fcb1"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_隼影處刑-action.png",
+        "sha256": "239fe98cb7729fa4feaf23aa21a61cecdf6f0afe3a06fe541fd36a7c0e9f158f"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 40,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/source/body-source-user-directed-existing-extra-action-hawk-dive-66943d1fa9895fbb.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/source/body-source-user-directed-existing-extra-action-hawk-dive-66943d1fa9895fbb.png",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/archer/hawk-dive-8dir-v1.png",
+      "originalSourceSha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "sourceSha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "outputSha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 5,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 5,
+        "frameDurationsMs": [
+          120,
+          180,
+          220,
+          200,
+          200
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_14",
+      "acceptedAnimationId": "archer_14:hawk-dive:own-folder-v2:66943d1fa9895fbb",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "fallbackUsed": false
+    },
+    "packagePath": "archer_射手/3_R_高階/15_隼影處刑_archer_14",
+    "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "6b859d24041df8c1c7a82c99ba23cc3a94382dcf8924f9ab65f80611ab0ca6d9",
+    "iconFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/icon.png",
+    "iconFileSha256": "a5955634846936d7a039b9530a79514d31e3fe5b0cb4438368f1d12a44cc6828",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_隼影處刑.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/source/primary-source-c56b29cc0d36d720.png",
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_14:source-e8bbed8a29d85f22:output-6b859d24041df8c1",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_14",
+    "previewSourceSequenceSha256": "e8bbed8a29d85f223b9ce426076b022ba86d95b8fc50b2d6ae35f80661606803",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.025,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/preview/gameplay-preview-v1.webm",
+    "sha256": "6b859d24041df8c1c7a82c99ba23cc3a94382dcf8924f9ab65f80611ab0ca6d9",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_14:source-e8bbed8a29d85f22:output-6b859d24041df8c1",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_14",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.129,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.079,
+      "durationSec": 3.95,
+      "file": "random-archer_14-hq.webm",
+      "bytes": 10246368,
+      "sha256": "e8bbed8a29d85f223b9ce426076b022ba86d95b8fc50b2d6ae35f80661606803"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_14-hq.webm",
+    "sourceVideoSha256": "e8bbed8a29d85f223b9ce426076b022ba86d95b8fc50b2d6ae35f80661606803",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.358,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      794,
+      292,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1079,
+      420,
+      1406,
+      668
+    ],
+    "contentMargins": [
+      285,
+      128,
+      284,
+      128
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.025,
+    "frameCount": 118,
+    "totalDurationMs": 3930,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 10246368,
+    "outputBytes": 1101584,
+    "reductionRatio": 0.89249,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/icon.png",
+    "sha256": "a5955634846936d7a039b9530a79514d31e3fe5b0cb4438368f1d12a44cc6828",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "8e8d85a04325b745bbcce4b7aaaf81d38575146a4bacec8846e98ab5f1636678",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_14-vfx.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_14-body.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_14.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_14",
+      "acceptedAnimationId": "archer_14:hawk-dive:own-folder-v2:66943d1fa9895fbb",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/archer/hawk-dive-8dir-v1.png",
+      "originalSourceSha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/source/body-source-user-directed-existing-extra-action-hawk-dive-66943d1fa9895fbb.png",
+      "packageSourceSha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/runtime/body.png",
+      "packageRuntimeSha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "fallbackUsed": false
+    },
+    "selectedSpatialContract": {
+      "source": "5173-configuration-contract-plus-user-ground-location-correction",
+      "changedFields": [
+        "visualContract",
+        "runtimeMotion"
+      ],
+      "fallbackUsed": false
+    }
+  },
+  "fallbackUsed": false
+}

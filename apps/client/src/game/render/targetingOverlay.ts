@@ -1,94 +1,85 @@
 import Phaser from "phaser";
-import { CLASS_META, COMBAT, type ClassId, type GameSnapshot, type PublicPlayer } from "@renaiss-game/shared";
+import {
+  CLASS_META,
+  COMBAT,
+  getArenaCursorTargetRange,
+  isArenaCursorTargetSkill,
+  type ArenaCatalogSkillId,
+  type GameSnapshot,
+  type PublicPlayer
+} from "@renaiss-game/shared";
 
 const SKILL_PREVIEW_COLOR = 0xff4f45;
 const SKILL_PREVIEW_GLOW = 0xffd4c7;
+const LOCK_TARGET_COLOR = 0x83e56f;
+const LOCK_TARGET_GLOW = 0xffe69a;
 
 export interface TargetingIntent {
   attack: boolean;
+  skillF: boolean;
   skillQ: boolean;
   skillE: boolean;
   skillR: boolean;
+  hotkeyLabel: "F" | "Q" | "E" | "R" | null;
+  activeSkillId: ArenaCatalogSkillId | null;
   aimPoint: { x: number; y: number };
 }
 
 export class TargetingOverlay {
   private readonly graphics: Phaser.GameObjects.Graphics;
+  private readonly lockLabel: Phaser.GameObjects.Text;
   private focusAlpha = 0;
-  private lastTargetId: string | null = null;
 
   constructor(private readonly scene: Phaser.Scene) {
     this.graphics = scene.add.graphics().setDepth(8750);
+    this.lockLabel = scene.add
+      .text(0, 0, "", {
+        fontFamily: '"Press Start 2P", monospace',
+        fontSize: "10px",
+        color: "#fff0aa",
+        backgroundColor: "#21150de8",
+        stroke: "#100905",
+        strokeThickness: 4,
+        padding: { x: 7, y: 5 }
+      })
+      .setOrigin(0.5, 1)
+      .setDepth(8751)
+      .setVisible(false);
   }
 
   update(snapshot: GameSnapshot | null, time: number, intent: TargetingIntent) {
     this.graphics.clear();
+    this.lockLabel.setVisible(false);
     const self = this.getSelf(snapshot);
     if (!snapshot || !self?.alive || snapshot.round.phase === "finished") {
       this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, 0, 0.18);
-      this.lastTargetId = null;
       return;
     }
 
-    const actionHeld = intent.attack || intent.skillQ || intent.skillE || intent.skillR;
+    const actionActive = intent.attack || intent.skillF || intent.skillQ || intent.skillE || intent.skillR;
+    if (!actionActive) {
+      this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, 0, 0.22);
+      return;
+    }
+
     const target = this.getFocusTarget(snapshot, self, intent);
-    if (!target) {
-      const targetAlpha = actionHeld ? 0.62 : 0;
-      this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, targetAlpha, actionHeld ? 0.36 : 0.14);
-      this.lastTargetId = null;
-      if (actionHeld) {
-        const accent = Phaser.Display.Color.HexStringToColor(CLASS_META[self.classId].accent).color;
-        this.drawSkillTelegraph(self, null, intent, accent, this.focusAlpha, time);
-      }
-      return;
-    }
-
-    const targetAlpha = actionHeld ? 0.86 : target.id === this.lastTargetId ? 0.38 : 0.3;
-    this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, targetAlpha, actionHeld ? 0.42 : 0.18);
-    this.lastTargetId = target.id;
-
+    const targetAlpha = target ? 0.86 : 0.62;
+    this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, targetAlpha, target ? 0.42 : 0.36);
     const accent = Phaser.Display.Color.HexStringToColor(CLASS_META[self.classId].accent).color;
-    const distance = Phaser.Math.Distance.Between(self.x, self.y, target.x, target.y);
-    if (actionHeld) {
-      this.drawSkillTelegraph(self, target, intent, accent, this.focusAlpha, time);
-      return;
+    this.drawSkillTelegraph(snapshot, self, target, intent, accent, this.focusAlpha, time);
+    const skillArmed = intent.skillF || intent.skillQ || intent.skillE || intent.skillR;
+    if (skillArmed && !isArenaCursorTargetSkill(intent.activeSkillId)) {
+      this.drawConfirmPrompt(intent);
     }
-    this.drawAimLine(self, target, accent, this.focusAlpha, time, actionHeld);
-    this.drawTargetReticle(self, target, accent, this.focusAlpha, time, distance, actionHeld);
   }
 
   destroy() {
     this.graphics.destroy();
-  }
-
-  private drawAimLine(
-    self: PublicPlayer,
-    target: PublicPlayer,
-    color: number,
-    alpha: number,
-    time: number,
-    actionHeld: boolean
-  ) {
-    const start = projectPoint(self.x, self.y, target.x, target.y, COMBAT.playerRadius + 20);
-    const end = projectPoint(target.x, target.y, self.x, self.y, COMBAT.playerRadius + 28);
-    const distance = Phaser.Math.Distance.Between(start.x, start.y, end.x, end.y);
-    const segmentCount = Math.max(4, Math.floor(distance / 70));
-    const dashPhase = ((time / 90) % 1) * (actionHeld ? 0.65 : 0.35);
-
-    this.graphics.lineStyle(actionHeld ? 3 : 2, 0x21150d, alpha * 0.32);
-    this.drawDashedLine(start, end, segmentCount, dashPhase, 0.62);
-    this.graphics.lineStyle(actionHeld ? 2 : 1, color, alpha * (actionHeld ? 0.72 : 0.38));
-    this.drawDashedLine(start, end, segmentCount, dashPhase, 0.48);
-
-    if (actionHeld) {
-      this.graphics.fillStyle(0xfff2b8, alpha * 0.58);
-      this.graphics.fillCircle(start.x, start.y, 3);
-      this.graphics.fillStyle(color, alpha * 0.42);
-      this.graphics.fillCircle(start.x, start.y, 6 + Math.sin(time / 90) * 1.2);
-    }
+    this.lockLabel.destroy();
   }
 
   private drawSkillTelegraph(
+    snapshot: GameSnapshot,
     self: PublicPlayer,
     target: PublicPlayer | null,
     intent: TargetingIntent,
@@ -107,18 +98,35 @@ export class TargetingOverlay {
       return;
     }
 
+    if (isArenaCursorTargetSkill(intent.activeSkillId)) {
+      this.drawCursorTargetPreview(snapshot, self, target, intent, alpha, time);
+      return;
+    }
+
     const skillColor = SKILL_PREVIEW_COLOR;
+    const label = intent.hotkeyLabel ?? "";
+    if (action === "skillF") {
+      if (self.classId === "engineer") {
+        const point = projectFromAngle(self.x, self.y, angle, COMBAT.playerRadius + COMBAT.turretRadius + 48);
+        this.drawDeploymentPoint(point.x, point.y, skillColor, alpha, time, label);
+      } else if (self.classId === "archer") {
+        this.drawBeamPath(self, angle, COMBAT.archerPiercingShotDistance, 42, skillColor, alpha, time, label);
+      } else {
+        this.drawGroundEllipse(self.x, self.y + 8, 145, 92, skillColor, alpha * 0.76, time, label);
+      }
+      return;
+    }
     if (action === "skillQ") {
-      this.drawSkillQTelegraph(self, angle, skillColor, alpha, time);
+      this.drawSkillQTelegraph(snapshot, self, angle, skillColor, alpha, time, label);
       return;
     }
 
     if (action === "skillE") {
-      this.drawSkillETelegraph(self, target, intent, angle, skillColor, alpha, time);
+      this.drawSkillETelegraph(snapshot, self, target, intent, angle, skillColor, alpha, time, label);
       return;
     }
 
-    this.drawSkillRTelegraph(self, intent, angle, skillColor, alpha, time);
+    this.drawSkillRTelegraph(snapshot, self, intent, angle, skillColor, alpha, time, label);
   }
 
   private drawAttackTelegraph(self: PublicPlayer, angle: number, color: number, alpha: number, time: number) {
@@ -150,61 +158,98 @@ export class TargetingOverlay {
     this.graphics.strokeEllipse(contact.x, contact.y + 14, 48 * pulse, 16 * pulse);
   }
 
-  private drawSkillQTelegraph(self: PublicPlayer, angle: number, color: number, alpha: number, time: number) {
+  private drawSkillQTelegraph(snapshot: GameSnapshot, self: PublicPlayer, angle: number, color: number, alpha: number, time: number, label: string) {
     if (self.classId === "warrior") {
-      this.drawDashPath(self, angle, COMBAT.warriorDashDistance, color, alpha, time, "Q");
+      this.drawDashPath(self, angle, COMBAT.warriorDashDistance, color, alpha, time, label);
       return;
     }
     if (self.classId === "archer") {
-      this.drawDashPath(self, angle, COMBAT.archerRollDistance, color, alpha, time, "Q");
+      this.drawDashPath(self, angle, COMBAT.archerRollDistance, color, alpha, time, label);
       return;
     }
     if (self.classId === "engineer") {
-      const point = projectFromAngle(self.x, self.y, angle, COMBAT.playerRadius + COMBAT.turretRadius + 48);
-      this.drawDeploymentPoint(point.x, point.y, color, alpha, time, "Q");
+      this.drawMagicTurretRanges(snapshot, self, color, alpha, time, label);
       return;
     }
-    this.drawBeamPath(self, angle, COMBAT.mageBeamLength, 78, color, alpha, time, "Q");
+    const focusRangeBonus =
+      self.focusLensEndsAt > snapshot.serverTime
+        ? COMBAT.mageFocusLensRangeBonus
+        : 0;
+    this.drawBeamPath(
+      self,
+      angle,
+      COMBAT.mageBeamLength + focusRangeBonus,
+      78,
+      color,
+      alpha,
+      time,
+      label
+    );
   }
 
   private drawSkillETelegraph(
+    snapshot: GameSnapshot,
     self: PublicPlayer,
     target: PublicPlayer | null,
     intent: TargetingIntent,
     angle: number,
     color: number,
     alpha: number,
-    time: number
+    time: number,
+    label: string
   ) {
     if (self.classId === "warrior") {
-      this.drawGroundEllipse(self.x, self.y + 16, 132, 78, color, alpha * 0.76, time, "E");
+      this.drawGroundEllipse(self.x, self.y + 16, 132, 78, color, alpha * 0.76, time, label);
       return;
     }
     if (self.classId === "archer") {
-      this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.archerRootRadius, COMBAT.archerRootRadius, color, alpha * 0.72, time, "E");
+      this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.archerRootRadius, COMBAT.archerRootRadius, color, alpha * 0.72, time, label);
       return;
     }
     if (self.classId === "engineer") {
-      this.drawGroundEllipse(self.x, self.y, COMBAT.engineerRepulsorPulseRadius, COMBAT.engineerRepulsorPulseRadius, color, alpha * 0.7, time, "E");
+      this.drawMagicTurretRanges(snapshot, self, color, alpha, time, label);
       return;
     }
-    this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.mageBurstRadius, COMBAT.mageBurstRadius, color, alpha * 0.72, time, "E");
+    this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.mageBurstRadius, COMBAT.mageBurstRadius, color, alpha * 0.72, time, label);
   }
 
-  private drawSkillRTelegraph(self: PublicPlayer, intent: TargetingIntent, angle: number, color: number, alpha: number, time: number) {
+  private drawSkillRTelegraph(snapshot: GameSnapshot, self: PublicPlayer, intent: TargetingIntent, angle: number, color: number, alpha: number, time: number, label: string) {
     if (self.classId === "warrior") {
-      this.drawGroundEllipse(self.x, self.y, COMBAT.warriorUltimateRadius, COMBAT.warriorUltimateRadius, color, alpha * 0.78, time, "R");
+      this.drawGroundEllipse(self.x, self.y, COMBAT.warriorUltimateRadius, COMBAT.warriorUltimateRadius, color, alpha * 0.78, time, label);
       return;
     }
     if (self.classId === "archer") {
-      this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.archerUltimateRadius, COMBAT.archerUltimateRadius, color, alpha * 0.72, time, "R");
+      this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.archerUltimateRadius, COMBAT.archerUltimateRadius, color, alpha * 0.72, time, label);
       return;
     }
     if (self.classId === "engineer") {
-      this.drawGroundEllipse(self.x, self.y, COMBAT.turretBoostedRange, COMBAT.turretBoostedRange, color, alpha * 0.68, time, "R");
+      this.drawMagicTurretRanges(snapshot, self, color, alpha, time, label);
       return;
     }
-    this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.mageUltimateRadius, COMBAT.mageUltimateRadius, color, alpha * 0.76, time, "R");
+    this.drawGroundEllipse(intent.aimPoint.x, intent.aimPoint.y, COMBAT.mageUltimateRadius, COMBAT.mageUltimateRadius, color, alpha * 0.76, time, label);
+  }
+
+  private drawMagicTurretRanges(
+    snapshot: GameSnapshot,
+    self: PublicPlayer,
+    color: number,
+    alpha: number,
+    time: number,
+    label: string
+  ) {
+    const turrets = snapshot.turrets.filter((turret) => turret.ownerId === self.id);
+    for (const turret of turrets) {
+      this.drawGroundEllipse(
+        turret.x,
+        turret.y,
+        COMBAT.magicTurretRange,
+        COMBAT.magicTurretRange,
+        color,
+        alpha * 0.64,
+        time,
+        label
+      );
+    }
   }
 
   private drawGroundEllipse(cx: number, cy: number, radiusX: number, radiusY: number, color: number, alpha: number, time: number, label: string) {
@@ -394,7 +439,12 @@ export class TargetingOverlay {
     this.graphics.strokeRoundedRect(x - 15, y - 10, 30, 20, 2);
     this.graphics.fillStyle(0xfff0ad, alpha * 0.88);
     this.graphics.fillRect(x - 4, y - 4, 8, 8);
-    if (label === "Q") {
+    if (label === "F") {
+      this.graphics.fillStyle(color, alpha * 0.95);
+      this.graphics.fillRect(x - 5, y - 5, 10, 3);
+      this.graphics.fillRect(x - 5, y - 2, 3, 8);
+      this.graphics.fillRect(x - 2, y - 1, 6, 3);
+    } else if (label === "Q") {
       this.graphics.fillStyle(color, alpha * 0.95);
       this.graphics.fillRect(x - 2, y - 2, 4, 4);
     } else if (label === "E") {
@@ -416,6 +466,86 @@ export class TargetingOverlay {
       ],
       true
     );
+  }
+
+  private drawCursorTargetPreview(
+    snapshot: GameSnapshot,
+    self: PublicPlayer,
+    target: PublicPlayer | null,
+    intent: TargetingIntent,
+    alpha: number,
+    time: number
+  ) {
+    const cursorPulse = 1 + Math.sin(time / 110) * 0.08;
+    const cursor = intent.aimPoint;
+
+    this.graphics.fillStyle(0x160d08, alpha * 0.58);
+    this.fillDiamond(cursor.x + 2, cursor.y + 3, 13 * cursorPulse, 13 * cursorPulse);
+    this.graphics.fillStyle(LOCK_TARGET_GLOW, alpha * 0.9);
+    this.fillDiamond(cursor.x, cursor.y, 11 * cursorPulse, 11 * cursorPulse);
+    this.graphics.fillStyle(0x160d08, alpha * 0.92);
+    this.fillDiamond(cursor.x, cursor.y, 8 * cursorPulse, 8 * cursorPulse);
+    this.graphics.fillStyle(LOCK_TARGET_COLOR, alpha * 0.92);
+    this.fillDiamond(cursor.x, cursor.y, 5 * cursorPulse, 5 * cursorPulse);
+    this.graphics.fillStyle(LOCK_TARGET_GLOW, alpha * 0.9);
+    this.graphics.fillRect(cursor.x - 2, cursor.y - 2, 4, 4);
+
+    if (!target) {
+      this.lockLabel
+        .setText("範圍內無目標\n左鍵確定 · 右鍵取消")
+        .setPosition(cursor.x, cursor.y - 28)
+        .setColor("#d9bca2")
+        .setVisible(true);
+      return;
+    }
+
+    const lineOrigins = intent.activeSkillId === "engineer_05"
+      ? snapshot.turrets.filter(
+          (turret) =>
+            turret.ownerId === self.id &&
+            turret.kind === "mechanical" &&
+            Phaser.Math.Distance.Between(turret.x, turret.y, target.x, target.y) <= 460
+        )
+      : [self];
+    for (const origin of lineOrigins) {
+      const segmentCount = Math.max(
+        4,
+        Math.floor(Phaser.Math.Distance.Between(origin.x, origin.y, target.x, target.y) / 62)
+      );
+      this.graphics.lineStyle(5, 0x160d08, alpha * 0.36);
+      this.drawDashedLine(origin, target, segmentCount, (time / 160) % 1, 0.54);
+      this.graphics.lineStyle(2, LOCK_TARGET_COLOR, alpha * 0.86);
+      this.drawDashedLine(origin, target, segmentCount, (time / 160) % 1, 0.46);
+      this.graphics.fillStyle(LOCK_TARGET_GLOW, alpha * 0.88);
+      this.fillDiamond(origin.x, origin.y - 12, 4, 6);
+    }
+
+    this.graphics.lineStyle(2, LOCK_TARGET_GLOW, alpha * 0.54);
+    this.drawDashedLine(cursor, target, 5, (time / 220) % 1, 0.34);
+    this.drawTargetReticle(
+      self,
+      target,
+      LOCK_TARGET_COLOR,
+      Math.max(alpha, 0.88),
+      time,
+      Phaser.Math.Distance.Between(self.x, self.y, target.x, target.y),
+      true
+    );
+
+    this.lockLabel
+      .setText(`${target.name}\n左鍵確定 · 右鍵取消`)
+      .setPosition(target.x, target.y - 92)
+      .setColor("#fff0aa")
+      .setVisible(true);
+  }
+
+  private drawConfirmPrompt(intent: TargetingIntent) {
+    const hotkey = intent.hotkeyLabel ?? "技能";
+    this.lockLabel
+      .setText(`${hotkey} 已選取\n左鍵施放 · 右鍵取消`)
+      .setPosition(intent.aimPoint.x, intent.aimPoint.y - 28)
+      .setColor("#fff0aa")
+      .setVisible(true);
   }
 
   private drawTargetReticle(
@@ -524,44 +654,78 @@ export class TargetingOverlay {
     if (intent.skillR) return "skillR";
     if (intent.skillE) return "skillE";
     if (intent.skillQ) return "skillQ";
+    if (intent.skillF) return "skillF";
     if (intent.attack) return "attack";
     return null;
   }
 
   private getFocusTarget(snapshot: GameSnapshot, self: PublicPlayer, intent: TargetingIntent) {
-    const actionHeld = intent.attack || intent.skillQ || intent.skillE || intent.skillR;
-    const maxRange = actionHeld ? Infinity : this.getFocusRange(self.classId, intent);
+    const cursorTargetRange = this.getCursorTargetRange(self, intent, snapshot.serverTime);
+    const maxRange = cursorTargetRange ?? Infinity;
     const candidates = snapshot.players.filter((player) => {
-      if (player.id === self.id || !player.alive) {
+      if (
+        player.id === self.id ||
+        !player.alive ||
+        player.spawnProtected ||
+        (snapshot.round.mode === "team_3v3" && player.team === self.team)
+      ) {
+        return false;
+      }
+      if (
+        intent.activeSkillId === "engineer_05" &&
+        !snapshot.turrets.some(
+          (turret) =>
+            turret.ownerId === self.id &&
+            turret.kind === "mechanical" &&
+            Phaser.Math.Distance.Between(turret.x, turret.y, player.x, player.y) <= 460
+        )
+      ) {
         return false;
       }
       return Phaser.Math.Distance.Between(self.x, self.y, player.x, player.y) <= maxRange;
     });
 
-    return candidates.sort((a, b) => this.scoreTarget(self, a, actionHeld) - this.scoreTarget(self, b, actionHeld))[0] ?? null;
+    return candidates.sort(
+      (a, b) =>
+        this.scoreTarget(self, a, intent, cursorTargetRange !== null) -
+          this.scoreTarget(self, b, intent, cursorTargetRange !== null) ||
+        a.id.localeCompare(b.id)
+    )[0] ?? null;
   }
 
-  private scoreTarget(self: PublicPlayer, target: PublicPlayer, actionHeld: boolean) {
-    const distance = Phaser.Math.Distance.Between(self.x, self.y, target.x, target.y);
-    if (actionHeld) {
-      return distance;
+  private scoreTarget(
+    self: PublicPlayer,
+    target: PublicPlayer,
+    intent: TargetingIntent,
+    cursorTargeting: boolean
+  ) {
+    if (cursorTargeting) {
+      return Phaser.Math.Distance.Squared(
+        intent.aimPoint.x,
+        intent.aimPoint.y,
+        target.x,
+        target.y
+      );
     }
-    const targetAngle = Phaser.Math.RadToDeg(Math.atan2(target.y - self.y, target.x - self.x));
-    const anglePenalty = Math.abs(Phaser.Math.Angle.ShortestBetween(self.angle, targetAngle)) * 2.4;
-    return distance + anglePenalty;
+    return Phaser.Math.Distance.Between(self.x, self.y, target.x, target.y);
   }
 
-  private getFocusRange(classId: ClassId, intent: TargetingIntent) {
-    if (intent.skillR) {
-      if (classId === "warrior") return COMBAT.warriorUltimateRadius + 220;
-      if (classId === "archer") return COMBAT.archerUltimateRadius + 160;
-      if (classId === "engineer") return COMBAT.turretBoostedRange + 180;
-      return COMBAT.mageUltimateRadius + 210;
+  private getCursorTargetRange(
+    self: PublicPlayer,
+    intent: TargetingIntent,
+    serverTime: number
+  ) {
+    const baseRange = getArenaCursorTargetRange(intent.activeSkillId);
+    if (baseRange === null) {
+      return null;
     }
-    if (classId === "warrior") return intent.skillQ ? COMBAT.warriorDashDistance + 230 : COMBAT.warriorDashDistance + 140;
-    if (classId === "archer") return intent.skillE ? COMBAT.archerRootRadius + 170 : COMBAT.arrowDistance;
-    if (classId === "engineer") return intent.skillE ? COMBAT.engineerRepulsorPulseRadius + 220 : COMBAT.turretRange + 140;
-    return intent.skillE ? COMBAT.mageBurstRadius + 220 : COMBAT.mageBeamLength;
+    const focusRangeBonus =
+      self.classId === "mage" &&
+      intent.activeSkillId !== "mage_11" &&
+      self.focusLensEndsAt > serverTime
+        ? COMBAT.mageFocusLensRangeBonus
+        : 0;
+    return baseRange + focusRangeBonus;
   }
 
   private getSelf(snapshot: GameSnapshot | null) {
@@ -570,14 +734,6 @@ export class TargetingOverlay {
     }
     return snapshot.players.find((player) => player.id === snapshot.selfId) ?? null;
   }
-}
-
-function projectPoint(fromX: number, fromY: number, toX: number, toY: number, distance: number) {
-  const angle = Math.atan2(toY - fromY, toX - fromX);
-  return {
-    x: fromX + Math.cos(angle) * distance,
-    y: fromY + Math.sin(angle) * distance
-  };
 }
 
 function projectFromAngle(x: number, y: number, angle: number, distance: number) {

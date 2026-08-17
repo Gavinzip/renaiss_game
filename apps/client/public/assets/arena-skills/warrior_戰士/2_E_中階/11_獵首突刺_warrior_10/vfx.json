@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_10",
+  "classId": "warrior",
+  "name": "獵首突刺",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
+  "runtime": {
+    "skillId": "warrior_10",
+    "classId": "warrior",
+    "name": "獵首突刺",
+    "persistent": false,
+    "previewSha256": "0594d170dee3e06a3877858d590d33f880928a3b0ba2f33cfee1ba2bad095d38",
+    "visualContract": {
+      "anchor": "owner",
+      "layer": "unit",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "body",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:366e2ddf305c2d92",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.gif",
+    "configPreviewSourceSha256": "366e2ddf305c2d92edef015ff7ad624aa2db1f382fd66cade024972050908efc",
+    "configPreviewOutputSha256": "eefe30c1be52e51765ff9b4735a8cb4988b11198c0c7e279a6c75abd9a717169",
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/primary.png",
+    "frameWidth": 362,
+    "frameHeight": 724,
+    "frameCount": 8,
+    "unionBounds": [
+      0,
+      239,
+      362,
+      498
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png",
+    "sourceSha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b",
+    "outputSha256": "475d2719710e3b35a52599955043a51191f257c7c1f98d32086455c6e5d20aa3",
+    "frameDurationsMs": [
+      140,
+      140,
+      140,
+      70,
+      70,
+      70,
+      70,
+      140
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": true,
+      "method": "nearest-full-frame-containment",
+      "scale": 0.988950276243094,
+      "preserveBottomGroundLine": false,
+      "beforeEdgeMargins": [
+        [
+          122,
+          240,
+          94,
+          231
+        ],
+        [
+          58,
+          289,
+          128,
+          231
+        ],
+        [
+          58,
+          289,
+          128,
+          231
+        ],
+        [
+          27,
+          277,
+          125,
+          231
+        ],
+        [
+          5,
+          277,
+          10,
+          231
+        ],
+        [
+          26,
+          279,
+          0,
+          230
+        ],
+        [
+          26,
+          279,
+          0,
+          230
+        ],
+        [
+          0,
+          247,
+          113,
+          226
+        ]
+      ],
+      "afterEdgeMargins": [
+        [
+          123,
+          241,
+          95,
+          232
+        ],
+        [
+          59,
+          290,
+          129,
+          232
+        ],
+        [
+          59,
+          290,
+          129,
+          232
+        ],
+        [
+          29,
+          278,
+          126,
+          232
+        ],
+        [
+          7,
+          278,
+          12,
+          232
+        ],
+        [
+          28,
+          280,
+          2,
+          231
+        ],
+        [
+          28,
+          280,
+          2,
+          231
+        ],
+        [
+          2,
+          248,
+          114,
+          228
+        ]
+      ]
+    },
+    "frameDurationMs": 140,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png",
+        "sha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺-action.png",
+        "sha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 40,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/headhunter-thrust-8dir-v1.png",
+      "sourceSha256": "2088edaecf316fba67b8a2c43ae1b8217d497e7ee11cb74061920870be5be2ee",
+      "outputSha256": "2088edaecf316fba67b8a2c43ae1b8217d497e7ee11cb74061920870be5be2ee",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 5,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 5,
+        "frameDurationsMs": [
+          150,
+          100,
+          100,
+          100,
+          150
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "acceptedAnimationId": "accepted:headhunter-thrust-8dir-v1.png:2088edaecf316fba",
+      "fallbackUsed": false
+    },
+    "packagePath": "warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "0594d170dee3e06a3877858d590d33f880928a3b0ba2f33cfee1ba2bad095d38",
+    "iconFile": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/icon.png",
+    "iconFileSha256": "d2d0e8702b316d63fb56ed6a112f289766503176d6d3b6aac6a25713556d751b",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_10:source-d6dc72c16e3e999d:output-0594d170dee3e06a",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_10",
+    "previewSourceSequenceSha256": "d6dc72c16e3e999dc94e700a7d04f68a541300fb35d6e11ae509276852c7a01e",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.032,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/preview/gameplay-preview-v1.webm",
+    "sha256": "0594d170dee3e06a3877858d590d33f880928a3b0ba2f33cfee1ba2bad095d38",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_10:source-d6dc72c16e3e999d:output-0594d170dee3e06a",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_10",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.596,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 8.747,
+      "durationSec": 3.151,
+      "file": "random-warrior_10-hq.webm",
+      "bytes": 6136018,
+      "sha256": "d6dc72c16e3e999dc94e700a7d04f68a541300fb35d6e11ae509276852c7a01e"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_10-hq.webm",
+    "sourceVideoSha256": "d6dc72c16e3e999dc94e700a7d04f68a541300fb35d6e11ae509276852c7a01e",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.064,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      746,
+      356,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1080,
+      547,
+      1307,
+      669
+    ],
+    "contentMargins": [
+      334,
+      191,
+      335,
+      191
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.032,
+    "frameCount": 94,
+    "totalDurationMs": 3130,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 6136018,
+    "outputBytes": 386557,
+    "reductionRatio": 0.937002,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/icon.png",
+    "sha256": "d2d0e8702b316d63fb56ed6a112f289766503176d6d3b6aac6a25713556d751b",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "a8413db8c41a8ac8a224dbc1dabf2ebb14ea1e2df31499f9e72207af48e237ed",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/primary.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/headhunter-thrust-8dir-v1.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_10.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

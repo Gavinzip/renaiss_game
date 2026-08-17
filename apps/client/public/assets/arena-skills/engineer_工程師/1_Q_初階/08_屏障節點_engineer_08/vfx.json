@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "skillId": "engineer_08",
+  "classId": "engineer",
+  "name": "屏障節點",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08",
+  "runtime": {
+    "skillId": "engineer_08",
+    "classId": "engineer",
+    "name": "屏障節點",
+    "persistent": true,
+    "previewSha256": "39487258158680975ca85894c77b4277fe4fa309f4ffa1c6537b53ba8de1af2c",
+    "visualContract": {
+      "anchor": "path",
+      "layer": "ground",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "segment",
+      "referenceSize": [
+        0,
+        36
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "add",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": {
+        "kind": "segment",
+        "outerColor": 1261455,
+        "outerWidth": 10,
+        "innerColor": 6482431,
+        "innerWidth": 4
+      },
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "accepted:engineer-barrier-link-v2:fcbcedb3b2ca7d07",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/evidence/20260809-engineer-selected-repairs/engineer_08-two-endpoint-preview.webp",
+    "configPreviewSourceSha256": "4c57a1d0d614ecad3fdb16fd80c2d30516d1a0d920a315b537165ab61e571371",
+    "configPreviewOutputSha256": "4c57a1d0d614ecad3fdb16fd80c2d30516d1a0d920a315b537165ab61e571371",
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 18,
+    "unionBounds": [
+      0,
+      71,
+      165,
+      94
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png",
+    "sourceSha256": "fcbcedb3b2ca7d07af276e842fd37c881a5b055dc9933058a4bd4697ac2c00ad",
+    "outputSha256": "e65d5c03785b041e029482c3bcaea74ea3b4b0681edada8278e35baa456beb77",
+    "frameDurationsMs": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      1000,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ],
+        [
+          2,
+          73,
+          2,
+          73
+        ]
+      ]
+    },
+    "frameDurationMs": 100,
+    "candidateOrigin": "engineer-two-endpoint-link-v2",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png",
+        "sha256": "fcbcedb3b2ca7d07af276e842fd37c881a5b055dc9933058a4bd4697ac2c00ad"
+      },
+      {
+        "role": "preserved-derivation-input",
+        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-network-v1-normalized.png",
+        "sha256": "6f3416dc38aa82a873db272ff1929d8f98e6c84663423f5b116eeb459cdc9d79"
+      }
+    ],
+    "fallbackUsed": false,
+    "packagePath": "engineer_工程師/1_Q_初階/08_屏障節點_engineer_08",
+    "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "39487258158680975ca85894c77b4277fe4fa309f4ffa1c6537b53ba8de1af2c",
+    "iconFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/icon.png",
+    "iconFileSha256": "81540f75570f9714abe8572d5469d0e1e6f5106ecb710ce6f61bb69027d2ac13",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_08:source-ed1b342806221bed:output-3948725815868097",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-engineer_08",
+    "previewSourceSequenceSha256": "ed1b342806221bed817573ece09b1159d271ee6d72ed633db34217ee8539c550",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.018,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/preview/gameplay-preview-v1.webm",
+    "sha256": "39487258158680975ca85894c77b4277fe4fa309f4ffa1c6537b53ba8de1af2c",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-engineer_08:source-ed1b342806221bed:output-3948725815868097",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-engineer_08",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 15.289,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 20.942,
+      "durationSec": 5.653,
+      "file": "random-engineer_08-hq.webm",
+      "bytes": 12161063,
+      "sha256": "ed1b342806221bed817573ece09b1159d271ee6d72ed633db34217ee8539c550"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_08-hq.webm",
+    "sourceVideoSha256": "ed1b342806221bed817573ece09b1159d271ee6d72ed633db34217ee8539c550",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.142,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      850,
+      367,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1095,
+      571,
+      1501,
+      667
+    ],
+    "contentMargins": [
+      245,
+      204,
+      245,
+      204
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.018,
+    "frameCount": 169,
+    "totalDurationMs": 5630,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 12161063,
+    "outputBytes": 777069,
+    "reductionRatio": 0.936102,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/icon.png",
+    "sha256": "81540f75570f9714abe8572d5469d0e1e6f5106ecb710ce6f61bb69027d2ac13",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "9012ff95f4eb375546bd5e49c5d536da38dd18d3aa6e6e1a4d368533e834667c",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/selected-runtime-20260809-engineer-repairs/assets/engineer_08-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_08.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

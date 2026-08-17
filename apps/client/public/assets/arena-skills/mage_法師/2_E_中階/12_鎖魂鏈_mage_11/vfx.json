@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_11",
+  "classId": "mage",
+  "name": "鎖魂鏈",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11",
+  "runtime": {
+    "skillId": "mage_11",
+    "classId": "mage",
+    "name": "鎖魂鏈",
+    "persistent": false,
+    "previewSha256": "e564d78bbb2df4aeee0ccb6345a9c76872a96365827203b02b9b06cb225eb00d",
+    "visualContract": {
+      "anchor": "path",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "segment",
+      "referenceSize": [
+        0,
+        16
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": 1,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": {
+        "kind": "repeated-links",
+        "outerColor": 4925052,
+        "outerWidth": 4,
+        "innerColor": 14198783,
+        "innerWidth": 1,
+        "linkSpacing": 13,
+        "linkLength": 9,
+        "linkWidth": 6
+      },
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:33cd9c3d8a13d7cd",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-鎖魂鏈.gif",
+    "configPreviewSourceSha256": "33cd9c3d8a13d7cdc716363de6a20d43ba10350cd2efd63b8b99152b55b2d396",
+    "configPreviewOutputSha256": "4f310777a45abdf3014bb78371a961f4f783e7e37ec6bd81cc2902e930b870d6",
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      5,
+      59,
+      159,
+      105
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png",
+    "sourceSha256": "11b8599eef5bb55ba530fc4eb84fe8c9bca97391f9b6dab70a3b958a13da7ed1",
+    "outputSha256": "8de075163c88aee2948ff4119757c5dcd1205f5d93e2020a8eb522f64a0f1e0f",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          32,
+          61,
+          32,
+          62
+        ],
+        [
+          7,
+          68,
+          8,
+          68
+        ],
+        [
+          7,
+          75,
+          8,
+          66
+        ],
+        [
+          7,
+          71,
+          8,
+          71
+        ],
+        [
+          7,
+          71,
+          9,
+          71
+        ],
+        [
+          7,
+          73,
+          8,
+          73
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png",
+        "sha256": "11b8599eef5bb55ba530fc4eb84fe8c9bca97391f9b6dab70a3b958a13da7ed1"
+      }
+    ],
+    "packagePath": "mage_法師/2_E_中階/12_鎖魂鏈_mage_11",
+    "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "e564d78bbb2df4aeee0ccb6345a9c76872a96365827203b02b9b06cb225eb00d",
+    "iconFile": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/icon.png",
+    "iconFileSha256": "f5b5fb3fa8e8ae95386ee897f85298f62b2b4eebce7e402e4bf498ee666c0782",
+    "playback": {
+      "introFrameIndices": [
+        0
+      ],
+      "loopFrameIndices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "recoveryFrameIndices": [
+        5
+      ]
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_11:source-adc8ff2f9e697f77:output-e564d78bbb2df4ae",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_11",
+    "previewSourceSequenceSha256": "adc8ff2f9e697f77397a97c27db693c49510b6289138308dcd8d4eef0021d089",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.024,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/preview/gameplay-preview-v1.webm",
+    "sha256": "e564d78bbb2df4aeee0ccb6345a9c76872a96365827203b02b9b06cb225eb00d",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_11:source-adc8ff2f9e697f77:output-e564d78bbb2df4ae",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_11",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.25,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.429,
+      "durationSec": 4.179,
+      "file": "random-mage_11-hq.webm",
+      "bytes": 8452610,
+      "sha256": "adc8ff2f9e697f77397a97c27db693c49510b6289138308dcd8d4eef0021d089"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_11-hq.webm",
+    "sourceVideoSha256": "adc8ff2f9e697f77397a97c27db693c49510b6289138308dcd8d4eef0021d089",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.048,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      774,
+      353,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1079,
+      542,
+      1366,
+      668
+    ],
+    "contentMargins": [
+      305,
+      189,
+      304,
+      189
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.024,
+    "frameCount": 124,
+    "totalDurationMs": 4130,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 8452610,
+    "outputBytes": 641658,
+    "reductionRatio": 0.924088,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/icon.png",
+    "sha256": "f5b5fb3fa8e8ae95386ee897f85298f62b2b4eebce7e402e4bf498ee666c0782",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "0e54e7cf0923170875956a2612df2b4cd8a0b44a3988456beb33ff773a17a424",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_11.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

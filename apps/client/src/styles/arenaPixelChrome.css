@@ -1,0 +1,541 @@
+/*
+ * Arena-only pixel chrome.
+ *
+ * Every visible frame below is rendered from the generated raster 9-slice
+ * kit in public/assets/generated/arena-ui. Gameplay layout remains in the
+ * main stylesheet; this file owns the shared arena material language.
+ */
+
+@font-face {
+  font-family: "ArenaPixel";
+  src: url("/assets/ui/sprout-lands/pixelFont-7-8x14-sproutLands.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --arena-chrome-panel: url("/assets/generated/arena-ui/arena-panel-frame.png");
+  --arena-chrome-inset: url("/assets/generated/arena-ui/arena-inset-frame.png");
+  --arena-chrome-gold: url("/assets/generated/arena-ui/arena-gold-button.png");
+  --arena-chrome-primary: url("/assets/generated/arena-ui/arena-primary-button.png");
+  --arena-chrome-square: url("/assets/generated/arena-ui/arena-square-button.png");
+  --arena-chrome-ink: #100916;
+  --arena-chrome-plum: #2f2038;
+  --arena-chrome-plum-deep: #1a1021;
+  --arena-chrome-gold-ink: #291625;
+  --arena-chrome-gold-text: #ffd977;
+  --arena-chrome-copy: #f3dca5;
+  --arena-chrome-shadow: rgba(10, 4, 12, 0.58);
+}
+
+.start-panel,
+.start-panel *,
+.hud-layer,
+.hud-layer * {
+  font-family: "ArenaPixel", "PingFang TC", "Noto Sans TC", sans-serif;
+}
+
+.start-panel,
+.arena-loadout-banner,
+.start-panel > .class-command,
+.start-panel > .class-stage,
+.arena-loadout-editor,
+.start-panel > .start-copy,
+.hud-drawer,
+.round-hud,
+.round-result,
+.event-feed,
+.round-rewards,
+.minimap,
+.leaderboard,
+.skill-bar,
+.death-overlay,
+.combat-toast,
+.combat-announcer,
+.low-health-alert,
+.safe-entry-alert {
+  background: var(--arena-chrome-plum);
+  border: 12px solid transparent;
+  border-image: var(--arena-chrome-panel) 14 fill / 12px / 0 stretch;
+  box-shadow: 7px 9px 0 var(--arena-chrome-shadow);
+  image-rendering: pixelated;
+}
+
+.start-panel {
+  border-width: 16px;
+  border-image-width: 16px;
+  box-shadow: 10px 12px 0 var(--arena-chrome-shadow);
+}
+
+.arena-loadout-banner,
+.start-panel > .class-command,
+.start-panel > .class-stage,
+.arena-loadout-editor,
+.start-panel > .start-copy {
+  border-width: 10px;
+  border-image-width: 10px;
+  box-shadow: 4px 5px 0 rgba(10, 4, 12, 0.42);
+}
+
+.round-hud,
+.event-feed,
+.round-rewards,
+.hud-drawer,
+.leaderboard {
+  border-width: 10px;
+  border-image-width: 10px;
+}
+
+.minimap,
+.skill-bar,
+.combat-toast,
+.low-health-alert,
+.safe-entry-alert {
+  border-width: 8px;
+  border-image-width: 8px;
+}
+
+.arena-loadout-banner,
+.start-panel > .class-command,
+.start-panel > .class-stage,
+.arena-loadout-editor,
+.start-panel > .start-copy,
+.round-hud,
+.event-feed,
+.round-rewards,
+.hud-drawer,
+.leaderboard,
+.minimap,
+.skill-bar {
+  color: var(--arena-chrome-copy);
+}
+
+.arena-loadout-banner h1,
+.start-panel > .class-command header strong,
+.start-panel .class-stage-name strong,
+.arena-loadout-editor > header strong,
+.round-hud header strong,
+.round-result header strong,
+.leaderboard header,
+.event-feed header,
+.round-rewards header,
+.hud-drawer header,
+.minimap header {
+  color: var(--arena-chrome-gold-text);
+  text-shadow: 3px 3px 0 var(--arena-chrome-ink);
+}
+
+.round-hud header,
+.round-hud footer,
+.event-feed header,
+.round-rewards header,
+.leaderboard header,
+.minimap header,
+.hud-drawer header,
+.arena-loadout-editor > header {
+  background: var(--arena-chrome-plum-deep);
+  border: 6px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 6px / 0 stretch;
+  image-rendering: pixelated;
+}
+
+.round-hud header,
+.event-feed header,
+.round-rewards header,
+.leaderboard header,
+.minimap header,
+.hud-drawer header {
+  height: auto;
+  min-height: 38px;
+}
+
+.round-hud footer {
+  min-height: 34px;
+  padding: 3px 8px;
+}
+
+.arena-loadout-editor > header {
+  padding: 4px 7px 8px;
+}
+
+.start-panel .class-card,
+.start-panel .skill-glyph,
+.equipped-skill,
+.skill-roster-card,
+.skill-loadout-detail,
+.arena-loadout-editor > footer,
+.start-panel > .start-copy input,
+.round-winner-card,
+.round-podium li,
+.drawer-toggle,
+.drawer-language-row,
+.drawer-exit-button,
+.drawer-map-board,
+.minimap-board,
+.round-meter,
+.respawn-meter,
+.skill-tooltip,
+.death-class-card,
+.round-reward-stage img,
+.round-reward-strip img {
+  background: var(--arena-chrome-plum-deep);
+  border: 7px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 7px / 0 stretch;
+  box-shadow: 3px 4px 0 rgba(9, 4, 11, 0.42);
+  image-rendering: pixelated;
+}
+
+.start-panel .class-card {
+  border-width: 8px;
+  border-image-width: 8px;
+}
+
+.start-panel .class-card:hover,
+.start-panel .class-card.is-selected,
+.equipped-skill.is-active,
+.skill-roster-card:hover,
+.skill-roster-card.is-selected,
+.death-class-card.is-current {
+  background: #4a2d43;
+  border-image-source: var(--arena-chrome-panel);
+  border-image-slice: 14 fill;
+  color: var(--arena-chrome-gold-text);
+  transform: translateY(-1px);
+}
+
+.start-panel .class-card:hover,
+.start-panel .class-card.is-selected {
+  border-color: transparent;
+  box-shadow: 4px 5px 0 rgba(9, 4, 11, 0.48);
+}
+
+.skill-roster-card.is-reserve {
+  background: #17101d;
+  border-image-source: var(--arena-chrome-inset);
+}
+
+.start-panel > .start-copy input:focus {
+  outline: 3px solid #f0b84e;
+  outline-offset: -7px;
+}
+
+.top-actions button,
+.top-actions a,
+.skill-bar .skill-button,
+.skill-bar .skill-button:nth-child(n),
+.skill-bar .skill-button.action-skillF,
+.skill-bar .skill-button.action-skillQ,
+.skill-bar .skill-button.action-skillE,
+.skill-bar .skill-button.action-skillR,
+.skill-bar .skill-button.action-attack,
+.mobile-action-button,
+.language-switcher button,
+.arena-tags span,
+.arena-tutorial-button,
+.drawer-language-row button {
+  background: var(--arena-chrome-plum);
+  border: 10px solid transparent;
+  border-image: var(--arena-chrome-square) 12 fill / 10px / 0 stretch;
+  box-shadow: 4px 5px 0 var(--arena-chrome-shadow);
+  image-rendering: pixelated;
+}
+
+.top-actions button,
+.top-actions a {
+  width: 64px;
+  height: 64px;
+  color: #f6d77a;
+}
+
+.top-actions svg,
+.arena-tutorial-button svg,
+.drawer-exit-button svg,
+.leaderboard header svg {
+  filter: drop-shadow(2px 2px 0 #130918);
+  shape-rendering: crispEdges;
+}
+
+.top-actions button:hover,
+.top-actions a:hover,
+.top-actions button.is-active,
+.language-switcher button.is-active,
+.arena-loadout-banner .language-switcher button.is-active {
+  color: #291625;
+  background: #d99d3e;
+  border-image-source: var(--arena-chrome-gold);
+  border-image-slice: 14 fill;
+}
+
+.top-actions button:active,
+.top-actions a:active,
+.skill-button:not(:disabled):active,
+.mobile-action-button:not(:disabled):active {
+  transform: translateY(3px);
+  box-shadow: 2px 2px 0 var(--arena-chrome-shadow);
+}
+
+.status-chip {
+  min-height: 38px;
+  color: var(--arena-chrome-copy);
+  background: var(--arena-chrome-plum);
+  border: 8px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 8px / 0 stretch;
+  box-shadow: 4px 5px 0 var(--arena-chrome-shadow);
+  image-rendering: pixelated;
+}
+
+.enter-button,
+.start-panel > .start-copy .enter-button,
+.combat-announcer span,
+.combat-announcer b,
+.round-winner-card b,
+.round-hud footer b,
+.leaderboard b,
+.leaderboard small,
+.event-feed i,
+.event-feed em,
+.drawer-map-stats b,
+.skill-button strong,
+.equipped-skill > b,
+.skill-roster-card > b,
+.safe-entry-alert strong,
+.low-health-alert strong {
+  color: var(--arena-chrome-gold-ink);
+  background: #d99d3e;
+  border: 7px solid transparent;
+  border-image: var(--arena-chrome-gold) 14 fill / 7px / 0 stretch;
+  box-shadow: 2px 3px 0 rgba(8, 3, 9, 0.4);
+  text-shadow: none;
+  image-rendering: pixelated;
+}
+
+.enter-button,
+.start-panel > .start-copy .enter-button {
+  border-width: 9px;
+  border-image-width: 9px;
+  border-image-source: var(--arena-chrome-primary);
+  color: #f7efb8;
+  text-shadow: 2px 2px 0 #20300f;
+}
+
+.enter-button:hover,
+.start-panel > .start-copy .enter-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.skill-bar {
+  gap: 5px;
+  padding: 7px 10px 17px;
+}
+
+.skill-bar .skill-button,
+.skill-bar .skill-button:nth-child(n) {
+  width: 82px;
+  height: 96px;
+  padding: 8px 7px 14px;
+  color: var(--arena-chrome-copy);
+}
+
+.skill-bar .skill-button:hover:not(:disabled) {
+  border-image-source: var(--arena-chrome-panel);
+  filter: brightness(1.08);
+}
+
+.skill-button strong {
+  bottom: -15px;
+}
+
+.skill-button em {
+  left: 9px;
+  top: 9px;
+  color: var(--arena-chrome-gold-text);
+  background: var(--arena-chrome-plum-deep);
+  border: 5px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 5px / 0 stretch;
+  box-shadow: none;
+}
+
+.skill-tooltip {
+  border-width: 9px;
+  border-image-width: 9px;
+}
+
+.skill-tooltip::after,
+.combat-announcer::before,
+.combat-announcer::after {
+  display: none;
+}
+
+.leaderboard {
+  width: 252px;
+}
+
+.leaderboard ol,
+.event-feed ol,
+.drawer-events {
+  padding: 6px;
+}
+
+.leaderboard li,
+.event-feed li,
+.drawer-events li {
+  min-height: 30px;
+  margin-top: 3px;
+  padding: 2px 4px;
+  background: #1d1224;
+  border: 5px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 5px / 0 stretch;
+  image-rendering: pixelated;
+}
+
+.leaderboard li:first-child,
+.event-feed li:first-child,
+.drawer-events li:first-child {
+  margin-top: 0;
+}
+
+.leaderboard b,
+.leaderboard small,
+.event-feed i,
+.event-feed em {
+  border-width: 4px;
+  border-image-width: 4px;
+  box-shadow: none;
+}
+
+.round-reward-stage img,
+.round-reward-strip img {
+  background: #160e1b;
+}
+
+.round-reward-strip img.is-active {
+  border-image-source: var(--arena-chrome-panel);
+  filter: brightness(1.12);
+  box-shadow: 3px 4px 0 rgba(9, 4, 11, 0.52);
+}
+
+.round-meter,
+.respawn-meter {
+  height: 28px;
+  padding: 4px;
+  background: #120b18;
+}
+
+.round-meter i,
+.round-hud.is-finished .round-meter i,
+.respawn-meter i {
+  background: #e4a940;
+  box-shadow: inset 0 3px 0 #ffd975, inset 0 -3px 0 #8b4d2a;
+  image-rendering: pixelated;
+}
+
+.round-hud.is-finished .round-meter i {
+  background: #8e63b5;
+  box-shadow: inset 0 3px 0 #d19be7, inset 0 -3px 0 #4c2c65;
+}
+
+.drawer-map-board,
+.minimap-board {
+  background: #1c3624;
+  box-shadow: 3px 4px 0 rgba(7, 4, 9, 0.38);
+}
+
+.minimap-center,
+.minimap-pack,
+.minimap-attack-pack,
+.minimap-dot {
+  border-radius: 0;
+  box-shadow: none;
+  image-rendering: pixelated;
+}
+
+.round-winner-card,
+.round-podium li {
+  background: #1e1325;
+}
+
+.round-podium li.is-self {
+  border-image-source: var(--arena-chrome-panel);
+  filter: brightness(1.08);
+}
+
+.combat-toast,
+.combat-announcer,
+.low-health-alert,
+.safe-entry-alert {
+  background: var(--arena-chrome-plum);
+}
+
+.combat-toast.tone-heal,
+.combat-toast.tone-danger,
+.combat-toast.tone-streak,
+.combat-toast.tone-round,
+.combat-announcer.tone-victory,
+.combat-announcer.tone-assist,
+.combat-announcer.tone-danger,
+.combat-announcer.tone-streak,
+.combat-announcer.tone-round {
+  border-color: transparent;
+  border-image-source: var(--arena-chrome-panel);
+}
+
+.combat-announcer strong {
+  color: #fff1bd;
+  text-shadow: 4px 4px 0 var(--arena-chrome-ink);
+}
+
+.drawer-toggle.is-on,
+.drawer-language-row button.is-active {
+  color: var(--arena-chrome-gold-ink);
+  background: #d99d3e;
+  border-image-source: var(--arena-chrome-gold);
+}
+
+.drawer-exit-button:hover {
+  color: #ffd99a;
+  background: #5a2834;
+  border-image-source: var(--arena-chrome-panel);
+}
+
+.death-overlay {
+  border-width: 14px;
+  border-image-width: 14px;
+}
+
+.death-class-switch {
+  background: var(--arena-chrome-plum-deep);
+  border: 9px solid transparent;
+  border-image: var(--arena-chrome-panel) 14 fill / 9px / 0 stretch;
+  box-shadow: 5px 6px 0 var(--arena-chrome-shadow);
+}
+
+.death-class-card::before,
+.death-class-card.is-current::after {
+  display: none;
+}
+
+.mobile-action-button {
+  color: var(--arena-chrome-copy);
+}
+
+@media (max-width: 760px) {
+  .top-actions button,
+  .top-actions a {
+    width: 62px;
+    height: 62px;
+  }
+
+  .round-hud,
+  .event-feed,
+  .round-rewards,
+  .hud-drawer,
+  .death-overlay {
+    border-width: 8px;
+    border-image-width: 8px;
+  }
+
+  .minimap {
+    border-width: 7px;
+    border-image-width: 7px;
+  }
+}

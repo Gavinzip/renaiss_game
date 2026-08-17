@@ -1,20 +1,23 @@
 import Phaser from "phaser";
-import { MAP_COLLIDERS, RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, resolveCollision, type Collider, type RpgElement } from "@renaiss-game/shared";
-import { copyTexture, makeMatteTransparent } from "../assets/chromaKey";
+import { RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, mapPropsToColliders, resolveCollision, type Collider, type RpgElement } from "@renaiss-game/shared";
+import { makeMatteTransparent } from "../assets/chromaKey";
 import { ENV_CROPS, ENV_TEXTURES } from "../assets/crops";
-import { buildRuntimeTextures } from "../assets/runtimeTextures";
+import { buildNewCompatibleWalkTexture, buildVillageRuntimeTextures, getNewCompatibleWalkFrameTexture } from "../assets/runtimeTextures";
 import { generatedAssetPath } from "../assets/generatedAssets";
 import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
 import { RPG_PET_SPRITE_FRAME, RPG_PET_SPRITE_ROW, rpgPetAnimationFrameIndexes } from "../assets/rpgPetSprites";
+import { getRenderableMapProps } from "../mapDraft";
 import { renderVillageMap } from "../render/villageMap";
 import { isDomTextEditingActive } from "../input/domFocus";
 import {
   getVillagePlayerAnimationFrame,
   getVillagePlayerStepPose,
+  getVillagePlayerWalkDirection,
   VILLAGE_PLAYER_DISPLAY,
   VILLAGE_PLAYER_ORIGIN_Y,
   type VillagePlayerDirection,
-  type VillagePlayerFacing
+  type VillagePlayerFacing,
+  type VillagePlayerWalkDirection
 } from "../render/villagePlayerAnimation";
 import { useRpgStore, type RpgNavigationTarget, type RpgPlace } from "../../state/rpgStore";
 import { rpgCopy } from "../../i18n/rpg";
@@ -83,10 +86,9 @@ export class RpgVillageScene extends Phaser.Scene {
   private lastFacing: VillagePlayerFacing = "right";
   private lastMoveAxis: "horizontal" | "vertical" = "horizontal";
   private lastDirection: VillagePlayerDirection = "down";
+  private lastPlayerWalkDirection: VillagePlayerWalkDirection = "south";
   private shopPoint = new Phaser.Math.Vector2(650, 460);
-  private gymPoint = new Phaser.Math.Vector2(1260, 430);
   private arenaPoint = new Phaser.Math.Vector2(980, 360);
-  private personalHousePoint = new Phaser.Math.Vector2(840, 340);
   private unsubscribePlayerName?: () => void;
 
   constructor() {
@@ -95,23 +97,9 @@ export class RpgVillageScene extends Phaser.Scene {
 
   preload() {
     if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
-    this.load.image("classSprites", generatedAssetPath("class-sprites"));
+    this.load.image("newCompatibleWalk_engineer", generatedAssetPath("characters/new-compatible/engineer/walk-8dir"));
     this.load.image("villageAssets", generatedAssetPath("village-assets"));
     this.load.image("arenaDecals", generatedAssetPath("arena-decals"));
-    this.load.image("skillEffects", generatedAssetPath("skill-effects"));
-    this.load.image("combatObjects", generatedAssetPath("combat-objects"));
-    this.load.image("statusEffects", generatedAssetPath("status-effects"));
-    this.load.image("abilityEffects", generatedAssetPath("ability-effects"));
-    this.load.image("warriorVerticalSlash", generatedAssetPath("warrior-vertical-slash"));
-    this.load.image("warriorArcherEffects", generatedAssetPath("warrior-archer-effects"));
-    this.load.image("warriorVerdictCombatFx", generatedAssetPath("combat-fx-warrior-verdict"));
-    this.load.image("engineerEffects", generatedAssetPath("engineer-effects"));
-    this.load.image("mageEffects", generatedAssetPath("mage-effects"));
-    this.load.image("combatEffects", generatedAssetPath("combat-effects"));
-    this.load.image("warriorAttackSprites", generatedAssetPath("warrior-attack-sprites"));
-    this.load.image("archerAttackSprites", generatedAssetPath("archer-attack-sprites"));
-    this.load.image("engineerActionSprites", generatedAssetPath("engineer-action-sprites"));
-    this.load.image("mageAttackSprites", generatedAssetPath("mage-attack-sprites"));
     this.load.spritesheet("rpgPetSprites", generatedAssetPath("rpg-pet-sprites"), {
       frameWidth: RPG_PET_SPRITE_FRAME,
       frameHeight: RPG_PET_SPRITE_FRAME
@@ -127,11 +115,9 @@ export class RpgVillageScene extends Phaser.Scene {
   }
 
   create() {
-    copyTexture(this, "classSprites", "classSpritesClean");
     makeMatteTransparent(this, "villageAssets", "villageAssetsClean", "magenta");
-    makeMatteTransparent(this, "skillEffects", "skillEffectsClean", "edgeBlack");
-    makeMatteTransparent(this, "combatObjects", "combatObjectsClean", "edgeBlack");
-    buildRuntimeTextures(this);
+    buildVillageRuntimeTextures(this, { includeLegacyClassTextures: false });
+    buildNewCompatibleWalkTexture(this, "engineer");
     this.textures.get("rpgPetSprites").setFilter(Phaser.Textures.FilterMode.NEAREST);
     this.textures.get("rpgPetDirections").setFilter(Phaser.Textures.FilterMode.NEAREST);
     this.textures.get("rpgPetDirectionWalk").setFilter(Phaser.Textures.FilterMode.NEAREST);
@@ -139,9 +125,10 @@ export class RpgVillageScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
     this.cameras.main.setZoom(0.78);
     this.cameras.main.roundPixels = true;
-    this.colliders = [...MAP_COLLIDERS];
+    const villageMapProps = getRenderableMapProps().filter((prop) => prop.type !== "houseA" && prop.type !== "houseB");
+    this.colliders = mapPropsToColliders(villageMapProps);
 
-    renderVillageMap(this);
+    renderVillageMap(this, villageMapProps);
     this.addRpgVillageProps();
     this.addPlaceLabels();
     this.createParty();
@@ -193,6 +180,7 @@ export class RpgVillageScene extends Phaser.Scene {
 
     if (moving) {
       this.movePlayer((moveX / length) * speed * seconds, (moveY / length) * speed * seconds);
+      this.lastPlayerWalkDirection = getVillagePlayerWalkDirection(moveX, moveY, this.lastPlayerWalkDirection);
       this.lastMoveAxis = Math.abs(moveY) > Math.abs(moveX) ? "vertical" : "horizontal";
       if (this.lastMoveAxis === "horizontal") {
         this.lastFacing = moveX < 0 ? "left" : moveX > 0 ? "right" : this.lastFacing;
@@ -208,8 +196,8 @@ export class RpgVillageScene extends Phaser.Scene {
     this.updateNearbyPlace(inputBlocked);
   }
 
-  private pointForNavigationTarget(target: RpgNavigationTarget) {
-    return target === "gym" ? this.gymPoint : this.arenaPoint;
+  private pointForNavigationTarget(_target: RpgNavigationTarget) {
+    return this.arenaPoint;
   }
 
   private movePlayer(deltaX: number, deltaY: number) {
@@ -265,22 +253,15 @@ export class RpgVillageScene extends Phaser.Scene {
   private updateNearbyPlace(inputBlocked: boolean) {
     const playerPoint = new Phaser.Math.Vector2(this.player.x, this.player.y);
     const shopDistance = playerPoint.distance(this.shopPoint);
-    const gymDistance = playerPoint.distance(this.gymPoint);
     const arenaDistance = playerPoint.distance(this.arenaPoint);
-    const personalHouseDistance = playerPoint.distance(this.personalHousePoint);
-    const nearPlace = personalHouseDistance < 170 ? "house" : shopDistance < 145 ? "shop" : gymDistance < 155 ? "gym" : arenaDistance < 160 ? "arena" : null;
+    const nearPlace = shopDistance < 145 ? "shop" : arenaDistance < 160 ? "arena" : null;
     if (nearPlace !== this.lastNearPlace) {
       this.lastNearPlace = nearPlace;
       useRpgStore.getState().setNearPlace(nearPlace);
     }
     if (!inputBlocked && nearPlace && Phaser.Input.Keyboard.JustDown(this.keys.E)) {
       const store = useRpgStore.getState();
-      if (nearPlace === "house") {
-        store.enterHouse();
-        this.scene.start("RpgHouseScene");
-      }
       if (nearPlace === "shop") store.openShop();
-      if (nearPlace === "gym") store.openGym();
       if (nearPlace === "arena") store.openArena();
     }
   }
@@ -290,7 +271,7 @@ export class RpgVillageScene extends Phaser.Scene {
     const playerY = WORLD.height / 2 + 360;
     this.playerShadow = this.add.ellipse(playerX, playerY + 13, 72, 18, 0x080604, 0.22).setDepth(playerY - 3);
     this.player = this.add
-      .image(playerX, playerY, "sprite_engineer_0")
+      .image(playerX, playerY, getNewCompatibleWalkFrameTexture("engineer", this.lastPlayerWalkDirection, 0))
       .setOrigin(0.5, VILLAGE_PLAYER_ORIGIN_Y)
       .setDisplaySize(VILLAGE_PLAYER_DISPLAY.width, VILLAGE_PLAYER_DISPLAY.height);
     this.playerLabel = this.add
@@ -401,21 +382,15 @@ export class RpgVillageScene extends Phaser.Scene {
 
   private addPlaceLabels() {
     this.shopPoint = new Phaser.Math.Vector2(WORLD.width / 2 - 410, WORLD.height / 2 + 655);
-    this.gymPoint = new Phaser.Math.Vector2(WORLD.width / 2 + 520, WORLD.height / 2 + 655);
     this.arenaPoint = new Phaser.Math.Vector2(WORLD.width / 2 + 720, WORLD.height / 2 + 345);
-    this.personalHousePoint = new Phaser.Math.Vector2(WORLD.width / 2 - 760, WORLD.height / 2 + 320);
   }
 
   private addRpgVillageProps() {
     const c = WORLD.width / 2;
     const m = WORLD.height / 2;
     const profileCopy = rpgCopy().profile;
-    this.addHouse(c - 1030, m + 455, "houseB", "CardsMelt4048", 0.94);
-    this.addHouse(c - 760, m + 120, "houseB", profileCopy.house, 0.94);
     this.addHouse(c + 720, m + 150, "houseB", profileCopy.arena, 0.92);
-    this.addHouse(c - 410, m + 470, "houseA", profileCopy.cabinet, 0.9);
-    this.addHouse(c + 520, m + 470, "houseA", profileCopy.gym, 0.9);
-    this.addHouse(c + 900, m + 450, "houseB", "RocksSmash4680", 0.94);
+    this.addHouse(c - 410, m + 470, "houseA", profileCopy.skillForge, 0.9);
     this.addProp(ENV_TEXTURES.treeRound, c - 1110, m + 190, 108, 140, m + 258, { collider: { kind: "circle", x: c - 1110, y: m + 162, radius: 40 } });
     this.addProp(ENV_TEXTURES.treePine, c - 995, m + 184, 108, 146, m + 252, { collider: { kind: "circle", x: c - 995, y: m + 154, radius: 38 } });
     this.addProp(ENV_TEXTURES.treeRound, c + 1130, m + 210, 108, 140, m + 278, { collider: { kind: "circle", x: c + 1130, y: m + 182, radius: 40 } });
@@ -468,11 +443,11 @@ export class RpgVillageScene extends Phaser.Scene {
   }
 
   private updatePlayerFrame(moving: boolean) {
-    const frame = getVillagePlayerAnimationFrame("engineer", moving, this.lastDirection, this.lastFacing, this.time.now);
+    const frame = getVillagePlayerAnimationFrame(moving, this.lastPlayerWalkDirection, this.time.now);
     const pose = getVillagePlayerStepPose(moving, this.lastDirection, this.time.now);
     this.player
-      .setTexture(`sprite_engineer_${frame.frameIndex}`)
-      .setFlipX(frame.flipX)
+      .setTexture(getNewCompatibleWalkFrameTexture("engineer", frame.direction, frame.frameIndex))
+      .setFlipX(false)
       .setOrigin(0.5, pose.originY)
       .setDisplaySize(pose.width, pose.height)
       .setAngle(0);

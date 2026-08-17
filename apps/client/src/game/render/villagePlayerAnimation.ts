@@ -1,9 +1,10 @@
 export type VillagePlayerDirection = "side" | "down" | "up";
 export type VillagePlayerFacing = "left" | "right";
+export type VillagePlayerWalkDirection = "south" | "south-east" | "east" | "north-east" | "north" | "north-west" | "west" | "south-west";
 
 export interface VillagePlayerAnimationFrame {
   frameIndex: number;
-  flipX: boolean;
+  direction: VillagePlayerWalkDirection;
 }
 
 export interface VillagePlayerStepPose {
@@ -25,41 +26,33 @@ export const VILLAGE_PLAYER_DISPLAY = {
 export const VILLAGE_PLAYER_ORIGIN_Y = 0.96;
 
 const WALK_FRAME_MS = 118;
-const DOWN_WALK_FRAMES = [0, 1, 2] as const;
-const SIDE_WALK_FRAMES = [4, 5, 6] as const;
+const WALK_FRAME_COUNT = 7;
+
+export function getVillagePlayerWalkDirection(
+  moveX: number,
+  moveY: number,
+  fallback: VillagePlayerWalkDirection
+): VillagePlayerWalkDirection {
+  if (moveX === 0 && moveY === 0) return fallback;
+
+  const horizontalMagnitude = Math.abs(moveX);
+  const verticalMagnitude = Math.abs(moveY);
+  const horizontal = moveX < 0 ? "west" : "east";
+  const vertical = moveY < 0 ? "north" : "south";
+  const cardinalThreshold = Math.SQRT2 - 1;
+  if (horizontalMagnitude <= verticalMagnitude * cardinalThreshold) return vertical;
+  if (verticalMagnitude <= horizontalMagnitude * cardinalThreshold) return horizontal;
+  return `${vertical}-${horizontal}` as VillagePlayerWalkDirection;
+}
 
 export function getVillagePlayerAnimationFrame(
-  _classId: "engineer",
   moving: boolean,
-  direction: VillagePlayerDirection,
-  facing: VillagePlayerFacing,
+  direction: VillagePlayerWalkDirection,
   now: number
 ): VillagePlayerAnimationFrame {
-  if (!moving) {
-    return {
-      frameIndex: direction === "up" ? 3 : direction === "side" ? 4 : 0,
-      flipX: direction === "side" && facing === "left"
-    };
-  }
-
-  const step = Math.floor(now / WALK_FRAME_MS);
-  if (direction === "side") {
-    return {
-      frameIndex: SIDE_WALK_FRAMES[step % SIDE_WALK_FRAMES.length],
-      flipX: facing === "left"
-    };
-  }
-
-  if (direction === "up") {
-    return {
-      frameIndex: 3,
-      flipX: false
-    };
-  }
-
   return {
-    frameIndex: DOWN_WALK_FRAMES[step % DOWN_WALK_FRAMES.length],
-    flipX: false
+    frameIndex: moving ? Math.floor(now / WALK_FRAME_MS) % WALK_FRAME_COUNT : 0,
+    direction
   };
 }
 

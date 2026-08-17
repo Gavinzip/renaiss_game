@@ -23,8 +23,18 @@ export function RoundHud({ round, serverTime }: RoundHudProps) {
         <i style={{ width: `${progress * 100}%` }} />
       </div>
       <footer>
-        <span>{round.winner?.name ?? t.round.scoreLimit}</span>
-        <b>{round.scoreLimit}</b>
+        {round.mode === "team_3v3" ? (
+          <>
+            <span className="team-score-red">{t.ui.redTeam} {round.teamScores.red}</span>
+            <b>{round.scoreLimit}</b>
+            <span className="team-score-blue">{t.ui.blueTeam} {round.teamScores.blue}</span>
+          </>
+        ) : (
+          <>
+            <span>{round.winner?.name ?? t.round.scoreLimit}</span>
+            <b>{round.scoreLimit}</b>
+          </>
+        )}
       </footer>
     </section>
   );

@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_05",
+  "classId": "mage",
+  "name": "稜鏡碎裂",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
+  "runtime": {
+    "skillId": "mage_05",
+    "classId": "mage",
+    "name": "稜鏡碎裂",
+    "persistent": false,
+    "previewSha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
+    "visualContract": {
+      "anchor": "target",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        52,
+        42
+      ],
+      "referenceOffset": [
+        0,
+        -5
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:c1554b416a0f3c5c",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-稜鏡碎裂.gif",
+    "configPreviewSourceSha256": "c1554b416a0f3c5c230ef2a4438b5737122da074bff9ed2e6307ab55a5b62bc8",
+    "configPreviewOutputSha256": "bd0ef7675d731014a7bbd1e3d8bbb338d6bcedf0d5602e03927b7366b849ef2e",
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      32,
+      34,
+      132,
+      134
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
+    "sourceSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+    "outputSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          67,
+          113,
+          67,
+          33
+        ],
+        [
+          61,
+          76,
+          61,
+          33
+        ],
+        [
+          56,
+          36,
+          56,
+          33
+        ],
+        [
+          41,
+          63,
+          42,
+          43
+        ],
+        [
+          34,
+          95,
+          35,
+          37
+        ],
+        [
+          69,
+          121,
+          69,
+          37
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
+        "sha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48"
+      }
+    ],
+    "packagePath": "mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
+    "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
+    "iconFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/icon.png",
+    "iconFileSha256": "66998dfd74798f0364c8b0cc7d8b437a7c3cac50deaa88b591983416c6202cd4",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_05:source-b4b038355972d6e7:output-7a996b1f5d01c694",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_05",
+    "previewSourceSequenceSha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.029,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v1.webm",
+    "sha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_05:source-b4b038355972d6e7:output-7a996b1f5d01c694",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_05",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.534,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 8.015,
+      "durationSec": 3.481,
+      "file": "random-mage_05-hq.webm",
+      "bytes": 7442352,
+      "sha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_05-hq.webm",
+    "sourceVideoSha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.0,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      820,
+      356,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1081,
+      548,
+      1454,
+      668
+    ],
+    "contentMargins": [
+      261,
+      192,
+      262,
+      192
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.029,
+    "frameCount": 103,
+    "totalDurationMs": 3430,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 7442352,
+    "outputBytes": 394151,
+    "reductionRatio": 0.947039,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/icon.png",
+    "sha256": "66998dfd74798f0364c8b0cc7d8b437a7c3cac50deaa88b591983416c6202cd4",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "5a01c5f9b578a85f42f238ff664cd150e29578ee16d0aaef1b143f4be6a1a564",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_05.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

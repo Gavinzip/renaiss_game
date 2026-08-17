@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_06",
+  "classId": "warrior",
+  "name": "裂甲斬",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06",
+  "runtime": {
+    "skillId": "warrior_06",
+    "classId": "warrior",
+    "name": "裂甲斬",
+    "persistent": false,
+    "previewSha256": "c4ca5530aa735d08ffe9fdb742c558849b5952a7d2978f841d72d749b6778981",
+    "visualContract": {
+      "anchor": "target",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        40,
+        43
+      ],
+      "referenceOffset": [
+        4,
+        -39
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:4bef10f8bb92aa6a",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.gif",
+    "configPreviewSourceSha256": "4bef10f8bb92aa6af21f01eab11626ddd76bcbe79ae8e2a43be4562c28251453",
+    "configPreviewOutputSha256": "d8b05b04b6ae7f9d128b89147e52d9017b6774502fb1eaba4e362a52f2ec07cd",
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/runtime/primary.png",
+    "frameWidth": 362,
+    "frameHeight": 724,
+    "frameCount": 6,
+    "unionBounds": [
+      0,
+      257,
+      362,
+      466
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png",
+    "sourceSha256": "5318c453134fed46012e2c19c9c3175d2abb7a66b0951545cd7920890bc1c36d",
+    "outputSha256": "ace179973e2cc1ea6557e9fb7dea5a42f2e863f865bdbc21dd8d2c824e76f283",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "blankFrameIndices": [
+      0
+    ],
+    "pixelSafetyNormalization": {
+      "applied": true,
+      "method": "nearest-full-frame-containment",
+      "scale": 0.988950276243094,
+      "preserveBottomGroundLine": false,
+      "beforeEdgeMargins": [
+        null,
+        [
+          84,
+          285,
+          153,
+          286
+        ],
+        [
+          18,
+          265,
+          0,
+          260
+        ],
+        [
+          0,
+          258,
+          116,
+          259
+        ],
+        [
+          6,
+          265,
+          149,
+          266
+        ],
+        [
+          4,
+          279,
+          197,
+          266
+        ]
+      ],
+      "afterEdgeMargins": [
+        null,
+        [
+          85,
+          286,
+          153,
+          287
+        ],
+        [
+          20,
+          266,
+          2,
+          261
+        ],
+        [
+          2,
+          259,
+          117,
+          260
+        ],
+        [
+          8,
+          266,
+          149,
+          267
+        ],
+        [
+          6,
+          280,
+          197,
+          267
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png",
+        "sha256": "5318c453134fed46012e2c19c9c3175d2abb7a66b0951545cd7920890bc1c36d"
+      }
+    ],
+    "packagePath": "warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "c4ca5530aa735d08ffe9fdb742c558849b5952a7d2978f841d72d749b6778981",
+    "iconFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/icon.png",
+    "iconFileSha256": "5f91ec13a4dc30cd6fab76ee745bd52c8a9349b21e02f6f87b5e89abc102c3fa",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_06:source-f08d05f9ac4f7c52:output-c4ca5530aa735d08",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_06",
+    "previewSourceSequenceSha256": "f08d05f9ac4f7c52c76ae9cac7ab2c1eb1e4a992c2a9ba91883b9efcf361bfa0",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/preview/gameplay-preview-v1.webm",
+    "sha256": "c4ca5530aa735d08ffe9fdb742c558849b5952a7d2978f841d72d749b6778981",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_06:source-f08d05f9ac4f7c52:output-c4ca5530aa735d08",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_06",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 6.04,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.184,
+      "durationSec": 3.144,
+      "file": "random-warrior_06-hq.webm",
+      "bytes": 6252740,
+      "sha256": "f08d05f9ac4f7c52c76ae9cac7ab2c1eb1e4a992c2a9ba91883b9efcf361bfa0"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_06-hq.webm",
+    "sourceVideoSha256": "f08d05f9ac4f7c52c76ae9cac7ab2c1eb1e4a992c2a9ba91883b9efcf361bfa0",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.129,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      722,
+      353,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1101,
+      547,
+      1238,
+      663
+    ],
+    "contentMargins": [
+      379,
+      194,
+      380,
+      194
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 93,
+    "totalDurationMs": 3100,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 6252740,
+    "outputBytes": 434341,
+    "reductionRatio": 0.930536,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/icon.png",
+    "sha256": "5f91ec13a4dc30cd6fab76ee745bd52c8a9349b21e02f6f87b5e89abc102c3fa",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "d0b7570bdf2fdf3723203b8f43e774cc095a596c3fa88931b029da19c9f7cad8",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_06.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

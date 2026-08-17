@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "date": "2026-07-26",
+  "classificationRule": "new-compatible is based on accepted visible identity; provenance is recorded separately",
+  "pixelLabGenerationDuringThisMigration": 0,
+  "assets": [
+    {
+      "key": "warrior.walk",
+      "path": "characters/new-compatible/warrior/walk-8dir.png",
+      "status": "accepted",
+      "source": "PixelLab",
+      "sha256": "16baf4658b189b3141b6477018fb83e78a0b60c58e5bf7f55fd2538b5b8b1294"
+    },
+    {
+      "key": "warrior.m1",
+      "path": "characters/new-compatible/warrior/melee-m1-8dir.png",
+      "status": "accepted",
+      "source": "PixelLab (7 directions) plus built-in ImageGen south-west using the accepted PixelLab walk as identity anchor",
+      "sha256": "05392a32b889a2a3f49bf9d62e8a3bea8fba944b97976018c35dd0042f1668c1"
+    },
+    {
+      "key": "archer.walk",
+      "path": "characters/new-compatible/archer/walk-8dir.png",
+      "status": "accepted",
+      "source": "PixelLab",
+      "sha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912"
+    },
+    {
+      "key": "archer.moving-full-draw",
+      "path": "characters/new-compatible/archer/moving-full-draw-8dir.png",
+      "status": "accepted",
+      "source": "Archer class-level moving-full-draw package v3; whole-body WEST gait with palette matched to accepted PixelLab WEST walk",
+      "sha256": "2e071065950c34fd1f78d61a97681f150c2c7b9c830bca2f4eeb3cab91cbface"
+    },
+    {
+      "key": "archer.standing-full-draw",
+      "path": "characters/new-compatible/archer/standing-full-draw-8dir.png",
+      "status": "accepted",
+      "source": "complete-frame selection from accepted moving-full-draw",
+      "sha256": "b67e35bbb9aaacaa86e2f75a230a9a970b174547c3a709dd9d70657fabf17796"
+    },
+    {
+      "key": "archer.forest-roll",
+      "path": "characters/new-compatible/archer/forest-roll-8dir.png",
+      "status": "accepted",
+      "source": "accepted directional walk bookends plus visually compatible legacy-origin complete roll frames",
+      "sha256": "211c5624f9dd126c4fb1da8e4665dc697a86eaa73e34ac75fa076eae647eb3a3"
+    }
+  ],
+  "legacyActiveCompatibility": [
+    "class-sprites.png",
+    "warrior-attack-sprites.png",
+    "archer-attack-sprites.png",
+    "engineer-action-sprites.png",
+    "mage-attack-sprites.png"
+  ],
+  "rejectedRuntimeSources": [
+    "docs/design/arena-skill-vfx-assets/rejected/character/archer/drawn-bow-8dir.png",
+    "docs/design/arena-skill-vfx-assets/rejected/reviews/archer/moving-draw-8dir-keyposes-v7/"
+  ]
+}

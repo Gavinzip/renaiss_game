@@ -12,6 +12,8 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
   const { t } = useArenaI18n();
   const aliveCount = snapshot.players.filter((player) => player.alive).length;
   const self = snapshot.players.find((player) => player.id === selfId);
+  const visibleHealthPacks = getNearestItems(snapshot.healthPacks, self, 6);
+  const visibleAttackPacks = getNearestItems(snapshot.attackBoostPacks, self, 4);
 
   return (
     <section className="minimap" aria-label={t.drawer.minimap}>
@@ -21,7 +23,7 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
       </header>
       <div className="minimap-board">
         <span className="minimap-center" style={pointStyle(WORLD.width / 2, WORLD.height / 2)} />
-        {snapshot.healthPacks.slice(0, 16).map((pack) => {
+        {visibleHealthPacks.map((pack) => {
           const variant = getHealthPackVariant(pack.imageIndex);
           return (
             <span
@@ -32,7 +34,7 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
             />
           );
         })}
-        {snapshot.attackBoostPacks.slice(0, 10).map((pack) => (
+        {visibleAttackPacks.map((pack) => (
           <span
             key={pack.id}
             className="minimap-attack-pack"
@@ -42,7 +44,13 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
         ))}
         {snapshot.turrets.map((turret) => {
           const owned = turret.ownerId === selfId;
-          const classes = ["minimap-turret", owned ? "self" : "rival", turret.boosted ? "is-boosted" : ""]
+          const owner = snapshot.players.find((player) => player.id === turret.ownerId);
+          const allied = Boolean(
+            snapshot.round.mode === "team_3v3" &&
+            self?.team &&
+            owner?.team === self.team
+          );
+          const classes = ["minimap-turret", owned ? "self" : allied ? "ally" : "rival", turret.shield > 0 ? "is-boosted" : ""]
             .filter(Boolean)
             .join(" ");
 
@@ -50,14 +58,19 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
             <span
               key={turret.id}
               className={classes}
-              title={`${owned ? t.drawer.alliedTurret : t.drawer.rivalTurret}${turret.boosted ? ` ${t.drawer.overclocked}` : ""}`}
+              title={owned ? t.drawer.alliedTurret : t.drawer.rivalTurret}
               style={pointStyle(turret.x, turret.y)}
             />
           );
         })}
         {snapshot.players.map((player) => {
           const isSelf = player.id === selfId;
-          const classes = ["minimap-dot", isSelf ? "self" : player.bot ? "bot" : "rival", player.alive ? "" : "is-dead"]
+          const allied = Boolean(
+            snapshot.round.mode === "team_3v3" &&
+            self?.team &&
+            player.team === self.team
+          );
+          const classes = ["minimap-dot", isSelf ? "self" : allied ? "ally" : player.bot ? "bot" : "rival", player.alive ? "" : "is-dead"]
             .filter(Boolean)
             .join(" ");
 
@@ -68,7 +81,8 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
               title={player.name}
               style={{
                 ...pointStyle(player.x, player.y),
-                "--class-color": CLASS_META[player.classId].accent
+                "--class-color": CLASS_META[player.classId].accent,
+                "--heading": `${player.angle}deg`
               } as CSSProperties}
             />
           );
@@ -76,6 +90,25 @@ export function Minimap({ snapshot, selfId }: MinimapProps) {
       </div>
     </section>
   );
+}
+
+function getNearestItems<T extends { x: number; y: number }>(
+  items: T[],
+  self: { x: number; y: number } | undefined,
+  limit: number
+) {
+  if (!self) {
+    return items.slice(0, limit);
+  }
+  return [...items]
+    .sort((left, right) => squaredDistance(left, self) - squaredDistance(right, self))
+    .slice(0, limit);
+}
+
+function squaredDistance(left: { x: number; y: number }, right: { x: number; y: number }) {
+  const dx = left.x - right.x;
+  const dy = left.y - right.y;
+  return dx * dx + dy * dy;
 }
 
 function pointStyle(x: number, y: number): CSSProperties {

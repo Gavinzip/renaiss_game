@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_12",
+  "classId": "warrior",
+  "name": "斷城震落",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "pixel-library-ground-impact-v2",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12",
+  "runtime": {
+    "skillId": "warrior_12",
+    "classId": "warrior",
+    "name": "斷城震落",
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/runtime/primary.png",
+    "frameWidth": 192,
+    "frameHeight": 192,
+    "frameCount": 15,
+    "frameDurationMs": 87,
+    "unionBounds": [
+      6,
+      4,
+      186,
+      186
+    ],
+    "persistent": false,
+    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-citadel-slam-ground-impact-v2.png",
+    "sourceSha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
+    "outputSha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
+    "previewSha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "packagePath": "warrior_戰士/3_R_高階/13_斷城震落_warrior_12",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12",
+    "sourceSelection": "pixel-library-ground-impact-v2",
+    "previewFile": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
+    "iconFile": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/icon.png",
+    "iconFileSha256": "30f09402e68c01fb1ba51a3f88d52b9113947eeea576754b30a5c442ec351ec3",
+    "frameDurationsMs": [
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      87,
+      82
+    ],
+    "sourceLineage": [
+      {
+        "role": "vertical-debris-burst",
+        "paths": [
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0000.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0001.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0002.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0003.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0004.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0005.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0006.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0007.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0008.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0009.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0010.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0011.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0012.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0013.png",
+          "tools/source_assets/warrior-citadel-slam-v2/explosion/frame0014.png"
+        ],
+        "sha256": [
+          "ca4ec408c4016e4dbe5f1e6ac78b4738894d80cc6293273a2c750111f974ed32",
+          "a506653e44df3ea6119cfdc3a53ef38c8e796b989e47778f9f46f859f3431c59",
+          "c50e4a3e827ff28ec93248a35a1a32e14fdea288dba68b7924b9c36c8724137e",
+          "466573aa14312dea8932388219025fa875c9872f4e83dd2219a1cc476eec271e",
+          "f7491e5225ed42860c8f2260d75ffc52751c47f1ae9a8a0d2eef8089188def5d",
+          "10502d49476a6d975802fbec870f9c2d91ca87b95f54f9461caecc9390da2309",
+          "87d040c1ce61550aa15a9f665fc6eb9da8801c3cfd4fdad1e17a7cdfd8a4bc53",
+          "92d48a49c57109537b5ac4a23c53ed767571ad18d928154aac1ba56f5ae55e06",
+          "5716feb29403dd0f098c6bd166b2e93f309172c49601e83481a14c806b88f648",
+          "668b21219459a9229e39776ba1cd3d6f51e5c4a82f29db86b9c38eda89293fea",
+          "2a584ded32b3c65987bfa0a33d9735e76a23ef3e6e57addae679b5058035f3fb",
+          "e823c964bd7acc37e7792c0bfaff2e0b4604571160c5d777a00a1e01c079e362",
+          "e2d87f34c57a4c5f8adf0df249acbe56518677299d885c1ded465e0af657b9c6",
+          "74d91b697cde1d571f0b132ba34d9f562c253c6b93b7d9d9c60df8111d9eff13",
+          "d190fbdbce6352c01c470f4b2c0beca085b8aef3c3c032ed22b58aa6b1cd242f"
+        ]
+      },
+      {
+        "role": "ground-contact-shock",
+        "paths": [
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0000.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0001.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0002.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0003.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0004.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0005.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0006.png",
+          "tools/source_assets/warrior-citadel-slam-v2/impact/frame0007.png"
+        ],
+        "sha256": [
+          "cf8bc4978306c2e687d479222a42846eb63f0fbb4f4f56d7f76180631f014733",
+          "7e3eeb6c544a9c24a296cd4c21d9cae8dd0b6affb8706d261d60fc70714429d7",
+          "9290a25c5755b110b1e7449b0aa3f0884715e7b8dda8a2706bc66b103811a28a",
+          "a2ac2bc00530fa8eacf15b9af0f14b8d48c4696354f874eebf731941fb54c4f5",
+          "b0ef4b677abf38f4615c7edc1e10f6bef9ed64b98597643fc24d0b0065d91f2f",
+          "c4360d743271899133793381d477786a68a3476c3c5171565633ff97036611ef",
+          "a20604a652ccc4a591b5db3279401592d695bbd4086f794da19999c9867108b1",
+          "b71a66414c17fc7183fce4ee3ff93deac38358485f44d14ae76c2cd5ce570597"
+        ]
+      }
+    ],
+    "candidateOrigin": "gavin-pixel-library-composite-v2",
+    "actionBody": {
+      "file": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 40,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/citadel-slam-8dir-v1.png",
+      "sourceSha256": "2473cf8aa6396dedc0b050e65940a91436316645546ea557844d53fe333bea75",
+      "outputSha256": "2473cf8aa6396dedc0b050e65940a91436316645546ea557844d53fe333bea75",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 5,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 5,
+        "frameDurationsMs": [
+          150,
+          100,
+          100,
+          100,
+          150
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "acceptedAnimationId": "accepted:citadel-slam-8dir-v1.png:2473cf8aa6396ded",
+      "fallbackUsed": false
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_12:source-f56b77621a7e29a0:output-506a4d80409037e7",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_12",
+    "previewSourceSequenceSha256": "f56b77621a7e29a09ec70459eca25fd1a1839eece86179a9fbbe17d770a13bfb",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.026,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/preview/gameplay-preview-v1.webm",
+    "sha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_12:source-f56b77621a7e29a0:output-506a4d80409037e7",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_12",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.452,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 9.308,
+      "durationSec": 3.856,
+      "file": "random-warrior_12-hq.webm",
+      "bytes": 10290830,
+      "sha256": "f56b77621a7e29a09ec70459eca25fd1a1839eece86179a9fbbe17d770a13bfb"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_12-hq.webm",
+    "sourceVideoSha256": "f56b77621a7e29a09ec70459eca25fd1a1839eece86179a9fbbe17d770a13bfb",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.209,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      692,
+      386,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      950,
+      547,
+      1330,
+      730
+    ],
+    "contentMargins": [
+      258,
+      161,
+      258,
+      160
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.026,
+    "frameCount": 115,
+    "totalDurationMs": 3830,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 10290830,
+    "outputBytes": 612065,
+    "reductionRatio": 0.940523,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/icon.png",
+    "sha256": "30f09402e68c01fb1ba51a3f88d52b9113947eeea576754b30a5c442ec351ec3",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "c1303ad8bf68e1c3904a71d08ed25990360a5b16b5f46a28471290bb55ecdd0a",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-sources/warrior-citadel-slam-ground-impact-v2.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/citadel-slam-8dir-v1.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_12.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

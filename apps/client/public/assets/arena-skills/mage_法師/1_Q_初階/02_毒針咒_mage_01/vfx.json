@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "skillId": "mage_01",
+  "classId": "mage",
+  "name": "毒針咒",
+  "key": "Q",
+  "tier": 1,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01",
+  "runtime": {
+    "skillId": "mage_01",
+    "classId": "mage",
+    "name": "毒針咒",
+    "persistent": false,
+    "previewSha256": "5e89b080b9b2f3169922ed274e05f95e5433d8d65b07169ad6688869c1ad5977",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        44,
+        22
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        44,
+        22
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": false,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:78def3b191414ed8",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-毒針咒.gif",
+    "configPreviewSourceSha256": "78def3b191414ed858cbb1e17a687ac1baebd10d7d60646460f583dc8abd5038",
+    "configPreviewOutputSha256": "9759fc22a753ab040acea524d3888fc2284e7811b067ab20a2fff8ca71ba3f42",
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 6,
+    "unionBounds": [
+      26,
+      59,
+      140,
+      106
+    ],
+    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png",
+    "sourceSha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
+    "outputSha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
+    "frameDurationsMs": [
+      78,
+      78,
+      78,
+      78,
+      78,
+      78
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          28,
+          68,
+          37,
+          66
+        ],
+        [
+          31,
+          70,
+          37,
+          67
+        ],
+        [
+          33,
+          72,
+          37,
+          68
+        ],
+        [
+          33,
+          74,
+          37,
+          69
+        ],
+        [
+          95,
+          61,
+          27,
+          61
+        ],
+        [
+          107,
+          73,
+          34,
+          69
+        ]
+      ]
+    },
+    "frameDurationMs": 78,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png",
+        "sha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf"
+      }
+    ],
+    "packagePath": "mage_法師/1_Q_初階/02_毒針咒_mage_01",
+    "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "5e89b080b9b2f3169922ed274e05f95e5433d8d65b07169ad6688869c1ad5977",
+    "iconFile": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/icon.png",
+    "iconFileSha256": "b3534c10c9188ed87de32bbbf5adb59c3062eacc17d2cb796b9e732f881edb18",
+    "statusAsset": {
+      "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/status.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameCount": 10,
+      "frameDurationMs": 100,
+      "frameDurationsMs": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "playback": {
+        "introFrameIndices": [
+          0
+        ],
+        "loopFrameIndices": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "recoveryFrameIndices": [
+          9
+        ]
+      },
+      "unionBounds": [
+        2,
+        2,
+        62,
+        62
+      ],
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png",
+      "sourceSha256": "bdc4a8b3564ebdce2ed5a00a564151e9988e59af1542507e2b21f85065e887da",
+      "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/source/timed-status-v1-source.png",
+      "outputSha256": "d3d64ead139c643297efe1d760cbbe887588b2610af2c92a51f59d216189b5b3",
+      "acceptedAnimationId": "mage_01:timed-status-v1:d3d64ead139c6432"
+    },
+    "statusVisualContract": {
+      "anchor": "target",
+      "layer": "air",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        48,
+        48
+      ],
+      "referenceOffset": [
+        0,
+        -30
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_01:source-b66d762eae711352:output-5e89b080b9b2f316",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-mage_01",
+    "previewSourceSequenceSha256": "b66d762eae7113527ad76ad562ca6f4a5651eb6aadfcf86c114ce0725f5aca7d",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/preview/gameplay-preview-v1.webm",
+    "sha256": "5e89b080b9b2f3169922ed274e05f95e5433d8d65b07169ad6688869c1ad5977",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_01:source-b66d762eae711352:output-5e89b080b9b2f316",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-mage_01",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.152,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 10.703,
+      "durationSec": 6.551,
+      "file": "random-mage_01-hq.webm",
+      "bytes": 12377985,
+      "sha256": "b66d762eae7113527ad76ad562ca6f4a5651eb6aadfcf86c114ce0725f5aca7d"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_01-hq.webm",
+    "sourceVideoSha256": "b66d762eae7113527ad76ad562ca6f4a5651eb6aadfcf86c114ce0725f5aca7d",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.061,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      838,
+      356,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1081,
+      548,
+      1490,
+      668
+    ],
+    "contentMargins": [
+      243,
+      192,
+      244,
+      192
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 195,
+    "totalDurationMs": 6500,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 12377985,
+    "outputBytes": 810406,
+    "reductionRatio": 0.934528,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/icon.png",
+    "sha256": "b3534c10c9188ed87de32bbbf5adb59c3062eacc17d2cb796b9e732f881edb18",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "4b39071deae5f9c334e4695008cb9c165090a4fc8123be532399427aa53ceb2d",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/mage_01.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

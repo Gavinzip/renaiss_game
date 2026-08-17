@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_09",
+  "classId": "warrior",
+  "name": "戰陣號令",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09",
+  "runtime": {
+    "skillId": "warrior_09",
+    "classId": "warrior",
+    "name": "戰陣號令",
+    "persistent": true,
+    "previewSha256": "0b18edf62c227d5b8fb4af5aedb7b72b7610879dcc9ce474f32c4b7899ac8ad1",
+    "visualContract": {
+      "anchor": "owner",
+      "layer": "unit",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "overlay",
+      "referenceSize": [
+        28,
+        22
+      ],
+      "referenceOffset": [
+        20,
+        -14
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:dad7e1c9592f2ad3",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_戰陣號令.gif",
+    "configPreviewSourceSha256": "dad7e1c9592f2ad3bbf52a6536d22b2c07f06b6b464982ffe8069805339061f3",
+    "configPreviewOutputSha256": "432e7f76a3748cad066c7fab1383971a57d5d72a4f589a6ef6837a8c694efc75",
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/runtime/primary.png",
+    "frameWidth": 28,
+    "frameHeight": 22,
+    "frameCount": 4,
+    "unionBounds": [
+      0,
+      0,
+      28,
+      22
+    ],
+    "sourcePath": "apps/client/public/assets/generated/rpg-status-vfx.png",
+    "sourceSha256": "6f9f3c43f55f2bfb6b5e4bd7d2f77c1987da4a5049affc7b322834e4e9282108",
+    "outputSha256": "87034dcd555a35b2086a3538197724c2b3ab5acb027f8f16cb1499ee6a9844ae",
+    "frameDurationsMs": [
+      70,
+      70,
+      3790,
+      70
+    ],
+    "blankFrameIndices": [
+      3
+    ],
+    "pixelSafetyNormalization": {
+      "applied": false,
+      "beforeEdgeMargins": [
+        [
+          4,
+          2,
+          5,
+          2
+        ],
+        [
+          6,
+          2,
+          6,
+          2
+        ],
+        [
+          11,
+          2,
+          11,
+          2
+        ],
+        null
+      ]
+    },
+    "configurationComposition": {
+      "kind": "trim-fit-overlay",
+      "visibleBounds": [
+        24,
+        18
+      ],
+      "canvasSize": [
+        28,
+        22
+      ],
+      "safeMargin": 2,
+      "resampling": "nearest",
+      "source": "tools/export_arena_skill_vfx_review.py#scaled_effect"
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "apps/client/public/assets/generated/rpg-status-vfx.png",
+        "sha256": "6f9f3c43f55f2bfb6b5e4bd7d2f77c1987da4a5049affc7b322834e4e9282108"
+      }
+    ],
+    "packagePath": "warrior_戰士/2_E_中階/10_戰陣號令_warrior_09",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "0b18edf62c227d5b8fb4af5aedb7b72b7610879dcc9ce474f32c4b7899ac8ad1",
+    "iconFile": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/icon.png",
+    "iconFileSha256": "e398ebc0a42b43afe49fbabf0e4d45fbdacad32b92b033949ae1bdf88a124724",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_09:source-843ac84280d6d336:output-0b18edf62c227d5b",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_09",
+    "previewSourceSequenceSha256": "843ac84280d6d336ac9e890070feaf51854ec85b6fa2ca5de68d840860d611a7",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.018,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/preview/gameplay-preview-v1.webm",
+    "sha256": "0b18edf62c227d5b8fb4af5aedb7b72b7610879dcc9ce474f32c4b7899ac8ad1",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_09:source-843ac84280d6d336:output-0b18edf62c227d5b",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_09",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 5.21,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 10.859,
+      "durationSec": 5.649,
+      "file": "random-warrior_09-hq.webm",
+      "bytes": 10448633,
+      "sha256": "843ac84280d6d336ac9e890070feaf51854ec85b6fa2ca5de68d840860d611a7"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_09-hq.webm",
+    "sourceVideoSha256": "843ac84280d6d336ac9e890070feaf51854ec85b6fa2ca5de68d840860d611a7",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.142,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      772,
+      368,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1102,
+      576,
+      1338,
+      663
+    ],
+    "contentMargins": [
+      330,
+      208,
+      330,
+      209
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.018,
+    "frameCount": 169,
+    "totalDurationMs": 5630,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 10448633,
+    "outputBytes": 554630,
+    "reductionRatio": 0.946918,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/icon.png",
+    "sha256": "e398ebc0a42b43afe49fbabf0e4d45fbdacad32b92b033949ae1bdf88a124724",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "b83d12c056239feb6b4a0df8726b2707c374f53bae3cd8fa239667a9e7735bf9",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/warrior_09-vfx.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_09.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

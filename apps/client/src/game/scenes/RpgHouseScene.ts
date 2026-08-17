@@ -1,15 +1,17 @@
 import Phaser from "phaser";
 import { resolveCollision, type Collider } from "@renaiss-game/shared";
-import { getClassFrameCrop } from "../assets/crops";
 import { generatedAssetPath } from "../assets/generatedAssets";
+import { buildNewCompatibleWalkTexture, getNewCompatibleWalkFrameTexture } from "../assets/runtimeTextures";
 import { shouldLoadStaticAssetsWithCors, staticAssetUrl } from "../assets/staticAssets";
 import {
   getVillagePlayerAnimationFrame,
   getVillagePlayerStepPose,
+  getVillagePlayerWalkDirection,
   VILLAGE_PLAYER_DISPLAY,
   VILLAGE_PLAYER_ORIGIN_Y,
   type VillagePlayerDirection,
-  type VillagePlayerFacing
+  type VillagePlayerFacing,
+  type VillagePlayerWalkDirection
 } from "../render/villagePlayerAnimation";
 import { renderVinciHouseRoom, VINCI_HOUSE_WORLD, VINCI_HOUSE_ZONES, type HouseInteractZone } from "../render/vinciHouseRoom";
 import { isDomTextEditingActive } from "../input/domFocus";
@@ -39,6 +41,7 @@ export class RpgHouseScene extends Phaser.Scene {
   private lastFacing: VillagePlayerFacing = "left";
   private lastMoveAxis: "horizontal" | "vertical" = "horizontal";
   private lastDirection: VillagePlayerDirection = "side";
+  private lastPlayerWalkDirection: VillagePlayerWalkDirection = "west";
   private lastNearPlace: RpgPlace | null = null;
 
   constructor() {
@@ -47,7 +50,7 @@ export class RpgHouseScene extends Phaser.Scene {
 
   preload() {
     if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
-    this.load.image("classSprites", generatedAssetPath("class-sprites"));
+    this.load.image("newCompatibleWalk_engineer", generatedAssetPath("characters/new-compatible/engineer/walk-8dir"));
     this.load.image("vinciShowroomEntity", staticAssetUrl("/assets/vinci-world/showroom/standard/standard_entity.webp"));
     this.load.image("vinciShowroomProps", staticAssetUrl("/assets/vinci-world/showroom/standard/standard_props.webp"));
   }
@@ -55,6 +58,7 @@ export class RpgHouseScene extends Phaser.Scene {
   create() {
     this.cameras.main.setBounds(0, 0, VINCI_HOUSE_WORLD.width, VINCI_HOUSE_WORLD.height);
     this.cameras.main.roundPixels = true;
+    buildNewCompatibleWalkTexture(this, "engineer");
     renderVinciHouseRoom(this);
     this.createPlayer();
     this.createCabinetHotspots();
@@ -86,6 +90,7 @@ export class RpgHouseScene extends Phaser.Scene {
     if (moving) {
       const speed = PLAYER_SPEED * (this.keys.SPACE.isDown ? 1.18 : 1);
       this.movePlayer((moveX / length) * speed * seconds, (moveY / length) * speed * seconds);
+      this.lastPlayerWalkDirection = getVillagePlayerWalkDirection(moveX, moveY, this.lastPlayerWalkDirection);
       this.lastMoveAxis = Math.abs(moveY) > Math.abs(moveX) ? "vertical" : "horizontal";
       if (this.lastMoveAxis === "horizontal") {
         this.lastFacing = moveX < 0 ? "left" : moveX > 0 ? "right" : this.lastFacing;
@@ -110,12 +115,11 @@ export class RpgHouseScene extends Phaser.Scene {
 
   private createPlayer() {
     this.playerShadow = this.add.ellipse(PLAYER_START.x, PLAYER_START.y + 13, 72, 18, 0x080604, 0.22).setDepth(PLAYER_START.y - 3);
-    const initialFrame = this.ensurePlayerFrame(4);
     this.player = this.add
-      .image(PLAYER_START.x, PLAYER_START.y, "classSprites", initialFrame)
+      .image(PLAYER_START.x, PLAYER_START.y, getNewCompatibleWalkFrameTexture("engineer", this.lastPlayerWalkDirection, 0))
       .setOrigin(0.5, VILLAGE_PLAYER_ORIGIN_Y)
       .setDisplaySize(VILLAGE_PLAYER_DISPLAY.width, VILLAGE_PLAYER_DISPLAY.height)
-      .setFlipX(true)
+      .setFlipX(false)
       .setDepth(PLAYER_START.y);
     this.playerLabel = this.add
       .text(this.player.x, this.player.y - 74, "Ari", {
@@ -141,27 +145,17 @@ export class RpgHouseScene extends Phaser.Scene {
   }
 
   private updatePlayerFrame(moving: boolean) {
-    const frame = getVillagePlayerAnimationFrame("engineer", moving, this.lastDirection, this.lastFacing, this.time.now);
+    const frame = getVillagePlayerAnimationFrame(moving, this.lastPlayerWalkDirection, this.time.now);
     const pose = getVillagePlayerStepPose(moving, this.lastDirection, this.time.now);
     this.player
-      .setTexture("classSprites", this.ensurePlayerFrame(frame.frameIndex))
-      .setFlipX(frame.flipX)
+      .setTexture(getNewCompatibleWalkFrameTexture("engineer", frame.direction, frame.frameIndex))
+      .setFlipX(false)
       .setOrigin(0.5, pose.originY)
       .setDisplaySize(pose.width, pose.height);
     this.playerShadow
       .setPosition(this.player.x + pose.shadowOffsetX, this.player.y + pose.shadowOffsetY)
       .setScale(pose.shadowScaleX, pose.shadowScaleY)
       .setFillStyle(0x080604, pose.shadowAlpha);
-  }
-
-  private ensurePlayerFrame(frameIndex: number) {
-    const crop = getClassFrameCrop("engineer", frameIndex);
-    const frame = `house-engineer-${frameIndex}`;
-    const sourceTexture = this.textures.get("classSprites");
-    if (!sourceTexture.has(frame)) {
-      sourceTexture.add(frame, 0, crop.x, crop.y, crop.width, crop.height);
-    }
-    return frame;
   }
 
   private updateNearPlace(inputBlocked: boolean) {

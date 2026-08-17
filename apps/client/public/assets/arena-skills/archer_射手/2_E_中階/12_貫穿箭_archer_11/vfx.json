@@ -1,0 +1,521 @@
+{
+  "schemaVersion": 1,
+  "skillId": "archer_11",
+  "classId": "archer",
+  "name": "貫穿箭",
+  "key": "E",
+  "tier": 2,
+  "sourceSelection": "5173-configuration-preview",
+  "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11",
+  "runtime": {
+    "skillId": "archer_11",
+    "classId": "archer",
+    "name": "貫穿箭",
+    "persistent": false,
+    "previewSha256": "ec005073a444fcece7cfe9d85700a60e3a25078057c0d1f6360f87d8e93021b9",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "air",
+      "rotate": true,
+      "referenceActorHeight": 66,
+      "renderKind": "projectile",
+      "referenceSize": [
+        64,
+        24
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": null,
+      "radiusWidthMultiplier": null,
+      "sourceAngleDegrees": 0,
+      "projectileSize": [
+        64,
+        24
+      ],
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:6333465972c36b2a",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_貫穿箭.gif",
+    "configPreviewSourceSha256": "6333465972c36b2a56e3af92609de4073ed7c67ae135314e9a8d0bdc4170d404",
+    "configPreviewOutputSha256": "3eb40f5d6efd15291418111bc41f86875aa9294ce6d9cb357d920f2a46d0426b",
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/primary.png",
+    "frameWidth": 165,
+    "frameHeight": 165,
+    "frameCount": 10,
+    "unionBounds": [
+      0,
+      101,
+      165,
+      165
+    ],
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/primary-source-a0bb85cee6ec0f73.png",
+    "sourceSha256": "a0bb85cee6ec0f73d2e945a5b6f6a6a948dbfd3cb576b9bc26fc6a50f882ced3",
+    "outputSha256": "b4365591512bf2168c4f501524bd07157322f8ada8f19d1a28c4d8dda4a5de98",
+    "frameDurationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "blankFrameIndices": [],
+    "pixelSafetyNormalization": {
+      "applied": true,
+      "method": "nearest-full-frame-containment",
+      "scale": 0.9757575757575757,
+      "preserveBottomGroundLine": false,
+      "beforeEdgeMargins": [
+        [
+          30,
+          147,
+          31,
+          0
+        ],
+        [
+          8,
+          146,
+          8,
+          1
+        ],
+        [
+          8,
+          146,
+          8,
+          1
+        ],
+        [
+          13,
+          146,
+          13,
+          0
+        ],
+        [
+          13,
+          146,
+          13,
+          0
+        ],
+        [
+          0,
+          103,
+          0,
+          1
+        ],
+        [
+          0,
+          103,
+          0,
+          1
+        ],
+        [
+          2,
+          126,
+          3,
+          0
+        ],
+        [
+          2,
+          126,
+          3,
+          0
+        ],
+        [
+          67,
+          147,
+          67,
+          0
+        ]
+      ],
+      "afterEdgeMargins": [
+        [
+          31,
+          145,
+          32,
+          2
+        ],
+        [
+          10,
+          144,
+          10,
+          3
+        ],
+        [
+          10,
+          144,
+          10,
+          3
+        ],
+        [
+          15,
+          144,
+          15,
+          2
+        ],
+        [
+          15,
+          144,
+          15,
+          2
+        ],
+        [
+          2,
+          103,
+          2,
+          3
+        ],
+        [
+          2,
+          103,
+          2,
+          3
+        ],
+        [
+          4,
+          125,
+          5,
+          2
+        ],
+        [
+          4,
+          125,
+          5,
+          2
+        ],
+        [
+          67,
+          145,
+          67,
+          2
+        ]
+      ]
+    },
+    "frameDurationMs": 70,
+    "candidateOrigin": "configuration-v7-transparent-source-logical-timeline",
+    "sourceLineage": [
+      {
+        "role": "vfx",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_貫穿箭.png",
+        "sha256": "a0bb85cee6ec0f73d2e945a5b6f6a6a948dbfd3cb576b9bc26fc6a50f882ced3"
+      },
+      {
+        "role": "actionBody",
+        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_貫穿箭-action-e.png",
+        "sha256": "c50310ad1c1cd2d0b3056fc27d3aab0aca996d185e84143b0fbbb7af9c6dbc06"
+      }
+    ],
+    "actionBody": {
+      "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/body.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 40,
+      "unionBounds": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-source-accepted-catalog-v2-piercing-shot-8dir-own-folder-v2.png",
+      "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-source-accepted-catalog-v2-piercing-shot-8dir-own-folder-v2.png",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-e.png",
+      "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+      "sourceSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "outputSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "semanticAnchor": [
+        128,
+        224
+      ],
+      "grid": {
+        "columns": 5,
+        "rows": 8
+      },
+      "directionalLayout": {
+        "directionOrder": [
+          "east",
+          "south-east",
+          "south",
+          "south-west",
+          "west",
+          "north-west",
+          "north",
+          "north-east"
+        ],
+        "framesPerDirection": 5,
+        "frameDurationsMs": [
+          100,
+          140,
+          160,
+          160,
+          160
+        ]
+      },
+      "displayHeightMultiplier": 1.3195876288659794,
+      "actionSkillId": "archer_11",
+      "acceptedAnimationId": "archer_11:piercing-shot:own-folder-v2:ad817d98bf3596a5",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "fallbackUsed": false,
+      "originalSources": [
+        {
+          "direction": "east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-e.png",
+          "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/east-7680df52454c4d9d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/east-7680df52454c4d9d.png"
+        },
+        {
+          "direction": "south-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-se.png",
+          "originalSourceSha256": "b9373c7b18b4858d9c6ee06853cd495bcdb816f287f9bde2606ae592a8b161bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-east-b9373c7b18b4858d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-east-b9373c7b18b4858d.png"
+        },
+        {
+          "direction": "south",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-s.png",
+          "originalSourceSha256": "67c66ec8dedcbda5016a8954a8cc4dbb76872527a2bcd7e821debb3b5e3c77c8",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-67c66ec8dedcbda5.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-67c66ec8dedcbda5.png"
+        },
+        {
+          "direction": "south-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-sw.png",
+          "originalSourceSha256": "4b3f88e2954f7acc0353f32777644569fa93b5c62c08a1497708f24204399741",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-west-4b3f88e2954f7acc.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-west-4b3f88e2954f7acc.png"
+        },
+        {
+          "direction": "west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-w.png",
+          "originalSourceSha256": "2472bb1c270266ba0d6a911b5202ab3f4f4250a581d30b97f4ab134e461729bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/west-2472bb1c270266ba.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/west-2472bb1c270266ba.png"
+        },
+        {
+          "direction": "north-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-nw.png",
+          "originalSourceSha256": "01c311b3ee7ce320a985b3e755de1bf416801b86b2e0a2e875c06e89d3215ea4",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-west-01c311b3ee7ce320.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-west-01c311b3ee7ce320.png"
+        },
+        {
+          "direction": "north",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-n.png",
+          "originalSourceSha256": "9c380311a9739a08ec36d485b1e123afcf2e5c2d7c932bc2d849e87953434d65",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-9c380311a9739a08.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-9c380311a9739a08.png"
+        },
+        {
+          "direction": "north-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-ne.png",
+          "originalSourceSha256": "5088035604cc78830b24d412d38dece12108f5211a8700ddf5696a831980e88d",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-east-5088035604cc7883.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-east-5088035604cc7883.png"
+        }
+      ]
+    },
+    "packagePath": "archer_射手/2_E_中階/12_貫穿箭_archer_11",
+    "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11",
+    "sourceSelection": "5173-configuration-preview",
+    "previewFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "ec005073a444fcece7cfe9d85700a60e3a25078057c0d1f6360f87d8e93021b9",
+    "iconFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/icon.png",
+    "iconFileSha256": "87a18ef7cbd18d3cd226c5a278af0c34982b07ebb50ba75913d6081b9e1b80a9",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_貫穿箭.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/primary-source-a0bb85cee6ec0f73.png",
+    "fallbackUsed": false,
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_11:source-59e807eb95890cfb:output-ec005073a444fcec",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-archer_11",
+    "previewSourceSequenceSha256": "59e807eb95890cfb857603487028c2d970f34a2cb34cc1a4307bd6fb14e13aa2",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.031,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/preview/gameplay-preview-v1.webm",
+    "sha256": "ec005073a444fcece7cfe9d85700a60e3a25078057c0d1f6360f87d8e93021b9",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_11:source-59e807eb95890cfb:output-ec005073a444fcec",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-archer_11",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.053,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 7.302,
+      "durationSec": 3.249,
+      "file": "random-archer_11-hq.webm",
+      "bytes": 5920327,
+      "sha256": "59e807eb95890cfb857603487028c2d970f34a2cb34cc1a4307bd6fb14e13aa2"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_11-hq.webm",
+    "sourceVideoSha256": "59e807eb95890cfb857603487028c2d970f34a2cb34cc1a4307bd6fb14e13aa2",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.062,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      1002,
+      358,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1081,
+      547,
+      1818,
+      672
+    ],
+    "contentMargins": [
+      79,
+      189,
+      80,
+      190
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.031,
+    "frameCount": 97,
+    "totalDurationMs": 3230,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 5920327,
+    "outputBytes": 415334,
+    "reductionRatio": 0.929846,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/icon.png",
+    "sha256": "87a18ef7cbd18d3cd226c5a278af0c34982b07ebb50ba75913d6081b9e1b80a9",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "303dbe0aa6bbb2333789f1acef1327ee6fa7e53ce1f8d9760b07273ca69027be",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeConfigCandidateManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_11-vfx.png",
+      "actionBody": "/@fs/Users/gavin/Documents/renaiss%20game/docs/design/arena-skill-vfx-review/config-runtime-candidate-20260806/assets/archer_11-body.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/archer_11.webp",
+    "originalsDeleted": false,
+    "selectedActionBody": {
+      "actionSkillId": "archer_11",
+      "acceptedAnimationId": "archer_11:piercing-shot:own-folder-v2:ad817d98bf3596a5",
+      "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-e.png",
+      "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+      "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-source-accepted-catalog-v2-piercing-shot-8dir-own-folder-v2.png",
+      "packageSourceSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "packageRuntimeFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/body.png",
+      "packageRuntimeSha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "fallbackUsed": false,
+      "originalSources": [
+        {
+          "direction": "east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-e.png",
+          "originalSourceSha256": "7680df52454c4d9d676c38eb87df793c86aa485e2cf782001f005bf9ad4efa09",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/east-7680df52454c4d9d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/east-7680df52454c4d9d.png"
+        },
+        {
+          "direction": "south-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-se.png",
+          "originalSourceSha256": "b9373c7b18b4858d9c6ee06853cd495bcdb816f287f9bde2606ae592a8b161bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-east-b9373c7b18b4858d.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-east-b9373c7b18b4858d.png"
+        },
+        {
+          "direction": "south",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-s.png",
+          "originalSourceSha256": "67c66ec8dedcbda5016a8954a8cc4dbb76872527a2bcd7e821debb3b5e3c77c8",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-67c66ec8dedcbda5.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-67c66ec8dedcbda5.png"
+        },
+        {
+          "direction": "south-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-sw.png",
+          "originalSourceSha256": "4b3f88e2954f7acc0353f32777644569fa93b5c62c08a1497708f24204399741",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-west-4b3f88e2954f7acc.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/south-west-4b3f88e2954f7acc.png"
+        },
+        {
+          "direction": "west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-w.png",
+          "originalSourceSha256": "2472bb1c270266ba0d6a911b5202ab3f4f4250a581d30b97f4ab134e461729bd",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/west-2472bb1c270266ba.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/west-2472bb1c270266ba.png"
+        },
+        {
+          "direction": "north-west",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-nw.png",
+          "originalSourceSha256": "01c311b3ee7ce320a985b3e755de1bf416801b86b2e0a2e875c06e89d3215ea4",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-west-01c311b3ee7ce320.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-west-01c311b3ee7ce320.png"
+        },
+        {
+          "direction": "north",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-n.png",
+          "originalSourceSha256": "9c380311a9739a08ec36d485b1e123afcf2e5c2d7c932bc2d849e87953434d65",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-9c380311a9739a08.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-9c380311a9739a08.png"
+        },
+        {
+          "direction": "north-east",
+          "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/catalog-v2/character-skills/archer/2_貫穿箭-action-ne.png",
+          "originalSourceSha256": "5088035604cc78830b24d412d38dece12108f5211a8700ddf5696a831980e88d",
+          "packageSourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-east-5088035604cc7883.png",
+          "packageSourceFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/body-directions-v2/north-east-5088035604cc7883.png"
+        }
+      ]
+    }
+  },
+  "fallbackUsed": false
+}

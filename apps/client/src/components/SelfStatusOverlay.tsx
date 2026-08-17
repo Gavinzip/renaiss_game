@@ -1,4 +1,5 @@
-import type { PublicPlayer } from "@renaiss-game/shared";
+import { CLASS_META, type PublicPlayer } from "@renaiss-game/shared";
+import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useArenaI18n } from "../i18n/arena";
 
@@ -60,22 +61,73 @@ export function SelfStatusOverlay({ player }: SelfStatusOverlayProps) {
 
   const healthRatio = player.health / player.maxHealth;
   const critical = healthRatio <= 0.45;
+  const staminaRatio = player.maxStamina > 0 ? player.stamina / player.maxStamina : 0;
+  const statusBadges = [
+    player.spawnProtected ? t.selfStatus.protected : null,
+    player.shielded ? t.selfStatus.shielded : null,
+    player.attackBoosted ? t.selfStatus.attackBoosted : null,
+    player.stunned ? t.selfStatus.stunned : null,
+    player.rooted ? t.selfStatus.rooted : null,
+    player.poisoned ? t.selfStatus.poisoned : null,
+    player.slowed ? t.selfStatus.slowed : null
+  ].filter((status): status is string => Boolean(status));
 
   return (
     <>
       {pulse ? <div key={pulse.id} className={`self-status-pulse tone-${pulse.tone}`} aria-hidden="true" /> : null}
-      {player.spawnProtected ? (
-        <section className="safe-entry-alert" aria-live="polite">
-          <span>{t.selfStatus.safeEntry}</span>
-          <strong>{t.selfStatus.protected}</strong>
-        </section>
-      ) : null}
-      {critical ? (
-        <section className="low-health-alert" aria-live="polite">
-          <span>{t.selfStatus.criticalHp}</span>
-          <strong>{Math.max(1, Math.ceil(healthRatio * 100))}%</strong>
-        </section>
-      ) : null}
+      <section
+        className={`self-vitals ${critical ? "is-critical" : ""}`}
+        style={{ "--self-accent": CLASS_META[player.classId].accent } as CSSProperties}
+        aria-label={`${player.name} ${t.selfStatus.health}`}
+        aria-live={critical ? "polite" : "off"}
+      >
+        <header>
+          <span>{player.name}</span>
+          <div>
+            {statusBadges.slice(0, 3).map((status) => (
+              <b key={status}>{status}</b>
+            ))}
+          </div>
+        </header>
+        <VitalBar
+          label="HP"
+          value={player.health}
+          max={player.maxHealth}
+          ratio={healthRatio}
+          tone="health"
+        />
+        <VitalBar
+          label="SP"
+          value={player.stamina}
+          max={player.maxStamina}
+          ratio={staminaRatio}
+          tone="stamina"
+        />
+        {critical ? <small>{t.selfStatus.criticalHp}</small> : null}
+      </section>
     </>
+  );
+}
+
+function VitalBar({
+  label,
+  value,
+  max,
+  ratio,
+  tone
+}: {
+  label: string;
+  value: number;
+  max: number;
+  ratio: number;
+  tone: "health" | "stamina";
+}) {
+  const clampedRatio = Math.max(0, Math.min(1, ratio));
+  return (
+    <div className={`self-vital-row tone-${tone}`}>
+      <b>{label}</b>
+      <i><span style={{ width: `${clampedRatio * 100}%` }} /></i>
+      <em>{Math.ceil(value)}/{Math.ceil(max)}</em>
+    </div>
   );
 }

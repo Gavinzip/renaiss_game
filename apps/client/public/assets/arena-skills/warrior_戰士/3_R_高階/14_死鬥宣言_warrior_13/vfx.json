@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "skillId": "warrior_13",
+  "classId": "warrior",
+  "name": "死鬥宣言",
+  "key": "R",
+  "tier": 3,
+  "sourceSelection": "current-8766-runtime",
+  "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13",
+  "runtime": {
+    "skillId": "warrior_13",
+    "classId": "warrior",
+    "name": "死鬥宣言",
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/runtime/primary.png",
+    "frameWidth": 1254,
+    "frameHeight": 1254,
+    "frameCount": 1,
+    "frameDurationMs": 120,
+    "unionBounds": [
+      0,
+      0,
+      1254,
+      1254
+    ],
+    "persistent": true,
+    "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/3_死鬥宣言.png",
+    "sourceSha256": "76735e138816b8ada1f22cfdd88893ed311159b419de5789163778d245897331",
+    "outputSha256": "76735e138816b8ada1f22cfdd88893ed311159b419de5789163778d245897331",
+    "previewSha256": "a551b9d394b13279a1e373a120171db06df4a999fe519f611f33bf5b148dd63d",
+    "visualContract": {
+      "anchor": "effect",
+      "layer": "ground",
+      "rotate": false,
+      "referenceActorHeight": 66,
+      "renderKind": "field",
+      "referenceSize": [
+        0,
+        0
+      ],
+      "referenceOffset": [
+        0,
+        0
+      ],
+      "blendMode": "normal",
+      "radiusAspect": 0.4666666666666667,
+      "radiusWidthMultiplier": 2,
+      "sourceAngleDegrees": 0,
+      "projectileSize": null,
+      "pathCore": null,
+      "projectileLaunchScale": true,
+      "fixedDisplay": false
+    },
+    "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:8d7d3a53f6c01a15",
+    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/3_死鬥宣言.gif",
+    "configPreviewSourceSha256": "8d7d3a53f6c01a15a930ad492b3ac091ff477d5541e3e651552545d3f7505847",
+    "configPreviewOutputSha256": "dd2a415b4e21062ae6d781efa9ea79b06d97c41630647ed0116bb18393504b76",
+    "iconSource": {
+      "path": "docs/design/arena-skill-vfx-sources/warrior-death-realm-obsidian-pixel-safe-v2-strip.png",
+      "frameWidth": 512,
+      "frameHeight": 240,
+      "frameCount": 6,
+      "removeBorderMatte": true,
+      "sha256": "8e9116ffdfb4935d253b6de3a837262c166a5cd0d03acc3a96b137d4e33ddcbc",
+      "reason": "scene-wide realm backdrop uses a separate readable skill icon source"
+    },
+    "packagePath": "warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13",
+    "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13",
+    "sourceSelection": "current-8766-runtime",
+    "previewFile": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/preview/gameplay-preview-v1.webm",
+    "previewFileSha256": "a551b9d394b13279a1e373a120171db06df4a999fe519f611f33bf5b148dd63d",
+    "iconFile": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/icon.png",
+    "iconFileSha256": "97c5878a01d46672682717d79164fc8a328656ff98c99504d74c69d9c474f362",
+    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_13:source-d93edeb15403dfd6:output-a551b9d394b13279",
+    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewSourceScenario": "random-warrior_13",
+    "previewSourceSequenceSha256": "d93edeb15403dfd63c53d925e844b24377b5223886e1bb2ad4d802cfcd797295",
+    "previewFallbackUsed": false,
+    "previewMediaType": "video/webm",
+    "previewFrameRate": 30.0,
+    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+  },
+  "preview": {
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/preview/gameplay-preview-v1.webm",
+    "sha256": "a551b9d394b13279a1e373a120171db06df4a999fe519f611f33bf5b148dd63d",
+    "kind": "actual-5173-gameplay-video-optimized",
+    "mediaType": "video/webm",
+    "sourceVersion": "configuration-hq-runtime-20260813",
+    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_13:source-d93edeb15403dfd6:output-a551b9d394b13279",
+    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceScenario": "random-warrior_13",
+    "sourceCapture": "canvas-capture-stream",
+    "sourceCaptureEvidence": {
+      "source": "canvas-capture-stream",
+      "transport": "html-canvas-media-recorder-vp9",
+      "captureStartSec": 4.623,
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "requestedFrameRate": 60,
+      "requestedBitrate": 20000000,
+      "actualBitrateSetting": 20000000,
+      "mimeType": "video/webm;codecs=vp9",
+      "interpolatedFrames": false,
+      "fallbackUsed": false,
+      "captureEndSec": 11.272,
+      "durationSec": 6.649,
+      "file": "random-warrior_13-hq.webm",
+      "bytes": 14984483,
+      "sha256": "d93edeb15403dfd63c53d925e844b24377b5223886e1bb2ad4d802cfcd797295"
+    },
+    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_13-hq.webm",
+    "sourceVideoSha256": "d93edeb15403dfd63c53d925e844b24377b5223886e1bb2ad4d802cfcd797295",
+    "sourceSize": [
+      1920,
+      1080
+    ],
+    "sourceFrameRate": 60.061,
+    "previewSize": [
+      896,
+      504
+    ],
+    "outputSize": [
+      896,
+      504
+    ],
+    "crop": [
+      816,
+      368,
+      896,
+      504
+    ],
+    "visibleContentBounds": [
+      1102,
+      576,
+      1425,
+      663
+    ],
+    "contentMargins": [
+      286,
+      208,
+      287,
+      209
+    ],
+    "zoomFactor": 2.1429,
+    "frameRate": 30.0,
+    "frameCount": 198,
+    "totalDurationMs": 6600,
+    "encoding": "vp9-webm-crf34-30fps-physical-crop",
+    "encodingSettings": {
+      "codec": "vp9",
+      "crf": 34,
+      "frameRate": 30,
+      "pixelFormat": "yuv420p",
+      "audioRemoved": true
+    },
+    "videoReencoded": true,
+    "physicalCropApplied": true,
+    "runtimeViewportCrop": false,
+    "resampling": "ffmpeg-approved-crop-no-spatial-scale",
+    "optimizationVersion": "arena-config-cdn-preview-v1",
+    "sourceBytes": 14984483,
+    "outputBytes": 877826,
+    "reductionRatio": 0.941418,
+    "interpolatedFrames": false,
+    "sourceSubstitutionForReview": false,
+    "fallbackUsed": false
+  },
+  "icon": {
+    "file": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/icon.png",
+    "sha256": "97c5878a01d46672682717d79164fc8a328656ff98c99504d74c69d9c474f362",
+    "width": 64,
+    "height": 64,
+    "sourceAtlasSha256": "412063e244356a08497da80af0adc47e579a720938529acaea00958986436431",
+    "sourceCellSha256": "4c94775c9cea2b66e0f36ab858a61c9e8150775727884ad5370334f2e68d860d",
+    "resampling": "none-exact-atlas-cell"
+  },
+  "provenance": {
+    "runtimeManifest": "arenaSkillRuntimeManifest.json",
+    "originalRuntimeUrls": {
+      "primary": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/runtime/primary.png"
+    },
+    "originalPreviewPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_13.webp",
+    "originalsDeleted": false
+  },
+  "fallbackUsed": false
+}

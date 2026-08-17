@@ -95,30 +95,6 @@ function mapEventToAnnouncement(event: CombatEvent, selfId: string, serverTime: 
     };
   }
 
-  if (event.type === "kill" && event.actorId === selfId) {
-    return {
-      id: `announce-kill-${event.id}-${serverTime}`,
-      kicker: t.combat.elimination,
-      title: t.combat.rivalDown,
-      subtitle: t.combat.defeatedTarget(event.targetName),
-      tone: "victory",
-      scoreDelta: event.scoreDelta,
-      priority: 4
-    };
-  }
-
-  if (event.type === "assist" && event.participantIds?.includes(selfId)) {
-    return {
-      id: `announce-assist-${event.id}-${serverTime}`,
-      kicker: t.combat.assist,
-      title: t.combat.teamCredit,
-      subtitle: t.combat.pressureOn(event.targetName),
-      tone: "assist",
-      scoreDelta: event.scoreDelta,
-      priority: 3
-    };
-  }
-
   if (event.type === "round") {
     return {
       id: `announce-round-${event.id}-${serverTime}`,

@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import type { IncomingMessage } from "node:http";
 import type { Express, Request, Response } from "express";
 
 interface XOAuthStateRecord {
@@ -14,7 +15,7 @@ interface XSessionPayload {
   issuedAt: number;
 }
 
-interface AuthUser {
+export interface AuthUser {
   provider: "x" | "dev";
   id: string;
   username: string;
@@ -125,6 +126,35 @@ export function installXAuthRoutes(app: Express) {
   });
 }
 
+/** Resolves the signed Arena identity for authenticated HTTP progression routes. */
+export function resolveHttpAuthUser(req: Request): AuthUser | null {
+  return readXSession(req) ?? readDevAuthUser(req);
+}
+
+/**
+ * Resolves the same signed X session used by HTTP routes for Arena sockets.
+ * A distinct test identity is accepted only under the explicit localhost
+ * DEV_AUTH_BYPASS contract and is never enabled in production.
+ */
+export function resolveArenaSocketAuthUser(
+  req: IncomingMessage,
+  handshakeAuth: unknown
+): AuthUser | null {
+  const signedUser = readXSessionFromHeaders(req.headers);
+  if (signedUser) return signedUser;
+  const hostname = hostnameFromHeaders(req.headers);
+  if (!isDevAuthEnabledForHostname(hostname)) return null;
+  const override = readArenaDevIdentity(handshakeAuth);
+  if (override) return override;
+  const username = process.env.DEV_AUTH_USERNAME?.trim() || "RegionsPlay7941";
+  return {
+    provider: "dev",
+    id: process.env.DEV_AUTH_USER_ID?.trim() || "local-dev",
+    username,
+    displayName: `@${username}`
+  };
+}
+
 function readXAuthConfig() {
   const clientId = process.env.X_CLIENT_ID?.trim();
   const clientSecret = process.env.X_CLIENT_SECRET?.trim();
@@ -212,7 +242,11 @@ function parseJson<T>(text: string): T {
 }
 
 function readXSession(req: Request): AuthUser | null {
-  const cookie = readCookies(req)[SESSION_COOKIE_NAME];
+  return readXSessionFromHeaders(req.headers);
+}
+
+function readXSessionFromHeaders(headers: IncomingMessage["headers"]): AuthUser | null {
+  const cookie = readCookies(headers.cookie)[SESSION_COOKIE_NAME];
   const config = readXAuthConfig();
   if (!cookie || !config) return null;
   const [encodedPayload, signature] = cookie.split(".");
@@ -248,7 +282,13 @@ function readDevAuthUser(req: Request): AuthUser | null {
 }
 
 function isDevAuthEnabled(req: Request) {
-  return process.env.DEV_AUTH_BYPASS === "1" && process.env.NODE_ENV !== "production" && isLocalhostHost(req.hostname);
+  return isDevAuthEnabledForHostname(req.hostname);
+}
+
+function isDevAuthEnabledForHostname(hostname: string) {
+  return process.env.DEV_AUTH_BYPASS === "1" &&
+    process.env.NODE_ENV !== "production" &&
+    isLocalhostHost(hostname);
 }
 
 function setXSessionCookie(res: Response, req: Request, payload: XSessionPayload) {
@@ -268,10 +308,9 @@ function signSession(encodedPayload: string, sessionSecret: string) {
   return crypto.createHmac("sha256", sessionSecret).update(encodedPayload).digest("base64url");
 }
 
-function readCookies(req: Request) {
-  const header = req.headers.cookie ?? "";
+function readCookies(header: string | undefined) {
   return Object.fromEntries(
-    header
+    (header ?? "")
       .split(";")
       .map((cookie) => cookie.trim())
       .filter(Boolean)
@@ -281,6 +320,41 @@ function readCookies(req: Request) {
         return [cookie.slice(0, separator), decodeURIComponent(cookie.slice(separator + 1))];
       })
   );
+}
+
+function hostnameFromHeaders(headers: IncomingMessage["headers"]) {
+  const forwarded = firstHeaderValue(headers["x-forwarded-host"]);
+  const host = forwarded || firstHeaderValue(headers.host) || "";
+  try {
+    return new URL(`http://${host}`).hostname;
+  } catch {
+    return "";
+  }
+}
+
+function firstHeaderValue(value: string | string[] | undefined) {
+  const raw = Array.isArray(value) ? value[0] : value;
+  return raw?.split(",")[0]?.trim() ?? "";
+}
+
+function readArenaDevIdentity(value: unknown): AuthUser | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const candidate = value as { arenaDevUserId?: unknown; arenaDevUsername?: unknown };
+  if (
+    typeof candidate.arenaDevUserId !== "string" ||
+    typeof candidate.arenaDevUsername !== "string"
+  ) {
+    return null;
+  }
+  const id = candidate.arenaDevUserId.trim().replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64);
+  const username = candidate.arenaDevUsername.trim().replace(/[^A-Za-z0-9_]/g, "").slice(0, 32);
+  if (!id || !username) return null;
+  return {
+    provider: "dev",
+    id: `dev:${id}`,
+    username,
+    displayName: `@${username}`
+  };
 }
 
 function sessionCookieAttributes(req: Request) {

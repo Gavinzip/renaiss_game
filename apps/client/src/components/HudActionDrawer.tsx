@@ -1,18 +1,18 @@
 import { CLASS_META, WORLD, type CombatEvent, type GameSnapshot } from "@renaiss-game/shared";
 import { SignOut } from "@phosphor-icons/react";
 import type { CSSProperties } from "react";
+import {
+  GAME_UI_SOUND_PACKS,
+  playGameUiSound,
+  type GameUiSoundPack
+} from "../audio/gameUiSounds";
 import { getHealthPackVariant } from "../game/assets/healthPackVariants";
 import { formatScore } from "../utils/formatScore";
 import { ARENA_LANGUAGES, useArenaI18n } from "../i18n/arena";
+import type { HudDisplayPrefs, HudScale, HudTogglePreference } from "../state/hudPreferences";
 import { EVENT_LABELS, formatCombatEventMessage, formatScoreDelta } from "./combatEventText";
 
 export type HudActionMode = "map" | "messages" | "settings";
-
-export interface HudDisplayPrefs {
-  minimap: boolean;
-  combatPopups: boolean;
-  audio: boolean;
-}
 
 interface HudActionDrawerProps {
   mode: HudActionMode;
@@ -20,7 +20,10 @@ interface HudActionDrawerProps {
   selfId: string | null;
   serverTime: number;
   displayPrefs: HudDisplayPrefs;
-  onToggleDisplayPref: (key: keyof HudDisplayPrefs) => void;
+  onToggleDisplayPref: (key: HudTogglePreference) => void;
+  onSetHudScale: (scale: HudScale) => void;
+  onSetAudioVolume: (volume: number) => void;
+  onSetAudioPack: (pack: GameUiSoundPack) => void;
   onExitArena: () => void;
 }
 
@@ -31,6 +34,9 @@ export function HudActionDrawer({
   serverTime,
   displayPrefs,
   onToggleDisplayPref,
+  onSetHudScale,
+  onSetAudioVolume,
+  onSetAudioPack,
   onExitArena
 }: HudActionDrawerProps) {
   if (mode === "map") {
@@ -41,7 +47,16 @@ export function HudActionDrawer({
     return <MessagesDrawer events={snapshot?.events ?? []} serverTime={serverTime} />;
   }
 
-  return <SettingsDrawer displayPrefs={displayPrefs} onToggleDisplayPref={onToggleDisplayPref} onExitArena={onExitArena} />;
+  return (
+    <SettingsDrawer
+      displayPrefs={displayPrefs}
+      onToggleDisplayPref={onToggleDisplayPref}
+      onSetHudScale={onSetHudScale}
+      onSetAudioVolume={onSetAudioVolume}
+      onSetAudioPack={onSetAudioPack}
+      onExitArena={onExitArena}
+    />
+  );
 }
 
 function MapDrawer({ snapshot, selfId }: { snapshot: GameSnapshot | null; selfId: string | null }) {
@@ -80,7 +95,7 @@ function MapDrawer({ snapshot, selfId }: { snapshot: GameSnapshot | null; selfId
             ))}
             {snapshot.turrets.map((turret) => {
               const owned = turret.ownerId === selfId;
-              const classes = ["minimap-turret", owned ? "self" : "rival", turret.boosted ? "is-boosted" : ""]
+              const classes = ["minimap-turret", owned ? "self" : "rival", turret.shield > 0 ? "is-boosted" : ""]
                 .filter(Boolean)
                 .join(" ");
 
@@ -153,13 +168,24 @@ function MessagesDrawer({ events, serverTime }: { events: CombatEvent[]; serverT
 function SettingsDrawer({
   displayPrefs,
   onToggleDisplayPref,
+  onSetHudScale,
+  onSetAudioVolume,
+  onSetAudioPack,
   onExitArena
 }: {
   displayPrefs: HudDisplayPrefs;
-  onToggleDisplayPref: (key: keyof HudDisplayPrefs) => void;
+  onToggleDisplayPref: (key: HudTogglePreference) => void;
+  onSetHudScale: (scale: HudScale) => void;
+  onSetAudioVolume: (volume: number) => void;
+  onSetAudioPack: (pack: GameUiSoundPack) => void;
   onExitArena: () => void;
 }) {
   const { language, setLanguage, t } = useArenaI18n();
+  const audioCopy = language === "zh"
+    ? { volume: "音效音量", style: "音效風格", arcade: "像素", mechanical: "機械", cinematic: "電影" }
+    : language === "ko"
+      ? { volume: "효과음 음량", style: "효과음 스타일", arcade: "픽셀", mechanical: "기계", cinematic: "시네마" }
+      : { volume: "SFX volume", style: "SFX style", arcade: "Pixel", mechanical: "Mechanical", cinematic: "Cinematic" };
 
   return (
     <section className="hud-drawer" aria-label={t.drawer.settings}>
@@ -171,6 +197,77 @@ function SettingsDrawer({
         <DrawerToggle label={t.drawer.minimap} active={displayPrefs.minimap} onClick={() => onToggleDisplayPref("minimap")} />
         <DrawerToggle label={t.drawer.combatPopups} active={displayPrefs.combatPopups} onClick={() => onToggleDisplayPref("combatPopups")} />
         <DrawerToggle label={t.drawer.audio} active={displayPrefs.audio} onClick={() => onToggleDisplayPref("audio")} />
+        <div className="drawer-audio-settings" aria-label={audioCopy.style}>
+          <label>
+            <span>{audioCopy.volume}<output>{Math.round(displayPrefs.audioVolume * 100)}%</output></span>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={displayPrefs.audioVolume}
+              disabled={!displayPrefs.audio}
+              onChange={(event) => onSetAudioVolume(Number(event.target.value))}
+              onPointerUp={() => playGameUiSound("select", { cooldownMs: 140 })}
+              onKeyDown={(event) => {
+                const direction = event.key === "ArrowLeft" || event.key === "ArrowDown"
+                  ? -1
+                  : event.key === "ArrowRight" || event.key === "ArrowUp"
+                    ? 1
+                    : 0;
+                if (direction !== 0) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onSetAudioVolume(Math.round(Math.max(0, Math.min(1, displayPrefs.audioVolume + direction * 0.01)) * 100) / 100);
+                }
+              }}
+              onKeyUp={(event) => {
+                if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
+                  playGameUiSound("select", { cooldownMs: 140 });
+                }
+              }}
+            />
+          </label>
+          <div>
+            <span>{audioCopy.style}</span>
+            <div>
+              {GAME_UI_SOUND_PACKS.map((pack) => (
+                <button
+                  key={pack}
+                  type="button"
+                  className={displayPrefs.audioPack === pack ? "is-active" : ""}
+                  aria-pressed={displayPrefs.audioPack === pack}
+                  disabled={!displayPrefs.audio}
+                  onClick={() => onSetAudioPack(pack)}
+                >
+                  {audioCopy[pack]}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <DrawerToggle label={t.ui.highContrast} active={displayPrefs.highContrast} onClick={() => onToggleDisplayPref("highContrast")} />
+        <DrawerToggle label={t.ui.reducedMotion} active={displayPrefs.reducedMotion} onClick={() => onToggleDisplayPref("reducedMotion")} />
+        <div className="drawer-scale-row">
+          <span>{t.ui.hudScale}</span>
+          <div>
+            {(["compact", "standard", "large"] as const).map((scale) => (
+              <button
+                key={scale}
+                type="button"
+                className={displayPrefs.uiScale === scale ? "is-active" : ""}
+                aria-pressed={displayPrefs.uiScale === scale}
+                onClick={() => onSetHudScale(scale)}
+              >
+                {scale === "compact"
+                  ? t.ui.hudScaleCompact
+                  : scale === "large"
+                    ? t.ui.hudScaleLarge
+                    : t.ui.hudScaleStandard}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="drawer-language-row">
           <span>{t.ui.language}</span>
           <div>
@@ -180,7 +277,11 @@ function SettingsDrawer({
                 type="button"
                 className={language === option.id ? "is-active" : ""}
                 aria-pressed={language === option.id}
-                onClick={() => setLanguage(option.id)}
+                onClick={() => {
+                  if (language === option.id) return;
+                  setLanguage(option.id);
+                  playGameUiSound("select");
+                }}
               >
                 {option.shortLabel}
               </button>
