@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:9cda6f549e2c86cd",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-04-壓制掃射.gif",
-    "configPreviewSourceSha256": "9cda6f549e2c86cd6c053571f7b7d94ebeac8eec0a2fec462a1e2c4c8bafb1ed",
-    "configPreviewOutputSha256": "035f333c16657223b4291f2e01222560f8a886b559f5a51fea684ea82556c3e2",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_04-hq.webm",
+    "configPreviewSourceSha256": "330ec21575bff5e48e8cf7f6c8431bae9d0b5cf83bf0d8c82cac7cb799f8da5c",
+    "configPreviewOutputSha256": "ada6ab02feeaec832eda29c38e3ea9df402dda47f6dff4f9696639b5f34b4721",
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       120,
       115
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-suppression-fire-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/source/primary-source-97a27a908ac7f827.png",
     "sourceSha256": "97a27a908ac7f827f15685916e456ebb7d9d8650fa604b9e4c80d5b85e50346f",
     "outputSha256": "df70ac2c54194a4759a7430913e66c8b5b3cb93b248d9b7ea15ff3c18333bfb4",
     "frameDurationsMs": [
@@ -182,8 +182,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-suppression-fire-v2-normalized.png",
-        "sha256": "97a27a908ac7f827f15685916e456ebb7d9d8650fa604b9e4c80d5b85e50346f"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/source/primary-source-97a27a908ac7f827.png",
+        "sha256": "97a27a908ac7f827f15685916e456ebb7d9d8650fa604b9e4c80d5b85e50346f",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-suppression-fire-v2-normalized.png"
       }
     ],
     "packagePath": "engineer_工程師/2_E_中階/04_壓制掃射_engineer_04",
@@ -198,9 +199,28 @@
     "previewSourceScenario": "random-engineer_04",
     "previewSourceSequenceSha256": "330ec21575bff5e48e8cf7f6c8431bae9d0b5cf83bf0d8c82cac7cb799f8da5c",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.025,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      787,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-suppression-fire-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/source/primary-source-97a27a908ac7f827.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/preview/gameplay-preview-v1.webm",

@@ -88,6 +88,10 @@ import {
   isCoarsePointerViewport,
   type ArenaCameraPoint
 } from "../render/arenaCameraMotion";
+import {
+  drawArenaCatalogImpactAccent,
+  needsArenaCatalogImpactAccent
+} from "../render/arenaCatalogImpactAccent";
 import { resolveMobileAimProjection } from "../input/mobileAimProjection";
 import {
   ARENA_WEB_ARCHER_FULL_DRAW,
@@ -2377,7 +2381,7 @@ export class VillageArenaScene extends Phaser.Scene {
           ? this.add.graphics()
           : undefined;
         const impactRing =
-          snapshotEffect.skillId === "archer_14"
+          needsArenaCatalogImpactAccent(snapshotEffect)
             ? this.add.graphics()
             : undefined;
         view = { image, pathCore, impactRing };
@@ -2432,45 +2436,11 @@ export class VillageArenaScene extends Phaser.Scene {
         .setDepth(getRenderedVfxDepth(renderedEffect, spec, progress));
 
       if (view.impactRing) {
-        const timelineProgress = runtimeMotion?.timelineProgress ?? -1;
-        const impactStarted = timelineProgress >= 0.78;
-        const ringAlpha = impactStarted
-          ? Phaser.Math.Clamp(
-              (timelineProgress - 0.78) / 0.12,
-              0,
-              1
-            )
-          : 0;
-        const radius = snapshotEffect.radius;
-        view.impactRing
-          .clear()
-          .setVisible(ringAlpha > 0)
-          .setAlpha(ringAlpha)
-          .setDepth(snapshotEffect.y + 30);
-        if (ringAlpha > 0) {
-          view.impactRing
-            .fillStyle(0x9b5b18, 0.18)
-            .fillEllipse(
-              snapshotEffect.x,
-              snapshotEffect.y,
-              radius * 2,
-              radius * 0.82
-            )
-            .lineStyle(6, 0xf3b847, 0.58)
-            .strokeEllipse(
-              snapshotEffect.x,
-              snapshotEffect.y,
-              radius * 2,
-              radius * 0.82
-            )
-            .lineStyle(2, 0xfff0a6, 0.96)
-            .strokeEllipse(
-              snapshotEffect.x,
-              snapshotEffect.y,
-              radius * 2,
-              radius * 0.82
-            );
-        }
+        drawArenaCatalogImpactAccent(
+          view.impactRing,
+          snapshotEffect,
+          runtimeMotion?.timelineProgress ?? -1
+        );
       }
 
       if (view.pathCore && pathCoreSpec) {
@@ -2666,6 +2636,16 @@ export class VillageArenaScene extends Phaser.Scene {
       }
       const targetX = effect.endX + motion.targetOffset[0] * scale;
       const targetY = effect.endY + motion.targetOffset[1] * scale;
+      if (motion.travelOrigin === "target-sky" && !motion.startOffset) {
+        throw new Error(`${effect.skillId} target-sky motion requires startOffset`);
+      }
+      const travelStart =
+        motion.travelOrigin === "target-sky"
+          ? {
+              x: targetX + (motion.startOffset?.[0] ?? 0) * scale,
+              y: targetY + (motion.startOffset?.[1] ?? 0) * scale
+            }
+          : { x: effect.startX, y: effect.startY };
       if (timelineProgress < motion.warningEndProgress) {
         const warningProgress =
           timelineProgress / Math.max(0.001, motion.warningEndProgress);
@@ -2691,12 +2671,12 @@ export class VillageArenaScene extends Phaser.Scene {
           1
         );
         const pathAngle = Math.atan2(
-          targetY - effect.startY,
-          targetX - effect.startX
+          targetY - travelStart.y,
+          targetX - travelStart.x
         );
         return {
-          x: Phaser.Math.Linear(effect.startX, targetX, travelProgress),
-          y: Phaser.Math.Linear(effect.startY, targetY, travelProgress),
+          x: Phaser.Math.Linear(travelStart.x, targetX, travelProgress),
+          y: Phaser.Math.Linear(travelStart.y, targetY, travelProgress),
           width: motion.travelDisplaySize[0] * scale,
           height: motion.travelDisplaySize[1] * scale,
           visible: true,

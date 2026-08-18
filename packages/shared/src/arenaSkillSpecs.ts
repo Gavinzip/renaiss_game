@@ -280,10 +280,10 @@ export const ARENA_SKILL_SPECS: Record<ArenaCatalogSkillId, ArenaSkillSpec> = {
     { damage: [32], range: 760 }
   ),
   archer_12: skill(
-    "目標腳邊先出現明顯預警，再以星痕箭進行超遠距狙殺。",
+    "鎖定目標後定身蓄力，星痕巨刃從高空墜落並在落點爆發。",
     "54",
     24000,
-    "預警 0.65 秒；射程 950",
+    "預警 0.65 秒；施放定身 1.1 秒；射程 950",
     "travel",
     { damage: [54], range: 950, durationMs: 650 }
   ),
@@ -440,7 +440,7 @@ export const ARENA_SKILL_SPECS: Record<ArenaCatalogSkillId, ArenaSkillSpec> = {
   ),
 
   mage_00: skill(
-    "由法杖魔法球射出細日耀光束，連到直線上的首名目標。",
+    "由法杖魔法球射出固定完整射程的粗日耀光束，命中直線上的首名目標。",
     "24",
     5000,
     "射程 650",

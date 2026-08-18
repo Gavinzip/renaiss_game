@@ -47,9 +47,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:33cd9c3d8a13d7cd",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-鎖魂鏈.gif",
-    "configPreviewSourceSha256": "33cd9c3d8a13d7cdc716363de6a20d43ba10350cd2efd63b8b99152b55b2d396",
-    "configPreviewOutputSha256": "4f310777a45abdf3014bb78371a961f4f783e7e37ec6bd81cc2902e930b870d6",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_11-hq.webm",
+    "configPreviewSourceSha256": "adc8ff2f9e697f77397a97c27db693c49510b6289138308dcd8d4eef0021d089",
+    "configPreviewOutputSha256": "e564d78bbb2df4aeee0ccb6345a9c76872a96365827203b02b9b06cb225eb00d",
     "file": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -60,7 +60,7 @@
       159,
       105
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/source/primary-source-11b8599eef5bb55b.png",
     "sourceSha256": "11b8599eef5bb55ba530fc4eb84fe8c9bca97391f9b6dab70a3b958a13da7ed1",
     "outputSha256": "8de075163c88aee2948ff4119757c5dcd1205f5d93e2020a8eb522f64a0f1e0f",
     "frameDurationsMs": [
@@ -118,8 +118,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png",
-        "sha256": "11b8599eef5bb55ba530fc4eb84fe8c9bca97391f9b6dab70a3b958a13da7ed1"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/source/primary-source-11b8599eef5bb55b.png",
+        "sha256": "11b8599eef5bb55ba530fc4eb84fe8c9bca97391f9b6dab70a3b958a13da7ed1",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png"
       }
     ],
     "packagePath": "mage_法師/2_E_中階/12_鎖魂鏈_mage_11",
@@ -148,9 +149,28 @@
     "previewSourceScenario": "random-mage_11",
     "previewSourceSequenceSha256": "adc8ff2f9e697f77397a97c27db693c49510b6289138308dcd8d4eef0021d089",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.024,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      774,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/source/primary-source-11b8599eef5bb55b.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/preview/gameplay-preview-v1.webm",

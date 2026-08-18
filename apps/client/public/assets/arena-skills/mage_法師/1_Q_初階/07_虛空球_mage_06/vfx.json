@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:e985ad7b96babad6",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-虛空球.gif",
-    "configPreviewSourceSha256": "e985ad7b96babad6df714a1400a696e917369f42a354923abb6809eb956bbcb2",
-    "configPreviewOutputSha256": "829f95832fc6af9161583ebc0947a8b7e8374d20449d4073de11479ed985c2d0",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_06-hq.webm",
+    "configPreviewSourceSha256": "0ea58b9da2a0c0964cf7e3e2f863a223c0f7dceefaaa9e498719a3f8767ec052",
+    "configPreviewOutputSha256": "ee1500a4b888fbe614dc9be1b98d768147b54756a9270b14bbf24131127efce4",
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/runtime/primary.png",
     "frameWidth": 160,
     "frameHeight": 112,
@@ -54,7 +54,7 @@
       133,
       88
     ],
-    "sourcePath": "apps/client/public/assets/generated/rpg-skill-vfx-dark.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/source/primary-source-4032ffae71470069.png",
     "sourceSha256": "4032ffae714700691a1bfbac6a7fddf6486ab2b3e6d4b2d7a8539103917a65d6",
     "outputSha256": "a50e24ba57d3c5a511bd403554a277d5c918d4562e78c34df6de849e33e73b8e",
     "frameDurationsMs": [
@@ -182,8 +182,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "apps/client/public/assets/generated/rpg-skill-vfx-dark.png",
-        "sha256": "4032ffae714700691a1bfbac6a7fddf6486ab2b3e6d4b2d7a8539103917a65d6"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/source/primary-source-4032ffae71470069.png",
+        "sha256": "4032ffae714700691a1bfbac6a7fddf6486ab2b3e6d4b2d7a8539103917a65d6",
+        "originalPath": "apps/client/public/assets/generated/rpg-skill-vfx-dark.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/07_虛空球_mage_06",
@@ -235,11 +236,12 @@
         61,
         62
       ],
-      "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/runtime/primary.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/source/timed-status-v1-source.png",
       "sourceSha256": "a50e24ba57d3c5a511bd403554a277d5c918d4562e78c34df6de849e33e73b8e",
       "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/source/timed-status-v1-source.png",
       "outputSha256": "6412c560ddf76f3668234260a81f1b616be0757add316eed22ee9a1583b2d917",
-      "acceptedAnimationId": "mage_06:timed-status-v1:6412c560ddf76f36"
+      "acceptedAnimationId": "mage_06:timed-status-v1:6412c560ddf76f36",
+      "originalSourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/runtime/primary.png"
     },
     "statusVisualContract": {
       "anchor": "target",
@@ -269,9 +271,28 @@
     "previewSourceScenario": "random-mage_06",
     "previewSourceSequenceSha256": "0ea58b9da2a0c0964cf7e3e2f863a223c0f7dceefaaa9e498719a3f8767ec052",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.021,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      834,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "apps/client/public/assets/generated/rpg-skill-vfx-dark.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/source/primary-source-4032ffae71470069.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/preview/gameplay-preview-v1.webm",

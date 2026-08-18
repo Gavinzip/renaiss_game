@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:545ec7b1a8cf23e2",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-瘴霧坩堝.gif",
-    "configPreviewSourceSha256": "545ec7b1a8cf23e2958e01dfbb776f7de19ba50264f2740b07ba8bbe20220f21",
-    "configPreviewOutputSha256": "4faf21b716a7a22cbef3b8e986fb791f4f76edc4e2b6cad64390e85c5cc2c18e",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_08-hq.webm",
+    "configPreviewSourceSha256": "47e7536d42a4ed813fbd96e675cc38f5dec94a796a1f9b6e15a2b0fa8c7f9a51",
+    "configPreviewOutputSha256": "78829396997da01d4cb59e71075f6728c62cc2b9d09551f1d1ac449926c8500d",
     "file": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/runtime/primary.png",
     "frameWidth": 128,
     "frameHeight": 128,
@@ -51,7 +51,7 @@
       126,
       126
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/source/primary-source-bdc4a8b3564ebdce.png",
     "sourceSha256": "bdc4a8b3564ebdce2ed5a00a564151e9988e59af1542507e2b21f85065e887da",
     "outputSha256": "28c941b2d2404ec6c6070b6da162440a447d3801d54e715bbda805c0c9dfcf4b",
     "frameDurationsMs": [
@@ -305,8 +305,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png",
-        "sha256": "bdc4a8b3564ebdce2ed5a00a564151e9988e59af1542507e2b21f85065e887da"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/source/primary-source-bdc4a8b3564ebdce.png",
+        "sha256": "bdc4a8b3564ebdce2ed5a00a564151e9988e59af1542507e2b21f85065e887da",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png"
       }
     ],
     "packagePath": "mage_法師/2_E_中階/09_瘴霧坩堝_mage_08",
@@ -363,9 +364,28 @@
     "previewSourceScenario": "random-mage_08",
     "previewSourceSequenceSha256": "47e7536d42a4ed813fbd96e675cc38f5dec94a796a1f9b6e15a2b0fa8c7f9a51",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      820,
+      364,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/source/primary-source-bdc4a8b3564ebdce.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/preview/gameplay-preview-v1.webm",
@@ -431,7 +451,7 @@
       179
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 183,
     "totalDurationMs": 6100,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

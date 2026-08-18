@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "accepted:engineer-magic-sync-flight-v3:af43a0a6b6a6f899",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/evidence/20260809-engineer-selected-repairs/engineer_12-flight-only-preview.webp",
-    "configPreviewSourceSha256": "f8791d4e46be0b96eb028fad14241c0e3ef90b8737b254538b4daa0eab8f4c76",
-    "configPreviewOutputSha256": "f8791d4e46be0b96eb028fad14241c0e3ef90b8737b254538b4daa0eab8f4c76",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_12-hq.webm",
+    "configPreviewSourceSha256": "7a1a5fe1df591293673b76f9c122fd58c467f81608012efd9628c01c59fd0bb9",
+    "configPreviewOutputSha256": "b03878d102731b235918abf5829d27e9f059abb53240b044aa08a881aee6eedf",
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       104,
       92
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/source/primary-source-af43a0a6b6a6f899.png",
     "sourceSha256": "af43a0a6b6a6f899c2ab0106e632f378fd7e8e13907fda2c8bcfb447e970a1f3",
     "outputSha256": "c5adfd2ef91763ad6865fe0211e8039e86baf1c0101645a0cfe55e6323a4ab87",
     "frameDurationsMs": [
@@ -182,14 +182,15 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/source/primary-source-af43a0a6b6a6f899.png",
         "sha256": "af43a0a6b6a6f899c2ab0106e632f378fd7e8e13907fda2c8bcfb447e970a1f3",
         "semanticSourceFrameIndices": [
           0,
           1,
           2
         ],
-        "flightOnly": true
+        "flightOnly": true,
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png"
       }
     ],
     "fallbackUsed": false,
@@ -218,7 +219,25 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.025,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      826,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/source/primary-source-af43a0a6b6a6f899.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview/gameplay-preview-v1.webm",
@@ -256,7 +275,7 @@
       1920,
       1080
     ],
-    "sourceFrameRate": 60.0,
+    "sourceFrameRate": 60,
     "previewSize": [
       896,
       504

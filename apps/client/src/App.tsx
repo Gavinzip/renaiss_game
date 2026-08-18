@@ -78,6 +78,7 @@ import { useArenaSkillCollectionStore } from "./state/arenaSkillCollectionStore"
 import { ArenaTutorialModal, useFirstRunTutorial } from "./components/RpgTutorial";
 import { formatScore } from "./utils/formatScore";
 import { ArenaI18nProvider, ARENA_LANGUAGES, useArenaI18n } from "./i18n/arena";
+import { useOwnedPointerRelease } from "./hooks/useOwnedPointerRelease";
 
 const LANGUAGE_SELECTION_STORAGE_KEY = "renaiss:first-language-selected:v2";
 const ENTRY_LANGUAGE_OPTIONS = ARENA_LANGUAGES;
@@ -1382,6 +1383,23 @@ function MobileSkillButton({
     }
   };
 
+  useOwnedPointerRelease(pointerIdRef, {
+    onPointerUp: (event) => {
+      setHudAction("attack", false);
+      pointerIdRef.current = null;
+      setMobileAim(
+        "attack",
+        event.clientX - dragOriginRef.current.x,
+        event.clientY - dragOriginRef.current.y
+      );
+    },
+    onPointerCancel: () => {
+      setHudAction("attack", false);
+      pointerIdRef.current = null;
+      resetMobileAim();
+    }
+  }, classId === "archer" && action === "attack");
+
   return (
     <button
       type="button"
@@ -1395,6 +1413,7 @@ function MobileSkillButton({
       onPointerMove={moveAction}
       onPointerUp={releaseAction}
       onPointerCancel={cancelAction}
+      onLostPointerCapture={classId === "archer" && action === "attack" ? cancelAction : undefined}
       onContextMenu={(event) => event.preventDefault()}
     >
       {catalogSkillId ? (

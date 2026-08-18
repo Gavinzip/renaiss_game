@@ -36,13 +36,17 @@ function formatBytes(bytes) {
 }
 
 function isForbiddenPublicSource(path) {
-  const normalized = path.split(sep).join("/");
+  const normalized = path.split(sep).join("/").toLowerCase();
   const fileName = normalized.split("/").at(-1) ?? "";
   return (
     normalized.includes("/source/") ||
+    normalized.includes("/concept/") ||
     fileName.includes("-source") ||
     fileName.includes("-ai-source") ||
-    fileName.includes("source-v")
+    fileName.includes("source-v") ||
+    fileName.includes("concept") ||
+    fileName.endsWith(".psd") ||
+    fileName.endsWith(".aseprite")
   );
 }
 

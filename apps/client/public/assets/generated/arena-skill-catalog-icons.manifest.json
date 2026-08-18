@@ -1,0 +1,2819 @@
+{
+  "schemaVersion": 1,
+  "sourcePolicy": "accepted-runtime-animation-representative-frame",
+  "fallbackUsed": false,
+  "iconCount": 61,
+  "atlasPath": "apps/client/public/assets/generated/arena-skill-catalog-icons.png",
+  "atlasSha256": "2d622e9b73f5327669cb6ee2241e5faf0b802f04a9b6453633774a27b939bfdf",
+  "cellSize": 64,
+  "atlasColumns": 16,
+  "minimumTransparentMargin": 6,
+  "entries": [
+    {
+      "skillId": "warrior_00",
+      "classId": "warrior",
+      "name": "守線橫斬",
+      "iconColumn": 0,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/source/sword-wave-strip.png",
+      "sourceSha256": "a6c09ebfdb44d4d20e5cf3fb9c6aef271dda5bec9edcded4b5bc55d81a251328",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/runtime/primary.png",
+      "runtimeOutputSha256": "a6c09ebfdb44d4d20e5cf3fb9c6aef271dda5bec9edcded4b5bc55d81a251328",
+      "sourceFrameCount": 8,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 4,
+      "sourceFrameBounds": [
+        18,
+        394,
+        164,
+        494
+      ],
+      "sourceFrameSha256": "29545726d5a2ae7259fcf5dbd10061eb6015e287699a537e77461848f342df43",
+      "sourceFrameScore": 629.1006,
+      "fittedVisibleArea": 737.5237,
+      "fittedEnergy": 357.3818,
+      "scale": 0.356164,
+      "outputBounds": [
+        6,
+        11,
+        58,
+        47
+      ],
+      "margins": [
+        6,
+        11,
+        6,
+        17
+      ],
+      "visualCenter": [
+        37.58,
+        32.333
+      ],
+      "visualCenterOffset": 5.59,
+      "outputCellSha256": "f18ce2116a3490d1570f81a36622bfb129faa17db1579ebb11b198e75b23b5f2",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_01",
+      "classId": "warrior",
+      "name": "烈焰狂行",
+      "iconColumn": 1,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/source/rage-aura-composite.png",
+      "sourceSha256": "e9bbc8f921061e10d2107dc39d9a8515e4c63679fcb2a4a5a53d60a769cd8824",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/runtime/primary.png",
+      "runtimeOutputSha256": "e9bbc8f921061e10d2107dc39d9a8515e4c63679fcb2a4a5a53d60a769cd8824",
+      "sourceFrameCount": 16,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 8,
+      "sourceFrameBounds": [
+        54,
+        39,
+        108,
+        106
+      ],
+      "sourceFrameSha256": "ef8dbc91e7c358f6bc6ea5459e7e5830f3e8d614bd9d5119848fdc3b664818b0",
+      "sourceFrameScore": 551.6427,
+      "fittedVisibleArea": 1335.4351,
+      "fittedEnergy": 485.6079,
+      "scale": 0.776119,
+      "outputBounds": [
+        11,
+        6,
+        53,
+        58
+      ],
+      "margins": [
+        11,
+        6,
+        11,
+        6
+      ],
+      "visualCenter": [
+        31.678,
+        31.039
+      ],
+      "visualCenterOffset": 1.013,
+      "outputCellSha256": "6a5978d735a6452d97e230c1f537218f0e1247e0f0eabd412e086ae553f50da8",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_02",
+      "classId": "warrior",
+      "name": "戰環斬",
+      "iconColumn": 2,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-battle-ring.png",
+      "sourceSha256": "960c1800a4e81fbc329735ddbaaa39366969a943a429be633df1e07aa3ff492d",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/runtime/primary.png",
+      "runtimeOutputSha256": "60e9c158be709a46df8dd8a3f7e06d65e679b0c1f0f2adca21a2fbad1659a4a7",
+      "sourceFrameCount": 8,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 4,
+      "sourceFrameBounds": [
+        27,
+        310,
+        246,
+        411
+      ],
+      "sourceFrameSha256": "8b0ceb2e5b4d1f505c7fedd33b5c26cebf12d13ca5afa2713bb67890430e4710",
+      "sourceFrameScore": 404.7749,
+      "fittedVisibleArea": 454.9233,
+      "fittedEnergy": 280.3798,
+      "scale": 0.237443,
+      "outputBounds": [
+        6,
+        20,
+        58,
+        44
+      ],
+      "margins": [
+        6,
+        20,
+        6,
+        20
+      ],
+      "visualCenter": [
+        31.107,
+        32.174
+      ],
+      "visualCenterOffset": 0.909,
+      "outputCellSha256": "79c5bf72def04f10db7bd2d592c065316c968967e0ece81ad66bcb17af21d391",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_03",
+      "classId": "warrior",
+      "name": "斬鋒附魔",
+      "iconColumn": 3,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/source/triple-enchanted-strike.png",
+      "sourceSha256": "7fdc190dc838c9548c4a3c26caa73738711b9d44da63d3f9afc8f5cae5a3d3a0",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/runtime/primary.png",
+      "runtimeOutputSha256": "7fdc190dc838c9548c4a3c26caa73738711b9d44da63d3f9afc8f5cae5a3d3a0",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        39,
+        39,
+        126,
+        165
+      ],
+      "sourceFrameSha256": "5d90e53310ecf25c2069a230827b0dd4f02e9aaf5231ea6ad5e4b90f73579b2d",
+      "sourceFrameScore": 962.0581,
+      "fittedVisibleArea": 1199.3933,
+      "fittedEnergy": 414.7478,
+      "scale": 0.412698,
+      "outputBounds": [
+        11,
+        6,
+        47,
+        58
+      ],
+      "margins": [
+        11,
+        6,
+        17,
+        6
+      ],
+      "visualCenter": [
+        31.517,
+        32.467
+      ],
+      "visualCenterOffset": 0.672,
+      "outputCellSha256": "545d86cae7b782472361f50085d4711dd1e171582ea0bb50f7a64dcb17822cf8",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_04",
+      "classId": "warrior",
+      "name": "正義衝鋒",
+      "iconColumn": 4,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/generated/warrior-archer-effects.png",
+      "sourceSha256": "5a289b6e5d1c6343a0658576d8fdf9b07b57b4c7f6ad3982225b223f64e54db6",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/runtime/primary.png",
+      "runtimeOutputSha256": "837a349467f3619816b488b1a6fd723a03a4bfab735d6ce1fd55161a0beb1d96",
+      "sourceFrameCount": 12,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        81,
+        52,
+        244,
+        165
+      ],
+      "sourceFrameSha256": "75fed129c6470161ddd0426ee6e80bc917e072ffe225616c0e2b93433e3bb8ea",
+      "sourceFrameScore": 1093.0061,
+      "fittedVisibleArea": 1432.7567,
+      "fittedEnergy": 308.6574,
+      "scale": 0.319018,
+      "outputBounds": [
+        6,
+        14,
+        58,
+        50
+      ],
+      "margins": [
+        6,
+        14,
+        6,
+        14
+      ],
+      "visualCenter": [
+        30.938,
+        31.622
+      ],
+      "visualCenterOffset": 1.127,
+      "outputCellSha256": "106a9a66c6f4e133ccc3fc9b2f034720c89830e1429c17664fa25463b4d787b4",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_05",
+      "classId": "warrior",
+      "name": "盾首震擊",
+      "iconColumn": 5,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-shield-bash-premium.png",
+      "sourceSha256": "01d53d409c011f46be1dc7356131600b1c87c5349496e676691fe1b642e75f9f",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/runtime/primary.png",
+      "runtimeOutputSha256": "27a9a463aaf55f48bb4b17c9106e5f10ab5ab3fbaed79c74c445049937111021",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        72,
+        264,
+        304,
+        495
+      ],
+      "sourceFrameSha256": "2a8e3cd42c4f662615d35dddf566b5ff82813f128c3e84fbe62a96bcc547eb26",
+      "sourceFrameScore": 1395.1142,
+      "fittedVisibleArea": 1734.9628,
+      "fittedEnergy": 612.5476,
+      "scale": 0.224138,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        35.538,
+        33.144
+      ],
+      "visualCenterOffset": 3.719,
+      "outputCellSha256": "2062e987c10e823debc51dcf1072e3280a903eb7c19b11a32163ac75ad046aca",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_06",
+      "classId": "warrior",
+      "name": "裂甲斬",
+      "iconColumn": 6,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png",
+      "sourceSha256": "5318c453134fed46012e2c19c9c3175d2abb7a66b0951545cd7920890bc1c36d",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/runtime/primary.png",
+      "runtimeOutputSha256": "ace179973e2cc1ea6557e9fb7dea5a42f2e863f865bdbc21dd8d2c824e76f283",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        2,
+        259,
+        245,
+        464
+      ],
+      "sourceFrameSha256": "3c55658ca5557020564c36438f2ecbe83a1f1c99cdfad8f4972d0bf7b16d01c5",
+      "sourceFrameScore": 952.487,
+      "fittedVisibleArea": 1124.3885,
+      "fittedEnergy": 517.2717,
+      "scale": 0.213992,
+      "outputBounds": [
+        6,
+        11,
+        58,
+        55
+      ],
+      "margins": [
+        6,
+        11,
+        6,
+        9
+      ],
+      "visualCenter": [
+        24.198,
+        32.279
+      ],
+      "visualCenterOffset": 7.807,
+      "outputCellSha256": "d0b7570bdf2fdf3723203b8f43e774cc095a596c3fa88931b029da19c9f7cad8",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_07",
+      "classId": "warrior",
+      "name": "反擊姿態",
+      "iconColumn": 7,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-counter-magic-shield-v2-normalized.png",
+      "sourceSha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/runtime/primary.png",
+      "runtimeOutputSha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        44,
+        20,
+        330,
+        299
+      ],
+      "sourceFrameSha256": "d510a55ddc4fd8cef3f4dfbf177de73e10527b09e6c1a4cb7531fac42b217506",
+      "sourceFrameScore": 319.7727,
+      "fittedVisibleArea": 496.595,
+      "fittedEnergy": 290.6223,
+      "scale": 0.181818,
+      "outputBounds": [
+        6,
+        7,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        7,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.009,
+        30.748
+      ],
+      "visualCenterOffset": 1.252,
+      "outputCellSha256": "a55d33f89a238a5d63540b868630ac0ce521e25f3eb816ce405f40aa5628c753",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_08",
+      "classId": "warrior",
+      "name": "和平護盾",
+      "iconColumn": 8,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/topdown-core-vfx-concept.png",
+      "sourceSha256": "1a5ee39dc8731f3a611e9f1770283b674f9cc1c612b259a853a075833de6642f",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/2_E_中階/09_和平護盾_warrior_08/runtime/primary.png",
+      "runtimeOutputSha256": "34428fbe686702a4efe85b06a6b786bf26cd499ff4413bd3756e8d009cdfa73b",
+      "sourceFrameCount": 4,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        2,
+        2,
+        36,
+        44
+      ],
+      "sourceFrameSha256": "86ea5b9984195da971565e58d5bc89779419b98be3af7e0a4198677cbbdcb4e1",
+      "sourceFrameScore": 1276.9118,
+      "fittedVisibleArea": 1417.9138,
+      "fittedEnergy": 917.3773,
+      "scale": 1.238095,
+      "outputBounds": [
+        11,
+        6,
+        53,
+        58
+      ],
+      "margins": [
+        11,
+        6,
+        11,
+        6
+      ],
+      "visualCenter": [
+        32.068,
+        32.343
+      ],
+      "visualCenterOffset": 0.349,
+      "outputCellSha256": "d4f211c94d799f7e5dafb8f24eada51d3c181bb5c2c702debfe77ca8e38e444a",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_09",
+      "classId": "warrior",
+      "name": "戰陣號令",
+      "iconColumn": 9,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/generated/rpg-status-vfx.png",
+      "sourceSha256": "6f9f3c43f55f2bfb6b5e4bd7d2f77c1987da4a5049affc7b322834e4e9282108",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/runtime/primary.png",
+      "runtimeOutputSha256": "87034dcd555a35b2086a3538197724c2b3ab5acb027f8f16cb1499ee6a9844ae",
+      "sourceFrameCount": 4,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        6,
+        2,
+        22,
+        20
+      ],
+      "sourceFrameSha256": "d651767c524e4959a0fc0c2765d77e41e71bfee451c5656101af12a3421df571",
+      "sourceFrameScore": 1409.9208,
+      "fittedVisibleArea": 1827.7037,
+      "fittedEnergy": 400.2222,
+      "scale": 2.888889,
+      "outputBounds": [
+        12,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        12,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.012,
+        29.898
+      ],
+      "visualCenterOffset": 2.102,
+      "outputCellSha256": "b83d12c056239feb6b4a0df8726b2707c374f53bae3cd8fa239667a9e7735bf9",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_10",
+      "classId": "warrior",
+      "name": "獵首突刺",
+      "iconColumn": 10,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png",
+      "sourceSha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/primary.png",
+      "runtimeOutputSha256": "475d2719710e3b35a52599955043a51191f257c7c1f98d32086455c6e5d20aa3",
+      "sourceFrameCount": 8,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        59,
+        290,
+        233,
+        492
+      ],
+      "sourceFrameSha256": "123bb7d7bd17b8bdf895aba83fde1c7b635151997379353182239a3207536432",
+      "sourceFrameScore": 1163.7224,
+      "fittedVisibleArea": 1446.1668,
+      "fittedEnergy": 498.8931,
+      "scale": 0.257426,
+      "outputBounds": [
+        6,
+        6,
+        51,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        13,
+        6
+      ],
+      "visualCenter": [
+        33.333,
+        33.442
+      ],
+      "visualCenterOffset": 1.964,
+      "outputCellSha256": "a8413db8c41a8ac8a224dbc1dabf2ebb14ea1e2df31499f9e72207af48e237ed",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_11",
+      "classId": "warrior",
+      "name": "裂地震",
+      "iconColumn": 11,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/generated/ability-effects.png",
+      "sourceSha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/runtime/primary.png",
+      "runtimeOutputSha256": "9f94c3bf2fa7eeadc33f621f8ad79a1b04b9e4fd0223acb31bc7e13c81ac5ced",
+      "sourceFrameCount": 9,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        67,
+        35,
+        153,
+        85
+      ],
+      "sourceFrameSha256": "cebe659d872628856f744efc1ba620ad53fdcd9d38f1b2f703f142a3703aac30",
+      "sourceFrameScore": 698.2801,
+      "fittedVisibleArea": 882.5657,
+      "fittedEnergy": 277.8973,
+      "scale": 0.604651,
+      "outputBounds": [
+        6,
+        17,
+        58,
+        47
+      ],
+      "margins": [
+        6,
+        17,
+        6,
+        17
+      ],
+      "visualCenter": [
+        31.994,
+        32.001
+      ],
+      "visualCenterOffset": 0.006,
+      "outputCellSha256": "d41b93288cb72f55b0eecf48e132cff006948a926aa77c2847afbffbda7e6cdd",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_12",
+      "classId": "warrior",
+      "name": "斷城震落",
+      "iconColumn": 12,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-citadel-slam-ground-impact-v2.png",
+      "sourceSha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/runtime/primary.png",
+      "runtimeOutputSha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
+      "sourceFrameCount": 15,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        35,
+        35,
+        157,
+        157
+      ],
+      "sourceFrameSha256": "a1a8a24164decad38abe2d75fa0d06eb6bcf4bbb92bf72bf976a7e97ade9bd59",
+      "sourceFrameScore": 690.058,
+      "fittedVisibleArea": 1872.4891,
+      "fittedEnergy": 1264.2553,
+      "scale": 0.42623,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        31.981,
+        31.977
+      ],
+      "visualCenterOffset": 0.029,
+      "outputCellSha256": "c1303ad8bf68e1c3904a71d08ed25990360a5b16b5f46a28471290bb55ecdd0a",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "warrior_13",
+      "classId": "warrior",
+      "name": "死鬥宣言",
+      "iconColumn": 13,
+      "iconRow": 0,
+      "sourceKind": "arena-icon-source",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-death-realm-obsidian-pixel-safe-v2-strip.png",
+      "sourceSha256": "8e9116ffdfb4935d253b6de3a837262c166a5cd0d03acc3a96b137d4e33ddcbc",
+      "runtimeFile": "docs/design/arena-skill-vfx-sources/warrior-death-realm-obsidian-pixel-safe-v2-strip.png",
+      "runtimeOutputSha256": null,
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        2,
+        2,
+        510,
+        238
+      ],
+      "sourceFrameSha256": "5cf10f1c408a4945cbc2d343ce321ff154a177f9891fef82adec61195ad48e71",
+      "sourceFrameScore": 755.0143,
+      "fittedVisibleArea": 985.8456,
+      "fittedEnergy": 166.8518,
+      "scale": 0.102362,
+      "outputBounds": [
+        6,
+        20,
+        58,
+        44
+      ],
+      "margins": [
+        6,
+        20,
+        6,
+        20
+      ],
+      "visualCenter": [
+        31.941,
+        32.002
+      ],
+      "visualCenterOffset": 0.059,
+      "outputCellSha256": "4c94775c9cea2b66e0f36ab858a61c9e8150775727884ad5370334f2e68d860d",
+      "pixelAdaptation": "full-runtime-frame-with-palette-preserving-exposure"
+    },
+    {
+      "skillId": "warrior_14",
+      "classId": "warrior",
+      "name": "裁決",
+      "iconColumn": 14,
+      "iconRow": 0,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-judgment-sword-v1.png",
+      "sourceSha256": "0a2618b0aeec326e28966ad1728ad95c52ea948730a3648fd9ce45a4f4688b2c",
+      "runtimeFile": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/runtime/primary.png",
+      "runtimeOutputSha256": "b2dfaf0a4cdffaf34c8a9623ef24703435cf6059c277c01468b32d8d29eff697",
+      "sourceFrameCount": 1,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        201,
+        84,
+        711,
+        1629
+      ],
+      "sourceFrameSha256": "f1da2830683c04530a4e84e7dc794849575e8489123dc4b08dbf7e100cd1f603",
+      "sourceFrameScore": 254.8508,
+      "fittedVisibleArea": 286.0116,
+      "fittedEnergy": 199.0195,
+      "scale": 0.033657,
+      "outputBounds": [
+        23,
+        6,
+        40,
+        58
+      ],
+      "margins": [
+        23,
+        6,
+        24,
+        6
+      ],
+      "visualCenter": [
+        31.569,
+        31.022
+      ],
+      "visualCenterOffset": 1.068,
+      "outputCellSha256": "64b536f3ddc805925c8c2758ed88aa9653e3bffdff1cae683a90b4430af15bd7",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_00",
+      "classId": "archer",
+      "name": "月牙刃",
+      "iconColumn": 0,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/source/primary-source-2c25e5ceb0582431.png",
+      "sourceSha256": "2c25e5ceb0582431dff34af8a5edd1b7782f9e97d47cef9c3515a29992efa08d",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/runtime/primary.png",
+      "runtimeOutputSha256": "5b03e8a57363c9fe6a5c0652a3d492e7cbee7eb8a5eaa3ba4126b16ddcdce6bd",
+      "sourceFrameCount": 10,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 7,
+      "sourceFrameBounds": [
+        36,
+        95,
+        128,
+        163
+      ],
+      "sourceFrameSha256": "5cf5eaa15778fe85114f84b6312cf8e5df4313fbf77bc9677a34d50e6cda36aa",
+      "sourceFrameScore": 793.5948,
+      "fittedVisibleArea": 957.7732,
+      "fittedEnergy": 385.9825,
+      "scale": 0.565217,
+      "outputBounds": [
+        6,
+        12,
+        58,
+        50
+      ],
+      "margins": [
+        6,
+        12,
+        6,
+        14
+      ],
+      "visualCenter": [
+        23.894,
+        31.668
+      ],
+      "visualCenterOffset": 8.113,
+      "outputCellSha256": "e0c817ec3c01d7b241f5ec3fc9b88b70b9f78823ff7988ca0099d957983ad3dc",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_01",
+      "classId": "archer",
+      "name": "森林翻滾",
+      "iconColumn": 1,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/source/primary-source-934fbe23772103bf.png",
+      "sourceSha256": "934fbe23772103bf7e393f5843dbbf4233d1c6c2c14a928d54439e9c43d33984",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/primary.png",
+      "runtimeOutputSha256": "ff73edfb74ed5f90253954d80bd3f27e2416ae30f0fb0029b65646677add120e",
+      "sourceFrameCount": 12,
+      "selectionMethod": "manual-semantic-frame",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        53,
+        59,
+        187,
+        165
+      ],
+      "sourceFrameSha256": "37e3f0ed1dd06c02b98bafffd590b20551311b698e85c98232284ea5a5b42198",
+      "sourceFrameScore": 552.0028,
+      "fittedVisibleArea": 790.7498,
+      "fittedEnergy": 174.4048,
+      "scale": 0.38806,
+      "outputBounds": [
+        6,
+        10,
+        58,
+        51
+      ],
+      "margins": [
+        6,
+        10,
+        6,
+        13
+      ],
+      "visualCenter": [
+        40.618,
+        31.618
+      ],
+      "visualCenterOffset": 8.626,
+      "outputCellSha256": "493378c58316ca04ec4156066ba1bf66c90ce7ede6748f3bfdc642edb999a0f9",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_02",
+      "classId": "archer",
+      "name": "穿葉箭",
+      "iconColumn": 2,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/source/primary-source-634c7c5a2ca8424b.png",
+      "sourceSha256": "634c7c5a2ca8424bbbfb737943785cc218dc07d0294d9b27360b8b70b3cc238f",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/runtime/primary.png",
+      "runtimeOutputSha256": "90192b9b65e5c54f79bee0fb79e0dfbde43e4639f000096336efa7c28cbe3716",
+      "sourceFrameCount": 10,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        22,
+        56,
+        143,
+        162
+      ],
+      "sourceFrameSha256": "37a52b7bf8d75d22f455d2eb0ca585c04c3cd32881dd0c708d271222aa6916b4",
+      "sourceFrameScore": 397.4932,
+      "fittedVisibleArea": 494.222,
+      "fittedEnergy": 186.6573,
+      "scale": 0.429752,
+      "outputBounds": [
+        6,
+        9,
+        58,
+        55
+      ],
+      "margins": [
+        6,
+        9,
+        6,
+        9
+      ],
+      "visualCenter": [
+        27.595,
+        32.202
+      ],
+      "visualCenterOffset": 4.41,
+      "outputCellSha256": "f9efb45f3283a36d786901ec7268376715ca6cb27ceb397e1592569b62c3d5b5",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_03",
+      "classId": "archer",
+      "name": "荊刺陷阱",
+      "iconColumn": 3,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/source/primary-source-dac0eef7a529089c.png",
+      "sourceSha256": "dac0eef7a529089cb3e646b26ad2d8506efe6142171da8b0a290917c231c90ac",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/primary.png",
+      "runtimeOutputSha256": "0072c92cec1bdf09975d58173a00b0c7bb46107f568b4bc73feb106259381659",
+      "sourceFrameCount": 3,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        16,
+        21,
+        94,
+        96
+      ],
+      "sourceFrameSha256": "71fbfcd73e4f46dc1f015a1602fdb315d604f5918a2ff4d5ee63d77f5a8edb99",
+      "sourceFrameScore": 547.3174,
+      "fittedVisibleArea": 1012.8889,
+      "fittedEnergy": 531.1849,
+      "scale": 0.666667,
+      "outputBounds": [
+        6,
+        7,
+        58,
+        57
+      ],
+      "margins": [
+        6,
+        7,
+        6,
+        7
+      ],
+      "visualCenter": [
+        34.536,
+        31.913
+      ],
+      "visualCenterOffset": 2.538,
+      "outputCellSha256": "a74e7c80d490c1572d2905afa614389fd756475256d29bbda50876cf1e0570aa",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_04",
+      "classId": "archer",
+      "name": "隱形",
+      "iconColumn": 4,
+      "iconRow": 1,
+      "sourceKind": "server-state-concealment",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04/source/invisibility-icon-source.png",
+      "sourceSha256": "8b3110728abe461945d25323e0ea885120904f23308af1300e5cca9a840d7be0",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04/icon.png",
+      "runtimeOutputSha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
+      "sourceFrameCount": 1,
+      "selectionMethod": "explicit-self-concealment-outline",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        63,
+        62,
+        192,
+        224
+      ],
+      "sourceFrameSha256": "8b3110728abe461945d25323e0ea885120904f23308af1300e5cca9a840d7be0",
+      "sourceFrameScore": 1100.1905,
+      "fittedVisibleArea": 1386.7908,
+      "fittedEnergy": 468.1059,
+      "scale": 0.504854,
+      "outputBounds": [
+        10,
+        7,
+        56,
+        59
+      ],
+      "margins": [
+        10,
+        7,
+        8,
+        5
+      ],
+      "visualCenter": [
+        30.653,
+        32.364
+      ],
+      "visualCenterOffset": 1.395,
+      "outputCellSha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
+      "pixelAdaptation": "self-concealment-alpha-outline"
+    },
+    {
+      "skillId": "archer_05",
+      "classId": "archer",
+      "name": "追獵標記",
+      "iconColumn": 5,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/source/primary-source-d0514855e057e4fb.png",
+      "sourceSha256": "d0514855e057e4fb2bb01071b79f7862943ed467c04b50ec363156351f1b7577",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/primary.png",
+      "runtimeOutputSha256": "55cebf9aac51c855dd2dcf8160e5082ceeb48846ecc4e7b33c19df90687173c9",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        123,
+        299,
+        239,
+        416
+      ],
+      "sourceFrameSha256": "78acf9c90d9f76262bb08f2dc70096a94a912ef98a5837f3bff06765601db442",
+      "sourceFrameScore": 1049.5441,
+      "fittedVisibleArea": 1254.716,
+      "fittedEnergy": 529.4709,
+      "scale": 0.444444,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.322,
+        31.456
+      ],
+      "visualCenterOffset": 0.632,
+      "outputCellSha256": "9ae92a50083eb4860913c7b6b1d0e4bd5cf0a855531d61eb8f8437143827081b",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_06",
+      "classId": "archer",
+      "name": "風切步",
+      "iconColumn": 6,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/source/primary-source-680d945cfddb182a.png",
+      "sourceSha256": "680d945cfddb182a976dc66805791887609a9eee62450f5803fd335c747239bc",
+      "runtimeFile": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/runtime/primary.png",
+      "runtimeOutputSha256": "a204c5b9480ce5e37473d6205e3334fd6994824f4bfb7af5985b10e612087b0b",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        40,
+        23,
+        117,
+        101
+      ],
+      "sourceFrameSha256": "98f13db640f8b664acf016c0795517943c381fb771d75ad727f9551f64e45c63",
+      "sourceFrameScore": 645.1163,
+      "fittedVisibleArea": 1007.5556,
+      "fittedEnergy": 387.9869,
+      "scale": 0.666667,
+      "outputBounds": [
+        7,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        7,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        30.787,
+        30.355
+      ],
+      "visualCenterOffset": 2.044,
+      "outputCellSha256": "8015b1bce916425735f277ef6e1165d8453122b0911d2b3df970c7f2b919b56e",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_07",
+      "classId": "archer",
+      "name": "暗鉤牽引",
+      "iconColumn": 7,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/source/primary-source-20a538d0dceae03b.png",
+      "sourceSha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56",
+      "runtimeFile": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/primary.png",
+      "runtimeOutputSha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        34,
+        49,
+        86,
+        71
+      ],
+      "sourceFrameSha256": "d67fb3c15a99685cf39d9bab88bbe0d8cb088cfd8c772e38934a4b33f4321e98",
+      "sourceFrameScore": 257.6357,
+      "fittedVisibleArea": 327.0,
+      "fittedEnergy": 103.8322,
+      "scale": 1.0,
+      "outputBounds": [
+        6,
+        21,
+        58,
+        43
+      ],
+      "margins": [
+        6,
+        21,
+        6,
+        21
+      ],
+      "visualCenter": [
+        40.64,
+        32.088
+      ],
+      "visualCenterOffset": 8.641,
+      "outputCellSha256": "29535af66a2858aaf354fbecd0e515d56a37209e4bddb2b9c070e2984976ff1f",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_08",
+      "classId": "archer",
+      "name": "根縛",
+      "iconColumn": 8,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/source/primary-source-45cf1bbccada6f4c.png",
+      "sourceSha256": "45cf1bbccada6f4c949b3caed7a5980025a8d8e248d7719270348a28acd55e63",
+      "runtimeFile": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/runtime/primary.png",
+      "runtimeOutputSha256": "e8b982c4f061a3820fedc9ca10123c2a180c685f75b9267c52e23d270f47baf5",
+      "sourceFrameCount": 4,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        12,
+        54,
+        152,
+        163
+      ],
+      "sourceFrameSha256": "dc3e396a52ba25dec58524c989ef51ec24674c5be4ee8e92d334db48b17c4b51",
+      "sourceFrameScore": 870.7544,
+      "fittedVisibleArea": 1084.0833,
+      "fittedEnergy": 324.2692,
+      "scale": 0.371429,
+      "outputBounds": [
+        6,
+        10,
+        58,
+        50
+      ],
+      "margins": [
+        6,
+        10,
+        6,
+        14
+      ],
+      "visualCenter": [
+        29.816,
+        32.224
+      ],
+      "visualCenterOffset": 2.195,
+      "outputCellSha256": "966bc54de2c475618ce727aaa54936cd74b2e5cecb1b8f192bf389563624cc97",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_09",
+      "classId": "archer",
+      "name": "穩心瞄準",
+      "iconColumn": 9,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/source/primary-source-0a78b178dbb4f54f.png",
+      "sourceSha256": "0a78b178dbb4f54f2860c27d40ac43bcc940020603bd99fdc1f63f91523f594c",
+      "runtimeFile": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/primary.png",
+      "runtimeOutputSha256": "803b718b6701a5dc94ea7f4e5ca69c146c9ccd17156f32f0a3ed5742db348963",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 4,
+      "sourceFrameBounds": [
+        7,
+        13,
+        157,
+        163
+      ],
+      "sourceFrameSha256": "5a2cbc854462e1ccba03a7d546413fad2d54a427c71c58f70687f08558d9d53b",
+      "sourceFrameScore": 1077.1517,
+      "fittedVisibleArea": 1308.0149,
+      "fittedEnergy": 506.7244,
+      "scale": 0.346667,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        31.898,
+        31.913
+      ],
+      "visualCenterOffset": 0.134,
+      "outputCellSha256": "8460c3f31a24c1d2105cd34d0197a3bf0268ff32ea45eaf352154c84fe7ce689",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_10",
+      "classId": "archer",
+      "name": "藤網收束",
+      "iconColumn": 10,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/source/primary-source-derived-vine-net-alpha-key-v2-from-a6c5911b61097f75.png",
+      "sourceSha256": "79d8334d2aecd30adb6f8d0700e884179b30305d6abe7082bc378b7a085324d2",
+      "runtimeFile": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/primary.png",
+      "runtimeOutputSha256": "79d8334d2aecd30adb6f8d0700e884179b30305d6abe7082bc378b7a085324d2",
+      "sourceFrameCount": 4,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        7,
+        35,
+        112,
+        85
+      ],
+      "sourceFrameSha256": "89d214d8bf8a39b19341104b686bdbbf9547b081a793e1038270dc5b6cc7f02f",
+      "sourceFrameScore": 548.8596,
+      "fittedVisibleArea": 674.4671,
+      "fittedEnergy": 227.1766,
+      "scale": 0.495238,
+      "outputBounds": [
+        6,
+        19,
+        58,
+        44
+      ],
+      "margins": [
+        6,
+        19,
+        6,
+        20
+      ],
+      "visualCenter": [
+        31.547,
+        31.659
+      ],
+      "visualCenterOffset": 0.567,
+      "outputCellSha256": "5b97c5d1fc2cdd4b79d852637199c7c4ef903bc95fc4597beff1ef2d4be9547b",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_11",
+      "classId": "archer",
+      "name": "貫穿箭",
+      "iconColumn": 11,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/source/primary-source-a0bb85cee6ec0f73.png",
+      "sourceSha256": "a0bb85cee6ec0f73d2e945a5b6f6a6a948dbfd3cb576b9bc26fc6a50f882ced3",
+      "runtimeFile": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/primary.png",
+      "runtimeOutputSha256": "b4365591512bf2168c4f501524bd07157322f8ada8f19d1a28c4d8dda4a5de98",
+      "sourceFrameCount": 10,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 9,
+      "sourceFrameBounds": [
+        67,
+        145,
+        98,
+        163
+      ],
+      "sourceFrameSha256": "bb6e2424b6a6536449ab2f24fee287363648e1447f088da38aed582488cb9781",
+      "sourceFrameScore": 281.3543,
+      "fittedVisibleArea": 360.1582,
+      "fittedEnergy": 92.9834,
+      "scale": 1.677419,
+      "outputBounds": [
+        6,
+        16,
+        58,
+        46
+      ],
+      "margins": [
+        6,
+        16,
+        6,
+        18
+      ],
+      "visualCenter": [
+        36.835,
+        32.14
+      ],
+      "visualCenterOffset": 4.837,
+      "outputCellSha256": "303dbe0aa6bbb2333789f1acef1327ee6fa7e53ce1f8d9760b07273ca69027be",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_12",
+      "classId": "archer",
+      "name": "星痕狙殺",
+      "iconColumn": 12,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/source/primary-source-0f6ffcdd819d2444.png",
+      "sourceSha256": "0f6ffcdd819d2444467a1df9d9188cd9b0604635480fe5e44406d735d429f6df",
+      "runtimeFile": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/runtime/primary.png",
+      "runtimeOutputSha256": "4ade56414e1d3fbc53000876bedf5a620f29636df5a10212bf6901f0cfb482d5",
+      "sourceFrameCount": 13,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 9,
+      "sourceFrameBounds": [
+        28,
+        45,
+        136,
+        163
+      ],
+      "sourceFrameSha256": "b9f8effafe7ce3a9f7a8bf0ca83534e71fe0d4b506f1e74eac36dd88c9bbb235",
+      "sourceFrameScore": 537.8859,
+      "fittedVisibleArea": 670.3683,
+      "fittedEnergy": 204.9318,
+      "scale": 0.440678,
+      "outputBounds": [
+        10,
+        6,
+        54,
+        58
+      ],
+      "margins": [
+        10,
+        6,
+        10,
+        6
+      ],
+      "visualCenter": [
+        33.13,
+        31.767
+      ],
+      "visualCenterOffset": 1.154,
+      "outputCellSha256": "60492bd8d1a15d13e0580ad6c1a987536ab083eef4c05e513f266a4301c3eb57",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_13",
+      "classId": "archer",
+      "name": "種子雨",
+      "iconColumn": 13,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/source/primary-source-derived-small-tiled-seed-rain-v2-from-22fc6663a1e42f2b.png",
+      "sourceSha256": "c816ed6edf85274afe7db9a69cbc67481310d59ae6b0063bb82a2fe61f87c070",
+      "runtimeFile": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/primary.png",
+      "runtimeOutputSha256": "c816ed6edf85274afe7db9a69cbc67481310d59ae6b0063bb82a2fe61f87c070",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 12,
+      "sourceFrameBounds": [
+        8,
+        11,
+        110,
+        103
+      ],
+      "sourceFrameSha256": "88a3974e6d0c0083422eac964d6acae04d6cbe781354fad0297708779fd652a0",
+      "sourceFrameScore": 33.7077,
+      "fittedVisibleArea": 40.8043,
+      "fittedEnergy": 15.7288,
+      "scale": 0.509804,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        53
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        11
+      ],
+      "visualCenter": [
+        30.104,
+        32.239
+      ],
+      "visualCenterOffset": 1.911,
+      "outputCellSha256": "85a366a5de7d5b620afcee58189a3075761e9fd364cef3d423648c755e0085c7",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "archer_14",
+      "classId": "archer",
+      "name": "隼影處刑",
+      "iconColumn": 14,
+      "iconRow": 1,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/source/primary-source-c56b29cc0d36d720.png",
+      "sourceSha256": "c56b29cc0d36d720dfbcab85389923fcb1b2888466808d2d7ef5b4c22152fcb1",
+      "runtimeFile": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/runtime/primary.png",
+      "runtimeOutputSha256": "8ff034620978e341ca001ae885c08583da54f2c2343907645cad970e3ab0a42b",
+      "sourceFrameCount": 10,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 6,
+      "sourceFrameBounds": [
+        22,
+        37,
+        143,
+        163
+      ],
+      "sourceFrameSha256": "36a83f148aeed89d260212c164e397a02b6cf4031379095ed2b66650d1fb3667",
+      "sourceFrameScore": 1030.1625,
+      "fittedVisibleArea": 1203.6513,
+      "fittedEnergy": 586.5029,
+      "scale": 0.412698,
+      "outputBounds": [
+        7,
+        6,
+        57,
+        58
+      ],
+      "margins": [
+        7,
+        6,
+        7,
+        6
+      ],
+      "visualCenter": [
+        31.558,
+        35.479
+      ],
+      "visualCenterOffset": 3.507,
+      "outputCellSha256": "8e8d85a04325b745bbcce4b7aaaf81d38575146a4bacec8846e98ab5f1636678",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_00",
+      "classId": "engineer",
+      "name": "部署砲台",
+      "iconColumn": 0,
+      "iconRow": 2,
+      "sourceKind": "engineer-turret-runtime",
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret-fire.png",
+      "sourceSha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret-fire.png",
+      "runtimeOutputSha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
+      "sourceFrameCount": 4,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        16,
+        24,
+        112,
+        95
+      ],
+      "sourceFrameSha256": "f1fae8b296dc416554ac5b08f3b33dc623e6cdb388acaca5d5dabae5057a1b34",
+      "sourceFrameScore": 1261.455,
+      "fittedVisibleArea": 1489.3125,
+      "fittedEnergy": 678.5412,
+      "scale": 0.541667,
+      "outputBounds": [
+        6,
+        13,
+        58,
+        51
+      ],
+      "margins": [
+        6,
+        13,
+        6,
+        13
+      ],
+      "visualCenter": [
+        31.451,
+        31.937
+      ],
+      "visualCenterOffset": 0.553,
+      "outputCellSha256": "c28ad983dfdaab81cba92596eb769d9d39c9ddfb1c102b1de0d21dbd20faeaa3",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_01",
+      "classId": "engineer",
+      "name": "標定彈匣",
+      "iconColumn": 1,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-targeting-magazine-v2-normalized.png",
+      "sourceSha256": "71fcdc217d2f6d337fb2778c612661f6215b5ec8ba6f2a55342618c489e76076",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/runtime/primary.png",
+      "runtimeOutputSha256": "1e4dd1a8719488554e8e9483530bb74546a0c9091682d7570a9c4513ef19b607",
+      "sourceFrameCount": 16,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 7,
+      "sourceFrameBounds": [
+        40,
+        21,
+        124,
+        144
+      ],
+      "sourceFrameSha256": "fbcbdd3a37de0fac30fa71756fe240c5ac541a6fd29e214283943b39d8b644f8",
+      "sourceFrameScore": 612.1403,
+      "fittedVisibleArea": 752.0941,
+      "fittedEnergy": 268.4098,
+      "scale": 0.422764,
+      "outputBounds": [
+        15,
+        6,
+        51,
+        58
+      ],
+      "margins": [
+        15,
+        6,
+        13,
+        6
+      ],
+      "visualCenter": [
+        31.665,
+        32.504
+      ],
+      "visualCenterOffset": 0.605,
+      "outputCellSha256": "b86dd7dd77f3a1832738ec39172a73c07c492523b8196c58c127eb78b2efd704",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_02",
+      "classId": "engineer",
+      "name": "散射",
+      "iconColumn": 2,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-triple-scatter-v2-normalized.png",
+      "sourceSha256": "52f470d39c8e9ca63a21f9e4e0ec96535927238b1206ece76d03082de0fe72d2",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02/runtime/primary.png",
+      "runtimeOutputSha256": "5f24bb107bc5f2db5a720a1da069729c4bbf2801232eba11861b036e263e24cb",
+      "sourceFrameCount": 14,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        69,
+        68,
+        96,
+        96
+      ],
+      "sourceFrameSha256": "632279fba78a65f5f1fcc40083d741a75d4854edd17b6c0100a957a21faa4fc4",
+      "sourceFrameScore": 1120.0865,
+      "fittedVisibleArea": 1251.9796,
+      "fittedEnergy": 874.7836,
+      "scale": 1.857143,
+      "outputBounds": [
+        7,
+        6,
+        57,
+        58
+      ],
+      "margins": [
+        7,
+        6,
+        7,
+        6
+      ],
+      "visualCenter": [
+        32.115,
+        32.865
+      ],
+      "visualCenterOffset": 0.873,
+      "outputCellSha256": "4b7a4943145fa682c116aee3911ee27df059c85a6b63243aeea961b432e20371",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_03",
+      "classId": "engineer",
+      "name": "穿甲鐵芯",
+      "iconColumn": 3,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png",
+      "sourceSha256": "926e76695a33e3ddb0b9c00a146b89f02735432a2ee8ec3e92593d7aba1021e3",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/runtime/primary.png",
+      "runtimeOutputSha256": "0b42745ccd38ab815b192a951d301e6af93f68425307f9b059c3860cf1e9fc41",
+      "sourceFrameCount": 14,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 12,
+      "sourceFrameBounds": [
+        70,
+        72,
+        95,
+        93
+      ],
+      "sourceFrameSha256": "060744f1cf0b7e03cedbb53d55f077563f6af393dd7f24eb5c2cfd6c7c8d47db",
+      "sourceFrameScore": 1094.5658,
+      "fittedVisibleArea": 1406.08,
+      "fittedEnergy": 336.7008,
+      "scale": 2.08,
+      "outputBounds": [
+        6,
+        10,
+        58,
+        54
+      ],
+      "margins": [
+        6,
+        10,
+        6,
+        10
+      ],
+      "visualCenter": [
+        31.089,
+        31.698
+      ],
+      "visualCenterOffset": 0.96,
+      "outputCellSha256": "d107f26a36e8eadb456b5bfbed1720604ca40fba4cd6595fb57edca41efc1f48",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_04",
+      "classId": "engineer",
+      "name": "壓制掃射",
+      "iconColumn": 4,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-suppression-fire-v2-normalized.png",
+      "sourceSha256": "97a27a908ac7f827f15685916e456ebb7d9d8650fa604b9e4c80d5b85e50346f",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/runtime/primary.png",
+      "runtimeOutputSha256": "df70ac2c54194a4759a7430913e66c8b5b3cb93b248d9b7ea15ff3c18333bfb4",
+      "sourceFrameCount": 16,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 10,
+      "sourceFrameBounds": [
+        59,
+        51,
+        105,
+        113
+      ],
+      "sourceFrameSha256": "a7f5d1d3eb7dcd452c7f9890f1090f15ed95e753248c0dd724f7f4f797cdf264",
+      "sourceFrameScore": 781.6396,
+      "fittedVisibleArea": 944.0083,
+      "fittedEnergy": 365.9823,
+      "scale": 0.83871,
+      "outputBounds": [
+        14,
+        6,
+        53,
+        58
+      ],
+      "margins": [
+        14,
+        6,
+        11,
+        6
+      ],
+      "visualCenter": [
+        32.46,
+        31.862
+      ],
+      "visualCenterOffset": 0.48,
+      "outputCellSha256": "4a237197e1397b6ade05ba06799ecb7e592fc29919c908d98de9c98d49b8952b",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_05",
+      "classId": "engineer",
+      "name": "鎖定齊射",
+      "iconColumn": 5,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-locking-volley-v2-normalized.png",
+      "sourceSha256": "40a477aabeec21a60b787e0d92b4e8cc8611f9455d94fcd190739cd1c1961d15",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/runtime/primary.png",
+      "runtimeOutputSha256": "9c436683c03d344696f9c1090257929cd63f94b3f41670717087bf7f478365ef",
+      "sourceFrameCount": 16,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        52,
+        48,
+        112,
+        117
+      ],
+      "sourceFrameSha256": "fb138604a4112ca5af4ad560f2b55bfd7cd8369278fe4f1d0059f23775c6c48f",
+      "sourceFrameScore": 706.457,
+      "fittedVisibleArea": 853.6257,
+      "fittedEnergy": 388.3011,
+      "scale": 0.753623,
+      "outputBounds": [
+        10,
+        6,
+        55,
+        58
+      ],
+      "margins": [
+        10,
+        6,
+        9,
+        6
+      ],
+      "visualCenter": [
+        31.633,
+        32.511
+      ],
+      "visualCenterOffset": 0.63,
+      "outputCellSha256": "d60afadfbe3c338380f2aff90196be9245d10d08d7a3595151580a5665c3156c",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_06",
+      "classId": "engineer",
+      "name": "攻城模式",
+      "iconColumn": 6,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-siege-directional-effect-v4-normalized.png",
+      "sourceSha256": "6fec0a35099baff429e15733e4d0b395a444413e7fadf94bdd817fec10fbcf46",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/primary.png",
+      "runtimeOutputSha256": "bae371670b65894e0b803f21dc4bd7243cb9de719e8c3eaf3c63c1cc27a8e861",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 8,
+      "sourceFrameBounds": [
+        34,
+        49,
+        130,
+        116
+      ],
+      "sourceFrameSha256": "63ad19ab0aad8e800779f40e3e7c73533ce2e8d4ef0cd639610c656c18b7174e",
+      "sourceFrameScore": 979.9157,
+      "fittedVisibleArea": 1199.4306,
+      "fittedEnergy": 440.7459,
+      "scale": 0.541667,
+      "outputBounds": [
+        6,
+        17,
+        58,
+        53
+      ],
+      "margins": [
+        6,
+        17,
+        6,
+        11
+      ],
+      "visualCenter": [
+        31.547,
+        32.382
+      ],
+      "visualCenterOffset": 0.592,
+      "outputCellSha256": "4fdae18dc869d7fd6c0e81a3dfc7790e5ce6c6a32480837b9b36cf623099bbbe",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_07",
+      "classId": "engineer",
+      "name": "震爆彈筒",
+      "iconColumn": 7,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+      "sourceSha256": "f124b7d84fe0e1e4ec89bcc5bfc388f324ac0df74dbac5e2dff9078f0ab6b9bb",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/runtime/primary.png",
+      "runtimeOutputSha256": "e91fe0e897d1e905cac03209f3af34429822d8089aba05a9ce326ee45df836cd",
+      "sourceFrameCount": 24,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        66,
+        66,
+        99,
+        99
+      ],
+      "sourceFrameSha256": "67f74b35aa49dd6fa8388abc9d8b8b9a9ce4617f2f15f6bfddd98eeccf14a772",
+      "sourceFrameScore": 389.6941,
+      "fittedVisibleArea": 953.4766,
+      "fittedEnergy": 643.4893,
+      "scale": 1.575758,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.0,
+        32.0
+      ],
+      "visualCenterOffset": 0.0,
+      "outputCellSha256": "1d4198035c29fcfc629e4c4d916fd23e5723bff7b7c655fe824eca1237c2e6d7",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_08",
+      "classId": "engineer",
+      "name": "屏障節點",
+      "iconColumn": 8,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png",
+      "sourceSha256": "fcbcedb3b2ca7d07af276e842fd37c881a5b055dc9933058a4bd4697ac2c00ad",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/runtime/primary.png",
+      "runtimeOutputSha256": "e65d5c03785b041e029482c3bcaea74ea3b4b0681edada8278e35baa456beb77",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 11,
+      "sourceFrameBounds": [
+        2,
+        73,
+        163,
+        92
+      ],
+      "sourceFrameSha256": "5c4f91bb1b50b7881ff3eaf7424a66773dcc1d4c3db617ce6d4ee0936db0c5d9",
+      "sourceFrameScore": 136.5549,
+      "fittedVisibleArea": 256.5154,
+      "fittedEnergy": 102.5036,
+      "scale": 0.322981,
+      "outputBounds": [
+        6,
+        29,
+        58,
+        35
+      ],
+      "margins": [
+        6,
+        29,
+        6,
+        29
+      ],
+      "visualCenter": [
+        32.274,
+        32.013
+      ],
+      "visualCenterOffset": 0.274,
+      "outputCellSha256": "9012ff95f4eb375546bd5e49c5d536da38dd18d3aa6e6e1a4d368533e834667c",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_09",
+      "classId": "engineer",
+      "name": "支撐砲架",
+      "iconColumn": 9,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-overlay-v3-normalized.png",
+      "sourceSha256": "9abf02df39e5b20b08f28ed3597cae45548177b020947ed158efb21dc303a292",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/runtime/primary.png",
+      "runtimeOutputSha256": "f769bcf27c878b886e8754fc4ca2e9a7b3eb456508597ecccc5a9b13ff374dc3",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        54,
+        109,
+        111,
+        153
+      ],
+      "sourceFrameSha256": "5f1c9bc635c89e2bf71f1ef59439703a005ff884c36e1cc65522853d5f4fc937",
+      "sourceFrameScore": 1252.1269,
+      "fittedVisibleArea": 1587.1123,
+      "fittedEnergy": 499.0438,
+      "scale": 0.912281,
+      "outputBounds": [
+        6,
+        12,
+        58,
+        52
+      ],
+      "margins": [
+        6,
+        12,
+        6,
+        12
+      ],
+      "visualCenter": [
+        32.023,
+        32.133
+      ],
+      "visualCenterOffset": 0.135,
+      "outputCellSha256": "c2a228b327c03a4185bd8208e7161bad614c0f8c27dece27ea97526363264698",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_10",
+      "classId": "engineer",
+      "name": "破陣鉤彈",
+      "iconColumn": 10,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-breach-hook-v2-normalized.png",
+      "sourceSha256": "528f93af377323b09dcc17a40e29e381ed5753ac5cdc0574303b85f79db00886",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/runtime/primary.png",
+      "runtimeOutputSha256": "2e736fdd105564c535043fd4a4522795d117e3bf68a6d06f7fbf42a99494fbcc",
+      "sourceFrameCount": 24,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 21,
+      "sourceFrameBounds": [
+        60,
+        66,
+        104,
+        98
+      ],
+      "sourceFrameSha256": "6c341da628e919e21c37f2be49029fb2b20705c372f6c10772307b64742ed8dd",
+      "sourceFrameScore": 603.9231,
+      "fittedVisibleArea": 761.1983,
+      "fittedEnergy": 222.4362,
+      "scale": 1.181818,
+      "outputBounds": [
+        6,
+        19,
+        58,
+        57
+      ],
+      "margins": [
+        6,
+        19,
+        6,
+        7
+      ],
+      "visualCenter": [
+        24.228,
+        32.304
+      ],
+      "visualCenterOffset": 7.778,
+      "outputCellSha256": "086864091ba28743fa43eda69eb1ccac4c13030034d0d31ca7a3c587ab34697c",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_11",
+      "classId": "engineer",
+      "name": "砲台迅爆",
+      "iconColumn": 11,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-rapid-detonation-v3-anchor-normalized.png",
+      "sourceSha256": "c6f196494d7ff99d5148d81e99868caa25561480097239e3b87ae4babc932467",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/runtime/primary.png",
+      "runtimeOutputSha256": "256f76ebe15198a81944df7ee1ab4e308540c795b684a45938247154f2ca1c03",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 11,
+      "sourceFrameBounds": [
+        36,
+        28,
+        139,
+        132
+      ],
+      "sourceFrameSha256": "3ae2f74554b9ae55e5539408762d586857d89ab0e9966121fd41ea3d14c03d40",
+      "sourceFrameScore": 768.0341,
+      "fittedVisibleArea": 907.25,
+      "fittedEnergy": 410.373,
+      "scale": 0.5,
+      "outputBounds": [
+        6,
+        8,
+        55,
+        56
+      ],
+      "margins": [
+        6,
+        8,
+        9,
+        8
+      ],
+      "visualCenter": [
+        29.669,
+        33.36
+      ],
+      "visualCenterOffset": 2.699,
+      "outputCellSha256": "e6d2e39d2d1548a38202a0779d17dfa72b165687e77196bacb6186295e21ede6",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_12",
+      "classId": "engineer",
+      "name": "同步追跡彈",
+      "iconColumn": 12,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+      "sourceSha256": "af43a0a6b6a6f899c2ab0106e632f378fd7e8e13907fda2c8bcfb447e970a1f3",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/runtime/primary.png",
+      "runtimeOutputSha256": "c5adfd2ef91763ad6865fe0211e8039e86baf1c0101645a0cfe55e6323a4ab87",
+      "sourceFrameCount": 16,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 10,
+      "sourceFrameBounds": [
+        69,
+        75,
+        95,
+        90
+      ],
+      "sourceFrameSha256": "cbbf00db9490572e6a6db88464c6e5b6555ceb64f3276852f4765ea5533dc88b",
+      "sourceFrameScore": 666.1081,
+      "fittedVisibleArea": 740.0,
+      "fittedEnergy": 477.6874,
+      "scale": 2.0,
+      "outputBounds": [
+        6,
+        18,
+        58,
+        48
+      ],
+      "margins": [
+        6,
+        18,
+        6,
+        16
+      ],
+      "visualCenter": [
+        35.063,
+        32.226
+      ],
+      "visualCenterOffset": 3.071,
+      "outputCellSha256": "c2eb9c152264059e77fc8b1e75a1d5e8e0c272c62c4010811fe9cda8bcc3e157",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_13",
+      "classId": "engineer",
+      "name": "魔導鎖標",
+      "iconColumn": 13,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-lock-v1-normalized.png",
+      "sourceSha256": "bbec36b11ba5274a37b5c985d62b31b0b8713dfe66d076e54f0d934e4efab8fc",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/runtime/primary.png",
+      "runtimeOutputSha256": "1948b2b20b443c093610ae32465fa83586228e7a2dc13ae0bdd9da430214667f",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 5,
+      "sourceFrameBounds": [
+        50,
+        56,
+        114,
+        109
+      ],
+      "sourceFrameSha256": "62943405cf59c4421f2078d12f44a1515874bcbcb1fd6a61d9d20eb39075cffd",
+      "sourceFrameScore": 835.5917,
+      "fittedVisibleArea": 955.9062,
+      "fittedEnergy": 569.3068,
+      "scale": 0.8125,
+      "outputBounds": [
+        6,
+        10,
+        58,
+        53
+      ],
+      "margins": [
+        6,
+        10,
+        6,
+        11
+      ],
+      "visualCenter": [
+        30.997,
+        31.695
+      ],
+      "visualCenterOffset": 1.048,
+      "outputCellSha256": "45fcd71c3f7bdd3a4bea10483bd8cc023e56c1f56a67cc25d3bc5673d21b3619",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_14",
+      "classId": "engineer",
+      "name": "裂星魔彈",
+      "iconColumn": 14,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png",
+      "sourceSha256": "d4603e911841594dfa4b8c933d0ddb87f4373efde095f08929475bfa33a31a6c",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/runtime/primary.png",
+      "runtimeOutputSha256": "8abdd4e18f2049841326c15bfb93c200f38bbb3f46a333c37d87481f29350faa",
+      "sourceFrameCount": 18,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        64,
+        71,
+        100,
+        93
+      ],
+      "sourceFrameSha256": "b225fe81ef9831146c7c4ecc1f867b5af84f8fe32b4a58210b164a59c9a4f38d",
+      "sourceFrameScore": 875.2905,
+      "fittedVisibleArea": 1003.5679,
+      "fittedEnergy": 621.1463,
+      "scale": 1.444444,
+      "outputBounds": [
+        6,
+        16,
+        58,
+        48
+      ],
+      "margins": [
+        6,
+        16,
+        6,
+        16
+      ],
+      "visualCenter": [
+        33.962,
+        32.188
+      ],
+      "visualCenterOffset": 1.971,
+      "outputCellSha256": "aa8cc28f9ad55bfcc3a960f316b15c3afed901b4d1625971e55e81d271c8c880",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "engineer_15",
+      "classId": "engineer",
+      "name": "魔導飛彈矩陣",
+      "iconColumn": 15,
+      "iconRow": 2,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-matrix-v2-normalized.png",
+      "sourceSha256": "341cb2845d6545d56c24317d3cda33ed85c0bf68156b433fbfd0825cb62b3f75",
+      "runtimeFile": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/runtime/primary.png",
+      "runtimeOutputSha256": "1de58c657181e156a14c8b0cc449dbb4628d0e3208723899f6df50afa25cfdeb",
+      "sourceFrameCount": 20,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        46,
+        85,
+        118,
+        153
+      ],
+      "sourceFrameSha256": "c8cfa36c40d8adab67ea4442a163cce328c14f77d2e904b9fd021f61b0925dc4",
+      "sourceFrameScore": 1221.702,
+      "fittedVisibleArea": 1419.8086,
+      "fittedEnergy": 819.0951,
+      "scale": 0.722222,
+      "outputBounds": [
+        6,
+        7,
+        58,
+        56
+      ],
+      "margins": [
+        6,
+        7,
+        6,
+        8
+      ],
+      "visualCenter": [
+        31.75,
+        32.189
+      ],
+      "visualCenterOffset": 0.313,
+      "outputCellSha256": "a837cabc887284b94f7879f1ae77d0d5c81d07935c14c5e4357fcc7c5ad7cd80",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_00",
+      "classId": "mage",
+      "name": "日耀光束",
+      "iconColumn": 0,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-solar-beam.png",
+      "sourceSha256": "0dc02a6fe34ab2a4358c49e88967fcfdc4e0d22b105379cc65bdfaa782bd92ba",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/runtime/primary.png",
+      "runtimeOutputSha256": "813d8263b0e92a78183aa56d73a29d4a82afbcd18e8d10179d0426cf5c803f7a",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        5,
+        47,
+        115,
+        73
+      ],
+      "sourceFrameSha256": "447696ea3a0b58042d59e24b168fbd74dc68962d7f14597d60b50f90fc7e0525",
+      "sourceFrameScore": 212.6795,
+      "fittedVisibleArea": 239.3375,
+      "fittedEnergy": 145.6526,
+      "scale": 0.472727,
+      "outputBounds": [
+        6,
+        26,
+        58,
+        38
+      ],
+      "margins": [
+        6,
+        26,
+        6,
+        26
+      ],
+      "visualCenter": [
+        32.612,
+        31.765
+      ],
+      "visualCenterOffset": 0.656,
+      "outputCellSha256": "93dbd2f7f3936bc1e3bd4188a3625160b9bc7381ac4a849dc1625b7b4434393d",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_01",
+      "classId": "mage",
+      "name": "毒針咒",
+      "iconColumn": 1,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png",
+      "sourceSha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/primary.png",
+      "runtimeOutputSha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 4,
+      "sourceFrameBounds": [
+        95,
+        61,
+        138,
+        104
+      ],
+      "sourceFrameSha256": "a6d0f42f41a46fadb806a6ea9e866dfdaf3a834bc3c31e583c42deb9f26c92c1",
+      "sourceFrameScore": 351.6769,
+      "fittedVisibleArea": 861.3607,
+      "fittedEnergy": 531.9647,
+      "scale": 1.209302,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.035,
+        31.996
+      ],
+      "visualCenterOffset": 0.036,
+      "outputCellSha256": "4b39071deae5f9c334e4695008cb9c165090a4fc8123be532399427aa53ceb2d",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_02",
+      "classId": "mage",
+      "name": "汲魂之手",
+      "iconColumn": 2,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png",
+      "sourceSha256": "564eed7871b145e4c35f7c617f12a8158e674eb6a6190367931f04b5d0c473b2",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/runtime/primary.png",
+      "runtimeOutputSha256": "369b2e11581f8f320c41b0e917eab9ee06207abc14c73de443ecfd9618b7b0ca",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        40,
+        35,
+        124,
+        129
+      ],
+      "sourceFrameSha256": "51f3c27999f6c4428c7a70a141675bbbad26280be2f003921bda60e4619d7e6b",
+      "sourceFrameScore": 840.6901,
+      "fittedVisibleArea": 974.9823,
+      "fittedEnergy": 525.695,
+      "scale": 0.553191,
+      "outputBounds": [
+        12,
+        6,
+        57,
+        57
+      ],
+      "margins": [
+        12,
+        6,
+        7,
+        7
+      ],
+      "visualCenter": [
+        31.666,
+        33.282
+      ],
+      "visualCenterOffset": 1.325,
+      "outputCellSha256": "a6171640a83bd27fb910c73eb9ce9ae773d3503f2ef06b3ee772425a9b5d46fd",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_03",
+      "classId": "mage",
+      "name": "灼光烙印",
+      "iconColumn": 3,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-scorching-brand.png",
+      "sourceSha256": "430bc9baf21153f87bd2877128b19e0deeaa52c893098173e7a1a09e7e64e40f",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/runtime/primary.png",
+      "runtimeOutputSha256": "4a7c0edb2f655a005b0826b5c8342003ae95f69199ad5f471a79912c325bd7b5",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        29,
+        28,
+        135,
+        136
+      ],
+      "sourceFrameSha256": "bf0b3db858dcd34eff5417f927a0bb5dd11b79f87cdd2b13b3474f49e6c8ca74",
+      "sourceFrameScore": 1244.3322,
+      "fittedVisibleArea": 1348.9863,
+      "fittedEnergy": 984.1277,
+      "scale": 0.481481,
+      "outputBounds": [
+        7,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        7,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        31.851,
+        32.737
+      ],
+      "visualCenterOffset": 0.752,
+      "outputCellSha256": "2e08a8c11ca5a4af66f2c7fb798742a855bee388ed8d855488bda3ce2ec50866",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_04",
+      "classId": "mage",
+      "name": "禁言符",
+      "iconColumn": 4,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png",
+      "sourceSha256": "0949db7a8b3ac2131505f5409267afd3e9b462f8a4ce7f8d559654f05529df3f",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/runtime/primary.png",
+      "runtimeOutputSha256": "d1923b067b72b3e4824ed91870dda1bb3b720861a6d84adc4e7c5733e8cd9f81",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        28,
+        26,
+        137,
+        138
+      ],
+      "sourceFrameSha256": "84e828989d9c94f216ccf5cae64453356e6db2c71c1c5fd9bd245426711c4679",
+      "sourceFrameScore": 1264.8543,
+      "fittedVisibleArea": 1428.0931,
+      "fittedEnergy": 854.1502,
+      "scale": 0.464286,
+      "outputBounds": [
+        6,
+        6,
+        57,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        7,
+        6
+      ],
+      "visualCenter": [
+        31.726,
+        32.596
+      ],
+      "visualCenterOffset": 0.656,
+      "outputCellSha256": "78ec4c283314f56447db11850407b66369ad738f537a2f32b384e954af390bb0",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_05",
+      "classId": "mage",
+      "name": "稜鏡碎裂",
+      "iconColumn": 5,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
+      "sourceSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png",
+      "runtimeOutputSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 1,
+      "sourceFrameBounds": [
+        61,
+        76,
+        104,
+        132
+      ],
+      "sourceFrameSha256": "8494c1f584af271fe477843aba1e611a0463802d638078c91a44c5f5ccf90c8f",
+      "sourceFrameScore": 696.0174,
+      "fittedVisibleArea": 1336.4796,
+      "fittedEnergy": 817.6919,
+      "scale": 0.928571,
+      "outputBounds": [
+        12,
+        6,
+        52,
+        58
+      ],
+      "margins": [
+        12,
+        6,
+        12,
+        6
+      ],
+      "visualCenter": [
+        32.216,
+        33.846
+      ],
+      "visualCenterOffset": 1.859,
+      "outputCellSha256": "5a01c5f9b578a85f42f238ff664cd150e29578ee16d0aaef1b143f4be6a1a564",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_06",
+      "classId": "mage",
+      "name": "虛空球",
+      "iconColumn": 6,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "apps/client/public/assets/generated/rpg-skill-vfx-dark.png",
+      "sourceSha256": "4032ffae714700691a1bfbac6a7fddf6486ab2b3e6d4b2d7a8539103917a65d6",
+      "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/runtime/primary.png",
+      "runtimeOutputSha256": "a50e24ba57d3c5a511bd403554a277d5c918d4562e78c34df6de849e33e73b8e",
+      "sourceFrameCount": 16,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        37,
+        28,
+        89,
+        75
+      ],
+      "sourceFrameSha256": "5e4d4d0055a6a7219212fc77f086f4ab71afac69359ed77383c1b6b315c480ca",
+      "sourceFrameScore": 955.9875,
+      "fittedVisibleArea": 1840.0,
+      "fittedEnergy": 745.729,
+      "scale": 1.0,
+      "outputBounds": [
+        6,
+        11,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        11,
+        6,
+        6
+      ],
+      "visualCenter": [
+        28.188,
+        31.987
+      ],
+      "visualCenterOffset": 3.812,
+      "outputCellSha256": "139678196932d31f71ae2006661fe7c375f1cd3d1244da7fc561d579a808213e",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_07",
+      "classId": "mage",
+      "name": "復甦爆發",
+      "iconColumn": 7,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-renewal-burst-v8.png",
+      "sourceSha256": "05692711d3bcabeedd855642099fbcaa25796de26bf07003881f260305fa7ea8",
+      "runtimeFile": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/runtime/primary.png",
+      "runtimeOutputSha256": "84dbe7a0ee71e3765c7a8b95349f43b6e6152a192f7deb3f92c6288fbae43b4a",
+      "sourceFrameCount": 11,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 5,
+      "sourceFrameBounds": [
+        15,
+        22,
+        241,
+        122
+      ],
+      "sourceFrameSha256": "08765e54564e72ab4b844d66e786bdf83bdc47594127c4542b8c3321507d2730",
+      "sourceFrameScore": 146.4524,
+      "fittedVisibleArea": 408.8082,
+      "fittedEnergy": 216.7346,
+      "scale": 0.230088,
+      "outputBounds": [
+        7,
+        23,
+        57,
+        42
+      ],
+      "margins": [
+        7,
+        23,
+        7,
+        22
+      ],
+      "visualCenter": [
+        32.0,
+        32.499
+      ],
+      "visualCenterOffset": 0.499,
+      "outputCellSha256": "3343112892dc08547271b09e41b4f16eda7e075fc9c6ecfb1dd5afc91ebdb60e",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_08",
+      "classId": "mage",
+      "name": "瘴霧坩堝",
+      "iconColumn": 8,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png",
+      "sourceSha256": "bdc4a8b3564ebdce2ed5a00a564151e9988e59af1542507e2b21f85065e887da",
+      "runtimeFile": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/runtime/primary.png",
+      "runtimeOutputSha256": "28c941b2d2404ec6c6070b6da162440a447d3801d54e715bbda805c0c9dfcf4b",
+      "sourceFrameCount": 34,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 32,
+      "sourceFrameBounds": [
+        4,
+        4,
+        124,
+        124
+      ],
+      "sourceFrameSha256": "69d85fb9e3b9f1e959c389745f12d245a0e388eb7fb912502b3c04da78494126",
+      "sourceFrameScore": 709.2897,
+      "fittedVisibleArea": 873.9178,
+      "fittedEnergy": 318.7738,
+      "scale": 0.433333,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.076,
+        32.258
+      ],
+      "visualCenterOffset": 0.269,
+      "outputCellSha256": "537e943b752037a884ac5e10174ff3b18f1b37c71ceb7e6be41f9894c8d8c31f",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_09",
+      "classId": "mage",
+      "name": "聚焦透鏡",
+      "iconColumn": 9,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-focus-lens.png",
+      "sourceSha256": "77878a29de813fbd871ed395b947eff5fd2ac6b4c420119f2af8b3288ddf1a1b",
+      "runtimeFile": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/runtime/primary.png",
+      "runtimeOutputSha256": "f5971d255d0e38a6c5aba14b7fad0870e7a1049c68cd066ac2ff2045c8737183",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 4,
+      "sourceFrameBounds": [
+        26,
+        27,
+        138,
+        137
+      ],
+      "sourceFrameSha256": "5cf9a0127b1d1a457d8be7e8c844b4637cacc88cd3a5661037e73beeb44de5d7",
+      "sourceFrameScore": 893.4545,
+      "fittedVisibleArea": 1010.1199,
+      "fittedEnergy": 612.7188,
+      "scale": 0.464286,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        56
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        8
+      ],
+      "visualCenter": [
+        32.119,
+        31.742
+      ],
+      "visualCenterOffset": 0.284,
+      "outputCellSha256": "13a295100a1424937b527112036f0256336ce2259d5beb6401c81c91001c6d77",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_10",
+      "classId": "mage",
+      "name": "重力井",
+      "iconColumn": 10,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-gravity-well.png",
+      "sourceSha256": "8065527879d9680485b6a34d37358432409e621157323322639abdde206363e3",
+      "runtimeFile": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/runtime/primary.png",
+      "runtimeOutputSha256": "45f9954fd07c1e499ed19165a10f785e3705c15293f654b3998aed6b9614e672",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        34,
+        41,
+        131,
+        123
+      ],
+      "sourceFrameSha256": "919504229d2dded6eb432d9bc4dc143dc2ff54a1927c1624cc9f435c90210de8",
+      "sourceFrameScore": 1052.7115,
+      "fittedVisibleArea": 1223.3955,
+      "fittedEnergy": 651.7866,
+      "scale": 0.536082,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        50
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        14
+      ],
+      "visualCenter": [
+        32.328,
+        31.809
+      ],
+      "visualCenterOffset": 0.379,
+      "outputCellSha256": "b605665a7dc1c038803a358d04dacb629984dfad9b01c729558d08df82534b90",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_11",
+      "classId": "mage",
+      "name": "鎖魂鏈",
+      "iconColumn": 11,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-lock-chain.png",
+      "sourceSha256": "11b8599eef5bb55ba530fc4eb84fe8c9bca97391f9b6dab70a3b958a13da7ed1",
+      "runtimeFile": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/runtime/primary.png",
+      "runtimeOutputSha256": "8de075163c88aee2948ff4119757c5dcd1205f5d93e2020a8eb522f64a0f1e0f",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 0,
+      "sourceFrameBounds": [
+        32,
+        61,
+        133,
+        103
+      ],
+      "sourceFrameSha256": "087f6f02e707eb40c852f3ea78d25fa7754bcee749578b6f427e43bc2da47446",
+      "sourceFrameScore": 380.8213,
+      "fittedVisibleArea": 478.9852,
+      "fittedEnergy": 164.7056,
+      "scale": 0.514851,
+      "outputBounds": [
+        6,
+        21,
+        58,
+        43
+      ],
+      "margins": [
+        6,
+        21,
+        6,
+        21
+      ],
+      "visualCenter": [
+        38.175,
+        32.128
+      ],
+      "visualCenterOffset": 6.176,
+      "outputCellSha256": "0e54e7cf0923170875956a2612df2b4cd8a0b44a3988456beb33ff773a17a424",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_12",
+      "classId": "mage",
+      "name": "淨化風暴",
+      "iconColumn": 12,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png",
+      "sourceSha256": "708ce416ac2b8ac2f285d592d9333398b4df134c78c76e0fffefcec029e9b04a",
+      "runtimeFile": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/runtime/primary.png",
+      "runtimeOutputSha256": "8075b63523b61a9671eba5b479e362b05f711bbf077d3e56bb6fd544e2ccbeec",
+      "sourceFrameCount": 6,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 3,
+      "sourceFrameBounds": [
+        9,
+        34,
+        155,
+        141
+      ],
+      "sourceFrameSha256": "f246fe997c9c9cabdf07ac4d62bdaa9542bf943a0c0f78ee5094e10bf90412ce",
+      "sourceFrameScore": 556.5769,
+      "fittedVisibleArea": 627.5421,
+      "fittedEnergy": 378.0785,
+      "scale": 0.356164,
+      "outputBounds": [
+        6,
+        12,
+        58,
+        48
+      ],
+      "margins": [
+        6,
+        12,
+        6,
+        16
+      ],
+      "visualCenter": [
+        31.782,
+        32.175
+      ],
+      "visualCenterOffset": 0.279,
+      "outputCellSha256": "ff5fd8a0111275854b6b17637739dedb226be41918b88f9ba1a3b4a21af6dec5",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_13",
+      "classId": "mage",
+      "name": "禁時星盤",
+      "iconColumn": 13,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-time-astrolabe-v8.png",
+      "sourceSha256": "081a6dac228cfecb19eee6e928aec5ae674bd8958c261c1584382a53842cf290",
+      "runtimeFile": "/assets/arena-skills/mage_法師/3_R_高階/14_禁時星盤_mage_13/runtime/primary.png",
+      "runtimeOutputSha256": "4b27bf893223d7392261b72e2437e75158bf9ec6d6365f98c890b5ee074a42ac",
+      "sourceFrameCount": 4,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        4,
+        4,
+        124,
+        124
+      ],
+      "sourceFrameSha256": "dfcdb7af85100ef6a01b149aa9542a5c2c820dcc2e5c7c90bc4aea526b6f7958",
+      "sourceFrameScore": 854.3216,
+      "fittedVisibleArea": 1060.0056,
+      "fittedEnergy": 327.4553,
+      "scale": 0.433333,
+      "outputBounds": [
+        6,
+        8,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        8,
+        6,
+        6
+      ],
+      "visualCenter": [
+        31.922,
+        32.022
+      ],
+      "visualCenterOffset": 0.081,
+      "outputCellSha256": "41350a8b1d075f3e8eeea46b31d17cb6520a48031a24cac46124c532ecbf4fc4",
+      "pixelAdaptation": "none"
+    },
+    {
+      "skillId": "mage_14",
+      "classId": "mage",
+      "name": "血月祭壇",
+      "iconColumn": 14,
+      "iconRow": 3,
+      "sourceKind": "arena-runtime",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-blood-moon-altar-v8.png",
+      "sourceSha256": "267b0926dbe78a5cd0fb7b0193ddbafee1f60257eac1c9b3c9fd0ac775cf3473",
+      "runtimeFile": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/runtime/primary.png",
+      "runtimeOutputSha256": "cfd8f65f756c3638da0f6e1c53da01e589b702beea34c3098ec6f786336dda2f",
+      "sourceFrameCount": 5,
+      "selectionMethod": "auto-readable-apex",
+      "resampling": "nearest",
+      "sourceFrameIndex": 2,
+      "sourceFrameBounds": [
+        4,
+        4,
+        124,
+        124
+      ],
+      "sourceFrameSha256": "92a5cbd7c2cb9c7b5b829efc8a1b5e2799777bd39802425e5165101c559b5b2d",
+      "sourceFrameScore": 457.6136,
+      "fittedVisibleArea": 868.4722,
+      "fittedEnergy": 335.8471,
+      "scale": 0.433333,
+      "outputBounds": [
+        6,
+        6,
+        58,
+        58
+      ],
+      "margins": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "visualCenter": [
+        32.005,
+        31.883
+      ],
+      "visualCenterOffset": 0.118,
+      "outputCellSha256": "7729c7b027d251be93445b93c1d51000adcbdc811157c6d8574640cf94002e8a",
+      "pixelAdaptation": "none"
+    }
+  ]
+}

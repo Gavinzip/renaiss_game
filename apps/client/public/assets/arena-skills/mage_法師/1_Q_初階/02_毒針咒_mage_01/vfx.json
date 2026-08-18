@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:78def3b191414ed8",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-毒針咒.gif",
-    "configPreviewSourceSha256": "78def3b191414ed858cbb1e17a687ac1baebd10d7d60646460f583dc8abd5038",
-    "configPreviewOutputSha256": "9759fc22a753ab040acea524d3888fc2284e7811b067ab20a2fff8ca71ba3f42",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_01-hq.webm",
+    "configPreviewSourceSha256": "b66d762eae7113527ad76ad562ca6f4a5651eb6aadfcf86c114ce0725f5aca7d",
+    "configPreviewOutputSha256": "5e89b080b9b2f3169922ed274e05f95e5433d8d65b07169ad6688869c1ad5977",
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       140,
       106
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/source/primary-source-ad75d71deb4c34f0.png",
     "sourceSha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
     "outputSha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
     "frameDurationsMs": [
@@ -112,8 +112,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png",
-        "sha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/source/primary-source-ad75d71deb4c34f0.png",
+        "sha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/02_毒針咒_mage_01",
@@ -165,11 +166,12 @@
         62,
         62
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/source/timed-status-v1-source.png",
       "sourceSha256": "bdc4a8b3564ebdce2ed5a00a564151e9988e59af1542507e2b21f85065e887da",
       "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/source/timed-status-v1-source.png",
       "outputSha256": "d3d64ead139c643297efe1d760cbbe887588b2610af2c92a51f59d216189b5b3",
-      "acceptedAnimationId": "mage_01:timed-status-v1:d3d64ead139c6432"
+      "acceptedAnimationId": "mage_01:timed-status-v1:d3d64ead139c6432",
+      "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-miasma-cauldron-v8.png"
     },
     "statusVisualContract": {
       "anchor": "target",
@@ -199,9 +201,28 @@
     "previewSourceScenario": "random-mage_01",
     "previewSourceSequenceSha256": "b66d762eae7113527ad76ad562ca6f4a5651eb6aadfcf86c114ce0725f5aca7d",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      838,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-poison-needle-vivid-r2.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/source/primary-source-ad75d71deb4c34f0.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/preview/gameplay-preview-v1.webm",
@@ -267,7 +288,7 @@
       192
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 195,
     "totalDurationMs": 6500,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

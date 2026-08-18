@@ -1,0 +1,2326 @@
+{
+  "schemaVersion": 2,
+  "engineerSourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+  "fallbackUsed": false,
+  "previewCount": 60,
+  "entries": [
+    {
+      "skillId": "archer_00",
+      "classId": "archer",
+      "name": "月牙刃",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_月牙刃.gif",
+      "sourceSha256": "8c4240efff3ebcdcdd429c3913b0e7974cdfb4f278200d84934fb66ace899185",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_00.webp",
+      "outputSha256": "87a196ee45b1fc50a5d19e3e6f5a1e1d76768607ea3916713ff04945286b122b",
+      "frameCount": 10,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 700,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_01",
+      "classId": "archer",
+      "name": "森林翻滾",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_森林翻滾.gif",
+      "sourceSha256": "477b761d0b847ca45f70a9ae45d3c5900a24de9dbdb9a87140ad8467b0fce50c",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_01.webp",
+      "outputSha256": "bf728527b6b4f0f42e52d34ca6f38ca29ab05cda84eebfb56b68222eeba369ed",
+      "frameCount": 12,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_02",
+      "classId": "archer",
+      "name": "穿葉箭",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_穿葉箭.gif",
+      "sourceSha256": "5bed963fea92b331d476d2247b20e740789b52477482cf12655be67b37c05107",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_02.webp",
+      "outputSha256": "86a6b45e5bd15ac645d5f00564b060d14cd04679ea4815223957518e674ef2bf",
+      "frameCount": 10,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 700,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_03",
+      "classId": "archer",
+      "name": "荊刺陷阱",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_荊刺陷阱.gif",
+      "sourceSha256": "26a694637f0585c9816ebc0dbc6aaaa90f14560c0d2e9eb9a317fd72a29c5db3",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_03.webp",
+      "outputSha256": "3d87d808ca40b2d1e516bb6cc29b7a6d608ce564ebc6196e7a6f1edd6d3df275",
+      "frameCount": 3,
+      "durationsMs": [
+        140,
+        590,
+        70
+      ],
+      "totalDurationMs": 800,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_04",
+      "classId": "archer",
+      "name": "藤鞭射擊",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_藤鞭射擊.gif",
+      "sourceSha256": "d7fd657cee3b02143a3501a2fe1e07349ad1c8fbb477a30800178ce6813c9938",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_04.webp",
+      "outputSha256": "6a9d4361f6cbc4066cf4a497dda1998b5f8c80947278f11117c355f7978268c2",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_05",
+      "classId": "archer",
+      "name": "追獵標記",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_追獵標記.gif",
+      "sourceSha256": "26ff455202d5b695bbdcb476233bc339f35f58c1de579bcead4e0d5dd2a941f8",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_05.webp",
+      "outputSha256": "f33a523a8360ad5ef9e02134b9ad213224e2d2e677b75b9a45ffcbe0268f71c2",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_06",
+      "classId": "archer",
+      "name": "風切步",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_風切步.gif",
+      "sourceSha256": "dceabe8ef955e86afaeb6d4276ec4790eb1373694c9ef6c28e5c05186ab2ce7e",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_06.webp",
+      "outputSha256": "226dda8061dca1a24d0b479d535829b0500f8382b28fa7b38c0015f24b44261f",
+      "frameCount": 6,
+      "durationsMs": [
+        60,
+        60,
+        60,
+        60,
+        60,
+        50
+      ],
+      "totalDurationMs": 350,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_07",
+      "classId": "archer",
+      "name": "暗鉤牽引",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_暗鉤牽引.gif",
+      "sourceSha256": "8a53678ea44f7befe6bb944fd2a1b7ace546025d28cfd58a5545e06afa63add8",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_07.webp",
+      "outputSha256": "a8ae1e97ba8af2b871f2b8d6a095b409f3a17eaa3fbffcbf46b4f91bfa8c2ea3",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_08",
+      "classId": "archer",
+      "name": "根縛",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_根縛.gif",
+      "sourceSha256": "d200ddec27d924e95442f934154fbd5538cb032179d756c53c3c4c5e61558a40",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_08.webp",
+      "outputSha256": "eda5ade4ce6200f5a7c1ff43be4ab15911c26a30e45f79d896d9f7af993ef4dd",
+      "frameCount": 4,
+      "durationsMs": [
+        70,
+        70,
+        1790,
+        70
+      ],
+      "totalDurationMs": 2000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_09",
+      "classId": "archer",
+      "name": "穩心瞄準",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_穩心瞄準.gif",
+      "sourceSha256": "11e19bc8f0f060e863e6cb26b64794c64a6f4fbadaffa5d172a15cb9218b1f09",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_09.webp",
+      "outputSha256": "9a742efba8b51895de3fe3d6bf2a57b95357c39ecc3b57c7bd9a0163353a2836",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        650,
+        70
+      ],
+      "totalDurationMs": 1000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_10",
+      "classId": "archer",
+      "name": "藤網收束",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_藤網收束.gif",
+      "sourceSha256": "efc885314b3a6ebc7fb6c9b6b704405f0cf9b8206408c02f5b677a8ac71b38e9",
+      "outputPath": "apps/client/public/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/animation.webp",
+      "outputSha256": "0a636da4835124583b982a9e98b062298a7a8f6ca5f29e1b2ee9fe5a8a9bc0ca",
+      "frameCount": 4,
+      "durationsMs": [
+        70,
+        70,
+        1790,
+        70
+      ],
+      "totalDurationMs": 2000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_11",
+      "classId": "archer",
+      "name": "貫穿箭",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_貫穿箭.gif",
+      "sourceSha256": "6333465972c36b2a56e3af92609de4073ed7c67ae135314e9a8d0bdc4170d404",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_11.webp",
+      "outputSha256": "3eb40f5d6efd15291418111bc41f86875aa9294ce6d9cb357d920f2a46d0426b",
+      "frameCount": 10,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 700,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_12",
+      "classId": "archer",
+      "name": "星痕狙殺",
+      "key": "R",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_星痕狙殺.gif",
+      "sourceSha256": "761aa54e1a971c3549c84fb286ef3e5cf809430beaf6f98ee886fc49a2b77d6b",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_12.webp",
+      "outputSha256": "4df6410920670437b60a10d16dbb89df401f934b32a87adc6557c3d2888c3848",
+      "frameCount": 13,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        140
+      ],
+      "totalDurationMs": 980,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_13",
+      "classId": "archer",
+      "name": "種子雨",
+      "key": "R",
+      "sourceVersion": "archer-seed-rain-three-cycle-v1",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/弓手-高等-種子雨.gif",
+      "sourceSha256": "51b721c131cb260bf26a7ebea027b819ae4e86fce805cdaef6d5f04c08120ab1",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_13.webp",
+      "outputSha256": "5dbf049f7abe231c2f134da87a8293eaa948fb0bd29d0bf7d214ccc76c7ed5a8",
+      "frameCount": 17,
+      "durationsMs": [
+        170,
+        170,
+        160,
+        170,
+        170,
+        160,
+        170,
+        170,
+        160,
+        170,
+        170,
+        160,
+        170,
+        170,
+        160,
+        170,
+        330
+      ],
+      "totalDurationMs": 3000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "archer_14",
+      "classId": "archer",
+      "name": "隼影處刑",
+      "key": "R",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_隼影處刑.gif",
+      "sourceSha256": "4e86186c2a575d3dc2a2d6f4d79d21cfb63bdbcf3d8035b80ea018fd4cd92c61",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/archer_14.webp",
+      "outputSha256": "72072900b7bfefda2302f654b7f91d9fad89950827923f652b600b797ee1e84c",
+      "frameCount": 10,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 700,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_01",
+      "classId": "engineer",
+      "name": "標定彈匣",
+      "key": "Q",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-01-標定彈匣.gif",
+      "sourceSha256": "b675441548b0b1d03af80b15c7a1493aed665e9b61c5fdb42220dfb6709493a6",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_01.webp",
+      "outputSha256": "af2e49f930014eb5b27793203aa41fa3e4d42ba84b1f11e628bfd63ef44157fb",
+      "frameCount": 11,
+      "durationsMs": [
+        180,
+        270,
+        270,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1440,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_02",
+      "classId": "engineer",
+      "name": "散射",
+      "key": "Q",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-02-三連散射.gif",
+      "sourceSha256": "cb03d80304a26d34826021b144ebe2eeba1b8387d8521ec74aaa93449af49613",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_02.webp",
+      "outputSha256": "819a5cc0900cb60a4791568748e019b366b539ebcf7fef109705dd4567844198",
+      "frameCount": 13,
+      "durationsMs": [
+        180,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1260,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_03",
+      "classId": "engineer",
+      "name": "穿甲鐵芯",
+      "key": "Q",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-03-穿甲鐵芯.gif",
+      "sourceSha256": "932a672fdc4d47d34430fa3d7accb37fb19f779fa58d88b21ac23a005d18141c",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_03.webp",
+      "outputSha256": "3eeb1806ca38c6c36e6f640079ed20b305d84d98ee3b6f0bd998ec1039db6d90",
+      "frameCount": 12,
+      "durationsMs": [
+        180,
+        180,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1260,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_04",
+      "classId": "engineer",
+      "name": "壓制掃射",
+      "key": "E",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-04-壓制掃射.gif",
+      "sourceSha256": "9cda6f549e2c86cd6c053571f7b7d94ebeac8eec0a2fec462a1e2c4c8bafb1ed",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_04.webp",
+      "outputSha256": "035f333c16657223b4291f2e01222560f8a886b559f5a51fea684ea82556c3e2",
+      "frameCount": 15,
+      "durationsMs": [
+        160,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "totalDurationMs": 1280,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_05",
+      "classId": "engineer",
+      "name": "鎖定齊射",
+      "key": "E",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-05-鎖定齊射.gif",
+      "sourceSha256": "0a01488973f09f42485bb04cac9acc595fae50a24201901cf7f41741b48b619a",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_05.webp",
+      "outputSha256": "6268311aff50269e3b1e648cda8a49f02097cd5210dbd69a808ce283c5595fb7",
+      "frameCount": 14,
+      "durationsMs": [
+        270,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1440,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_06",
+      "classId": "engineer",
+      "name": "攻城模式",
+      "key": "R",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-06-攻城模式.gif",
+      "sourceSha256": "b4b68f14eba85e48446c7b44212651cd735dac3c01128ad05c9319e49b8f84e1",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_06.webp",
+      "outputSha256": "98084381a94b65b1e59a7ac4e0909bd3223ab8a8e11f261862de004bf83fada6",
+      "frameCount": 16,
+      "durationsMs": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        110,
+        220,
+        220,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        90
+      ],
+      "totalDurationMs": 1840,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_07",
+      "classId": "engineer",
+      "name": "震爆彈筒",
+      "key": "Q",
+      "sourceVersion": "20260809-engineer-runtime-repairs-v2-candidate-01",
+      "sourcePath": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+      "sourceSha256": "f124b7d84fe0e1e4ec89bcc5bfc388f324ac0df74dbac5e2dff9078f0ab6b9bb",
+      "outputPath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/candidate-v2/preview/animation.webp",
+      "outputSha256": "727258cc0f64580082f42bbcd0b484c3014633d11612b6d6a9dd82f6bbee2329",
+      "frameCount": 24,
+      "durationsMs": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 2160,
+      "sourceCropSize": [
+        165,
+        165
+      ],
+      "previewSize": [
+        165,
+        165
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest",
+      "status": "review-only-not-formal"
+    },
+    {
+      "skillId": "engineer_08",
+      "classId": "engineer",
+      "name": "屏障節點",
+      "key": "Q",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-08-屏障節點.gif",
+      "sourceSha256": "57b489309399467c921f0ced26c2936654a47baf15bcbb2d988191391925bf3d",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_08.webp",
+      "outputSha256": "f525deefbeaa2a051accfdfd35557e1ef2009916c96267efcc7cd4f09053a3a5",
+      "frameCount": 9,
+      "durationsMs": [
+        300,
+        100,
+        100,
+        100,
+        1500,
+        200,
+        200,
+        100,
+        100
+      ],
+      "totalDurationMs": 2700,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_09",
+      "classId": "engineer",
+      "name": "支撐砲架",
+      "key": "E",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-09-支撐砲架.gif",
+      "sourceSha256": "0225174ab48ffef4f751ea3c4f6bed6a29d3323a32b7f3a2d346dbd2b87cd72e",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_09.webp",
+      "outputSha256": "b82a6dcaa194ad288506499ba16eb4894f0b8721f8fdeebd4104905722e06a33",
+      "frameCount": 6,
+      "durationsMs": [
+        200,
+        400,
+        300,
+        1200,
+        400,
+        200
+      ],
+      "totalDurationMs": 2700,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_10",
+      "classId": "engineer",
+      "name": "破陣鉤彈",
+      "key": "E",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-10-破陣鉤彈.gif",
+      "sourceSha256": "550e56466ad538a1885ff3ed84590d40d37c4647e1f048cf8947be74cc1dbbcd",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_10.webp",
+      "outputSha256": "80ee88c7a06992066f05fded4ecb5fcdef7f1711d49833b0cb986a1c53b7c1fe",
+      "frameCount": 22,
+      "durationsMs": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        180,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        180
+      ],
+      "totalDurationMs": 2160,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_11",
+      "classId": "engineer",
+      "name": "砲台迅爆",
+      "key": "R",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-11-砲台迅爆.gif",
+      "sourceSha256": "3c02a5ca6b97b0c5a52be39718a285cd97499615bb49a07ed7d9df57fe7cf3c1",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_11.webp",
+      "outputSha256": "cb41750e01a4b05ac71dde3fac3a90f5fb9b6b626342913c897be18ee47b927d",
+      "frameCount": 12,
+      "durationsMs": [
+        320,
+        80,
+        80,
+        80,
+        240,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        160
+      ],
+      "totalDurationMs": 1440,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_12",
+      "classId": "engineer",
+      "name": "同步追跡彈",
+      "key": "Q",
+      "sourceVersion": "20260809-engineer-selected-repairs-v1",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-sync-v2-normalized.png",
+      "sourceSha256": "af43a0a6b6a6f899c2ab0106e632f378fd7e8e13907fda2c8bcfb447e970a1f3",
+      "outputPath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview-v2/animation.webp",
+      "outputSha256": "f8791d4e46be0b96eb028fad14241c0e3ef90b8737b254538b4daa0eab8f4c76",
+      "frameCount": 16,
+      "durationsMs": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1440,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        165,
+        165
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_13",
+      "classId": "engineer",
+      "name": "魔導鎖標",
+      "key": "Q",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-13-魔導鎖標.gif",
+      "sourceSha256": "64360669e7512ae4fd5396af4407600dcebf66c53f511a992a357ef7c8aa02e1",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_13.webp",
+      "outputSha256": "c62c73b37ee69a6d25b859b3dd5c76f96217726435f6449aafd13988cc537249",
+      "frameCount": 18,
+      "durationsMs": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        1000,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "totalDurationMs": 2700,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_14",
+      "classId": "engineer",
+      "name": "裂星魔彈",
+      "key": "E",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-14-裂星魔彈.gif",
+      "sourceSha256": "fbbc2783a889ab3bd713ada1777103a9f256689c61af010c24f1f39fbe455e5d",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_14.webp",
+      "outputSha256": "bea42e888d64c5e3225e0721100f6a818946fd7e3cfc7f5075761396520d3d2d",
+      "frameCount": 17,
+      "durationsMs": [
+        180,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1620,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "engineer_15",
+      "classId": "engineer",
+      "name": "魔導飛彈矩陣",
+      "key": "R",
+      "sourceVersion": "20260802-engineer-final-15-v20-matrix-shield-build",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-15-魔導飛彈矩陣.gif",
+      "sourceSha256": "31a1fa2e113b148c0ad6c46da0a80b35310ef7ad7fc9ad0f5cfdc72fbfb3d54b",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/engineer_15.webp",
+      "outputSha256": "532358f6800004867424a14427ce331969673cbcf643956329f7bb59ba592591",
+      "frameCount": 20,
+      "durationsMs": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "totalDurationMs": 1800,
+      "sourceCropSize": [
+        640,
+        360
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_00",
+      "classId": "mage",
+      "name": "日耀光束",
+      "key": "Q",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-日耀光束.gif",
+      "sourceSha256": "0c5af6833c5a9983cbce807063ac521821eac51a50ebd46ab53c13cb50919177",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_00.webp",
+      "outputSha256": "88a471592e33af8222fb263e2b9462749c6f0a84607f331430d145f4087a9213",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_01",
+      "classId": "mage",
+      "name": "毒針咒",
+      "key": "Q",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-毒針咒.gif",
+      "sourceSha256": "78def3b191414ed858cbb1e17a687ac1baebd10d7d60646460f583dc8abd5038",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_01.webp",
+      "outputSha256": "9759fc22a753ab040acea524d3888fc2284e7811b067ab20a2fff8ca71ba3f42",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_02",
+      "classId": "mage",
+      "name": "汲魂之手",
+      "key": "Q",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-汲魂之手.gif",
+      "sourceSha256": "670c89554e15b8e61bc0006a723da98e2554922bd137061376124aec62366785",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_02.webp",
+      "outputSha256": "7fb009426af7b81b6f2ebfa79ece0cd99b43dbda4e50aedd96e3c9a6352d9d9a",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_03",
+      "classId": "mage",
+      "name": "灼光烙印",
+      "key": "Q",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-灼光烙印.gif",
+      "sourceSha256": "60581c063d9749cf5782084d7fc0912023a3f92c29cf86bdd7238db28d2ddd97",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_03.webp",
+      "outputSha256": "4081af53a27ded63470eacca9950f40ea2a6733f8f8097c32c61983625cc7e2c",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_04",
+      "classId": "mage",
+      "name": "禁言符",
+      "key": "Q",
+      "sourceVersion": "mage-silence-native-loop-r1",
+      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png",
+      "sourceSha256": "0949db7a8b3ac2131505f5409267afd3e9b462f8a4ce7f8d559654f05529df3f",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_04.webp",
+      "outputSha256": "8ad44703077fa0f6947fed0f3857f0fa1f61d49c8803e445c41c78b912377c52",
+      "frameCount": 29,
+      "durationsMs": [
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        78,
+        50,
+        78
+      ],
+      "totalDurationMs": 2234,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless-native-cadence",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_05",
+      "classId": "mage",
+      "name": "稜鏡碎裂",
+      "key": "Q",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-稜鏡碎裂.gif",
+      "sourceSha256": "c1554b416a0f3c5c230ef2a4438b5737122da074bff9ed2e6307ab55a5b62bc8",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_05.webp",
+      "outputSha256": "bd0ef7675d731014a7bbd1e3d8bbb338d6bcedf0d5602e03927b7366b849ef2e",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_06",
+      "classId": "mage",
+      "name": "虛空球",
+      "key": "Q",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-虛空球.gif",
+      "sourceSha256": "e985ad7b96babad6df714a1400a696e917369f42a354923abb6809eb956bbcb2",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_06.webp",
+      "outputSha256": "829f95832fc6af9161583ebc0947a8b7e8374d20449d4073de11479ed985c2d0",
+      "frameCount": 16,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 1120,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_07",
+      "classId": "mage",
+      "name": "復甦爆發",
+      "key": "E",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-復甦爆發.gif",
+      "sourceSha256": "88be44aa24f3baeeecdece87e9d9748efca309df94c1403baa83652896233654",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_07.webp",
+      "outputSha256": "e3246c00135d87244c2677e12c4898add5828ee23804a6da68c537dd45ab0708",
+      "frameCount": 11,
+      "durationsMs": [
+        300,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        890
+      ],
+      "totalDurationMs": 2000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_08",
+      "classId": "mage",
+      "name": "瘴霧坩堝",
+      "key": "E",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-瘴霧坩堝.gif",
+      "sourceSha256": "545ec7b1a8cf23e2958e01dfbb776f7de19ba50264f2740b07ba8bbe20220f21",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_08.webp",
+      "outputSha256": "4faf21b716a7a22cbef3b8e986fb791f4f76edc4e2b6cad64390e85c5cc2c18e",
+      "frameCount": 34,
+      "durationsMs": [
+        100,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        110,
+        110,
+        110,
+        110,
+        100
+      ],
+      "totalDurationMs": 4000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_09",
+      "classId": "mage",
+      "name": "聚焦透鏡",
+      "key": "E",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-聚焦透鏡.gif",
+      "sourceSha256": "89d8a822fad60b3f8c6aa25e49e815c8561f193fcda81f323daa464b03acdd7b",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_09.webp",
+      "outputSha256": "0accefda771bda106d53c4c429eca2816f2f819106e62ef7416565d87187ffd9",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_10",
+      "classId": "mage",
+      "name": "重力井",
+      "key": "E",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-重力井.gif",
+      "sourceSha256": "44dedfccadbb0766e6ed0a03186fea18c0f49801e91121c6b2f88ef0fa6a0c3f",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_10.webp",
+      "outputSha256": "e2c41e2240b451f5ddc41a88d1ed7a660a14a1c78c041674e63f63d3cd288619",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_11",
+      "classId": "mage",
+      "name": "鎖魂鏈",
+      "key": "E",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-鎖魂鏈.gif",
+      "sourceSha256": "33cd9c3d8a13d7cdc716363de6a20d43ba10350cd2efd63b8b99152b55b2d396",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_11.webp",
+      "outputSha256": "4f310777a45abdf3014bb78371a961f4f783e7e37ec6bd81cc2902e930b870d6",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_12",
+      "classId": "mage",
+      "name": "淨化風暴",
+      "key": "R",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-高等-淨化風暴.gif",
+      "sourceSha256": "5491f8bbe8b3607fa4a50646a029b607dbb5929ee14fac2778c5ea1b7f74019e",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_12.webp",
+      "outputSha256": "9e301927001ab7198c10a855a9dd7a1b54f66c84b705e50d2aca5168ee5f2b63",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_13",
+      "classId": "mage",
+      "name": "禁時星盤",
+      "key": "R",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-高等-禁時星盤.gif",
+      "sourceSha256": "2d4ad6dc53735469caaaa60c7cf729f66cfe471b73deb64cc9935e77eb2250bb",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_13.webp",
+      "outputSha256": "3db0ae8c21bf80af38ed01bf9dc2ebe4e01db087f689c730228b6a47ce211c1b",
+      "frameCount": 26,
+      "durationsMs": [
+        100,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        100
+      ],
+      "totalDurationMs": 3000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "mage_14",
+      "classId": "mage",
+      "name": "血月祭壇",
+      "key": "R",
+      "sourceVersion": "mage-motion-continuity-v8-accepted",
+      "sourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-高等-血月祭壇.gif",
+      "sourceSha256": "7a6fa00e5cba6939cd799d937e2c24a16e10e4fab6e1fe35a6cafceddd2d5e26",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/mage_14.webp",
+      "outputSha256": "67f3f39f21b6bf11eac8933102c1bb9f1db0fefe1816adffc95e9e52bafb145f",
+      "frameCount": 42,
+      "durationsMs": [
+        100,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        100
+      ],
+      "totalDurationMs": 5000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_00",
+      "classId": "warrior",
+      "name": "守線橫斬",
+      "key": "Q",
+      "sourceVersion": "actual-5173-gameplay-canvas-warrior-redesign-20260809",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/preview/animation.webp",
+      "sourceSha256": "53b34a1ab55cab1fc240b720af59c913b895e10417d9a5b66a9644be4c01d680",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_00.webp",
+      "outputSha256": "53b34a1ab55cab1fc240b720af59c913b895e10417d9a5b66a9644be4c01d680",
+      "frameCount": 31,
+      "durationsMs": [
+        94,
+        94,
+        96,
+        92,
+        95,
+        92,
+        108,
+        93,
+        110,
+        107,
+        96,
+        101,
+        96,
+        107,
+        94,
+        100,
+        104,
+        99,
+        93,
+        96,
+        96,
+        95,
+        109,
+        115,
+        98,
+        96,
+        94,
+        94,
+        108,
+        110,
+        100
+      ],
+      "totalDurationMs": 3082,
+      "sourceCropSize": [
+        1280,
+        720
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_01",
+      "classId": "warrior",
+      "name": "烈焰狂行",
+      "key": "Q",
+      "sourceVersion": "actual-5173-gameplay-canvas-warrior-rage-self-burn-v12-clean-20260811",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/preview/animation.webp",
+      "sourceSha256": "f6fe0f29c6ca800a810a5fb0f9505a846f18e17c81b0614ff347d39d47dc9aa1",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_01.webp",
+      "outputSha256": "f6fe0f29c6ca800a810a5fb0f9505a846f18e17c81b0614ff347d39d47dc9aa1",
+      "frameCount": 66,
+      "durationsMs": [
+        100,
+        116,
+        111,
+        104,
+        94,
+        93,
+        92,
+        93,
+        104,
+        93,
+        93,
+        97,
+        100,
+        112,
+        93,
+        101,
+        101,
+        103,
+        103,
+        108,
+        94,
+        103,
+        97,
+        110,
+        102,
+        99,
+        96,
+        95,
+        106,
+        94,
+        113,
+        111,
+        101,
+        94,
+        95,
+        98,
+        113,
+        99,
+        106,
+        109,
+        103,
+        93,
+        92,
+        92,
+        95,
+        95,
+        100,
+        108,
+        96,
+        109,
+        99,
+        93,
+        106,
+        94,
+        100,
+        97,
+        105,
+        97,
+        104,
+        106,
+        106,
+        111,
+        101,
+        92,
+        104,
+        100
+      ],
+      "totalDurationMs": 6644,
+      "sourceCropSize": [
+        1280,
+        720
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_02",
+      "classId": "warrior",
+      "name": "戰環斬",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_戰環斬.gif",
+      "sourceSha256": "cfca06da1519ef1da332fddafbfb7b660543ecdc5e8dd5ca3ea769c14ce65b08",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_02.webp",
+      "outputSha256": "f0c0a1bd51525774d13fc51fb47fdef654de6bd5b4e421a3c14a0cae5f977c96",
+      "frameCount": 10,
+      "durationsMs": [
+        140,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        140
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_03",
+      "classId": "warrior",
+      "name": "斬鋒附魔",
+      "key": "Q",
+      "sourceVersion": "actual-5173-gameplay-canvas-warrior-redesign-v2-20260809",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/preview/animation.webp",
+      "sourceSha256": "e031512c6d8075c5ab8ee52975fb4428e59ba73f6739df1da0e243ab4beb690a",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_03.webp",
+      "outputSha256": "e031512c6d8075c5ab8ee52975fb4428e59ba73f6739df1da0e243ab4beb690a",
+      "frameCount": 49,
+      "durationsMs": [
+        105,
+        108,
+        111,
+        103,
+        110,
+        115,
+        92,
+        101,
+        106,
+        93,
+        99,
+        96,
+        101,
+        92,
+        111,
+        107,
+        92,
+        92,
+        99,
+        92,
+        110,
+        99,
+        113,
+        116,
+        95,
+        110,
+        96,
+        102,
+        109,
+        98,
+        103,
+        95,
+        108,
+        92,
+        103,
+        94,
+        106,
+        98,
+        113,
+        96,
+        95,
+        104,
+        96,
+        107,
+        94,
+        112,
+        92,
+        95,
+        100
+      ],
+      "totalDurationMs": 4976,
+      "sourceCropSize": [
+        1280,
+        720
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_04",
+      "classId": "warrior",
+      "name": "正義衝鋒",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_正義衝鋒.gif",
+      "sourceSha256": "6a289e6331a6b44a1ea1231dfc5c629044cc166ed337badca7ad688aed94d1ee",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_04.webp",
+      "outputSha256": "545239493f7b601447831b941c14c3b0ef351db11496b17aa2629126f843dccf",
+      "frameCount": 12,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_05",
+      "classId": "warrior",
+      "name": "盾首震擊",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_盾首震擊.gif",
+      "sourceSha256": "415546ac23ed1e6cdb2bfcc276d5c2e1a54c6118610b447576cfa668fde55d10",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_05.webp",
+      "outputSha256": "a6bd3fb1aebdecd240cb0c6dc345fedeeb105d6a072a06a7b9e2fa31cde95825",
+      "frameCount": 8,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        70,
+        70,
+        70,
+        70,
+        140
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_06",
+      "classId": "warrior",
+      "name": "裂甲斬",
+      "key": "Q",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.gif",
+      "sourceSha256": "4bef10f8bb92aa6af21f01eab11626ddd76bcbe79ae8e2a43be4562c28251453",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_06.webp",
+      "outputSha256": "d8b05b04b6ae7f9d128b89147e52d9017b6774502fb1eaba4e362a52f2ec07cd",
+      "frameCount": 6,
+      "durationsMs": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 420,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_07",
+      "classId": "warrior",
+      "name": "反擊姿態",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_反擊姿態.gif",
+      "sourceSha256": "b773d5b0bfaa1bd80e161784adf1d262c6e3a83fe3789727be0c7421036413e5",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_07.webp",
+      "outputSha256": "80556b7a86ca289713f99aefe767fd8c0120ffc2cf3bbde17af3ef1ada5bee86",
+      "frameCount": 8,
+      "durationsMs": [
+        140,
+        70,
+        640,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "totalDurationMs": 1200,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_08",
+      "classId": "warrior",
+      "name": "和平護盾",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_和平護盾.gif",
+      "sourceSha256": "dffae6efedf3d61f9b4b07c92d7c4fe3c0dac2ea3cbb08aa7d7cabf807040002",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_08.webp",
+      "outputSha256": "45f1a02ed16f62224e2edda93fa955a4882f5d376cd2d976ee94d124d205a619",
+      "frameCount": 4,
+      "durationsMs": [
+        70,
+        70,
+        2790,
+        70
+      ],
+      "totalDurationMs": 3000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_09",
+      "classId": "warrior",
+      "name": "戰陣號令",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_戰陣號令.gif",
+      "sourceSha256": "dad7e1c9592f2ad3bbf52a6536d22b2c07f06b6b464982ffe8069805339061f3",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_09.webp",
+      "outputSha256": "432e7f76a3748cad066c7fab1383971a57d5d72a4f589a6ef6837a8c694efc75",
+      "frameCount": 4,
+      "durationsMs": [
+        70,
+        70,
+        3790,
+        70
+      ],
+      "totalDurationMs": 4000,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_10",
+      "classId": "warrior",
+      "name": "獵首突刺",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.gif",
+      "sourceSha256": "366e2ddf305c2d92edef015ff7ad624aa2db1f382fd66cade024972050908efc",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_10.webp",
+      "outputSha256": "eefe30c1be52e51765ff9b4735a8cb4988b11198c0c7e279a6c75abd9a717169",
+      "frameCount": 8,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        70,
+        70,
+        70,
+        70,
+        140
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_11",
+      "classId": "warrior",
+      "name": "裂地震",
+      "key": "E",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_裂地震.gif",
+      "sourceSha256": "c133066db06a4d12ba0600663131c57a68f58a9d5a69ec2d419463ad721d2edb",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_11.webp",
+      "outputSha256": "5cfb42b65f38e21aa187b5831e304382f0a9132c1b6660886f765a586341b0fa",
+      "frameCount": 4,
+      "durationsMs": [
+        70,
+        70,
+        1290,
+        70
+      ],
+      "totalDurationMs": 1500,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_12",
+      "classId": "warrior",
+      "name": "斷城震落",
+      "key": "R",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/3_斷城震落.gif",
+      "sourceSha256": "4ad302809902f57c8eb40b8427ab07de4489b19597733ca1ead9dc982cb32ea8",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_12.webp",
+      "outputSha256": "c282e8be22b3fe80c453814a59a503156d008f56f6576927045a21b753e548f1",
+      "frameCount": 10,
+      "durationsMs": [
+        140,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        140
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_13",
+      "classId": "warrior",
+      "name": "死鬥宣言",
+      "key": "R",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/3_死鬥宣言.gif",
+      "sourceSha256": "8d7d3a53f6c01a15a930ad492b3ac091ff477d5541e3e651552545d3f7505847",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_13.webp",
+      "outputSha256": "dd2a415b4e21062ae6d781efa9ea79b06d97c41630647ed0116bb18393504b76",
+      "frameCount": 29,
+      "durationsMs": [
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        5080,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40
+      ],
+      "totalDurationMs": 6200,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    },
+    {
+      "skillId": "warrior_14",
+      "classId": "warrior",
+      "name": "裁決",
+      "key": "R",
+      "sourceVersion": "arena-skill-vfx-assets-v7-staging",
+      "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/3_裁決.gif",
+      "sourceSha256": "33a691aaea00bcc6542b749b6971cdd14e4adfba56061eb5555531bcf59a6e91",
+      "outputPath": "apps/client/public/assets/generated/arena-skill-previews/warrior_14.webp",
+      "outputSha256": "ab3504a7783fc6ea3bbf205d97d4dba7cacf409b89123498db8dc2f7b3391f74",
+      "frameCount": 8,
+      "durationsMs": [
+        140,
+        140,
+        140,
+        70,
+        70,
+        70,
+        70,
+        140
+      ],
+      "totalDurationMs": 840,
+      "sourceCropSize": [
+        512,
+        288
+      ],
+      "previewSize": [
+        512,
+        288
+      ],
+      "encoding": "animated-webp-lossless",
+      "resampling": "nearest"
+    }
+  ]
+}

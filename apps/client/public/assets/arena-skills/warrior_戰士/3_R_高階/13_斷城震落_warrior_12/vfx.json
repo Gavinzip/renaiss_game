@@ -23,7 +23,7 @@
       186
     ],
     "persistent": false,
-    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-citadel-slam-ground-impact-v2.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/source/primary-source-07216969cae78b20.png",
     "sourceSha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
     "outputSha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
     "previewSha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
@@ -148,7 +148,7 @@
         256,
         256
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/citadel-slam-8dir-v1.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/source/body-source-2473cf8aa6396ded.png",
       "sourceSha256": "2473cf8aa6396dedc0b050e65940a91436316645546ea557844d53fe333bea75",
       "outputSha256": "2473cf8aa6396dedc0b050e65940a91436316645546ea557844d53fe333bea75",
       "semanticAnchor": [
@@ -181,16 +181,40 @@
       },
       "displayHeightMultiplier": 1.3195876288659794,
       "acceptedAnimationId": "accepted:citadel-slam-8dir-v1.png:2473cf8aa6396ded",
-      "fallbackUsed": false
+      "fallbackUsed": false,
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/citadel-slam-8dir-v1.png",
+      "sourceFile": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/source/body-source-2473cf8aa6396ded.png"
     },
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_12-hq.webm",
+    "configPreviewSourceSha256": "f56b77621a7e29a09ec70459eca25fd1a1839eece86179a9fbbe17d770a13bfb",
+    "configPreviewOutputSha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_12:source-f56b77621a7e29a0:output-506a4d80409037e7",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_12",
     "previewSourceSequenceSha256": "f56b77621a7e29a09ec70459eca25fd1a1839eece86179a9fbbe17d770a13bfb",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.026,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      692,
+      386,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/warrior-citadel-slam-ground-impact-v2.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/source/primary-source-07216969cae78b20.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/preview/gameplay-preview-v1.webm",

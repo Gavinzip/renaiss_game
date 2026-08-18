@@ -44,9 +44,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "accepted:engineer-barrier-link-v2:fcbcedb3b2ca7d07",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/evidence/20260809-engineer-selected-repairs/engineer_08-two-endpoint-preview.webp",
-    "configPreviewSourceSha256": "4c57a1d0d614ecad3fdb16fd80c2d30516d1a0d920a315b537165ab61e571371",
-    "configPreviewOutputSha256": "4c57a1d0d614ecad3fdb16fd80c2d30516d1a0d920a315b537165ab61e571371",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_08-hq.webm",
+    "configPreviewSourceSha256": "ed1b342806221bed817573ece09b1159d271ee6d72ed633db34217ee8539c550",
+    "configPreviewOutputSha256": "39487258158680975ca85894c77b4277fe4fa309f4ffa1c6537b53ba8de1af2c",
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -57,7 +57,7 @@
       165,
       94
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/source/primary-source-fcbcedb3b2ca7d07.png",
     "sourceSha256": "fcbcedb3b2ca7d07af276e842fd37c881a5b055dc9933058a4bd4697ac2c00ad",
     "outputSha256": "e65d5c03785b041e029482c3bcaea74ea3b4b0681edada8278e35baa456beb77",
     "frameDurationsMs": [
@@ -199,8 +199,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png",
-        "sha256": "fcbcedb3b2ca7d07af276e842fd37c881a5b055dc9933058a4bd4697ac2c00ad"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/source/primary-source-fcbcedb3b2ca7d07.png",
+        "sha256": "fcbcedb3b2ca7d07af276e842fd37c881a5b055dc9933058a4bd4697ac2c00ad",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png"
       },
       {
         "role": "preserved-derivation-input",
@@ -223,7 +224,25 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.018,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      850,
+      367,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-barrier-link-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/source/primary-source-fcbcedb3b2ca7d07.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/preview/gameplay-preview-v1.webm",

@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:d200ddec27d924e9",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_根縛.gif",
-    "configPreviewSourceSha256": "d200ddec27d924e95442f934154fbd5538cb032179d756c53c3c4c5e61558a40",
-    "configPreviewOutputSha256": "eda5ade4ce6200f5a7c1ff43be4ab15911c26a30e45f79d896d9f7af993ef4dd",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_08-hq.webm",
+    "configPreviewSourceSha256": "3bc16ebfd6d9bac397b671efad837542cf21a9b50a2b4605a12e9893a65298d6",
+    "configPreviewOutputSha256": "f8225b839c9d3a6b29cb512db145055f106312a484f0b54448051e9cc2a6e33d",
     "file": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -197,7 +197,23 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.025,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      854,
+      392,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/preview/gameplay-preview-v1.webm",

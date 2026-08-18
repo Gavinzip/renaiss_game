@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:b675441548b0b1d0",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-01-標定彈匣.gif",
-    "configPreviewSourceSha256": "b675441548b0b1d03af80b15c7a1493aed665e9b61c5fdb42220dfb6709493a6",
-    "configPreviewOutputSha256": "af2e49f930014eb5b27793203aa41fa3e4d42ba84b1f11e628bfd63ef44157fb",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_01-hq.webm",
+    "configPreviewSourceSha256": "9cdbd56bc9ca40faa19e6ac399092bb1b1d8dc50fe5e26594ae3bcf8c98a78fe",
+    "configPreviewOutputSha256": "9ee76fcf2b8f1cb5b84c352fae7a517958f2d478f675458afc8a0e7eec7c59b3",
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       129,
       152
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-targeting-magazine-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/source/primary-source-71fcdc217d2f6d33.png",
     "sourceSha256": "71fcdc217d2f6d337fb2778c612661f6215b5ec8ba6f2a55342618c489e76076",
     "outputSha256": "1e4dd1a8719488554e8e9483530bb74546a0c9091682d7570a9c4513ef19b607",
     "frameDurationsMs": [
@@ -182,13 +182,15 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-targeting-magazine-v2-normalized.png",
-        "sha256": "71fcdc217d2f6d337fb2778c612661f6215b5ec8ba6f2a55342618c489e76076"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/source/primary-source-71fcdc217d2f6d33.png",
+        "sha256": "71fcdc217d2f6d337fb2778c612661f6215b5ec8ba6f2a55342618c489e76076",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-targeting-magazine-v2-normalized.png"
       },
       {
         "role": "projectileAsset",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png",
-        "sha256": "9ff998bd6cba68b09ef32093445b7f64e6659fa76bcb46ad501f4c660f58ad66"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/source/projectile-source-9ff998bd6cba68b0.png",
+        "sha256": "9ff998bd6cba68b09ef32093445b7f64e6659fa76bcb46ad501f4c660f58ad66",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png"
       }
     ],
     "projectileAsset": {
@@ -202,7 +204,7 @@
         98,
         91
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/source/projectile-source-9ff998bd6cba68b0.png",
       "sourceSha256": "9ff998bd6cba68b09ef32093445b7f64e6659fa76bcb46ad501f4c660f58ad66",
       "outputSha256": "3c28d39aeec92d01a3895be1019db5f84b1a1d2a5d6f15642eb96925f38d8c54",
       "frameDurationsMs": [
@@ -324,7 +326,9 @@
             79
           ]
         ]
-      }
+      },
+      "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/source/projectile-source-9ff998bd6cba68b0.png"
     },
     "fallbackUsed": false,
     "packagePath": "engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01",
@@ -341,7 +345,25 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.015,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      826,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-targeting-magazine-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/source/primary-source-71fcdc217d2f6d33.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/preview/gameplay-preview-v1.webm",

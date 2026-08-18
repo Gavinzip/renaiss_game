@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:64360669e7512ae4",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-13-魔導鎖標.gif",
-    "configPreviewSourceSha256": "64360669e7512ae4fd5396af4407600dcebf66c53f511a992a357ef7c8aa02e1",
-    "configPreviewOutputSha256": "c62c73b37ee69a6d25b859b3dd5c76f96217726435f6449aafd13988cc537249",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_13-hq.webm",
+    "configPreviewSourceSha256": "0a2892373e0c5270f06dc5915fe7906352866ae3906d3b5fa8a80d438be936fb",
+    "configPreviewOutputSha256": "d058696153b504c560a22e260a99d950b9305c642a346f47d8054dab6b07c7fc",
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       133,
       128
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-lock-v1-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/source/primary-source-bbec36b11ba5274a.png",
     "sourceSha256": "bbec36b11ba5274a37b5c985d62b31b0b8713dfe66d076e54f0d934e4efab8fc",
     "outputSha256": "1948b2b20b443c093610ae32465fa83586228e7a2dc13ae0bdd9da430214667f",
     "frameDurationsMs": [
@@ -196,19 +196,21 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-lock-v1-normalized.png",
-        "sha256": "bbec36b11ba5274a37b5c985d62b31b0b8713dfe66d076e54f0d934e4efab8fc"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/source/primary-source-bbec36b11ba5274a.png",
+        "sha256": "bbec36b11ba5274a37b5c985d62b31b0b8713dfe66d076e54f0d934e4efab8fc",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-lock-v1-normalized.png"
       },
       {
         "role": "projectileAsset",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png",
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/source/projectile-source-88f0d796fffd5419.png",
         "sha256": "88f0d796fffd5419dc9672b7937edbfb8130b416fafd3beaf67254af35161c2f",
         "semanticSourceFrameIndices": [
           0,
           1,
           2
         ],
-        "flightOnly": true
+        "flightOnly": true,
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png"
       }
     ],
     "projectileAsset": {
@@ -222,7 +224,7 @@
         104,
         93
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/source/projectile-source-88f0d796fffd5419.png",
       "sourceSha256": "88f0d796fffd5419dc9672b7937edbfb8130b416fafd3beaf67254af35161c2f",
       "outputSha256": "e0cbed212362c3affb3f0c50183e17aac54ec00e0a968dc8c609c176c16e1dca",
       "frameDurationsMs": [
@@ -369,7 +371,9 @@
         1,
         2
       ],
-      "flightOnly": true
+      "flightOnly": true,
+      "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/source/projectile-source-88f0d796fffd5419.png"
     },
     "fallbackUsed": false,
     "packagePath": "engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13",
@@ -386,7 +390,25 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.018,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      840,
+      352,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-lock-v1-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/source/primary-source-bbec36b11ba5274a.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/preview/gameplay-preview-v1.webm",

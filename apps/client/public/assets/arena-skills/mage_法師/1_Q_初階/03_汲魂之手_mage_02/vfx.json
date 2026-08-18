@@ -58,9 +58,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:670c89554e15b8e6",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-汲魂之手.gif",
-    "configPreviewSourceSha256": "670c89554e15b8e61bc0006a723da98e2554922bd137061376124aec62366785",
-    "configPreviewOutputSha256": "7fb009426af7b81b6f2ebfa79ece0cd99b43dbda4e50aedd96e3c9a6352d9d9a",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_02-hq.webm",
+    "configPreviewSourceSha256": "646217e51f5bafe597fc1f3690143d06df56406f682658821320796bfc2591b5",
+    "configPreviewOutputSha256": "c796878e59446879a08c3a87a267b732381dff077da98d31dc4d00f506da80bf",
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -71,7 +71,7 @@
       135,
       131
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/source/primary-source-564eed7871b145e4.png",
     "sourceSha256": "564eed7871b145e4c35f7c617f12a8158e674eb6a6190367931f04b5d0c473b2",
     "outputSha256": "369b2e11581f8f320c41b0e917eab9ee06207abc14c73de443ecfd9618b7b0ca",
     "frameDurationsMs": [
@@ -129,8 +129,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png",
-        "sha256": "564eed7871b145e4c35f7c617f12a8158e674eb6a6190367931f04b5d0c473b2"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/source/primary-source-564eed7871b145e4.png",
+        "sha256": "564eed7871b145e4c35f7c617f12a8158e674eb6a6190367931f04b5d0c473b2",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/03_汲魂之手_mage_02",
@@ -145,9 +146,28 @@
     "previewSourceScenario": "random-mage_02",
     "previewSourceSequenceSha256": "646217e51f5bafe597fc1f3690143d06df56406f682658821320796bfc2591b5",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      820,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-soul-siphon-hand.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/source/primary-source-564eed7871b145e4.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/preview/gameplay-preview-v1.webm",
@@ -213,7 +233,7 @@
       192
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 105,
     "totalDurationMs": 3500,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

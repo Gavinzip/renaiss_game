@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:60581c063d9749cf",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-灼光烙印.gif",
-    "configPreviewSourceSha256": "60581c063d9749cf5782084d7fc0912023a3f92c29cf86bdd7238db28d2ddd97",
-    "configPreviewOutputSha256": "4081af53a27ded63470eacca9950f40ea2a6733f8f8097c32c61983625cc7e2c",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_03-hq.webm",
+    "configPreviewSourceSha256": "f84849b2963c5ba7a02c11ea11075c0b7d614db8827e76f4e8f8f9206ecaf4dd",
+    "configPreviewOutputSha256": "a60868dfb854150f68d8e5639d9ac1d222e26e4345439294593dcf4b6a9cb560",
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -51,7 +51,7 @@
       138,
       138
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-scorching-brand.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/source/primary-source-430bc9baf21153f8.png",
     "sourceSha256": "430bc9baf21153f87bd2877128b19e0deeaa52c893098173e7a1a09e7e64e40f",
     "outputSha256": "4a7c0edb2f655a005b0826b5c8342003ae95f69199ad5f471a79912c325bd7b5",
     "frameDurationsMs": [
@@ -109,8 +109,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-scorching-brand.png",
-        "sha256": "430bc9baf21153f87bd2877128b19e0deeaa52c893098173e7a1a09e7e64e40f"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/source/primary-source-430bc9baf21153f8.png",
+        "sha256": "430bc9baf21153f87bd2877128b19e0deeaa52c893098173e7a1a09e7e64e40f",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-scorching-brand.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/04_灼光烙印_mage_03",
@@ -139,9 +140,28 @@
     "previewSourceScenario": "random-mage_03",
     "previewSourceSequenceSha256": "f84849b2963c5ba7a02c11ea11075c0b7d614db8827e76f4e8f8f9206ecaf4dd",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      830,
+      342,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-scorching-brand.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/source/primary-source-430bc9baf21153f8.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/preview/gameplay-preview-v1.webm",
@@ -207,7 +227,7 @@
       178
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 168,
     "totalDurationMs": 5600,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

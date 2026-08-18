@@ -23,7 +23,7 @@
       413
     ],
     "persistent": false,
-    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-battle-ring.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/source/primary-source-960c1800a4e81fbc.png",
     "sourceSha256": "960c1800a4e81fbc329735ddbaaa39366969a943a429be633df1e07aa3ff492d",
     "outputSha256": "60e9c158be709a46df8dd8a3f7e06d65e679b0c1f0f2adca21a2fbad1659a4a7",
     "previewSha256": "7da10c2624cd206d1f6af40a02e295e8b5011c4d1c668b898c6655671ee0cd9f",
@@ -68,7 +68,7 @@
         256,
         256
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/battle-ring-spin-8dir-v1.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/source/body-source-af878d3ce6cead4e.png",
       "sourceSha256": "af878d3ce6cead4e4a48a62473596f35276791febe9e90dd67143f29bfc9cb30",
       "outputSha256": "af878d3ce6cead4e4a48a62473596f35276791febe9e90dd67143f29bfc9cb30",
       "semanticAnchor": [
@@ -101,7 +101,9 @@
       },
       "displayHeightMultiplier": 1.3195876288659794,
       "acceptedAnimationId": "accepted:battle-ring-spin-8dir-v1.png:af878d3ce6cead4e",
-      "fallbackUsed": false
+      "fallbackUsed": false,
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/battle-ring-spin-8dir-v1.png",
+      "sourceFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/source/body-source-af878d3ce6cead4e.png"
     },
     "alphaCleanup": "enclosed-neutral-matte-v1",
     "alphaCleanupRemovedPixels": [
@@ -115,14 +117,35 @@
       0
     ],
     "fallbackUsed": false,
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_02-hq.webm",
+    "configPreviewSourceSha256": "0896dd0e1388395857ccd20e800ca854d988f7284ab87851c6f1862c55309d39",
+    "configPreviewOutputSha256": "7da10c2624cd206d1f6af40a02e295e8b5011c4d1c668b898c6655671ee0cd9f",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_02:source-0896dd0e13883958:output-7da10c2624cd206d",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_02",
     "previewSourceSequenceSha256": "0896dd0e1388395857ccd20e800ca854d988f7284ab87851c6f1862c55309d39",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      706,
+      368,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/warrior-battle-ring.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/source/primary-source-960c1800a4e81fbc.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/preview/gameplay-preview-v1.webm",
@@ -188,7 +211,7 @@
       180
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 90,
     "totalDurationMs": 3000,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

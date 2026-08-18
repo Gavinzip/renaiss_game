@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:8a53678ea44f7bef",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_暗鉤牽引.gif",
-    "configPreviewSourceSha256": "8a53678ea44f7befe6bb944fd2a1b7ace546025d28cfd58a5545e06afa63add8",
-    "configPreviewOutputSha256": "a8ae1e97ba8af2b871f2b8d6a095b409f3a17eaa3fbffcbf46b4f91bfa8c2ea3",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_07-hq.webm",
+    "configPreviewSourceSha256": "2b6822b9140afe25e251693169c3c3c6ac80355068596c8a9d5ffcaa016ca616",
+    "configPreviewOutputSha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
     "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/primary.png",
     "frameWidth": 120,
     "frameHeight": 120,
@@ -226,7 +226,23 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.02,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      845,
+      360,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",

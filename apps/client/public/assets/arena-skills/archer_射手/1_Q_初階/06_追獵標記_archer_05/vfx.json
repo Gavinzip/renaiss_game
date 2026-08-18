@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:26ff455202d5b695",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_追獵標記.gif",
-    "configPreviewSourceSha256": "26ff455202d5b695bbdcb476233bc339f35f58c1de579bcead4e0d5dd2a941f8",
-    "configPreviewOutputSha256": "f33a523a8360ad5ef9e02134b9ad213224e2d2e677b75b9a45ffcbe0268f71c2",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_05-hq.webm",
+    "configPreviewSourceSha256": "4a25dd4fe77d26184835c092e10b8c7aa0ed4cd5496d3eaa72865c6ae94d2374",
+    "configPreviewOutputSha256": "7a37d9c722ff2474c880cc2fec7c060edb4461af9e9c13f691de03f7e0b23179",
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/primary.png",
     "frameWidth": 362,
     "frameHeight": 724,
@@ -236,8 +236,24 @@
     "previewSourceSequenceSha256": "4a25dd4fe77d26184835c092e10b8c7aa0ed4cd5496d3eaa72865c6ae94d2374",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      836,
+      360,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/preview/gameplay-preview-v1.webm",
@@ -303,7 +319,7 @@
       196
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 198,
     "totalDurationMs": 6600,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

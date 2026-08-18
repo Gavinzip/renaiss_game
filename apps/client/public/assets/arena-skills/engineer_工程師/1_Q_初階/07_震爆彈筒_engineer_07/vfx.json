@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "candidate:engineer-concussion-pressure-wave-v4:f124b7d84fe0e1e4",
-    "configPreviewSourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/candidate-v2/preview/animation.webp",
-    "configPreviewSourceSha256": "727258cc0f64580082f42bbcd0b484c3014633d11612b6d6a9dd82f6bbee2329",
-    "configPreviewOutputSha256": "727258cc0f64580082f42bbcd0b484c3014633d11612b6d6a9dd82f6bbee2329",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_07-hq.webm",
+    "configPreviewSourceSha256": "7b415935ae0f438df5e8b5674525c0a1152f096774ac6684c871a8c6997514c6",
+    "configPreviewOutputSha256": "6a34969387cb72b7728bceda3036532311d6e6f87644a24d6b3186d386679a2c",
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -51,7 +51,7 @@
       161,
       161
     ],
-    "sourcePath": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/source/primary-source-f124b7d84fe0e1e4.png",
     "sourceSha256": "f124b7d84fe0e1e4ec89bcc5bfc388f324ac0df74dbac5e2dff9078f0ab6b9bb",
     "outputSha256": "e91fe0e897d1e905cac03209f3af34429822d8089aba05a9ce326ee45df836cd",
     "frameDurationsMs": [
@@ -90,9 +90,10 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/source/primary-source-f124b7d84fe0e1e4.png",
         "sha256": "f124b7d84fe0e1e4ec89bcc5bfc388f324ac0df74dbac5e2dff9078f0ab6b9bb",
-        "status": "review-only-not-formal"
+        "status": "review-only-not-formal",
+        "originalPath": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png"
       }
     ],
     "fallbackUsed": false,
@@ -110,7 +111,25 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.029,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      791,
+      376,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "work/generated-images/20260809-engineer-shockwave/candidate-01-blue-pressure-wave.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/source/primary-source-f124b7d84fe0e1e4.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/preview/gameplay-preview-v1.webm",

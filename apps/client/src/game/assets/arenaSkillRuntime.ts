@@ -204,6 +204,8 @@ interface ArenaSkillRuntimeEntryMetadata {
     | {
         kind: "effect-source-to-target-shot";
         durationMs: number;
+        travelOrigin: "caster" | "target-sky";
+        startOffset?: [number, number];
         warningEndProgress: number;
         travelEndProgress: number;
         visibleEndProgress: number;

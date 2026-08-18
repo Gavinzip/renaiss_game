@@ -23,7 +23,7 @@
       497
     ],
     "persistent": false,
-    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-shield-bash-premium.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/source/primary-source-01d53d409c011f46.png",
     "sourceSha256": "01d53d409c011f46be1dc7356131600b1c87c5349496e676691fe1b642e75f9f",
     "outputSha256": "27a9a463aaf55f48bb4b17c9106e5f10ab5ab3fbaed79c74c445049937111021",
     "previewSha256": "43a64a0d6eb33a48fb12018b29d99502d73e650b7b52c5d2885cf855c61face0",
@@ -68,7 +68,7 @@
         256,
         256
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/shield-bash-8dir-v1.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/source/body-source-b2da3f9ca8ddc827.png",
       "sourceSha256": "b2da3f9ca8ddc8277f004211ebc4f410ae7372fba31f292fc93bfe3c0f99f757",
       "outputSha256": "b2da3f9ca8ddc8277f004211ebc4f410ae7372fba31f292fc93bfe3c0f99f757",
       "semanticAnchor": [
@@ -101,16 +101,40 @@
       },
       "displayHeightMultiplier": 1.3195876288659794,
       "acceptedAnimationId": "accepted:shield-bash-8dir-v1.png:b2da3f9ca8ddc827",
-      "fallbackUsed": false
+      "fallbackUsed": false,
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/shield-bash-8dir-v1.png",
+      "sourceFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/source/body-source-b2da3f9ca8ddc827.png"
     },
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_05-hq.webm",
+    "configPreviewSourceSha256": "c15946dd0fbd16054a5822f63ae0cbc5e411937a8a4846131f4cb7ddf4e203fd",
+    "configPreviewOutputSha256": "43a64a0d6eb33a48fb12018b29d99502d73e650b7b52c5d2885cf855c61face0",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_05:source-c15946dd0fbd1605:output-43a64a0d6eb33a48",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_05",
     "previewSourceSequenceSha256": "c15946dd0fbd16054a5822f63ae0cbc5e411937a8a4846131f4cb7ddf4e203fd",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.034,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      726,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/warrior-shield-bash-premium.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/source/primary-source-01d53d409c011f46.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/preview/gameplay-preview-v1.webm",

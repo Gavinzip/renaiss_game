@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:31a1fa2e113b148c",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-15-魔導飛彈矩陣.gif",
-    "configPreviewSourceSha256": "31a1fa2e113b148c0ad6c46da0a80b35310ef7ad7fc9ad0f5cfdc72fbfb3d54b",
-    "configPreviewOutputSha256": "532358f6800004867424a14427ce331969673cbcf643956329f7bb59ba592591",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_15-hq.webm",
+    "configPreviewSourceSha256": "5eca0de3adba05d36db2f0e8925ef0a678b51597eb6b65e48e080e6de0a1258d",
+    "configPreviewOutputSha256": "188b86a34e7f04283683607dd602a99b96b46185819e6531215626b4988c4d5a",
     "file": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       145,
       155
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-matrix-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/source/primary-source-341cb2845d6545d5.png",
     "sourceSha256": "341cb2845d6545d56c24317d3cda33ed85c0bf68156b433fbfd0825cb62b3f75",
     "outputSha256": "1de58c657181e156a14c8b0cc449dbb4628d0e3208723899f6df50afa25cfdeb",
     "frameDurationsMs": [
@@ -210,8 +210,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-matrix-v2-normalized.png",
-        "sha256": "341cb2845d6545d56c24317d3cda33ed85c0bf68156b433fbfd0825cb62b3f75"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/source/primary-source-341cb2845d6545d5.png",
+        "sha256": "341cb2845d6545d56c24317d3cda33ed85c0bf68156b433fbfd0825cb62b3f75",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-matrix-v2-normalized.png"
       },
       {
         "role": "projectileAsset",
@@ -282,9 +283,28 @@
     "previewSourceScenario": "random-engineer_15",
     "previewSourceSequenceSha256": "5eca0de3adba05d36db2f0e8925ef0a678b51597eb6b65e48e080e6de0a1258d",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.018,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      864,
+      376,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-matrix-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/source/primary-source-341cb2845d6545d5.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/preview/gameplay-preview-v1.webm",

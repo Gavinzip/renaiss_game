@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:archer-seed-rain-three-cycle-v1:51b721c131cb260b",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/弓手-高等-種子雨.gif",
-    "configPreviewSourceSha256": "51b721c131cb260bf26a7ebea027b819ae4e86fce805cdaef6d5f04c08120ab1",
-    "configPreviewOutputSha256": "5dbf049f7abe231c2f134da87a8293eaa948fb0bd29d0bf7d214ccc76c7ed5a8",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_13-hq.webm",
+    "configPreviewSourceSha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be",
+    "configPreviewOutputSha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
     "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/primary.png",
     "frameWidth": 120,
     "frameHeight": 120,
@@ -260,8 +260,24 @@
     "previewSourceSequenceSha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      970,
+      388,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
@@ -327,7 +343,7 @@
       87
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 147,
     "totalDurationMs": 4900,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

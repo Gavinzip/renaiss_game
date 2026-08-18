@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:4bef10f8bb92aa6a",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.gif",
-    "configPreviewSourceSha256": "4bef10f8bb92aa6af21f01eab11626ddd76bcbe79ae8e2a43be4562c28251453",
-    "configPreviewOutputSha256": "d8b05b04b6ae7f9d128b89147e52d9017b6774502fb1eaba4e362a52f2ec07cd",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_06-hq.webm",
+    "configPreviewSourceSha256": "f08d05f9ac4f7c52c76ae9cac7ab2c1eb1e4a992c2a9ba91883b9efcf361bfa0",
+    "configPreviewOutputSha256": "c4ca5530aa735d08ffe9fdb742c558849b5952a7d2978f841d72d749b6778981",
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/runtime/primary.png",
     "frameWidth": 362,
     "frameHeight": 724,
@@ -51,7 +51,7 @@
       362,
       466
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/source/primary-source-5318c453134fed46.png",
     "sourceSha256": "5318c453134fed46012e2c19c9c3175d2abb7a66b0951545cd7920890bc1c36d",
     "outputSha256": "ace179973e2cc1ea6557e9fb7dea5a42f2e863f865bdbc21dd8d2c824e76f283",
     "frameDurationsMs": [
@@ -142,8 +142,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png",
-        "sha256": "5318c453134fed46012e2c19c9c3175d2abb7a66b0951545cd7920890bc1c36d"
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/source/primary-source-5318c453134fed46.png",
+        "sha256": "5318c453134fed46012e2c19c9c3175d2abb7a66b0951545cd7920890bc1c36d",
+        "originalPath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png"
       }
     ],
     "packagePath": "warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06",
@@ -158,9 +159,28 @@
     "previewSourceScenario": "random-warrior_06",
     "previewSourceSequenceSha256": "f08d05f9ac4f7c52c76ae9cac7ab2c1eb1e4a992c2a9ba91883b9efcf361bfa0",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      722,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/1_裂甲斬.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/source/primary-source-5318c453134fed46.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/preview/gameplay-preview-v1.webm",
@@ -226,7 +246,7 @@
       194
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 93,
     "totalDurationMs": 3100,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

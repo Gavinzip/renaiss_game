@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:88be44aa24f3baee",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-中等-復甦爆發.gif",
-    "configPreviewSourceSha256": "88be44aa24f3baeeecdece87e9d9748efca309df94c1403baa83652896233654",
-    "configPreviewOutputSha256": "e3246c00135d87244c2677e12c4898add5828ee23804a6da68c537dd45ab0708",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_07-hq.webm",
+    "configPreviewSourceSha256": "32098589145488eed84e45b73374119f3c78de9d9435db73d721f4a904c61a53",
+    "configPreviewOutputSha256": "2659fb888e2f16f71092229667def18c0ecdcba16566c65209e54ae4715173c1",
     "file": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/runtime/primary.png",
     "frameWidth": 256,
     "frameHeight": 144,
@@ -51,7 +51,7 @@
       250,
       144
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-renewal-burst-v8.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/source/primary-source-05692711d3bcabee.png",
     "sourceSha256": "05692711d3bcabeedd855642099fbcaa25796de26bf07003881f260305fa7ea8",
     "outputSha256": "84dbe7a0ee71e3765c7a8b95349f43b6e6152a192f7deb3f92c6288fbae43b4a",
     "frameDurationsMs": [
@@ -137,8 +137,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-renewal-burst-v8.png",
-        "sha256": "05692711d3bcabeedd855642099fbcaa25796de26bf07003881f260305fa7ea8"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/source/primary-source-05692711d3bcabee.png",
+        "sha256": "05692711d3bcabeedd855642099fbcaa25796de26bf07003881f260305fa7ea8",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-renewal-burst-v8.png"
       }
     ],
     "packagePath": "mage_法師/2_E_中階/08_復甦爆發_mage_07",
@@ -172,9 +173,28 @@
     "previewSourceScenario": "random-mage_07",
     "previewSourceSequenceSha256": "32098589145488eed84e45b73374119f3c78de9d9435db73d721f4a904c61a53",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.025,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      714,
+      364,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-renewal-burst-v8.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/source/primary-source-05692711d3bcabee.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/preview/gameplay-preview-v1.webm",

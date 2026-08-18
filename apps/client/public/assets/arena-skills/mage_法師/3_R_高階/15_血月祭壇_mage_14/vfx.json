@@ -23,7 +23,7 @@
       126
     ],
     "persistent": true,
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-blood-moon-altar-v8.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/source/primary-source-267b0926dbe78a5c.png",
     "sourceSha256": "267b0926dbe78a5cd0fb7b0193ddbafee1f60257eac1c9b3c9fd0ac775cf3473",
     "outputSha256": "cfd8f65f756c3638da0f6e1c53da01e589b702beea34c3098ec6f786336dda2f",
     "previewSha256": "e8aa990c0fbc4554b81089f657cbd0412e17e3994e6e1415791617c1e567afdf",
@@ -77,14 +77,36 @@
         4
       ]
     },
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_14-hq.webm",
+    "configPreviewSourceSha256": "455303cf671abb9e53fb072b648f9ee6dbda978d23d7d2866ce6cdb95cc7907d",
+    "configPreviewOutputSha256": "e8aa990c0fbc4554b81089f657cbd0412e17e3994e6e1415791617c1e567afdf",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_14:source-455303cf671abb9e:output-e8aa990c0fbc4554",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-mage_14",
     "previewSourceSequenceSha256": "455303cf671abb9e53fb072b648f9ee6dbda978d23d7d2866ce6cdb95cc7907d",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.013,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      876,
+      391,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-blood-moon-altar-v8.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/source/primary-source-267b0926dbe78a5c.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/preview/gameplay-preview-v1.webm",

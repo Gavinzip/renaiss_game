@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:0225174ab48ffef4",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-09-支撐砲架.gif",
-    "configPreviewSourceSha256": "0225174ab48ffef4f751ea3c4f6bed6a29d3323a32b7f3a2d346dbd2b87cd72e",
-    "configPreviewOutputSha256": "b82a6dcaa194ad288506499ba16eb4894f0b8721f8fdeebd4104905722e06a33",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_09-hq.webm",
+    "configPreviewSourceSha256": "b12f7283310d0a6ebff6a83fa767e2fee7dd3c426d93d007e5c9f598afaa542c",
+    "configPreviewOutputSha256": "3bad3ad044e0269849e32b6c0a10ca68acc0ecc669595cbfc77812a3f264e2c2",
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -51,7 +51,7 @@
       147,
       155
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-overlay-v3-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/source/primary-source-9abf02df39e5b20b.png",
     "sourceSha256": "9abf02df39e5b20b08f28ed3597cae45548177b020947ed158efb21dc303a292",
     "outputSha256": "f769bcf27c878b886e8754fc4ca2e9a7b3eb456508597ecccc5a9b13ff374dc3",
     "frameDurationsMs": [
@@ -193,13 +193,15 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-overlay-v3-normalized.png",
-        "sha256": "9abf02df39e5b20b08f28ed3597cae45548177b020947ed158efb21dc303a292"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/source/primary-source-9abf02df39e5b20b.png",
+        "sha256": "9abf02df39e5b20b08f28ed3597cae45548177b020947ed158efb21dc303a292",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-overlay-v3-normalized.png"
       },
       {
         "role": "alternateEffectAsset",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-magic-v2-normalized.png",
-        "sha256": "4631eab0edffe348c2a8edeae58bbbc1083aaf8a391b88520255ce16e7553466"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/source/alternate-source-4631eab0edffe348.png",
+        "sha256": "4631eab0edffe348c2a8edeae58bbbc1083aaf8a391b88520255ce16e7553466",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-magic-v2-normalized.png"
       }
     ],
     "alternateEffectAsset": {
@@ -213,7 +215,7 @@
         144,
         155
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-magic-v2-normalized.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/source/alternate-source-4631eab0edffe348.png",
       "sourceSha256": "4631eab0edffe348c2a8edeae58bbbc1083aaf8a391b88520255ce16e7553466",
       "outputSha256": "d88419bd8c7e3243cdb915f0683dc0d4dba6337b60c6cbdfa0696230e711cd09",
       "frameDurationsMs": [
@@ -349,7 +351,9 @@
             12
           ]
         ]
-      }
+      },
+      "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-magic-v2-normalized.png",
+      "sourceFile": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/source/alternate-source-4631eab0edffe348.png"
     },
     "packagePath": "engineer_工程師/2_E_中階/09_支撐砲架_engineer_09",
     "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09",
@@ -363,9 +367,28 @@
     "previewSourceScenario": "random-engineer_09",
     "previewSourceSequenceSha256": "b12f7283310d0a6ebff6a83fa767e2fee7dd3c426d93d007e5c9f598afaa542c",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.018,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      792,
+      386,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-support-braces-overlay-v3-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/source/primary-source-9abf02df39e5b20b.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/preview/gameplay-preview-v1.webm",

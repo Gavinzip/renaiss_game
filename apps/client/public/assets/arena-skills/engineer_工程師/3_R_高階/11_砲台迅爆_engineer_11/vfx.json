@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:3c02a5ca6b97b0c5",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-11-砲台迅爆.gif",
-    "configPreviewSourceSha256": "3c02a5ca6b97b0c5a52be39718a285cd97499615bb49a07ed7d9df57fe7cf3c1",
-    "configPreviewOutputSha256": "cb41750e01a4b05ac71dde3fac3a90f5fb9b6b626342913c897be18ee47b927d",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_11-hq.webm",
+    "configPreviewSourceSha256": "400b933a4731a34fe150f29af09295dbd45d41808369ee346bcde711bd9b9ab7",
+    "configPreviewOutputSha256": "7b3dc17be2e1b0fc115e3961d225913ee5c71035fcc7e2bb8ef4af89f873f091",
     "file": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -51,7 +51,7 @@
       147,
       134
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-rapid-detonation-v3-anchor-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/source/primary-source-c6f196494d7ff99d.png",
     "sourceSha256": "c6f196494d7ff99d5148d81e99868caa25561480097239e3b87ae4babc932467",
     "outputSha256": "256f76ebe15198a81944df7ee1ab4e308540c795b684a45938247154f2ca1c03",
     "frameDurationsMs": [
@@ -193,8 +193,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-rapid-detonation-v3-anchor-normalized.png",
-        "sha256": "c6f196494d7ff99d5148d81e99868caa25561480097239e3b87ae4babc932467"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/source/primary-source-c6f196494d7ff99d.png",
+        "sha256": "c6f196494d7ff99d5148d81e99868caa25561480097239e3b87ae4babc932467",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-rapid-detonation-v3-anchor-normalized.png"
       }
     ],
     "packagePath": "engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11",
@@ -209,9 +210,28 @@
     "previewSourceScenario": "random-engineer_11",
     "previewSourceSequenceSha256": "400b933a4731a34fe150f29af09295dbd45d41808369ee346bcde711bd9b9ab7",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.028,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      859,
+      376,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-rapid-detonation-v3-anchor-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/source/primary-source-c6f196494d7ff99d.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/preview/gameplay-preview-v1.webm",

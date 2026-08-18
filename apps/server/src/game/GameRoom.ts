@@ -30,7 +30,6 @@ import {
   getMageTimedVisualDuration,
   getRuntimeMageSkill,
   getSkillCooldownMs,
-  MAGE_TARGET_TORSO_OFFSET_Y,
   WORLD,
   isBlocked,
   type ArenaLoadout,
@@ -300,6 +299,7 @@ const TARGET_ROOM_POPULATION = BOT_NAMES.length;
 const EVENT_TTL_MS = 9000;
 const EVENT_LIMIT = 18;
 const SPAWN_GUARD_MS = 8500;
+const ARCHER_STAR_SNIPE_CAST_LOCK_MS = 1100;
 const TURRET_DEPLOY_DISTANCE = COMBAT.playerRadius + COMBAT.turretRadius + 48;
 const TURRET_DEPLOY_ANGLE_OFFSETS = [0, -32, 32, -64, 64, 180] as const;
 // Keep Engineer barrier links outside the 54 px mechanical-turret body. The
@@ -2117,7 +2117,13 @@ export class GameRoom {
   }
 
   private isMovementLocked(player: PlayerEntity, now: number) {
-    return player.classId === "mage" && player.action === "skillQ" && player.actionPoseEndsAt > now;
+    if (player.actionPoseEndsAt <= now) {
+      return false;
+    }
+    return (
+      (player.classId === "mage" && player.action === "skillQ") ||
+      player.actionSkillId === "archer_12"
+    );
   }
 
   private isInMeleeArc(attacker: PlayerEntity, target: { x: number; y: number }) {
@@ -2591,6 +2597,13 @@ export class GameRoom {
     if (skillId === "archer_12") {
       const damageTarget = this.getAimDamageTarget(player, 950);
       if (!damageTarget) return false;
+      this.setActionPose(
+        player,
+        now,
+        ARCHER_STAR_SNIPE_CAST_LOCK_MS,
+        "skillR",
+        skillId
+      );
       const target = damageTarget.target;
       const shotOrigin = this.getMuzzlePoint(
         { x: player.x, y: player.y - 28 },
@@ -4240,15 +4253,10 @@ export class GameRoom {
         : playerTarget
           ? { kind: "player", target: playerTarget }
           : null;
-    const end = target
-      ? {
-          x: target.target.x,
-          y:
-            target.kind === "player"
-              ? target.target.y + MAGE_TARGET_TORSO_OFFSET_Y
-              : target.target.y - 20
-        }
-      : project(origin, player.angle, beamRange);
+    // Solar Beam always renders its full authored range. A nearby target may
+    // take the first hit, but it must not shorten the line or drag its endpoint
+    // toward that target; the fixed line is part of the player's range read.
+    const end = project(origin, player.angle, beamRange);
 
     if (target?.kind === "player") {
       this.damagePlayer(
@@ -4796,6 +4804,14 @@ export class GameRoom {
       return this.getMuzzlePoint({ x: player.x, y: player.y - 28 }, player.angle, 58, 0);
     }
 
+    if (type === "magic_ball" && player.classId === "mage") {
+      const origin = getMageStaffAnchor(player);
+      return {
+        ...origin,
+        distance: distance(player, origin)
+      };
+    }
+
     return this.getMuzzlePoint(player, player.angle, 40, 10);
   }
 
@@ -4829,6 +4845,31 @@ export class GameRoom {
   private faceAim(player: PlayerEntity) {
     player.angle = this.getAimAngle(player, this.getAimPoint(player), player.angle);
     player.input.angle = player.angle;
+  }
+
+  private beginArcherCrescentReturn(
+    projectile: ProjectileEntity,
+    now: number
+  ) {
+    if (projectile.skillId !== "archer_00" || projectile.returningToOwner) {
+      return false;
+    }
+    const owner = this.players.get(projectile.ownerId);
+    if (!owner?.alive) {
+      return false;
+    }
+    projectile.returningToOwner = true;
+    projectile.returnStartsAt = now + 90;
+    projectile.damage = 0;
+    projectile.onHit = undefined;
+    projectile.targetId = undefined;
+    projectile.hitTargetIds = undefined;
+    projectile.distanceTraveled = 0;
+    projectile.maxDistance = Math.max(
+      distance(projectile, getArcherBowAnchor(owner)) + 80,
+      160
+    );
+    return true;
   }
 
   private updateProjectiles(deltaMs: number, now: number) {
@@ -4914,6 +4955,9 @@ export class GameRoom {
         projectile.y < 0 ||
         projectile.y > WORLD.height
       ) {
+        if (this.beginArcherCrescentReturn(projectile, now)) {
+          surviving.push(projectile);
+        }
         continue;
       }
 
@@ -4932,6 +4976,9 @@ export class GameRoom {
           startedAt: now,
           duration: 360
         });
+        if (this.beginArcherCrescentReturn(projectile, now)) {
+          surviving.push(projectile);
+        }
         continue;
       }
 
@@ -4969,6 +5016,9 @@ export class GameRoom {
         break;
       }
       if (hitBarrier) {
+        if (this.beginArcherCrescentReturn(projectile, now)) {
+          surviving.push(projectile);
+        }
         continue;
       }
 
@@ -4999,18 +5049,10 @@ export class GameRoom {
             projectile.onHit?.returnDamage &&
             projectile.onHit.returnDelayMs
           ) {
-            projectile.returningToOwner = true;
-            projectile.returnStartsAt = now + 90;
-            projectile.damage = 0;
-            projectile.onHit = undefined;
-            projectile.targetId = undefined;
-            projectile.hitTargetIds = undefined;
-            projectile.distanceTraveled = 0;
-            projectile.maxDistance = Math.max(
-              distance(projectile, getArcherBowAnchor(owner)) + 80,
-              160
+            retainedAtContact = this.beginArcherCrescentReturn(
+              projectile,
+              now
             );
-            retainedAtContact = true;
             break;
           }
           if (
@@ -5099,6 +5141,11 @@ export class GameRoom {
             break;
           }
         }
+      }
+
+      if (hit && this.beginArcherCrescentReturn(projectile, now)) {
+        surviving.push(projectile);
+        continue;
       }
 
       if (!hit) {

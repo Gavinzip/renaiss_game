@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:932a672fdc4d47d3",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-03-穿甲鐵芯.gif",
-    "configPreviewSourceSha256": "932a672fdc4d47d34430fa3d7accb37fb19f779fa58d88b21ac23a005d18141c",
-    "configPreviewOutputSha256": "3eeb1806ca38c6c36e6f640079ed20b305d84d98ee3b6f0bd998ec1039db6d90",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_03-hq.webm",
+    "configPreviewSourceSha256": "d3dec6702b18b06c94312c4f2d38845396b65f199d151f8078eb542e77993bd5",
+    "configPreviewOutputSha256": "b2698f5471bf4ef861225111f753eb3f244eb85398edd8f68223aa062e257c26",
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       108,
       101
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/source/primary-source-926e76695a33e3dd.png",
     "sourceSha256": "926e76695a33e3ddb0b9c00a146b89f02735432a2ee8ec3e92593d7aba1021e3",
     "outputSha256": "0b42745ccd38ab815b192a951d301e6af93f68425307f9b059c3860cf1e9fc41",
     "frameDurationsMs": [
@@ -168,8 +168,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png",
-        "sha256": "926e76695a33e3ddb0b9c00a146b89f02735432a2ee8ec3e92593d7aba1021e3"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/source/primary-source-926e76695a33e3dd.png",
+        "sha256": "926e76695a33e3ddb0b9c00a146b89f02735432a2ee8ec3e92593d7aba1021e3",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png"
       }
     ],
     "packagePath": "engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03",
@@ -184,9 +185,28 @@
     "previewSourceScenario": "random-engineer_03",
     "previewSourceSequenceSha256": "d3dec6702b18b06c94312c4f2d38845396b65f199d151f8078eb542e77993bd5",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.022,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      826,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-armor-piercing-core-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/source/primary-source-926e76695a33e3dd.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/preview/gameplay-preview-v1.webm",

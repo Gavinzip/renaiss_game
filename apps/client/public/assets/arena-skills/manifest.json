@@ -20,7 +20,7 @@
       "packagePath": "archer_射手/1_Q_初階/01_月牙刃_archer_00",
       "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "385c5d2c65d0c5dc6f2d2fec4860fd048ff39706c93be617af0d2d5d894949ea",
+      "contractSha256": "c9ef26743879df0c7626db6b1f325aeda33c3a403e6d847d1d6825f0945c4de8",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/preview/gameplay-preview-v1.webm",
         "sha256": "a185e275cdb3498bac0a2fd875d0156135d8cef958b88bf050dedfbafc8edcc9",
@@ -85,7 +85,7 @@
           192
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 111,
         "totalDurationMs": 3700,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -128,7 +128,7 @@
       "packagePath": "archer_射手/1_Q_初階/02_森林翻滾_archer_01",
       "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "359fe1fb38d7c19aa1e621210cd9516a35b9995f6ed438619f2541b0a3c4fcfb",
+      "contractSha256": "21e70c1a1f94a679ae9299a11611e3f1e27f3356fd11d2a15515a0b2c59deffc",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/preview/gameplay-preview-v1.webm",
         "sha256": "e44b195b1235aa7918fbc526ac962ab57590060967cc2f90594fd18fdab69550",
@@ -193,7 +193,7 @@
           196
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 93,
         "totalDurationMs": 3100,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -236,7 +236,7 @@
       "packagePath": "archer_射手/1_Q_初階/03_穿葉箭_archer_02",
       "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "5e2fc0dc4d16069456bac6ac7bad9d1c2d982bca132ed3fa93d47eb0dbcf92cb",
+      "contractSha256": "1bf0bdac41af9e4f8facd8c8c13a83554c6846dffc48faa16de059c7de32f3ec",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/preview/gameplay-preview-v1.webm",
         "sha256": "5133babec4f00a63a60971e63b0f2757e474140abc9fd970ab158f363b344584",
@@ -301,7 +301,7 @@
           190
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 93,
         "totalDurationMs": 3100,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -344,7 +344,7 @@
       "packagePath": "archer_射手/1_Q_初階/04_荊刺陷阱_archer_03",
       "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "2656c758453a45ef833a45e435f0e835fd88b9127c0091c28996e5302bdb9133",
+      "contractSha256": "d32b8f65aba96a702c4fb8192421727acc440c2572b42d20237b386af4145301",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/preview/gameplay-preview-v1.webm",
         "sha256": "798607b4baeca8c5d278ee870e683c486b281480a1f631fffcb0c89809a950f4",
@@ -449,12 +449,12 @@
       "name": "隱形",
       "key": "Q",
       "tier": 1,
-      "packagePath": "archer_射手/1_Q_初階/05_藤鞭射擊_archer_04",
-      "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04",
+      "packagePath": "archer_射手/1_Q_初階/05_隱形_archer_04",
+      "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "bb7a3df73bc89b8eae794a5bc142d46d2c6a873223c018bf66ffde6c5f00c38e",
+      "contractSha256": "c234a1d95f1fc0b3f1ed88240bb7edf85fa670c366e998895ee23776a5a8bb67",
       "preview": {
-        "file": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/preview/gameplay-preview-v1.webm",
+        "file": "/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04/preview/gameplay-preview-v1.webm",
         "sha256": "170c8617d0e502e2df100c36fde341963c2f2189eeb2378ff7e947ad6db95682",
         "kind": "actual-5173-gameplay-video-optimized",
         "mediaType": "video/webm",
@@ -517,7 +517,7 @@
           205
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 117,
         "totalDurationMs": 3900,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -541,7 +541,7 @@
         "fallbackUsed": false
       },
       "icon": {
-        "file": "/assets/arena-skills/archer_射手/1_Q_初階/05_藤鞭射擊_archer_04/icon.png",
+        "file": "/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04/icon.png",
         "sha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
         "width": 64,
         "height": 64,
@@ -560,7 +560,7 @@
       "packagePath": "archer_射手/1_Q_初階/06_追獵標記_archer_05",
       "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "3f789c1f2e163e73244b1e29335cbec8a43cdb3af50405ce3d7240329da9571e",
+      "contractSha256": "e8eca385611826ff4de6c665ddaa448d83b6b10310e1e99b63cc53b0f37c3df6",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/preview/gameplay-preview-v1.webm",
         "sha256": "7a37d9c722ff2474c880cc2fec7c060edb4461af9e9c13f691de03f7e0b23179",
@@ -625,7 +625,7 @@
           196
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 198,
         "totalDurationMs": 6600,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -668,7 +668,7 @@
       "packagePath": "archer_射手/1_Q_初階/07_風切步_archer_06",
       "packageUrl": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "ef809d5c08c66493cd36b2bc6e61cdbd909356b1df168570aa266fd985093179",
+      "contractSha256": "44d242e9f0f0d94e2266c4ca7af7b627c05621524ae2e3a8a28c5daec6dc96bc",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/preview/gameplay-preview-v1.webm",
         "sha256": "2c85b24ed4048b9107bd651f0fb4b9f8c55b49a5a9dd2a15bbb6552b964b0a82",
@@ -776,7 +776,7 @@
       "packagePath": "archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
       "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "80c7001ea824ca1a4bdf9aa77520952d67b613ea3e26a2d169147e1bc0d547d2",
+      "contractSha256": "92838e7fcbd1c62dfac19ec71c4a6c72f7df0c4f323495965c7face8a40dfe87",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",
         "sha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
@@ -884,7 +884,7 @@
       "packagePath": "archer_射手/2_E_中階/09_根縛_archer_08",
       "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "ed0bcf7e9a41422256af73de7a593a219f144bc3c455380b089ce996e39872be",
+      "contractSha256": "3251d88c49a62fbba12475e2163044be12f3c601c27808c2bbe2a4add64e036d",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/preview/gameplay-preview-v1.webm",
         "sha256": "f8225b839c9d3a6b29cb512db145055f106312a484f0b54448051e9cc2a6e33d",
@@ -992,7 +992,7 @@
       "packagePath": "archer_射手/2_E_中階/10_穩心瞄準_archer_09",
       "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "bed4b4bf02e9b04981cd71a894031cf8981ae10e3dadd9968bb63d744b25fa7f",
+      "contractSha256": "ef809e48c173542c3d9e449a2f8878b51c6204877a6de3aa12dfd1ed3b7831c8",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/preview/gameplay-preview-v1.webm",
         "sha256": "e429367d92a852eb5dc4934dd658fe8aea81fdde4866c327c0ad0ff6491da531",
@@ -1057,7 +1057,7 @@
           111
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 279,
         "totalDurationMs": 9300,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -1184,7 +1184,7 @@
       "packagePath": "archer_射手/2_E_中階/12_貫穿箭_archer_11",
       "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "a5f195e9108cd99f31eeb7f3068c04419007d2b089e40e24bf5621fbef46a039",
+      "contractSha256": "d28df5287ad42fdc5ece1f30ff6962f9502e425522b19ea08c3dbdce150a4b71",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/preview/gameplay-preview-v1.webm",
         "sha256": "ec005073a444fcece7cfe9d85700a60e3a25078057c0d1f6360f87d8e93021b9",
@@ -1292,7 +1292,7 @@
       "packagePath": "archer_射手/3_R_高階/13_星痕狙殺_archer_12",
       "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "622026f47bbdaca02d56a2cb30280f6b789d508f460184402d742d8bb7e66094",
+      "contractSha256": "5911246fdaf4779fde8e81e240eabb6afd3173bbff5a1ed74c388a9432a0a82e",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/preview/gameplay-preview-v1.webm",
         "sha256": "01f18227b7d10180ffc2dfd13a438cd89077484820b65334bf551f8d4ee8e118",
@@ -1357,7 +1357,7 @@
           184
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 114,
         "totalDurationMs": 3800,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -1400,7 +1400,7 @@
       "packagePath": "archer_射手/3_R_高階/14_種子雨_archer_13",
       "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "7385ad52d281c1bac0c68e603d5b966a68ead028d27986beef72eeb51f636842",
+      "contractSha256": "7663a0ff9b94f7a8561a4365d64ebb5e78a0d0a35943441f92cd84ba697bd99f",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
         "sha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
@@ -1465,7 +1465,7 @@
           87
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 147,
         "totalDurationMs": 4900,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -1508,7 +1508,7 @@
       "packagePath": "archer_射手/3_R_高階/15_隼影處刑_archer_14",
       "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "34072e3cf05c9b19e27004953724594fc1cca63cfe84729751076efc9247a85b",
+      "contractSha256": "e3feacb4557451c8407a20f243c6eb1ce33cd896019c14eb27be40daf796957f",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/preview/gameplay-preview-v1.webm",
         "sha256": "6b859d24041df8c1c7a82c99ba23cc3a94382dcf8924f9ab65f80611ab0ca6d9",
@@ -1616,7 +1616,7 @@
       "packagePath": "engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01",
       "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "a307a7f379dcf19444e700596ee2e21ac683c07185cbcc3856a1eacf2c1e5817",
+      "contractSha256": "2df984969415dd88b8c605fa518b27cbdb5610213df85c2a5181fe3e39bb7131",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/preview/gameplay-preview-v1.webm",
         "sha256": "9ee76fcf2b8f1cb5b84c352fae7a517958f2d478f675458afc8a0e7eec7c59b3",
@@ -1721,12 +1721,12 @@
       "name": "散射",
       "key": "Q",
       "tier": 1,
-      "packagePath": "engineer_工程師/1_Q_初階/02_三連散射_engineer_02",
-      "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_三連散射_engineer_02",
+      "packagePath": "engineer_工程師/1_Q_初階/02_散射_engineer_02",
+      "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "ed25e5416f6228299652c90507cc910ce9ef54f6dcb7a130a0492fbc0cc155e6",
+      "contractSha256": "86c91632d5333d940b7c55f54edf13ea4824b369b210c9260d841598716a450b",
       "preview": {
-        "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_三連散射_engineer_02/preview/gameplay-preview-v1.webm",
+        "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02/preview/gameplay-preview-v1.webm",
         "sha256": "f58362d2aa430f074c0ccca08d437d6b77a040b63395fdb8cbadda52d932c84f",
         "kind": "actual-5173-gameplay-video-optimized",
         "mediaType": "video/webm",
@@ -1813,7 +1813,7 @@
         "fallbackUsed": false
       },
       "icon": {
-        "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_三連散射_engineer_02/icon.png",
+        "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02/icon.png",
         "sha256": "25ddf931bdf8b8a646a7a4bfd1e0e30b5128e7b92732166910aeb83d459b706d",
         "width": 64,
         "height": 64,
@@ -1832,7 +1832,7 @@
       "packagePath": "engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03",
       "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "525129cba9c7f8fe83ab406f7aafa9b690655f8d96a1e06759be02bcf9dc1459",
+      "contractSha256": "cb239bdfcc2b8a847b41a9e3e19620d167153f0dcd9e0776808782cabdec3f3e",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/preview/gameplay-preview-v1.webm",
         "sha256": "b2698f5471bf4ef861225111f753eb3f244eb85398edd8f68223aa062e257c26",
@@ -1940,7 +1940,7 @@
       "packagePath": "engineer_工程師/2_E_中階/04_壓制掃射_engineer_04",
       "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "d27916b7ab2dd7f277d1b74a05654d78197c12b5a8fb5b3e6b84dac623acdcea",
+      "contractSha256": "af623c35c32b3a1424a064c30644595a1c163eaaaf8b349b3094385a67a66fb2",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/preview/gameplay-preview-v1.webm",
         "sha256": "ada6ab02feeaec832eda29c38e3ea9df402dda47f6dff4f9696639b5f34b4721",
@@ -2048,7 +2048,7 @@
       "packagePath": "engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05",
       "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "e0df45c58e37b889005d9df352897739073f3822856b5625edc82cbe6c02e06f",
+      "contractSha256": "91f2b6ae220a9df9ae1e2dbb94ae194a6be918dfc763ddcaebce3b7c5155f7a0",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/preview/gameplay-preview-v1.webm",
         "sha256": "835f107174877bac95b71f508662b93a2f4d5021c7edc27bf608f1dd7d1ad387",
@@ -2113,7 +2113,7 @@
           194
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 153,
         "totalDurationMs": 5100,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -2156,7 +2156,7 @@
       "packagePath": "engineer_工程師/3_R_高階/06_攻城模式_engineer_06",
       "packageUrl": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "94d7c193409336f8f3f8f49b208cc781c1524f9aeddce2cdc5ed959af4c44008",
+      "contractSha256": "bcc967a0580aaef2fbac686f15891fea180f6cc3ca0a69b11af0c4ed150ce88a",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/preview/gameplay-preview-v1.webm",
         "sha256": "a56395866a7293bc0402264740181e926785c68a841548b45bf2d8c85078cf62",
@@ -2264,7 +2264,7 @@
       "packagePath": "engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07",
       "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "e6d757d366928c6fec2017db23aff96d0cc25b136bc9fb9f5378ebc5874647fe",
+      "contractSha256": "a8314d35f9181f4724f2af30646e8eecf8fe674b482481f56b0c1e271a466c7c",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/preview/gameplay-preview-v1.webm",
         "sha256": "6a34969387cb72b7728bceda3036532311d6e6f87644a24d6b3186d386679a2c",
@@ -2372,7 +2372,7 @@
       "packagePath": "engineer_工程師/1_Q_初階/08_屏障節點_engineer_08",
       "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "f6fb0b63efd5181d090f95d22e2ad375486b212d4eaeddad722283e608c99873",
+      "contractSha256": "43a55df10d1e9219b97ea812b49cf8671756adda869ca0c7ddf89364f8e24fdc",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/preview/gameplay-preview-v1.webm",
         "sha256": "39487258158680975ca85894c77b4277fe4fa309f4ffa1c6537b53ba8de1af2c",
@@ -2480,7 +2480,7 @@
       "packagePath": "engineer_工程師/2_E_中階/09_支撐砲架_engineer_09",
       "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "cd0f947ea118df7c1012e3959e225a3d59e39a0a63b56f93b68e66c3f82c9a32",
+      "contractSha256": "2fd585ed84672cc7ae8662de7481c04254bd2f4959b199985c9b94e63310fa9a",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/preview/gameplay-preview-v1.webm",
         "sha256": "3bad3ad044e0269849e32b6c0a10ca68acc0ecc669595cbfc77812a3f264e2c2",
@@ -2588,7 +2588,7 @@
       "packagePath": "engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10",
       "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "c0302450906e498079803b5b668c6a72bc85cbf71a23c526601c141fa55c2077",
+      "contractSha256": "9e89ae89599e0c721651bdfa3008c3b1db847bc26fef13e61df778db004b0943",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/preview/gameplay-preview-v1.webm",
         "sha256": "0528c50e5ff64c357745a8b98db329eb6cf887b62e57f67d18e56149b107dbed",
@@ -2696,7 +2696,7 @@
       "packagePath": "engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11",
       "packageUrl": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "587676fdf3e4be6c872d80dfe16f00228270082b116ba69421eeee8ce22c5625",
+      "contractSha256": "69e4acea90bac602e15d5f9ad0920f00db96618e73e1cb3b0c8cf0c9ad5d1868",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/preview/gameplay-preview-v1.webm",
         "sha256": "7b3dc17be2e1b0fc115e3961d225913ee5c71035fcc7e2bb8ef4af89f873f091",
@@ -2804,7 +2804,7 @@
       "packagePath": "engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12",
       "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "2d0d3b3e98db0ca0b6a4d1a66a2d35e1f58f1ee93e6c6431c5b0cfa7be71d621",
+      "contractSha256": "567a49cd14bfe084c19b35cf485bceef92a11102ed8d07cf2fe3cd81fbbc1788",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview/gameplay-preview-v1.webm",
         "sha256": "b03878d102731b235918abf5829d27e9f059abb53240b044aa08a881aee6eedf",
@@ -2841,7 +2841,7 @@
           1920,
           1080
         ],
-        "sourceFrameRate": 60.0,
+        "sourceFrameRate": 60,
         "previewSize": [
           896,
           504
@@ -2912,7 +2912,7 @@
       "packagePath": "engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13",
       "packageUrl": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "262874899dd61a002e441b4c07b7fc474c38ab81f0773d3e477e3de8901839e6",
+      "contractSha256": "1015409d4b540fc8e2e1afab39fe81eb9067c69f0c6bfbb7234874137c04dd0f",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/preview/gameplay-preview-v1.webm",
         "sha256": "d058696153b504c560a22e260a99d950b9305c642a346f47d8054dab6b07c7fc",
@@ -3020,7 +3020,7 @@
       "packagePath": "engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14",
       "packageUrl": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "7edcecee4851dbc4c5dd3702ee26f9ce28834f63ba1719d4ac5d5f9970b0a0fb",
+      "contractSha256": "7cb5012cff80a3de0806070e6e61bc17cb22e29cd066833d627cc894cc16823e",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/preview/gameplay-preview-v1.webm",
         "sha256": "2b1942db1f8adcb77042453f254d729a0f064066c86666ba311adb423c2de12e",
@@ -3128,7 +3128,7 @@
       "packagePath": "engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15",
       "packageUrl": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "cbd7c8741c239e5b5231b9865b426873d74035cf1df20b338f97c1bb6bcf12bc",
+      "contractSha256": "de53d0286f65559afc1db498d7570023232363089b2200520ba258b52bff3f65",
       "preview": {
         "file": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/preview/gameplay-preview-v1.webm",
         "sha256": "188b86a34e7f04283683607dd602a99b96b46185819e6531215626b4988c4d5a",
@@ -3236,7 +3236,7 @@
       "packagePath": "mage_法師/1_Q_初階/01_日耀光束_mage_00",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "11ed318b8c092be1cf67fc4d045aa821aecda924eefa562b839cabb626515da6",
+      "contractSha256": "a90f2b3185d2437c24e2f98140545a816a0676b2f6d6a0f6117c6727e1f1a56f",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/preview/gameplay-preview-v1.webm",
         "sha256": "3b8b35a77763276d4feff5b32b3e97dcf931a7571abeac8aba65cc01255dec4a",
@@ -3344,7 +3344,7 @@
       "packagePath": "mage_法師/1_Q_初階/02_毒針咒_mage_01",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "55485472e7661924b8f84a614a513c5e228457447c60001a3ebc4996c66963a0",
+      "contractSha256": "03c9e1ee576ee19fe40b9ff7e743f230622e17113ba20ee8647918cbc10cd13d",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/preview/gameplay-preview-v1.webm",
         "sha256": "5e89b080b9b2f3169922ed274e05f95e5433d8d65b07169ad6688869c1ad5977",
@@ -3409,7 +3409,7 @@
           192
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 195,
         "totalDurationMs": 6500,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -3452,7 +3452,7 @@
       "packagePath": "mage_法師/1_Q_初階/03_汲魂之手_mage_02",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "46b300a4af9471bf3225c4d3db9ccff73e3a10fc8d7e1c536c879d8ccd044795",
+      "contractSha256": "02bb31a1b8ded9800c7e2ecfe8f2740313b16e327a36141dea5b99c573defba8",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/preview/gameplay-preview-v1.webm",
         "sha256": "c796878e59446879a08c3a87a267b732381dff077da98d31dc4d00f506da80bf",
@@ -3517,7 +3517,7 @@
           192
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 105,
         "totalDurationMs": 3500,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -3560,7 +3560,7 @@
       "packagePath": "mage_法師/1_Q_初階/04_灼光烙印_mage_03",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "fc39f17bff30db30cecc06b7a3768e63b14daea1be904cf378e2b458270ec757",
+      "contractSha256": "8578e0dc121079ca798042321eb50424d0170c866317fa39428f4241e313c6a2",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/preview/gameplay-preview-v1.webm",
         "sha256": "a60868dfb854150f68d8e5639d9ac1d222e26e4345439294593dcf4b6a9cb560",
@@ -3625,7 +3625,7 @@
           178
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 168,
         "totalDurationMs": 5600,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -3668,7 +3668,7 @@
       "packagePath": "mage_法師/1_Q_初階/05_禁言符_mage_04",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "c18550b0f3868bdede65fe97d6a2d5e5f2889dc635f7f924cb556183f00a31bb",
+      "contractSha256": "fd2385b3949dece5420b6ac61c9c5dfc36956ef22e708e169eb809edbd5b2524",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/preview/gameplay-preview-v1.webm",
         "sha256": "a98a1b1987f508568d37e96a841d86371e4a50396e7126a1e858bec5c742198a",
@@ -3733,7 +3733,7 @@
           178
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 111,
         "totalDurationMs": 3700,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -3776,7 +3776,7 @@
       "packagePath": "mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "536d952d1eac348052ced405e392ac4756271bdf77510a2050931d23b3afad2f",
+      "contractSha256": "e1859a24c31e7ec1e60717fb5f555be4142d07763e64bf148adacd71e5cee701",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v1.webm",
         "sha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
@@ -3813,7 +3813,7 @@
           1920,
           1080
         ],
-        "sourceFrameRate": 60.0,
+        "sourceFrameRate": 60,
         "previewSize": [
           896,
           504
@@ -3884,7 +3884,7 @@
       "packagePath": "mage_法師/1_Q_初階/07_虛空球_mage_06",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "8cb93dc0628f462d9c5d63837fda8849dd5ec1b231a1f668e2f40f2e940c0700",
+      "contractSha256": "f66cdf334c76b1c2fce58701e8cd1b88d8a10229d5c6ee619ec640681cdc285e",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/preview/gameplay-preview-v1.webm",
         "sha256": "ee1500a4b888fbe614dc9be1b98d768147b54756a9270b14bbf24131127efce4",
@@ -3992,7 +3992,7 @@
       "packagePath": "mage_法師/2_E_中階/08_復甦爆發_mage_07",
       "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "525407705179847663fd761d704bfc53abbf2e6a8ce20493c0ce79b78c307e81",
+      "contractSha256": "54dc9c05bdf8b7da83bdde148a8440f190863e1c79a8188e2128b661076cbe6d",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/preview/gameplay-preview-v1.webm",
         "sha256": "2659fb888e2f16f71092229667def18c0ecdcba16566c65209e54ae4715173c1",
@@ -4100,7 +4100,7 @@
       "packagePath": "mage_法師/2_E_中階/09_瘴霧坩堝_mage_08",
       "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "f8f186060a85747853fc28c38eec12d9be8a049f6b65ac5f8c445a4409351a5c",
+      "contractSha256": "acfd5704fa541508dfadbb3f10c0c524fceeab8aa4b8e892ec5c8c74333119d4",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/preview/gameplay-preview-v1.webm",
         "sha256": "78829396997da01d4cb59e71075f6728c62cc2b9d09551f1d1ac449926c8500d",
@@ -4165,7 +4165,7 @@
           179
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 183,
         "totalDurationMs": 6100,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -4208,7 +4208,7 @@
       "packagePath": "mage_法師/2_E_中階/10_聚焦透鏡_mage_09",
       "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "0d77653b9b0b4e585098b9b2f8d1cdadab3197f8170dd86f22cf246a06160919",
+      "contractSha256": "369880d34faac0b147a655cd40e66cb87c38139e0f5406e18dc414cba85c1680",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/preview/gameplay-preview-v1.webm",
         "sha256": "f37c28afba8d1ef8690c6bdf33c8d7d402406ce0c6fc1bc587843674ac01209c",
@@ -4245,7 +4245,7 @@
           1920,
           1080
         ],
-        "sourceFrameRate": 60.0,
+        "sourceFrameRate": 60,
         "previewSize": [
           896,
           504
@@ -4273,7 +4273,7 @@
           189
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 210,
         "totalDurationMs": 7000,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -4316,7 +4316,7 @@
       "packagePath": "mage_法師/2_E_中階/11_重力井_mage_10",
       "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "985138ba30b4af3de50b6ec9edce12ebb460f7ee3af78dc96a9eb45ff905216d",
+      "contractSha256": "795603860d02fd95b0cdc6a1f966c4873278990d454fdddd2768eb2df0b6bc73",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/preview/gameplay-preview-v1.webm",
         "sha256": "14465a2a199c47e80d40d6b3ebb9f6a407624fcbdc2443a0bd0a2de1406217aa",
@@ -4381,7 +4381,7 @@
           163
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 147,
         "totalDurationMs": 4900,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -4424,7 +4424,7 @@
       "packagePath": "mage_法師/2_E_中階/12_鎖魂鏈_mage_11",
       "packageUrl": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "6e35ad39df0b095ac914e1b782d314fa4f8478669646c01797031183cdf11338",
+      "contractSha256": "1d6067b5adb0b653565bd5b6b4b3414b84b64a4797cd4091d240e8c9c7da7707",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/preview/gameplay-preview-v1.webm",
         "sha256": "e564d78bbb2df4aeee0ccb6345a9c76872a96365827203b02b9b06cb225eb00d",
@@ -4532,7 +4532,7 @@
       "packagePath": "mage_法師/3_R_高階/13_淨化風暴_mage_12",
       "packageUrl": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "3083bd6b8c84ca1a4cb13213a998f3c18a3086870544fbd1878dc6072821e7a6",
+      "contractSha256": "4a6aedd825ed287f8ed9fe5bcf08b53a5badbd65644d9ece87d4b36e33d43a19",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/preview/gameplay-preview-v1.webm",
         "sha256": "95537e1887201db290f8fe6181b972e90dc21ec92a86820472c308815b97b392",
@@ -4640,7 +4640,7 @@
       "packagePath": "mage_法師/3_R_高階/14_禁時星盤_mage_13",
       "packageUrl": "/assets/arena-skills/mage_法師/3_R_高階/14_禁時星盤_mage_13",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "07d2519a7acb62c3d5e01e5f2545017906d7ed7d0c1da57454f31a6fa95ac17d",
+      "contractSha256": "25605f3d47183bdcdb05c8848cdb1e7da692d0585e04f85d97d6bf41083ac7d8",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/3_R_高階/14_禁時星盤_mage_13/preview/gameplay-preview-v1.webm",
         "sha256": "6fa404e63751993dd9257160dd338a3b8bcd11fa6497e0cf6eef4b643ae0ab7c",
@@ -4705,7 +4705,7 @@
           125
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 150,
         "totalDurationMs": 5000,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -4748,7 +4748,7 @@
       "packagePath": "mage_法師/3_R_高階/15_血月祭壇_mage_14",
       "packageUrl": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "a2978ce01254443b90cb7ee24eb0e3aada311c8cd50027dae0fb99ff76b199cc",
+      "contractSha256": "bbfd2bc3af5e1eaddd97e060e72b42c153868cb7db4c320d0f06f9eb79c6cf7b",
       "preview": {
         "file": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/preview/gameplay-preview-v1.webm",
         "sha256": "e8aa990c0fbc4554b81089f657cbd0412e17e3994e6e1415791617c1e567afdf",
@@ -4856,7 +4856,7 @@
       "packagePath": "warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00",
       "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "a79449aebe354c859c4593c397a4f1cf1d377150fd583c4ee6217b5f04760251",
+      "contractSha256": "e10c05e8f41726f68f3087244624d967334eef0f92a1c6582a98fcec7a15eddd",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/preview/gameplay-preview-v1.webm",
         "sha256": "625f463f0dddbf92d26a78451a26ad6ff6a75cc083aaa8539f62298a1ec24314",
@@ -4961,12 +4961,12 @@
       "name": "烈焰狂行",
       "key": "Q",
       "tier": 1,
-      "packagePath": "warrior_戰士/1_Q_初階/02_崩岩重鎚_warrior_01",
-      "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_崩岩重鎚_warrior_01",
+      "packagePath": "warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01",
+      "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "11a2a8796a1fd371c0f6e0b437f578e6b024c8528f566836a627dceed9633f86",
+      "contractSha256": "1b457d9d350ca598b3691d5252bc7e49a6072568bc7e6b3979e8d77a34d6d797",
       "preview": {
-        "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_崩岩重鎚_warrior_01/preview/gameplay-preview-v1.webm",
+        "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/preview/gameplay-preview-v1.webm",
         "sha256": "8b762c90dee4c88f62b3cf0cf237f32cf2a28483014a8724a9993ec68033be77",
         "kind": "actual-5173-gameplay-video-optimized",
         "mediaType": "video/webm",
@@ -5053,7 +5053,7 @@
         "fallbackUsed": false
       },
       "icon": {
-        "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_崩岩重鎚_warrior_01/icon.png",
+        "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/icon.png",
         "sha256": "5682557ba7927f74855e751f054ea9c9283cfb4ad373036b9a833c3c205c1bfa",
         "width": 64,
         "height": 64,
@@ -5072,7 +5072,7 @@
       "packagePath": "warrior_戰士/1_Q_初階/03_戰環斬_warrior_02",
       "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "b14f36f9c71f2552e140a2f58dac3b19e344a28eed3c70ac3591fb9f5c613ead",
+      "contractSha256": "3db55618317e1110077b8c62cb1f827a6d29ba048a5e7693314e20058fbed4be",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/preview/gameplay-preview-v1.webm",
         "sha256": "7da10c2624cd206d1f6af40a02e295e8b5011c4d1c668b898c6655671ee0cd9f",
@@ -5137,7 +5137,7 @@
           180
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 90,
         "totalDurationMs": 3000,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -5180,7 +5180,7 @@
       "packagePath": "warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03",
       "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "fd46728ae7fbb05f8915d6e37cdc9703206c154069b51f59a59534deb3734eb9",
+      "contractSha256": "32c862b0df8dd1addb0240b5c2885a0bf20b6fdae5be11de81bb3c5079e5f6b0",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/preview/gameplay-preview-v1.webm",
         "sha256": "19ce227477e16edb97c576d314272d14130f0d8da5a223bbcb3a438f3c097d8f",
@@ -5245,7 +5245,7 @@
           189
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 141,
         "totalDurationMs": 4700,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -5288,7 +5288,7 @@
       "packagePath": "warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04",
       "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "fe09f14213868c18f9f95247e9a7c8d0b611229bc9e27da42e4115292fd624c2",
+      "contractSha256": "2d8221d849b46427ff3c4281201a26bcf2c7e7bfa29669622e2c910c42f07de4",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/preview/gameplay-preview-v1.webm",
         "sha256": "8ba1349b74c41cba5e3c0d5dfa878c057a9943c28c38ba8a2fcc6c9517f677cd",
@@ -5396,7 +5396,7 @@
       "packagePath": "warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05",
       "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "9d98b96c0cdd289c6f867fdbe19f6f960a3c168d1882e85fb5e1a35915598160",
+      "contractSha256": "4661271df3f35685f7e6f6c0a3f4c9ee66df86566fec1c382eef457edcb101a1",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/preview/gameplay-preview-v1.webm",
         "sha256": "43a64a0d6eb33a48fb12018b29d99502d73e650b7b52c5d2885cf855c61face0",
@@ -5504,7 +5504,7 @@
       "packagePath": "warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06",
       "packageUrl": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "23868dbb6dfe54411e76498e95e2ff48a5ed7429c2fccd51095bf2d96971c919",
+      "contractSha256": "a6541ebd120e5a94527e9e902a6439b2371ae64b2574c495c6e00b74922dd687",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/preview/gameplay-preview-v1.webm",
         "sha256": "c4ca5530aa735d08ffe9fdb742c558849b5952a7d2978f841d72d749b6778981",
@@ -5569,7 +5569,7 @@
           194
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 93,
         "totalDurationMs": 3100,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -5612,7 +5612,7 @@
       "packagePath": "warrior_戰士/2_E_中階/08_反擊姿態_warrior_07",
       "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "e36144508f8d23d14451f6b2a7e0723179440b11569f4c9b8c8bbf25258d4308",
+      "contractSha256": "d2c9be42fc31c353a78f7742729b1b719155c9fc26fb3c8e76139bb985935773",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/preview/gameplay-preview-v1.webm",
         "sha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
@@ -5677,7 +5677,7 @@
           197
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 102,
         "totalDurationMs": 3400,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -5720,7 +5720,7 @@
       "packagePath": "warrior_戰士/2_E_中階/09_和平護盾_warrior_08",
       "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/09_和平護盾_warrior_08",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "7203dedd1f6871e4d0562347897dad165bd85dfabf2ac6f45b57bf09c2283630",
+      "contractSha256": "2afe2c1f9b745832e7d9448f4a74a94a5a22d58e60df519a5fba5c21ab25acf3",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/2_E_中階/09_和平護盾_warrior_08/preview/gameplay-preview-v1.webm",
         "sha256": "198d47d898ce3080f48b7564663a3324d7387892ce6ae14fb0eef33744db1f7c",
@@ -5828,7 +5828,7 @@
       "packagePath": "warrior_戰士/2_E_中階/10_戰陣號令_warrior_09",
       "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "5511f7e2313d6f087520e30210899ca94c19455021ddcb2cd02317dab2e3f47e",
+      "contractSha256": "3569bdf96cc8f18991596750d0f5735231688bd0f7fc44a954618faccbb0ac8c",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/preview/gameplay-preview-v1.webm",
         "sha256": "0b18edf62c227d5b8fb4af5aedb7b72b7610879dcc9ce474f32c4b7899ac8ad1",
@@ -5936,7 +5936,7 @@
       "packagePath": "warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
       "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "07d6d204953cb814f590ab99efcb0d573686253ac8cdd35ec9e886d2faa3cc98",
+      "contractSha256": "a342a2003426a4fba6e43eb861ba6027596eb8a87e8c5652c707900950190fd8",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/preview/gameplay-preview-v1.webm",
         "sha256": "0594d170dee3e06a3877858d590d33f880928a3b0ba2f33cfee1ba2bad095d38",
@@ -6044,7 +6044,7 @@
       "packagePath": "warrior_戰士/2_E_中階/12_裂地震_warrior_11",
       "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "5281075a4e493ea5c3d62908f5a4c8e29df951698164997a775478de919a4d39",
+      "contractSha256": "79fa7863d08f4c7f303ec7bda9b8afa24f8e283ce225953efa8c58e65dd82ea6",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/preview/gameplay-preview-v1.webm",
         "sha256": "3b246caee5b3e4e689e94b8f9160ea389b8b2084283528f81ae6800cd4943d96",
@@ -6152,7 +6152,7 @@
       "packagePath": "warrior_戰士/3_R_高階/13_斷城震落_warrior_12",
       "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "32c7c4720635fc1168bdf6698610ad523261c6d20d65ec7a06510b97e291c179",
+      "contractSha256": "8a51a1b228c088ef5f523847d5fe5bf66d956ba545a095b18d9c414e7ef8792b",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/preview/gameplay-preview-v1.webm",
         "sha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
@@ -6260,7 +6260,7 @@
       "packagePath": "warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13",
       "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "b5a16290306927eebae6e7f7ac0e6fcc3438b3638fc07e5ea8a1c9b789e24106",
+      "contractSha256": "0f0894be8f26ac3132de68d93f586a8824c7f98547e1ea8d03c9042534e43a26",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/preview/gameplay-preview-v1.webm",
         "sha256": "a551b9d394b13279a1e373a120171db06df4a999fe519f611f33bf5b148dd63d",
@@ -6325,7 +6325,7 @@
           209
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.0,
+        "frameRate": 30,
         "frameCount": 198,
         "totalDurationMs": 6600,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
@@ -6368,7 +6368,7 @@
       "packagePath": "warrior_戰士/3_R_高階/15_裁決_warrior_14",
       "packageUrl": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "1c5bb4e2e29e8bb910ef1435cd5cf00500cac8eb24c96edb202074905e214372",
+      "contractSha256": "a589440aee4947f1ca81c37f8313e22fd6d0841ffd90a20ba4d40e65938e1149",
       "preview": {
         "file": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/preview/gameplay-preview-v1.webm",
         "sha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
@@ -6532,9 +6532,10 @@
           ],
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/deploy-mechanical.png",
           "sha256": "a749cfc743bd040c6cc90bf95ea6c734a7ccb1913e759d10f8c0fac9e15ae50e",
-          "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-deploy-mechanical-v2-normalized.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-mechanical-v2-normalized.png",
           "sourceSha256": "89420f0e2d1a7ed4cbcd583644899a19afda5e931dd20f1c7729ede093ce9b53",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-mechanical-v2-normalized.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-mechanical-v2-normalized.png",
+          "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-deploy-mechanical-v2-normalized.png"
         },
         "deployMagic": {
           "kind": "animated-strip",
@@ -6573,7 +6574,7 @@
           ],
           "origin": [
             0.5,
-            1.0
+            1
           ],
           "referenceOffset": [
             0,
@@ -6589,9 +6590,10 @@
           ],
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/deploy-magic.png",
           "sha256": "44e6670b22d5c2f349870436a49dbdbbfc050fea581da0a3cdb1c47973e3578b",
-          "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-deploy-magic-v1-normalized.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-magic-v1-normalized.png",
           "sourceSha256": "9de31cf9d8909d7bb3966bce0521ce31602bcdd6d36894a66b6abf5b3b76396b",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-magic-v1-normalized.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-deploy-magic-v1-normalized.png",
+          "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-deploy-magic-v1-normalized.png"
         },
         "mechanicalBasicShot": {
           "kind": "animated-strip",
@@ -6644,9 +6646,10 @@
           ],
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/basic-shot-mechanical.png",
           "sha256": "dd4d0e7a9306611c07db0c2988521f8b9ad0a107fdd538bc0d6f0e3c9a8ff724",
-          "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-basic-shot-v1-normalized.png",
           "sourceSha256": "9ff998bd6cba68b09ef32093445b7f64e6659fa76bcb46ad501f4c660f58ad66",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-basic-shot-v1-normalized.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-turret-basic-shot-v1-normalized.png",
+          "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-turret-basic-shot-v1-normalized.png"
         },
         "magicBasicShot": {
           "kind": "animated-strip",
@@ -6699,25 +6702,28 @@
           ],
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/basic-shot-magic.png",
           "sha256": "888f1adb619307c237692be78b6219e2db493e152993ab35768254bb5170d446",
-          "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-basic-v2-normalized.png",
           "sourceSha256": "88f0d796fffd5419dc9672b7937edbfb8130b416fafd3beaf67254af35161c2f",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-basic-v2-normalized.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-basic-v2-normalized.png",
+          "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-basic-v2-normalized.png"
         },
         "mechanicalTurretAtlas": {
           "kind": "production-atlas",
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/mechanical-turret-atlas.png",
           "sha256": "a4333048ae7b54326a7378a622aaf59ee70ba2ee577612dc13e758a4ca9c5101",
-          "sourcePath": "apps/client/public/assets/generated/combat-objects.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/combat-objects.png",
           "sourceSha256": "a4333048ae7b54326a7378a622aaf59ee70ba2ee577612dc13e758a4ca9c5101",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/combat-objects.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/combat-objects.png",
+          "originalSourcePath": "apps/client/public/assets/generated/combat-objects.png"
         },
         "magicTurret": {
           "kind": "production-image",
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret.png",
           "sha256": "d890969d7f992975c0d023567229b17050da9feaba67d10afe2e1e1d97cb7d7d",
-          "sourcePath": "apps/client/public/assets/generated/engineer-magic-turret.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret.png",
           "sourceSha256": "d890969d7f992975c0d023567229b17050da9feaba67d10afe2e1e1d97cb7d7d",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret.png",
+          "originalSourcePath": "apps/client/public/assets/generated/engineer-magic-turret.png"
         },
         "magicTurretFire": {
           "kind": "production-strip",
@@ -6726,9 +6732,10 @@
           "sourceFrameCount": 4,
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret-fire.png",
           "sha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
-          "sourcePath": "apps/client/public/assets/generated/engineer-magic-turret-fire.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret-fire.png",
           "sourceSha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret-fire.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-turret-fire.png",
+          "originalSourcePath": "apps/client/public/assets/generated/engineer-magic-turret-fire.png"
         },
         "magicMuzzle": {
           "kind": "production-strip",
@@ -6737,9 +6744,10 @@
           "sourceFrameCount": 8,
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-muzzle.png",
           "sha256": "623e83cec146896559181eb0b8546688732c2654dcd171662225bea53f91feef",
-          "sourcePath": "apps/client/public/assets/generated/engineer-magic-muzzle.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-muzzle.png",
           "sourceSha256": "623e83cec146896559181eb0b8546688732c2654dcd171662225bea53f91feef",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-muzzle.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-muzzle.png",
+          "originalSourcePath": "apps/client/public/assets/generated/engineer-magic-muzzle.png"
         },
         "magicShield": {
           "kind": "production-strip",
@@ -6748,14 +6756,79 @@
           "sourceFrameCount": 6,
           "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-shield.png",
           "sha256": "d89c82820a1468bfecbd6a9cb57843f9ccc9ffd7f8a3369e76d8c3a67f7a7bf6",
-          "sourcePath": "apps/client/public/assets/generated/engineer-magic-shield.png",
+          "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-shield.png",
           "sourceSha256": "d89c82820a1468bfecbd6a9cb57843f9ccc9ffd7f8a3369e76d8c3a67f7a7bf6",
-          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-shield.png"
+          "sourceFile": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/source/engineer-magic-shield.png",
+          "originalSourcePath": "apps/client/public/assets/generated/engineer-magic-shield.png"
+        }
+      },
+      "configurationPreviews": {
+        "mechanical": {
+          "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/preview/gameplay-preview-mechanical-v1.webm",
+          "sha256": "71ffa3265d6675dc26c2cb3fa833b1ba8283dfaf786925cf07e30e9c52bd647e",
+          "mediaType": "video/webm",
+          "frameRate": 30,
+          "sourceSize": [
+            896,
+            504
+          ],
+          "crop": [
+            0,
+            0,
+            896,
+            504
+          ],
+          "sourceScenario": "random-engineer_00-mechanical",
+          "sourceCapture": "canvas-capture-stream",
+          "sourceReport": "docs/design/arena-dynamic-gameplay-review/turret-core-runtime-20260818/preview-report.json",
+          "sourceVideoSha256": "5c9181619d86e3772c6caf8c7e01acd5d30e36dc14c12c17619130f25d20f5c9",
+          "sourceVideoBytes": 2914934,
+          "sourceCrop": [
+            384,
+            162,
+            896,
+            504
+          ],
+          "acceptedAnimationId": "actual-phaser-gameplay:random-engineer_00-mechanical:71ffa3265d6675dc",
+          "encoding": "vp9-webm-crf34-30fps-physical-crop",
+          "interpolatedFrames": false,
+          "fallbackUsed": false
+        },
+        "magic_missile": {
+          "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/preview/gameplay-preview-magic-v1.webm",
+          "sha256": "faf90b5a5fcc9da40810b98d9be68a1afa9183305a2dd646a3be59498d8ef1af",
+          "mediaType": "video/webm",
+          "frameRate": 30,
+          "sourceSize": [
+            896,
+            504
+          ],
+          "crop": [
+            0,
+            0,
+            896,
+            504
+          ],
+          "sourceScenario": "random-engineer_00-magic",
+          "sourceCapture": "canvas-capture-stream",
+          "sourceReport": "docs/design/arena-dynamic-gameplay-review/turret-core-runtime-20260818/preview-report.json",
+          "sourceVideoSha256": "e24813e4129e24c66df0837078aada99f3531e1be953668e2a6f158c772d25dc",
+          "sourceVideoBytes": 3074982,
+          "sourceCrop": [
+            384,
+            136,
+            896,
+            504
+          ],
+          "acceptedAnimationId": "actual-phaser-gameplay:random-engineer_00-magic:faf90b5a5fcc9da4",
+          "encoding": "vp9-webm-crf34-30fps-physical-crop",
+          "interpolatedFrames": false,
+          "fallbackUsed": false
         }
       },
       "key": "F",
       "tier": "core",
-      "contractSha256": "6a6270e01cb8318ce997aa48cdfad42e7fd1d2f53b5a12cdb63a83c889930288",
+      "contractSha256": "3f4a37dc5bb11c44366287e497796ab50dbd262eafed11ffaf4766a2807c26ec",
       "icon": {
         "file": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/icon.png",
         "sha256": "4a0c8bc53af7b46249e175c1db27128a80e8f0c3e79fd9a06be2360e7794ff41",

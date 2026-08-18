@@ -21,7 +21,7 @@
       "renderKind": "segment",
       "referenceSize": [
         0,
-        18
+        30
       ],
       "referenceOffset": [
         0,
@@ -35,18 +35,18 @@
       "pathCore": {
         "kind": "segment",
         "outerColor": 16764234,
-        "outerWidth": 3,
+        "outerWidth": 6,
         "innerColor": 16776402,
-        "innerWidth": 1
+        "innerWidth": 3
       },
       "projectileLaunchScale": true,
       "fixedDisplay": false
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:0c5af6833c5a9983",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-日耀光束.gif",
-    "configPreviewSourceSha256": "0c5af6833c5a9983cbce807063ac521821eac51a50ebd46ab53c13cb50919177",
-    "configPreviewOutputSha256": "88a471592e33af8222fb263e2b9462749c6f0a84607f331430d145f4087a9213",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_00-hq.webm",
+    "configPreviewSourceSha256": "bd22fa0d7b51fbb7fd982422214e0d0b00733c747ba4525a0ea5ffa94f41b959",
+    "configPreviewOutputSha256": "3b8b35a77763276d4feff5b32b3e97dcf931a7571abeac8aba65cc01255dec4a",
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/runtime/primary.png",
     "frameWidth": 120,
     "frameHeight": 120,
@@ -57,7 +57,7 @@
       117,
       78
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-solar-beam.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/source/primary-source-0dc02a6fe34ab2a4.png",
     "sourceSha256": "0dc02a6fe34ab2a4358c49e88967fcfdc4e0d22b105379cc65bdfaa782bd92ba",
     "outputSha256": "813d8263b0e92a78183aa56d73a29d4a82afbcd18e8d10179d0426cf5c803f7a",
     "frameDurationsMs": [
@@ -115,8 +115,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-solar-beam.png",
-        "sha256": "0dc02a6fe34ab2a4358c49e88967fcfdc4e0d22b105379cc65bdfaa782bd92ba"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/source/primary-source-0dc02a6fe34ab2a4.png",
+        "sha256": "0dc02a6fe34ab2a4358c49e88967fcfdc4e0d22b105379cc65bdfaa782bd92ba",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-solar-beam.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/01_日耀光束_mage_00",
@@ -131,9 +132,28 @@
     "previewSourceScenario": "random-mage_00",
     "previewSourceSequenceSha256": "bd22fa0d7b51fbb7fd982422214e0d0b00733c747ba4525a0ea5ffa94f41b959",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.032,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      845,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-solar-beam.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/source/primary-source-0dc02a6fe34ab2a4.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/preview/gameplay-preview-v1.webm",

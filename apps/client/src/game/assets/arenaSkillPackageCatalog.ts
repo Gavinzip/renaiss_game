@@ -1,5 +1,19 @@
-import type { ArenaCatalogSkillId } from "@renaiss-game/shared";
+import type {
+  ArenaCatalogSkillId,
+  EngineerTurretKind
+} from "@renaiss-game/shared";
 import runtimeManifestJson from "./arenaSkillRuntimeManifest.json";
+
+interface PackagedGameplayPreview {
+  file?: string;
+  sha256?: string;
+  mediaType?: "video/webm" | "image/webp";
+  frameRate?: number;
+  sourceSize?: readonly number[];
+  crop?: readonly number[];
+  sourceScenario?: string;
+  fallbackUsed?: boolean;
+}
 
 interface PackagedArenaSkillEntry {
   skillId: ArenaCatalogSkillId;
@@ -11,6 +25,9 @@ interface PackagedArenaSkillEntry {
   previewFrameRate?: number;
   previewSourceSize?: readonly number[];
   previewCrop?: readonly number[];
+  configurationPreviews?: Partial<
+    Record<EngineerTurretKind, PackagedGameplayPreview>
+  >;
   iconFile?: string;
   iconFileSha256?: string;
   acceptedAnimationId?: string;
@@ -49,6 +66,28 @@ export function getArenaSkillPackagePreview(skillId: ArenaCatalogSkillId) {
     frameRate: entry.previewFrameRate,
     sourceSize: entry.previewSourceSize,
     crop: entry.previewCrop
+  };
+}
+
+export function getEngineerTurretPackagePreview(kind: EngineerTurretKind) {
+  const entry = getArenaSkillPackageEntry("engineer_00");
+  const preview = entry?.configurationPreviews?.[kind];
+  if (
+    !preview?.file ||
+    !preview.sha256 ||
+    preview.mediaType !== "video/webm" ||
+    preview.fallbackUsed !== false
+  ) {
+    return null;
+  }
+  return {
+    file: preview.file,
+    sha256: preview.sha256,
+    mediaType: preview.mediaType,
+    frameRate: preview.frameRate,
+    sourceSize: preview.sourceSize,
+    crop: preview.crop,
+    sourceScenario: preview.sourceScenario
   };
 }
 

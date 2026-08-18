@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:8c4240efff3ebcdc",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_月牙刃.gif",
-    "configPreviewSourceSha256": "8c4240efff3ebcdcdd429c3913b0e7974cdfb4f278200d84934fb66ace899185",
-    "configPreviewOutputSha256": "87a196ee45b1fc50a5d19e3e6f5a1e1d76768607ea3916713ff04945286b122b",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_00-hq.webm",
+    "configPreviewSourceSha256": "0fa40840a1e5a42b00154cb4a2535988b067f3ceae32582ec246cbdd7ada6ca6",
+    "configPreviewOutputSha256": "a185e275cdb3498bac0a2fd875d0156135d8cef958b88bf050dedfbafc8edcc9",
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -281,8 +281,24 @@
     "previewSourceSequenceSha256": "0fa40840a1e5a42b00154cb4a2535988b067f3ceae32582ec246cbdd7ada6ca6",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      813,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/preview/gameplay-preview-v1.webm",
@@ -348,7 +364,7 @@
       192
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 111,
     "totalDurationMs": 3700,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

@@ -23,7 +23,7 @@
       301
     ],
     "persistent": true,
-    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-counter-magic-shield-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/source/primary-source-a17e892a56875842.png",
     "sourceSha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
     "outputSha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
     "previewSha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
@@ -57,14 +57,36 @@
     "previewFileSha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
     "iconFile": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/icon.png",
     "iconFileSha256": "e9c7f1f2eb956e6007836cf3cc0a6b68ce664b41f4868c868605964a48eb7c06",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_07-hq.webm",
+    "configPreviewSourceSha256": "c848003001784f2e5639c35db223167471c623949aaeae5cf917dc410ca6a0ba",
+    "configPreviewOutputSha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_07:source-c848003001784f2e:output-6dde6c95e90246c6",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_07",
     "previewSourceSequenceSha256": "c848003001784f2e5639c35db223167471c623949aaeae5cf917dc410ca6a0ba",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      732,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/warrior-counter-magic-shield-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/source/primary-source-a17e892a56875842.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/preview/gameplay-preview-v1.webm",
@@ -130,7 +152,7 @@
       197
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 102,
     "totalDurationMs": 3400,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

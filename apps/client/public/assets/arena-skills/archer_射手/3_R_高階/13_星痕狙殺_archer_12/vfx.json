@@ -20,12 +20,12 @@
       "referenceActorHeight": 66,
       "renderKind": "overlay",
       "referenceSize": [
-        70,
-        60
+        104,
+        94
       ],
       "referenceOffset": [
-        -7,
-        -52
+        0,
+        -46
       ],
       "blendMode": "normal",
       "radiusAspect": null,
@@ -38,26 +38,31 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:761aa54e1a971c35",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_星痕狙殺.gif",
-    "configPreviewSourceSha256": "761aa54e1a971c3549c84fb286ef3e5cf809430beaf6f98ee886fc49a2b77d6b",
-    "configPreviewOutputSha256": "4df6410920670437b60a10d16dbb89df401f934b32a87adc6557c3d2888c3848",
-    "runtimeMotion": {
-      "kind": "effect-source-to-target-shot",
-      "durationMs": 1100,
-      "warningEndProgress": 0.18,
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_12-hq.webm",
+    "configPreviewSourceSha256": "cc620184e47a4fb35f7142f4995663ff8dca213010432fea610770e2f26293e7",
+    "configPreviewOutputSha256": "01f18227b7d10180ffc2dfd13a438cd89077484820b65334bf551f8d4ee8e118",
+      "runtimeMotion": {
+        "kind": "effect-source-to-target-shot",
+        "durationMs": 1100,
+        "travelOrigin": "target-sky",
+        "startOffset": [
+          0,
+          -165
+        ],
+        "warningEndProgress": 0.18,
       "travelEndProgress": 0.59,
-      "visibleEndProgress": 1.0,
-      "targetOffset": [
-        -7,
-        -52
-      ],
-      "travelDisplaySize": [
-        70,
-        60
-      ],
-      "impactDisplaySize": [
-        70,
-        60
+      "visibleEndProgress": 1,
+        "targetOffset": [
+          0,
+          -46
+        ],
+        "travelDisplaySize": [
+          96,
+          88
+        ],
+        "impactDisplaySize": [
+          104,
+          94
       ],
       "warningFrameIndices": [
         0,
@@ -415,8 +420,24 @@
     "previewSourceSequenceSha256": "cc620184e47a4fb35f7142f4995663ff8dca213010432fea610770e2f26293e7",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      852,
+      352,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/preview/gameplay-preview-v1.webm",
@@ -482,7 +503,7 @@
       184
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 114,
     "totalDurationMs": 3800,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

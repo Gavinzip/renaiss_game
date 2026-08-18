@@ -69,14 +69,34 @@
         "sha256": "a6c09ebfdb44d4d20e5cf3fb9c6aef271dda5bec9edcded4b5bc55d81a251328"
       }
     ],
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_00-hq.webm",
+    "configPreviewSourceSha256": "67f9d1298c6b6556d23450171183f2b6d986e965d715b0e738aed9cda48b27a3",
+    "configPreviewOutputSha256": "625f463f0dddbf92d26a78451a26ad6ff6a75cc083aaa8539f62298a1ec24314",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_00:source-67f9d1298c6b6556:output-625f463f0dddbf92",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_00",
     "previewSourceSequenceSha256": "67f9d1298c6b6556d23450171183f2b6d986e965d715b0e738aed9cda48b27a3",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.032,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      855,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/preview/gameplay-preview-v1.webm",

@@ -378,11 +378,30 @@
     "previewFallbackUsed": false,
     "effectDurationMs": 2200,
     "timingVersion": "20260812-engineer-siege-heavy-crater-16f-fast-v2",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_06-hq.webm",
+    "configPreviewSourceSha256": "a9632fb13daba6b2b0ad333959a3f091373a6b5674a86ebe956d3d4db5b724d3",
+    "configPreviewOutputSha256": "a56395866a7293bc0402264740181e926785c68a841548b45bf2d8c85078cf62",
     "previewSourceScenario": "random-engineer_06",
     "previewSourceSequenceSha256": "a9632fb13daba6b2b0ad333959a3f091373a6b5674a86ebe956d3d4db5b724d3",
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.018,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      790,
+      391,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/preview/gameplay-preview-v1.webm",

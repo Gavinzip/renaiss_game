@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:0a01488973f09f42",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-05-鎖定齊射.gif",
-    "configPreviewSourceSha256": "0a01488973f09f42485bb04cac9acc595fae50a24201901cf7f41741b48b619a",
-    "configPreviewOutputSha256": "6268311aff50269e3b1e648cda8a49f02097cd5210dbd69a808ce283c5595fb7",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_05-hq.webm",
+    "configPreviewSourceSha256": "cc625d983b6ea91e6e36c04c282f6d1259b8a3989435f6db7572bc876a0feaf9",
+    "configPreviewOutputSha256": "835f107174877bac95b71f508662b93a2f4d5021c7edc27bf608f1dd7d1ad387",
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       119,
       128
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-locking-volley-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/source/primary-source-40a477aabeec21a6.png",
     "sourceSha256": "40a477aabeec21a60b787e0d92b4e8cc8611f9455d94fcd190739cd1c1961d15",
     "outputSha256": "9c436683c03d344696f9c1090257929cd63f94b3f41670717087bf7f478365ef",
     "frameDurationsMs": [
@@ -182,8 +182,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-locking-volley-v2-normalized.png",
-        "sha256": "40a477aabeec21a60b787e0d92b4e8cc8611f9455d94fcd190739cd1c1961d15"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/source/primary-source-40a477aabeec21a6.png",
+        "sha256": "40a477aabeec21a60b787e0d92b4e8cc8611f9455d94fcd190739cd1c1961d15",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-locking-volley-v2-normalized.png"
       }
     ],
     "packagePath": "engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05",
@@ -198,9 +199,28 @@
     "previewSourceScenario": "random-engineer_05",
     "previewSourceSequenceSha256": "cc625d983b6ea91e6e36c04c282f6d1259b8a3989435f6db7572bc876a0feaf9",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      832,
+      353,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-locking-volley-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/source/primary-source-40a477aabeec21a6.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/preview/gameplay-preview-v1.webm",
@@ -266,7 +286,7 @@
       194
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 153,
     "totalDurationMs": 5100,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

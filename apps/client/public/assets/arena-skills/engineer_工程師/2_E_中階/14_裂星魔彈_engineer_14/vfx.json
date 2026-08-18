@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:20260802-engineer-final-15-v20-matrix-shield-build:fbbc2783a889ab3b",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/engineer-final-15-20260730/gifs/工程師-14-裂星魔彈.gif",
-    "configPreviewSourceSha256": "fbbc2783a889ab3bd713ada1777103a9f256689c61af010c24f1f39fbe455e5d",
-    "configPreviewOutputSha256": "bea42e888d64c5e3225e0721100f6a818946fd7e3cfc7f5075761396520d3d2d",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-engineer_14-hq.webm",
+    "configPreviewSourceSha256": "7a6db705bd6856a68357e34c924864d6e2246c2a1e332e1159a4687b0ea2a49e",
+    "configPreviewOutputSha256": "2b1942db1f8adcb77042453f254d729a0f064066c86666ba311adb423c2de12e",
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -54,7 +54,7 @@
       113,
       105
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/source/primary-source-d4603e911841594d.png",
     "sourceSha256": "d4603e911841594dfa4b8c933d0ddb87f4373efde095f08929475bfa33a31a6c",
     "outputSha256": "8abdd4e18f2049841326c15bfb93c200f38bbb3f46a333c37d87481f29350faa",
     "frameDurationsMs": [
@@ -196,8 +196,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png",
-        "sha256": "d4603e911841594dfa4b8c933d0ddb87f4373efde095f08929475bfa33a31a6c"
+        "path": "apps/client/public/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/source/primary-source-d4603e911841594d.png",
+        "sha256": "d4603e911841594dfa4b8c933d0ddb87f4373efde095f08929475bfa33a31a6c",
+        "originalPath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png"
       }
     ],
     "packagePath": "engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14",
@@ -212,9 +213,28 @@
     "previewSourceScenario": "random-engineer_14",
     "previewSourceSequenceSha256": "7a6db705bd6856a68357e34c924864d6e2246c2a1e332e1159a4687b0ea2a49e",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.023,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      866,
+      376,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/engineer-final-15-20260730/engineer-magic-split-v2-normalized.png",
+    "sourceFile": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/source/primary-source-d4603e911841594d.png"
   },
   "preview": {
     "file": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/preview/gameplay-preview-v1.webm",

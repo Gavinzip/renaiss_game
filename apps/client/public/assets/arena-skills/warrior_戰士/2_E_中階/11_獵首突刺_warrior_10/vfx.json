@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:366e2ddf305c2d92",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.gif",
-    "configPreviewSourceSha256": "366e2ddf305c2d92edef015ff7ad624aa2db1f382fd66cade024972050908efc",
-    "configPreviewOutputSha256": "eefe30c1be52e51765ff9b4735a8cb4988b11198c0c7e279a6c75abd9a717169",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_10-hq.webm",
+    "configPreviewSourceSha256": "d6dc72c16e3e999dc94e700a7d04f68a541300fb35d6e11ae509276852c7a01e",
+    "configPreviewOutputSha256": "0594d170dee3e06a3877858d590d33f880928a3b0ba2f33cfee1ba2bad095d38",
     "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/primary.png",
     "frameWidth": 362,
     "frameHeight": 724,
@@ -51,7 +51,7 @@
       362,
       498
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/source/primary-source-f101b585420b9350.png",
     "sourceSha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b",
     "outputSha256": "475d2719710e3b35a52599955043a51191f257c7c1f98d32086455c6e5d20aa3",
     "frameDurationsMs": [
@@ -176,8 +176,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png",
-        "sha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b"
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/source/primary-source-f101b585420b9350.png",
+        "sha256": "f101b585420b9350b14713f4afcbbd991e543bb57813061ae56ae89eeca55f4b",
+        "originalPath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png"
       },
       {
         "role": "actionBody",
@@ -196,7 +197,7 @@
         256,
         256
       ],
-      "sourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/headhunter-thrust-8dir-v1.png",
+      "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/source/body-source-2088edaecf316fba.png",
       "sourceSha256": "2088edaecf316fba67b8a2c43ae1b8217d497e7ee11cb74061920870be5be2ee",
       "outputSha256": "2088edaecf316fba67b8a2c43ae1b8217d497e7ee11cb74061920870be5be2ee",
       "semanticAnchor": [
@@ -229,7 +230,9 @@
       },
       "displayHeightMultiplier": 1.3195876288659794,
       "acceptedAnimationId": "accepted:headhunter-thrust-8dir-v1.png:2088edaecf316fba",
-      "fallbackUsed": false
+      "fallbackUsed": false,
+      "originalSourcePath": "docs/design/arena-skill-vfx-assets/new-compatible/accepted/character-skills/warrior/headhunter-thrust-8dir-v1.png",
+      "sourceFile": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/source/body-source-2088edaecf316fba.png"
     },
     "packagePath": "warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
     "packageUrl": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10",
@@ -243,9 +246,28 @@
     "previewSourceScenario": "random-warrior_10",
     "previewSourceSequenceSha256": "d6dc72c16e3e999dc94e700a7d04f68a541300fb35d6e11ae509276852c7a01e",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.032,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      746,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_獵首突刺.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/source/primary-source-f101b585420b9350.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/preview/gameplay-preview-v1.webm",

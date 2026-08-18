@@ -23,7 +23,7 @@
       178
     ],
     "persistent": false,
-    "sourcePath": "apps/client/public/assets/generated/warrior-archer-effects.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/source/primary-source-5a289b6e5d1c6343.png",
     "sourceSha256": "5a289b6e5d1c6343a0658576d8fdf9b07b57b4c7f6ad3982225b223f64e54db6",
     "outputSha256": "837a349467f3619816b488b1a6fd723a03a4bfab735d6ce1fd55161a0beb1d96",
     "previewSha256": "8ba1349b74c41cba5e3c0d5dfa878c057a9943c28c38ba8a2fcc6c9517f677cd",
@@ -57,14 +57,36 @@
     "previewFileSha256": "8ba1349b74c41cba5e3c0d5dfa878c057a9943c28c38ba8a2fcc6c9517f677cd",
     "iconFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/icon.png",
     "iconFileSha256": "ce2ac7babc3d2d1d078b81f79b137e1e8d8a660adf79b886f2786e65e69da55c",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_04-hq.webm",
+    "configPreviewSourceSha256": "ba40eda415d023f3290ba0e37f269c2eeb8eec5a4df379dbde3eb99cdea52cb1",
+    "configPreviewOutputSha256": "8ba1349b74c41cba5e3c0d5dfa878c057a9943c28c38ba8a2fcc6c9517f677cd",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_04:source-ba40eda415d023f3:output-8ba1349b74c41cba",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_04",
     "previewSourceSequenceSha256": "ba40eda415d023f3290ba0e37f269c2eeb8eec5a4df379dbde3eb99cdea52cb1",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.031,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      850,
+      371,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "apps/client/public/assets/generated/warrior-archer-effects.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/source/primary-source-5a289b6e5d1c6343.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/preview/gameplay-preview-v1.webm",

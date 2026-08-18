@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-silence-native-loop-r1:0949db7a8b3ac213",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png",
-    "configPreviewSourceSha256": "0949db7a8b3ac2131505f5409267afd3e9b462f8a4ce7f8d559654f05529df3f",
-    "configPreviewOutputSha256": "8ad44703077fa0f6947fed0f3857f0fa1f61d49c8803e445c41c78b912377c52",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_04-hq.webm",
+    "configPreviewSourceSha256": "037306448c32c3d914d5c53595db305a28045ccbadd15001a3214ffdabacd4c7",
+    "configPreviewOutputSha256": "a98a1b1987f508568d37e96a841d86371e4a50396e7126a1e858bec5c742198a",
     "playback": {
       "introFrameIndices": [
         0,
@@ -65,7 +65,7 @@
       140,
       140
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/source/primary-source-0949db7a8b3ac213.png",
     "sourceSha256": "0949db7a8b3ac2131505f5409267afd3e9b462f8a4ce7f8d559654f05529df3f",
     "outputSha256": "d1923b067b72b3e4824ed91870dda1bb3b720861a6d84adc4e7c5733e8cd9f81",
     "frameDurationsMs": [
@@ -123,8 +123,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png",
-        "sha256": "0949db7a8b3ac2131505f5409267afd3e9b462f8a4ce7f8d559654f05529df3f"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/source/primary-source-0949db7a8b3ac213.png",
+        "sha256": "0949db7a8b3ac2131505f5409267afd3e9b462f8a4ce7f8d559654f05529df3f",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/05_禁言符_mage_04",
@@ -139,9 +140,28 @@
     "previewSourceScenario": "random-mage_04",
     "previewSourceSequenceSha256": "037306448c32c3d914d5c53595db305a28045ccbadd15001a3214ffdabacd4c7",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      834,
+      342,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-silence-seal.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/source/primary-source-0949db7a8b3ac213.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/preview/gameplay-preview-v1.webm",
@@ -207,7 +227,7 @@
       178
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 111,
     "totalDurationMs": 3700,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

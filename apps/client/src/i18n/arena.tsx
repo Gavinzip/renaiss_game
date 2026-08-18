@@ -482,7 +482,7 @@ const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
     mage: {
       attack: { description: "朝準星方向發射魔法球。", facts: [`${getEffectiveBasicAttackDamage("mage")} 傷害`, `${COMBAT.magicBallDistance} 射程`] },
       skillF: { description: "以星界能量護住自己，短時間抵擋所有傷害。", facts: [`${COMBAT.mageAstralWardDuration / 1000} 秒護盾`, zhCooldown("mage", "skillF")] },
-      skillQ: { description: "向前打出明顯的日耀光束。", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} 傷害`, `${COMBAT.mageBeamLength} 射程`, "5 秒冷卻"] },
+      skillQ: { description: "向前打出固定完整射程的粗日耀光束。", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} 傷害`, `${COMBAT.mageBeamLength} 固定射程`, "5 秒冷卻"] },
       skillE: { description: "以法師自身為中心引爆復甦能量，傷害周圍敵人；沒死的敵人會被暈眩。", facts: [`${getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage)} 傷害`, `${COMBAT.mageBurstRadius} 半徑`, `${COMBAT.mageBurstStunDuration / 1000} 秒暈眩`, zhCooldown("mage", "skillE")] },
       skillR: { description: "在滑鼠位置召喚淨化風暴，以大範圍爆發收割敵人。", facts: [`${getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage)} 傷害`, `${COMBAT.mageUltimateRadius} 半徑`, zhCooldown("mage", "skillR")] }
     }
@@ -512,7 +512,7 @@ const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
     mage: {
       attack: { description: "Launch a magic orb projectile in the facing direction.", facts: [`${getEffectiveBasicAttackDamage("mage")} damage`, `${COMBAT.magicBallDistance} range`] },
       skillF: { description: "Wrap yourself in an astral barrier that blocks incoming damage.", facts: [`${COMBAT.mageAstralWardDuration / 1000}s shield`, enCooldown("mage", "skillF")] },
-      skillQ: { description: "Fire a readable solar beam in the facing direction.", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} damage`, `${COMBAT.mageBeamLength} range`, "5s CD"] },
+      skillQ: { description: "Fire a thick Solar Beam through its full fixed range.", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} damage`, `${COMBAT.mageBeamLength} fixed range`, "5s CD"] },
       skillE: { description: "Detonate Renewal Burst around the Mage, damaging nearby rivals and stunning survivors.", facts: [`${getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage)} damage`, `${COMBAT.mageBurstRadius} radius`, `${COMBAT.mageBurstStunDuration / 1000}s stun`, enCooldown("mage", "skillE")] },
       skillR: { description: "Summon Clean Storm at the cursor for a wide-area finishing burst.", facts: [`${getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage)} damage`, `${COMBAT.mageUltimateRadius} radius`, enCooldown("mage", "skillR")] }
     }
@@ -542,7 +542,7 @@ const tooltipCopy: Record<ArenaLanguage, TooltipCopy> = {
     mage: {
       attack: { description: "조준 방향으로 마법 구체를 발사합니다.", facts: [`${getEffectiveBasicAttackDamage("mage")} 피해`, `${COMBAT.magicBallDistance} 사거리`] },
       skillF: { description: "성계 장막으로 자신을 감싸 짧은 시간 동안 피해를 막습니다.", facts: [`${COMBAT.mageAstralWardDuration / 1000}초 방패`, koCooldown("mage", "skillF")] },
-      skillQ: { description: "조준 방향으로 선명한 태양 광선을 발사합니다.", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} 피해`, `${COMBAT.mageBeamLength} 사거리`, "5초 쿨다운"] },
+      skillQ: { description: "조준 방향으로 고정된 전체 사거리의 굵은 태양 광선을 발사합니다.", facts: [`${getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage)} 피해`, `${COMBAT.mageBeamLength} 고정 사거리`, "5초 쿨다운"] },
       skillE: { description: "마법사를 중심으로 재생 폭발을 일으켜 주변 적에게 피해를 주고 생존한 적을 기절시킵니다.", facts: [`${getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage)} 피해`, `${COMBAT.mageBurstRadius} 반경`, `${COMBAT.mageBurstStunDuration / 1000}초 기절`, koCooldown("mage", "skillE")] },
       skillR: { description: "커서 위치에 정화 폭풍을 소환해 넓은 범위를 마무리합니다.", facts: [`${getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage)} 피해`, `${COMBAT.mageUltimateRadius} 반경`, koCooldown("mage", "skillR")] }
     }

@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:11e19bc8f0f060e8",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_穩心瞄準.gif",
-    "configPreviewSourceSha256": "11e19bc8f0f060e863e6cb26b64794c64a6f4fbadaffa5d172a15cb9218b1f09",
-    "configPreviewOutputSha256": "9a742efba8b51895de3fe3d6bf2a57b95357c39ecc3b57c7bd9a0163353a2836",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_09-hq.webm",
+    "configPreviewSourceSha256": "5cebf9b7e33621eaa77cc799ee0d122daa00d4e8228699f078d88210468208d9",
+    "configPreviewOutputSha256": "e429367d92a852eb5dc4934dd658fe8aea81fdde4866c327c0ad0ff6491da531",
     "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -222,8 +222,24 @@
     "previewSourceSequenceSha256": "5cebf9b7e33621eaa77cc799ee0d122daa00d4e8228699f078d88210468208d9",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      880,
+      434,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/preview/gameplay-preview-v1.webm",
@@ -289,7 +305,7 @@
       111
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 279,
     "totalDurationMs": 9300,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

@@ -23,7 +23,7 @@
       1631
     ],
     "persistent": false,
-    "sourcePath": "docs/design/arena-skill-vfx-sources/warrior-judgment-sword-v1.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/source/primary-source-0a2618b0aeec326e.png",
     "sourceSha256": "0a2618b0aeec326e28966ad1728ad95c52ea948730a3648fd9ce45a4f4688b2c",
     "outputSha256": "b2dfaf0a4cdffaf34c8a9623ef24703435cf6059c277c01468b32d8d29eff697",
     "previewSha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
@@ -57,14 +57,36 @@
     "previewFileSha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
     "iconFile": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/icon.png",
     "iconFileSha256": "c57442080f44be016ba2b01f64840c204a341fd0f0090f090d0fda8683984f6d",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_14-hq.webm",
+    "configPreviewSourceSha256": "c17d6d1369cd7000f5394fafc0b5b2dc5a7f971c6c9b7c6e7bd931cef23532fb",
+    "configPreviewOutputSha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_14:source-c17d6d1369cd7000:output-078de3c353f97e60",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_14",
     "previewSourceSequenceSha256": "c17d6d1369cd7000f5394fafc0b5b2dc5a7f971c6c9b7c6e7bd931cef23532fb",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.027,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      786,
+      345,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/warrior-judgment-sword-v1.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/source/primary-source-0a2618b0aeec326e.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/preview/gameplay-preview-v1.webm",

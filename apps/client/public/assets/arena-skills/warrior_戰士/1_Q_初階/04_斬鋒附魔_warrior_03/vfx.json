@@ -52,14 +52,34 @@
       "playerField": "enchantedMeleeHitsRemaining",
       "position": "above-head"
     },
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_03-hq.webm",
+    "configPreviewSourceSha256": "a6fe4ec5ada3636978c8b671a091a65ddfa0bf4aea00f4b91e4ff5cd9627e460",
+    "configPreviewOutputSha256": "19ce227477e16edb97c576d314272d14130f0d8da5a223bbcb3a438f3c097d8f",
     "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-warrior_03:source-a6fe4ec5ada36369:output-19ce227477e16edb",
     "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
     "previewSourceScenario": "random-warrior_03",
     "previewSourceSequenceSha256": "a6fe4ec5ada3636978c8b671a091a65ddfa0bf4aea00f4b91e4ff5cd9627e460",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      730,
+      358,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/preview/gameplay-preview-v1.webm",
@@ -125,7 +145,7 @@
       189
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 141,
     "totalDurationMs": 4700,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

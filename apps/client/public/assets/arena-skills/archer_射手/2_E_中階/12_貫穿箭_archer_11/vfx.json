@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:6333465972c36b2a",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/2_貫穿箭.gif",
-    "configPreviewSourceSha256": "6333465972c36b2a56e3af92609de4073ed7c67ae135314e9a8d0bdc4170d404",
-    "configPreviewOutputSha256": "3eb40f5d6efd15291418111bc41f86875aa9294ce6d9cb357d920f2a46d0426b",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_11-hq.webm",
+    "configPreviewSourceSha256": "59e807eb95890cfb857603487028c2d970f34a2cb34cc1a4307bd6fb14e13aa2",
+    "configPreviewOutputSha256": "ec005073a444fcece7cfe9d85700a60e3a25078057c0d1f6360f87d8e93021b9",
     "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -340,7 +340,23 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.031,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      1002,
+      358,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/preview/gameplay-preview-v1.webm",

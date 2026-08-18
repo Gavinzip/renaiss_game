@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:26a694637f0585c9",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_荊刺陷阱.gif",
-    "configPreviewSourceSha256": "26a694637f0585c9816ebc0dbc6aaaa90f14560c0d2e9eb9a317fd72a29c5db3",
-    "configPreviewOutputSha256": "3d87d808ca40b2d1e516bb6cc29b7a6d608ce564ebc6196e7a6f1edd6d3df275",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_03-hq.webm",
+    "configPreviewSourceSha256": "eda3347ea5c22b21b0f413ad6eeb2a93194e4e474ff32a878af23ea2ab0e174f",
+    "configPreviewOutputSha256": "798607b4baeca8c5d278ee870e683c486b281480a1f631fffcb0c89809a950f4",
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/primary.png",
     "frameWidth": 110,
     "frameHeight": 112,
@@ -296,7 +296,23 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.013,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      767,
+      360,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/preview/gameplay-preview-v1.webm",

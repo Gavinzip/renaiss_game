@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:dceabe8ef955e86a",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_風切步.gif",
-    "configPreviewSourceSha256": "dceabe8ef955e86afaeb6d4276ec4790eb1373694c9ef6c28e5c05186ab2ce7e",
-    "configPreviewOutputSha256": "226dda8061dca1a24d0b479d535829b0500f8382b28fa7b38c0015f24b44261f",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_06-hq.webm",
+    "configPreviewSourceSha256": "bd41655374ab6bfee107d399e23fce3e0629cfbbe7eaf21b9bab52339113d144",
+    "configPreviewOutputSha256": "2c85b24ed4048b9107bd651f0fb4b9f8c55b49a5a9dd2a15bbb6552b964b0a82",
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/runtime/primary.png",
     "frameWidth": 120,
     "frameHeight": 112,
@@ -227,7 +227,23 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.032,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      778,
+      360,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/preview/gameplay-preview-v1.webm",

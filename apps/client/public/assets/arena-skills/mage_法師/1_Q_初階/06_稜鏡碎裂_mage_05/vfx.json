@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:c1554b416a0f3c5c",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-基礎-稜鏡碎裂.gif",
-    "configPreviewSourceSha256": "c1554b416a0f3c5c230ef2a4438b5737122da074bff9ed2e6307ab55a5b62bc8",
-    "configPreviewOutputSha256": "bd0ef7675d731014a7bbd1e3d8bbb338d6bcedf0d5602e03927b7366b849ef2e",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_05-hq.webm",
+    "configPreviewSourceSha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd",
+    "configPreviewOutputSha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -51,7 +51,7 @@
       132,
       134
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-0fc56338f12cc290.png",
     "sourceSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
     "outputSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
     "frameDurationsMs": [
@@ -109,8 +109,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
-        "sha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-0fc56338f12cc290.png",
+        "sha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png"
       }
     ],
     "packagePath": "mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
@@ -125,9 +126,28 @@
     "previewSourceScenario": "random-mage_05",
     "previewSourceSequenceSha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.029,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      820,
+      356,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-0fc56338f12cc290.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v1.webm",
@@ -165,7 +185,7 @@
       1920,
       1080
     ],
-    "sourceFrameRate": 60.0,
+    "sourceFrameRate": 60,
     "previewSize": [
       896,
       504

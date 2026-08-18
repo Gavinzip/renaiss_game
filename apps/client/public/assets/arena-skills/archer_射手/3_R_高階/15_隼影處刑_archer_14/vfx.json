@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:4e86186c2a575d3d",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/3_隼影處刑.gif",
-    "configPreviewSourceSha256": "4e86186c2a575d3dc2a2d6f4d79d21cfb63bdbcf3d8035b80ea018fd4cd92c61",
-    "configPreviewOutputSha256": "72072900b7bfefda2302f654b7f91d9fad89950827923f652b600b797ee1e84c",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_14-hq.webm",
+    "configPreviewSourceSha256": "e8bbed8a29d85f223b9ce426076b022ba86d95b8fc50b2d6ae35f80661606803",
+    "configPreviewOutputSha256": "6b859d24041df8c1c7a82c99ba23cc3a94382dcf8924f9ab65f80611ab0ca6d9",
     "runtimeMotion": {
       "kind": "effect-target-dive",
       "durationMs": 700,
@@ -313,7 +313,23 @@
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.025,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      794,
+      292,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/preview/gameplay-preview-v1.webm",

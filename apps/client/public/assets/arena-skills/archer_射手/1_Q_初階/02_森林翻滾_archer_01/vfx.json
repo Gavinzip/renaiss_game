@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:477b761d0b847ca4",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_森林翻滾.gif",
-    "configPreviewSourceSha256": "477b761d0b847ca45f70a9ae45d3c5900a24de9dbdb9a87140ad8467b0fce50c",
-    "configPreviewOutputSha256": "bf728527b6b4f0f42e52d34ca6f38ca29ab05cda84eebfb56b68222eeba369ed",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_01-hq.webm",
+    "configPreviewSourceSha256": "29f1fa9c45fd8f64abc81472f8c1f5b6b31d77808db8d2ba1f2d74d89d2c1ec9",
+    "configPreviewOutputSha256": "e44b195b1235aa7918fbc526ac962ab57590060967cc2f90594fd18fdab69550",
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/primary.png",
     "frameWidth": 240,
     "frameHeight": 224,
@@ -346,7 +346,7 @@
           110
         ]
       },
-      "displayHeightMultiplier": 1.0,
+      "displayHeightMultiplier": 1,
       "actionSkillId": "archer_01",
       "acceptedAnimationId": "archer_01:forest-roll:own-folder-v2:1b08ef4e29d44733",
       "selectionPolicy": "explicit-skill-action-user-directed-own-folder-v2",
@@ -368,8 +368,24 @@
     "previewSourceSequenceSha256": "29f1fa9c45fd8f64abc81472f8c1f5b6b31d77808db8d2ba1f2d74d89d2c1ec9",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      786,
+      372,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/preview/gameplay-preview-v1.webm",
@@ -435,7 +451,7 @@
       196
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 93,
     "totalDurationMs": 3100,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

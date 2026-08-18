@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:5491f8bbe8b3607f",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-review/new-compatible-accepted-v2/gifs/法師-高等-淨化風暴.gif",
-    "configPreviewSourceSha256": "5491f8bbe8b3607fa4a50646a029b607dbb5929ee14fac2778c5ea1b7f74019e",
-    "configPreviewOutputSha256": "9e301927001ab7198c10a855a9dd7a1b54f66c84b705e50d2aca5168ee5f2b63",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_12-hq.webm",
+    "configPreviewSourceSha256": "5da058eea43b5d12ee96424c2f3a92cf5a514a19dc6bff121bdfa28076401520",
+    "configPreviewOutputSha256": "95537e1887201db290f8fe6181b972e90dc21ec92a86820472c308815b97b392",
     "file": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -51,7 +51,7 @@
       157,
       143
     ],
-    "sourcePath": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/source/primary-source-708ce416ac2b8ac2.png",
     "sourceSha256": "708ce416ac2b8ac2f285d592d9333398b4df134c78c76e0fffefcec029e9b04a",
     "outputSha256": "8075b63523b61a9671eba5b479e362b05f711bbf077d3e56bb6fd544e2ccbeec",
     "frameDurationsMs": [
@@ -109,8 +109,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png",
-        "sha256": "708ce416ac2b8ac2f285d592d9333398b4df134c78c76e0fffefcec029e9b04a"
+        "path": "apps/client/public/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/source/primary-source-708ce416ac2b8ac2.png",
+        "sha256": "708ce416ac2b8ac2f285d592d9333398b4df134c78c76e0fffefcec029e9b04a",
+        "originalPath": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png"
       }
     ],
     "packagePath": "mage_法師/3_R_高階/13_淨化風暴_mage_12",
@@ -125,9 +126,28 @@
     "previewSourceScenario": "random-mage_12",
     "previewSourceSequenceSha256": "5da058eea43b5d12ee96424c2f3a92cf5a514a19dc6bff121bdfa28076401520",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.025,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      842,
+      381,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-purification-storm.png",
+    "sourceFile": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/source/primary-source-708ce416ac2b8ac2.png"
   },
   "preview": {
     "file": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/preview/gameplay-preview-v1.webm",

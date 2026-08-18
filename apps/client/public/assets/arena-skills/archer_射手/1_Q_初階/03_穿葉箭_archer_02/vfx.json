@@ -41,9 +41,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:5bed963fea92b331",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/archer/1_穿葉箭.gif",
-    "configPreviewSourceSha256": "5bed963fea92b331d476d2247b20e740789b52477482cf12655be67b37c05107",
-    "configPreviewOutputSha256": "86a6b45e5bd15ac645d5f00564b060d14cd04679ea4815223957518e674ef2bf",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_02-hq.webm",
+    "configPreviewSourceSha256": "93c8e6805fa484890078e37e39ad204d1b4a8fbe75ed8878d3da3839d4cbe66b",
+    "configPreviewOutputSha256": "5133babec4f00a63a60971e63b0f2757e474140abc9fd970ab158f363b344584",
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/runtime/primary.png",
     "frameWidth": 165,
     "frameHeight": 165,
@@ -339,8 +339,24 @@
     "previewSourceSequenceSha256": "93c8e6805fa484890078e37e39ad204d1b4a8fbe75ed8878d3da3839d4cbe66b",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
-    "previewFrameRate": 30.0,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewFrameRate": 30,
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      852,
+      358,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1"
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/preview/gameplay-preview-v1.webm",
@@ -406,7 +422,7 @@
       190
     ],
     "zoomFactor": 2.1429,
-    "frameRate": 30.0,
+    "frameRate": 30,
     "frameCount": 93,
     "totalDurationMs": 3100,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",

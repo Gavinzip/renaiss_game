@@ -38,9 +38,9 @@
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
     "acceptedAnimationId": "configuration:arena-skill-vfx-assets-v7-staging:c133066db06a4d12",
-    "configPreviewSourcePath": "docs/design/arena-skill-vfx-assets-v7-staging/character-skills/warrior/2_裂地震.gif",
-    "configPreviewSourceSha256": "c133066db06a4d12ba0600663131c57a68f58a9d5a69ec2d419463ad721d2edb",
-    "configPreviewOutputSha256": "5cfb42b65f38e21aa187b5831e304382f0a9132c1b6660886f765a586341b0fa",
+    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-warrior_11-hq.webm",
+    "configPreviewSourceSha256": "0c4917e00b8c50506cfca191b4a9954f43619ba2833cb26bdd53f9cc1e837996",
+    "configPreviewOutputSha256": "3b246caee5b3e4e689e94b8f9160ea389b8b2084283528f81ae6800cd4943d96",
     "file": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/runtime/primary.png",
     "frameWidth": 220,
     "frameHeight": 120,
@@ -51,7 +51,7 @@
       207,
       108
     ],
-    "sourcePath": "apps/client/public/assets/generated/ability-effects.png",
+    "sourcePath": "apps/client/public/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/source/primary-source-8ea7b71fe8635fcd.png",
     "sourceSha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33",
     "outputSha256": "9f94c3bf2fa7eeadc33f621f8ad79a1b04b9e4fd0223acb31bc7e13c81ac5ced",
     "frameDurationsMs": [
@@ -166,8 +166,9 @@
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "apps/client/public/assets/generated/ability-effects.png",
-        "sha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33"
+        "path": "apps/client/public/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/source/primary-source-8ea7b71fe8635fcd.png",
+        "sha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33",
+        "originalPath": "apps/client/public/assets/generated/ability-effects.png"
       }
     ],
     "packagePath": "warrior_戰士/2_E_中階/12_裂地震_warrior_11",
@@ -182,9 +183,28 @@
     "previewSourceScenario": "random-warrior_11",
     "previewSourceSequenceSha256": "0c4917e00b8c50506cfca191b4a9954f43619ba2833cb26bdd53f9cc1e837996",
     "previewFallbackUsed": false,
+    "fallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30.029,
-    "previewOptimizationVersion": "arena-config-cdn-preview-v1"
+    "previewSourceSize": [
+      896,
+      504
+    ],
+    "previewCrop": [
+      0,
+      0,
+      896,
+      504
+    ],
+    "configPreviewSourceCrop": [
+      697,
+      380,
+      896,
+      504
+    ],
+    "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
+    "originalSourcePath": "apps/client/public/assets/generated/ability-effects.png",
+    "sourceFile": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/source/primary-source-8ea7b71fe8635fcd.png"
   },
   "preview": {
     "file": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/preview/gameplay-preview-v1.webm",
