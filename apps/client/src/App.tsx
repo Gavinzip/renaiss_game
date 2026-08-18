@@ -1341,6 +1341,8 @@ function MobileSkillButton({
     if (isSkill) {
       queueMobileSkillGesture({ action: action as HudSkillAction, phase: "begin" });
       onAimGestureChange({ action: action as HudSkillAction, cancelling: false });
+    } else if (classId === "archer") {
+      setHudAction("attack", true);
     }
     updateAim(event);
   };
@@ -1374,7 +1376,9 @@ function MobileSkillButton({
       onAimGestureChange(null);
     } else {
       updateAim(event);
-      queueMobileAttack();
+      if (classId !== "archer") {
+        queueMobileAttack();
+      }
     }
   };
 

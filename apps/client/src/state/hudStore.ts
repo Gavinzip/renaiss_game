@@ -298,7 +298,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
   setJoined: (playerId) => set({ joined: true, selfId: playerId, connection: "connected" }),
   setSnapshot: (snapshot) => set({ snapshot, selfId: snapshot.selfId }),
   setHudAction: (action, active) => set((state) => ({ hudInput: { ...state.hudInput, [action]: active } })),
-  setMobileMove: (move) => set({ mobileMove: move, mobileControlsActive: true }),
+  setMobileMove: (move) => set({ mobileMove: move }),
   resetMobileMove: () => set({ mobileMove: { x: 0, y: 0 } }),
   setMobileAim: (action, dragX, dragY) =>
     set({

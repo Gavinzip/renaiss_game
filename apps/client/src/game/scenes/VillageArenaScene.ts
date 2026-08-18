@@ -368,6 +368,9 @@ export class VillageArenaScene extends Phaser.Scene {
   };
   private readonly handleArenaPointerDown = (event: PointerEvent) => {
     this.updatePointerArenaTarget(event);
+    if (event.pointerType === "mouse" && this.pointerOverArenaCanvas) {
+      useHudStore.getState().setMobileControlsActive(false);
+    }
     if (event.button === 2 && this.armedSkillSlot) {
       event.preventDefault();
       this.suppressNextContextMenu = true;
