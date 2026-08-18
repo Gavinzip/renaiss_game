@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import {
   CLASS_META,
+  CLASS_STATS,
   COMBAT,
   ARENA_DUEL_REALM,
   MAGE_TARGET_TORSO_OFFSET_Y,
@@ -80,6 +81,13 @@ import { getMageActionFxProfile, shouldShowMageActionFx } from "../render/mageAc
 import { getWarriorActionFxProfile, shouldShowWarriorActionFx } from "../render/warriorActionFx";
 import { renderVillageMap } from "../render/villageMap";
 import { frameRateIndependentAlpha } from "../render/frameRate";
+import {
+  advanceArenaCameraFocus,
+  alignArenaCameraScroll,
+  getArenaCameraZoom,
+  isCoarsePointerViewport,
+  type ArenaCameraPoint
+} from "../render/arenaCameraMotion";
 import { resolveMobileAimProjection } from "../input/mobileAimProjection";
 import {
   ARENA_WEB_ARCHER_FULL_DRAW,
@@ -361,6 +369,8 @@ export class VillageArenaScene extends Phaser.Scene {
   private lastSelfHealth: number | null = null;
   private lastSelfAlive: boolean | null = null;
   private nextCameraImpactAt = 0;
+  private touchCamera = false;
+  private cameraFocus: ArenaCameraPoint | null = null;
   private screenFlash: Phaser.GameObjects.Rectangle | null = null;
   private screenFlashTween: Phaser.Tweens.Tween | null = null;
   private readonly updatePointerArenaTarget = (event: PointerEvent) => {
@@ -473,7 +483,8 @@ export class VillageArenaScene extends Phaser.Scene {
     releaseArenaRuntimeSourceTextures(this);
 
     this.cameras.main.setBounds(0, 0, WORLD.width, WORLD.height);
-    this.cameras.main.setZoom(0.82);
+    this.touchCamera = isCoarsePointerViewport();
+    this.cameras.main.setZoom(getArenaCameraZoom(this.touchCamera));
     this.cameras.main.roundPixels = true;
     this.cameras.main.centerOn(WORLD.width / 2 + 150, WORLD.height / 2 - 80);
 
@@ -554,9 +565,9 @@ export class VillageArenaScene extends Phaser.Scene {
   override update(_time: number, delta: number) {
     this.captureSkillArmRequests();
     this.reconcileArmedSkill();
-    this.updateCamera();
     this.renderDuelRealm(this.snapshot?.duelRealm ?? null);
     this.renderSnapshot();
+    this.updateCamera();
     this.renderEffects();
     this.targetingOverlay?.update(this.snapshot, this.time.now, this.getTargetingIntent());
     this.ambientField?.update(this.time.now, delta);
@@ -3236,6 +3247,7 @@ export class VillageArenaScene extends Phaser.Scene {
       frameRateIndependentAlpha(alphaAt60Fps, this.game.loop.delta);
     const self = this.getSelf();
     if (!self) {
+      this.cameraFocus = null;
       const camera = this.cameras.main;
       const targetX = WORLD.width / 2 - camera.width / (2 * camera.zoom) + 150;
       const targetY = WORLD.height / 2 - camera.height / (2 * camera.zoom) - 80;
@@ -3244,12 +3256,48 @@ export class VillageArenaScene extends Phaser.Scene {
       return;
     }
     const camera = this.cameras.main;
-    const focus = this.getRenderedSelfPosition(self);
+    const renderedFocus = this.getRenderedSelfPosition(self);
+    const hudState = useHudStore.getState();
+    const mobileMove = hudState.mobileMove;
+    const mobileMoveActive = this.isMobileMoveActive(mobileMove);
+    const keyboardMoveX =
+      (this.keys.D.isDown || this.keys.RIGHT.isDown ? 1 : 0) -
+      (this.keys.A.isDown || this.keys.LEFT.isDown ? 1 : 0);
+    const keyboardMoveY =
+      (this.keys.S.isDown || this.keys.DOWN.isDown ? 1 : 0) -
+      (this.keys.W.isDown || this.keys.UP.isDown ? 1 : 0);
+    const move = {
+      x: Phaser.Math.Clamp(keyboardMoveX + (mobileMoveActive ? mobileMove.x : 0), -1, 1),
+      y: Phaser.Math.Clamp(keyboardMoveY + (mobileMoveActive ? mobileMove.y : 0), -1, 1)
+    };
+    const useTouchCamera = this.touchCamera || hudState.mobileControlsActive;
+    const expectedZoom = getArenaCameraZoom(useTouchCamera);
+    if (camera.zoom !== expectedZoom) {
+      camera.setZoom(expectedZoom);
+    }
+    const focus = useTouchCamera
+      ? advanceArenaCameraFocus({
+          current: this.cameraFocus,
+          renderedPlayer: renderedFocus,
+          move,
+          moveSpeed: CLASS_STATS[self.classId].moveSpeed * self.slowMultiplier,
+          sprintMultiplier: COMBAT.sprintSpeedMultiplier,
+          sprinting: self.sprinting || this.keys.SPACE.isDown || this.keys.SHIFT.isDown,
+          movementLocked: !self.alive || self.rooted || self.stunned,
+          deltaMs: this.game.loop.delta
+        })
+      : renderedFocus;
+    this.cameraFocus = useTouchCamera ? focus : null;
     const targetX = focus.x - camera.width / (2 * camera.zoom);
     const mobileFocusOffset = camera.width < 760 ? 180 / camera.zoom : 0;
     const targetY = focus.y - camera.height / (2 * camera.zoom) + mobileFocusOffset;
-    camera.scrollX = Phaser.Math.Linear(camera.scrollX, targetX, cameraAlpha(0.12));
-    camera.scrollY = Phaser.Math.Linear(camera.scrollY, targetY, cameraAlpha(0.12));
+    if (useTouchCamera) {
+      camera.scrollX = alignArenaCameraScroll(targetX, camera.zoom);
+      camera.scrollY = alignArenaCameraScroll(targetY, camera.zoom);
+    } else {
+      camera.scrollX = Phaser.Math.Linear(camera.scrollX, targetX, cameraAlpha(0.12));
+      camera.scrollY = Phaser.Math.Linear(camera.scrollY, targetY, cameraAlpha(0.12));
+    }
   }
 
   private getRenderedSelfPosition(self: PublicPlayer) {
