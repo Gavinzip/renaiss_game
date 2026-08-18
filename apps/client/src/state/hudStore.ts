@@ -27,15 +27,20 @@ export type ConnectionState = "idle" | ArenaConnectionStatus;
 export type ArenaAssetPreparationStatus = "idle" | "loading" | "ready" | "error";
 export type HudAction = "attack" | "skillF" | "skillQ" | "skillE" | "skillR";
 export type HudSkillAction = Exclude<HudAction, "attack">;
+export type MobileSkillGesturePhase = "begin" | "commit" | "cancel";
+export interface MobileSkillGestureCommand {
+  action: HudSkillAction;
+  phase: MobileSkillGesturePhase;
+}
 export interface MobileMoveInput {
   x: number;
   y: number;
 }
 export interface MobileAimInput {
   active: boolean;
-  viewportX: number;
-  viewportY: number;
-  action: HudSkillAction | null;
+  dragX: number;
+  dragY: number;
+  action: HudAction | null;
 }
 
 const emptySkillArmQueue = (): Record<HudSkillAction, number> => ({
@@ -47,8 +52,8 @@ const emptySkillArmQueue = (): Record<HudSkillAction, number> => ({
 
 const emptyMobileAim = (): MobileAimInput => ({
   active: false,
-  viewportX: 0,
-  viewportY: 0,
+  dragX: 0,
+  dragY: 0,
   action: null
 });
 
@@ -83,6 +88,7 @@ interface HudStore {
   mobileControlsActive: boolean;
   armedSkillAction: HudSkillAction | null;
   hudSkillArmQueue: Record<HudSkillAction, number>;
+  mobileSkillGestureQueue: MobileSkillGestureCommand[];
   setSelectedClass: (classId: ClassId) => void;
   setSelectedMode: (mode: ArenaGameMode) => void;
   setEngineerTurretKind: (kind: EngineerTurretKind) => void;
@@ -109,12 +115,14 @@ interface HudStore {
   setHudAction: (action: HudAction, active: boolean) => void;
   setMobileMove: (move: MobileMoveInput) => void;
   resetMobileMove: () => void;
-  setMobileAim: (action: HudSkillAction, viewportX: number, viewportY: number) => void;
+  setMobileAim: (action: HudAction, dragX: number, dragY: number) => void;
   resetMobileAim: () => void;
   setMobileControlsActive: (active: boolean) => void;
   setArmedSkillAction: (action: HudSkillAction | null) => void;
   queueHudSkillArm: (action: HudSkillAction) => void;
   consumeHudSkillArms: () => Record<HudSkillAction, number>;
+  queueMobileSkillGesture: (command: MobileSkillGestureCommand) => void;
+  consumeMobileSkillGestures: () => MobileSkillGestureCommand[];
   leaveArena: () => void;
 }
 
@@ -145,6 +153,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
   mobileControlsActive: false,
   armedSkillAction: null,
   hudSkillArmQueue: emptySkillArmQueue(),
+  mobileSkillGestureQueue: [],
   setSelectedClass: (classId) => set({ selectedClass: classId }),
   setSelectedMode: (selectedMode) => {
     window.localStorage.setItem("renaiss.arena.mode", selectedMode);
@@ -287,9 +296,9 @@ export const useHudStore = create<HudStore>((set, get) => ({
   setHudAction: (action, active) => set((state) => ({ hudInput: { ...state.hudInput, [action]: active } })),
   setMobileMove: (move) => set({ mobileMove: move, mobileControlsActive: true }),
   resetMobileMove: () => set({ mobileMove: { x: 0, y: 0 } }),
-  setMobileAim: (action, viewportX, viewportY) =>
+  setMobileAim: (action, dragX, dragY) =>
     set({
-      mobileAim: { active: true, viewportX, viewportY, action },
+      mobileAim: { active: true, dragX, dragY, action },
       mobileControlsActive: true
     }),
   resetMobileAim: () => set({ mobileAim: emptyMobileAim() }),
@@ -305,6 +314,15 @@ export const useHudStore = create<HudStore>((set, get) => ({
   consumeHudSkillArms: () => {
     const queue = get().hudSkillArmQueue;
     set({ hudSkillArmQueue: emptySkillArmQueue() });
+    return queue;
+  },
+  queueMobileSkillGesture: (command) =>
+    set((state) => ({
+      mobileSkillGestureQueue: [...state.mobileSkillGestureQueue, command]
+    })),
+  consumeMobileSkillGestures: () => {
+    const queue = get().mobileSkillGestureQueue;
+    set({ mobileSkillGestureQueue: [] });
     return queue;
   },
   leaveArena: () => set({
@@ -326,7 +344,8 @@ export const useHudStore = create<HudStore>((set, get) => ({
     mobileAim: emptyMobileAim(),
     mobileControlsActive: false,
     armedSkillAction: null,
-    hudSkillArmQueue: emptySkillArmQueue()
+    hudSkillArmQueue: emptySkillArmQueue(),
+    mobileSkillGestureQueue: []
   })
 }));
 

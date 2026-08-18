@@ -4,7 +4,7 @@ import {
   ARENA_CHARACTER_RUNTIME_WALK_CELL
 } from "../assets/arenaCharacterTextureProfile";
 
-export const ARENA_WEB_PLAYER_PRESENTATION_SCHEMA_VERSION = 2;
+export const ARENA_WEB_PLAYER_PRESENTATION_SCHEMA_VERSION = 3;
 export const ARENA_WEB_PLAYER_FALLBACK_USED = false;
 
 export const ARENA_WEB_EIGHT_DIRECTIONS = [

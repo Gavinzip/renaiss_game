@@ -321,6 +321,7 @@ const ARCHER_CHARGE_BAR_Y = -109;
 const ARCHER_CHARGE_BAR_WIDTH = 66;
 const ARCHER_CHARGE_FILL_WIDTH = 58;
 const MOBILE_MOVE_DEADZONE = 0.08;
+const MOBILE_AIM_DRAG_DEADZONE_PX = 6;
 
 export class VillageArenaScene extends Phaser.Scene {
   private socket: GameSocket | null = null;
@@ -687,14 +688,24 @@ export class VillageArenaScene extends Phaser.Scene {
     const mouseAttack = !this.suppressMouseAttackUntilPointerUp && (this.queuedMouseAttack || this.mouseAttackDragging);
     const queuedSkillCast = this.consumeQueuedSkillCast(self, this.snapshot.serverTime);
     const pointerAimPoint = this.getPointerAimPoint(mouseAttack);
-    const mobileAimPoint = this.getMobileAimPoint(hudState.mobileAim);
-    const useMobileAim = mobileAimPoint !== null && (this.armedSkillSlot !== null || queuedSkillCast !== null);
+    const mobileAimPoint = this.getMobileAimPoint(hudState.mobileAim, self);
+    const useMobileAim = mobileAimPoint !== null && (
+      (hudInput.attack && hudState.mobileAim.action === "attack") ||
+      (this.armedSkillSlot !== null && hudState.mobileAim.action === this.armedSkillSlot)
+    );
     const useMobileFacingFallback = hudState.mobileControlsActive && !this.armedSkillSlot && !queuedSkillCast && !mouseAttack;
+    const mobileMoveAimPoint = mobileMoveActive
+      ? project(
+          { x: self.x, y: self.y },
+          Phaser.Math.RadToDeg(Math.atan2(mobileMove.y, mobileMove.x)),
+          COMBAT.mageBeamLength
+        )
+      : this.getSelfForwardAimPoint(self);
     const baseAimPoint = queuedSkillCast?.aimPoint ?? (
       useMobileAim && mobileAimPoint
         ? mobileAimPoint
         : useMobileFacingFallback
-          ? this.getSelfForwardAimPoint(self)
+          ? mobileMoveAimPoint
           : pointerAimPoint
     );
     const pointerAngle = Phaser.Math.RadToDeg(Math.atan2(baseAimPoint.y - self.y, baseAimPoint.x - self.x));
@@ -736,8 +747,11 @@ export class VillageArenaScene extends Phaser.Scene {
     const self = this.getSelf();
     const serverTime = this.snapshot?.serverTime ?? Date.now();
     const activeInputSlot = this.armedSkillSlot;
-    const mobileAimPoint = this.getMobileAimPoint(hudState.mobileAim);
-    const useMobileAim = mobileAimPoint !== null && activeInputSlot !== null;
+    const mobileAimPoint = self ? this.getMobileAimPoint(hudState.mobileAim, self) : null;
+    const useMobileAim = mobileAimPoint !== null && (
+      (activeInputSlot !== null && hudState.mobileAim.action === activeInputSlot) ||
+      (hudInput.attack && hudState.mobileAim.action === "attack")
+    );
     const useMobileFacingFallback = hudState.mobileControlsActive && hudInput.attack && !activeInputSlot;
     const aimPoint = self
       ? useMobileAim && mobileAimPoint
@@ -777,9 +791,36 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   private captureSkillArmRequests() {
-    const hudSkillArms = useHudStore.getState().consumeHudSkillArms();
+    const hudState = useHudStore.getState();
+    const mobileGestures = hudState.consumeMobileSkillGestures();
+    const hudSkillArms = hudState.consumeHudSkillArms();
     const self = this.getSelf();
     if (!self?.alive) {
+      return;
+    }
+
+    if (mobileGestures.length > 0) {
+      for (const gesture of mobileGestures) {
+        if (gesture.phase === "begin") {
+          this.armSkill(
+            gesture.action,
+            self,
+            this.snapshot?.serverTime ?? Date.now(),
+            false
+          );
+          continue;
+        }
+        if (gesture.action !== this.armedSkillSlot) {
+          continue;
+        }
+        if (gesture.phase === "cancel") {
+          this.cancelArmedSkill();
+          continue;
+        }
+        const aimPoint = this.getMobileAimPoint(useHudStore.getState().mobileAim, self)
+          ?? this.getSelfForwardAimPoint(self);
+        this.confirmArmedSkill(aimPoint);
+      }
       return;
     }
 
@@ -804,12 +845,19 @@ export class VillageArenaScene extends Phaser.Scene {
     }
   }
 
-  private armSkill(slot: SkillKey, self: PublicPlayer, serverTime: number) {
+  private armSkill(
+    slot: SkillKey,
+    self: PublicPlayer,
+    serverTime: number,
+    toggleIfAlreadyArmed = true
+  ) {
     if (!this.isSkillSlotReady(slot, self, serverTime)) {
       return;
     }
     if (this.armedSkillSlot === slot) {
-      this.cancelArmedSkill();
+      if (toggleIfAlreadyArmed) {
+        this.cancelArmedSkill();
+      }
       return;
     }
     this.armedSkillSlot = slot;
@@ -889,20 +937,23 @@ export class VillageArenaScene extends Phaser.Scene {
     return Math.hypot(move.x, move.y) > MOBILE_MOVE_DEADZONE;
   }
 
-  private getMobileAimPoint(aim: MobileAimInput) {
-    if (!aim.active || !Number.isFinite(aim.viewportX) || !Number.isFinite(aim.viewportY)) {
+  private getMobileAimPoint(aim: MobileAimInput, self: PublicPlayer) {
+    if (!aim.active || !Number.isFinite(aim.dragX) || !Number.isFinite(aim.dragY)) {
       return null;
     }
 
-    const canvasRect = this.game.canvas.getBoundingClientRect();
-    const canvasX = aim.viewportX - canvasRect.left;
-    const canvasY = aim.viewportY - canvasRect.top;
-    if (!Number.isFinite(canvasX) || !Number.isFinite(canvasY)) {
+    const dragDistance = Math.hypot(aim.dragX, aim.dragY);
+    if (dragDistance < MOBILE_AIM_DRAG_DEADZONE_PX) {
+      this.lastMobileAimPoint = this.getSelfForwardAimPoint(self);
       return this.lastMobileAimPoint;
     }
 
-    const worldPoint = this.cameras.main.getWorldPoint(canvasX, canvasY);
-    this.lastMobileAimPoint = { x: worldPoint.x, y: worldPoint.y };
+    const angle = Phaser.Math.RadToDeg(Math.atan2(aim.dragY, aim.dragX));
+    this.lastMobileAimPoint = project(
+      { x: self.x, y: self.y },
+      angle,
+      COMBAT.mageBeamLength
+    );
     return this.lastMobileAimPoint;
   }
 

@@ -179,6 +179,7 @@ export interface ArenaText {
     reducedMotion: string;
     skills: string;
     attack: string;
+    cancelCast: string;
     killStreak: string;
     location: string;
     language: string;
@@ -635,6 +636,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       reducedMotion: "減少動畫",
       skills: "技能",
       attack: "普攻",
+      cancelCast: "拖到這裡取消",
       killStreak: "連殺",
       location: "09 FIELD, ECO ARENA 6C6K",
       language: "語言",
@@ -857,6 +859,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       reducedMotion: "Reduced motion",
       skills: "Skills",
       attack: "Attack",
+      cancelCast: "Drag here to cancel",
       killStreak: "Kill streak",
       location: "09 FIELD, ECO ARENA 6C6K",
       language: "Language",
@@ -1079,6 +1082,7 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       reducedMotion: "동작 줄이기",
       skills: "스킬",
       attack: "기본 공격",
+      cancelCast: "여기로 끌어 취소",
       killStreak: "연속 처치",
       location: "09 FIELD, ECO ARENA 6C6K",
       language: "언어",

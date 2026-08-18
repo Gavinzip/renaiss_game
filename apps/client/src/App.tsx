@@ -1116,10 +1116,17 @@ function MobileArenaControls({
   skillCooldowns: Record<HudSkillAction, number> | null;
   disabled: boolean;
 }) {
+  const { t } = useArenaI18n();
   const setMobileMove = useHudStore((state) => state.setMobileMove);
   const resetMobileMove = useHudStore((state) => state.resetMobileMove);
   const resetMobileAim = useHudStore((state) => state.resetMobileAim);
+  const setHudAction = useHudStore((state) => state.setHudAction);
   const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
+  const cancelZoneRef = useRef<HTMLDivElement | null>(null);
+  const [aimGesture, setAimGesture] = useState<{
+    action: HudSkillAction;
+    cancelling: boolean;
+  } | null>(null);
   const coreSkill = getArenaCatalogCoreSkill(classId);
   const coreSkillDetail = getArenaCatalogSkillDetail(coreSkill?.id ?? null);
   const coreSkillTooltip: ActionTooltip = coreSkillDetail
@@ -1139,7 +1146,20 @@ function MobileArenaControls({
     }
     resetMobileMove();
     resetMobileAim();
-  }, [disabled, resetMobileAim, resetMobileMove]);
+    setHudAction("attack", false);
+    setAimGesture(null);
+  }, [disabled, resetMobileAim, resetMobileMove, setHudAction]);
+
+  const isPointInCancelZone = (clientX: number, clientY: number) => {
+    const bounds = cancelZoneRef.current?.getBoundingClientRect();
+    return Boolean(
+      bounds &&
+      clientX >= bounds.left &&
+      clientX <= bounds.right &&
+      clientY >= bounds.top &&
+      clientY <= bounds.bottom
+    );
+  };
 
   return (
     <section className="mobile-arena-controls" aria-label="Mobile arena controls">
@@ -1166,6 +1186,8 @@ function MobileArenaControls({
             catalogSkillId={coreSkill?.id ?? null}
             endAt={skillCooldowns?.skillF ?? 0}
             disabled={disabled}
+            isPointInCancelZone={isPointInCancelZone}
+            onAimGestureChange={setAimGesture}
           />
         ) : null}
         {ARENA_LOADOUT_SLOTS.map((loadoutSlot) => {
@@ -1196,9 +1218,37 @@ function MobileArenaControls({
               catalogSkillId={catalogSkillId}
               endAt={skillCooldowns?.[ability] ?? 0}
               disabled={disabled}
+              isPointInCancelZone={isPointInCancelZone}
+              onAimGestureChange={setAimGesture}
             />
           );
         })}
+        <MobileSkillButton
+          classId={classId}
+          slot="attack"
+          action="attack"
+          actionClass="attack"
+          keyLabel="ATK"
+          title={t.ui.attack}
+          tooltip={actionTooltips.attack}
+          endAt={0}
+          disabled={disabled}
+          isPointInCancelZone={isPointInCancelZone}
+          onAimGestureChange={setAimGesture}
+        />
+      </div>
+      <div
+        ref={cancelZoneRef}
+        className={[
+          "mobile-cast-cancel-zone",
+          aimGesture ? "is-visible" : "",
+          aimGesture?.cancelling ? "is-hovered" : ""
+        ].filter(Boolean).join(" ")}
+        data-mobile-cancel-zone
+        aria-hidden={!aimGesture}
+      >
+        <span aria-hidden="true">×</span>
+        <strong>{t.ui.cancelCast}</strong>
       </div>
     </section>
   );
@@ -1214,7 +1264,9 @@ function MobileSkillButton({
   tooltip,
   catalogSkillId,
   endAt,
-  disabled = false
+  disabled = false,
+  isPointInCancelZone,
+  onAimGestureChange
 }: {
   classId: ClassId;
   slot: SkillIconSlot;
@@ -1226,15 +1278,20 @@ function MobileSkillButton({
   catalogSkillId?: ArenaCatalogSkillId | null;
   endAt: number;
   disabled?: boolean;
+  isPointInCancelZone: (clientX: number, clientY: number) => boolean;
+  onAimGestureChange: (
+    state: { action: HudSkillAction; cancelling: boolean } | null
+  ) => void;
 }) {
   const now = useHudStore((state) => state.snapshot?.serverTime ?? 0);
   const setHudAction = useHudStore((state) => state.setHudAction);
   const armedSkillAction = useHudStore((state) => state.armedSkillAction);
-  const queueHudSkillArm = useHudStore((state) => state.queueHudSkillArm);
+  const queueMobileSkillGesture = useHudStore((state) => state.queueMobileSkillGesture);
   const setMobileAim = useHudStore((state) => state.setMobileAim);
   const resetMobileAim = useHudStore((state) => state.resetMobileAim);
   const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
   const pointerIdRef = useRef<number | null>(null);
+  const dragOriginRef = useRef({ x: 0, y: 0 });
   const remaining = Math.max(0, endAt - now);
   const active = remaining <= 0 && !disabled;
   const cooling = remaining > 0;
@@ -1245,16 +1302,27 @@ function MobileSkillButton({
   const isArmed = isSkill && armedSkillAction === action;
 
   const updateAim = (event: PointerEvent<HTMLButtonElement>) => {
-    if (!isSkill) {
-      return;
+    const dragX = event.clientX - dragOriginRef.current.x;
+    const dragY = event.clientY - dragOriginRef.current.y;
+    setMobileAim(action, dragX, dragY);
+    const cancelling = isSkill && isPointInCancelZone(event.clientX, event.clientY);
+    if (isSkill) {
+      onAimGestureChange({ action: action as HudSkillAction, cancelling });
     }
-    setMobileAim(action as HudSkillAction, event.clientX, event.clientY);
+    return cancelling;
   };
 
-  const cancelAction = () => {
+  const cancelAction = (event?: PointerEvent<HTMLButtonElement>) => {
+    if (event && pointerIdRef.current !== event.pointerId) {
+      return;
+    }
     setHudAction(action, false);
     pointerIdRef.current = null;
     if (isSkill) {
+      queueMobileSkillGesture({ action: action as HudSkillAction, phase: "cancel" });
+      resetMobileAim();
+      onAimGestureChange(null);
+    } else {
       resetMobileAim();
     }
   };
@@ -1267,13 +1335,19 @@ function MobileSkillButton({
     }
     tryPointerCapture(event.currentTarget, event.pointerId);
     pointerIdRef.current = event.pointerId;
+    dragOriginRef.current = { x: event.clientX, y: event.clientY };
     setMobileControlsActive(true);
-    setHudAction(action, true);
+    if (isSkill) {
+      queueMobileSkillGesture({ action: action as HudSkillAction, phase: "begin" });
+      onAimGestureChange({ action: action as HudSkillAction, cancelling: false });
+    } else {
+      setHudAction(action, true);
+    }
     updateAim(event);
   };
 
   const moveAction = (event: PointerEvent<HTMLButtonElement>) => {
-    if (!isSkill || pointerIdRef.current !== event.pointerId || disabled) {
+    if (pointerIdRef.current !== event.pointerId || disabled) {
       return;
     }
     event.preventDefault();
@@ -1290,8 +1364,18 @@ function MobileSkillButton({
     setHudAction(action, false);
     pointerIdRef.current = null;
     if (isSkill) {
+      const cancelling = updateAim(event);
+      queueMobileSkillGesture({
+        action: action as HudSkillAction,
+        phase: cancelling ? "cancel" : "commit"
+      });
+      if (cancelling) {
+        resetMobileAim();
+      }
+      onAimGestureChange(null);
+    } else {
       updateAim(event);
-      queueHudSkillArm(action as HudSkillAction);
+      resetMobileAim();
     }
   };
 
