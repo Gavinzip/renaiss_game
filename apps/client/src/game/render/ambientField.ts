@@ -24,15 +24,27 @@ const TEXTURES: Record<AmbientKind, string> = {
   ember: "ambient_pixel_ember"
 };
 
-const MAX_PARTICLES = 72;
+const DEFAULT_MAX_PARTICLES = 72;
+
+interface AmbientFieldOptions {
+  maxParticles?: number;
+  spawnIntervalMultiplier?: number;
+}
 
 export class AmbientField {
   private readonly particles: AmbientParticle[] = [];
   private readonly anchors: MapProp[] = getRenderableMapProps().filter((prop) => prop.type === "crystal" || prop.type === "fountain" || prop.type === "lamp");
+  private readonly maxParticles: number;
+  private readonly spawnIntervalMultiplier: number;
   private nextMoteAt = 0;
   private nextAnchorSparkAt = 0;
 
-  constructor(private readonly scene: Phaser.Scene) {
+  constructor(
+    private readonly scene: Phaser.Scene,
+    options: AmbientFieldOptions = {}
+  ) {
+    this.maxParticles = Math.max(0, options.maxParticles ?? DEFAULT_MAX_PARTICLES);
+    this.spawnIntervalMultiplier = Math.max(1, options.spawnIntervalMultiplier ?? 1);
     this.ensureTextures();
   }
 
@@ -47,16 +59,16 @@ export class AmbientField {
   }
 
   private spawnVisibleMotes(time: number, delta: number) {
-    if (time < this.nextMoteAt || this.particles.length >= MAX_PARTICLES) {
+    if (time < this.nextMoteAt || this.particles.length >= this.maxParticles) {
       return;
     }
 
     const camera = this.scene.cameras.main;
     const view = camera.worldView;
     const spawnCount = delta > 24 ? 1 : 2;
-    this.nextMoteAt = time + Phaser.Math.Between(72, 128);
+    this.nextMoteAt = time + Phaser.Math.Between(72, 128) * this.spawnIntervalMultiplier;
 
-    for (let index = 0; index < spawnCount && this.particles.length < MAX_PARTICLES; index += 1) {
+    for (let index = 0; index < spawnCount && this.particles.length < this.maxParticles; index += 1) {
       const x = Phaser.Math.Clamp(view.x + Phaser.Math.Between(90, Math.max(90, view.width - 90)), 0, WORLD.width);
       const y = Phaser.Math.Clamp(view.y + Phaser.Math.Between(80, Math.max(80, view.height - 80)), 0, WORLD.height);
       const roadWeight = this.isRoadLike(x, y) ? 0.25 : 1;
@@ -83,10 +95,10 @@ export class AmbientField {
   }
 
   private spawnAnchorSparkles(time: number) {
-    if (time < this.nextAnchorSparkAt || this.particles.length >= MAX_PARTICLES) {
+    if (time < this.nextAnchorSparkAt || this.particles.length >= this.maxParticles) {
       return;
     }
-    this.nextAnchorSparkAt = time + Phaser.Math.Between(90, 170);
+    this.nextAnchorSparkAt = time + Phaser.Math.Between(90, 170) * this.spawnIntervalMultiplier;
 
     const camera = this.scene.cameras.main;
     const view = camera.worldView;

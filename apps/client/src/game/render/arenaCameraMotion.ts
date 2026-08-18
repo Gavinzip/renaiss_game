@@ -22,7 +22,9 @@ interface AdvanceArenaCameraFocusOptions {
 }
 
 export const DESKTOP_ARENA_CAMERA_ZOOM = 0.82;
-export const TOUCH_ARENA_CAMERA_ZOOM = 1;
+// Landscape phones need more surrounding combat context than desktop-sized
+// controls leave visible. Keep this independent from desktop presentation.
+export const TOUCH_ARENA_CAMERA_ZOOM = 0.76;
 
 const MOVE_DEADZONE = 0.08;
 const MAX_CAMERA_LEAD_PX = 16;

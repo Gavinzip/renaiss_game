@@ -1392,6 +1392,10 @@ function MobileSkillButton({
         event.clientX - dragOriginRef.current.x,
         event.clientY - dragOriginRef.current.y
       );
+      // A fast Archer tap can begin and end between two 30 Hz input packets.
+      // Queue one final attack packet so the server always observes a press,
+      // then releases the charge on the following packet.
+      queueMobileAttack();
     },
     onPointerCancel: () => {
       setHudAction("attack", false);

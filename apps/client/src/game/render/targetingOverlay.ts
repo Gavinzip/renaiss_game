@@ -35,6 +35,7 @@ export class TargetingOverlay {
   private readonly graphics: Phaser.GameObjects.Graphics;
   private readonly lockLabel: Phaser.GameObjects.Text;
   private focusAlpha = 0;
+  private hasRenderedTelegraph = false;
 
   constructor(private readonly scene: Phaser.Scene) {
     this.graphics = scene.add.graphics().setDepth(8750);
@@ -54,20 +55,23 @@ export class TargetingOverlay {
   }
 
   update(snapshot: GameSnapshot | null, time: number, intent: TargetingIntent) {
-    this.graphics.clear();
-    this.lockLabel.setVisible(false);
     const self = this.getSelf(snapshot);
     if (!snapshot || !self?.alive || snapshot.round.phase === "finished") {
+      this.clearRenderedTelegraph();
       this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, 0, 0.18);
       return;
     }
 
     const actionActive = intent.attack || intent.skillF || intent.skillQ || intent.skillE || intent.skillR;
     if (!actionActive) {
+      this.clearRenderedTelegraph();
       this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, 0, 0.22);
       return;
     }
 
+    this.graphics.clear();
+    this.lockLabel.setVisible(false);
+    this.hasRenderedTelegraph = true;
     const target = this.getFocusTarget(snapshot, self, intent);
     const targetAlpha = target ? 0.86 : 0.62;
     this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, targetAlpha, target ? 0.42 : 0.36);
@@ -83,6 +87,15 @@ export class TargetingOverlay {
   destroy() {
     this.graphics.destroy();
     this.lockLabel.destroy();
+  }
+
+  private clearRenderedTelegraph() {
+    if (!this.hasRenderedTelegraph) {
+      return;
+    }
+    this.graphics.clear();
+    this.lockLabel.setVisible(false);
+    this.hasRenderedTelegraph = false;
   }
 
   private drawSkillTelegraph(

@@ -217,7 +217,7 @@ export const ARENA_SKILL_TELEGRAPHS: Readonly<
   mage_06: { kind: "line", length: 560, width: 52, focusRangeBonus: true },
   mage_07: { kind: "self-area", radius: COMBAT.mageBurstRadius },
   mage_08: { kind: "ground-area", radius: COMBAT.mageMiasmaRadius },
-  mage_09: { kind: "self-status", radius: 62 },
+  mage_09: { kind: "line", length: COMBAT.mageBeamLength, width: 40 },
   mage_10: { kind: "ground-area", radius: 200 },
   mage_11: {
     kind: "target-lock",

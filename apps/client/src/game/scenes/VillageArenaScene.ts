@@ -93,6 +93,7 @@ import {
   needsArenaCatalogImpactAccent
 } from "../render/arenaCatalogImpactAccent";
 import { resolveMobileAimProjection } from "../input/mobileAimProjection";
+import { resolveMobileBasicAttackAimPoint } from "../input/mobileBasicAttackAim";
 import {
   ARENA_WEB_ARCHER_FULL_DRAW,
   ARENA_WEB_MAGE_STAFF_CAST,
@@ -287,6 +288,8 @@ const MOVEMENT_TRAIL_DURATION_MS = 420;
 const MOVEMENT_TRAIL_INTERVAL_MS = 86;
 const MOVEMENT_TRAIL_SPRINT_INTERVAL_MS = 58;
 const MAX_MOVEMENT_TRAILS = 72;
+const TOUCH_MAX_MOVEMENT_TRAILS = 24;
+const TOUCH_MOVEMENT_TRAIL_INTERVAL_MULTIPLIER = 1.5;
 const MOVEMENT_VISUAL_GRACE_MS = ARENA_WEB_PLAYER.movementVisualGraceMs;
 const PLAYER_INTERPOLATION = 0.34;
 const PLAYER_GROUND_Y = 15;
@@ -351,6 +354,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private ambientField: AmbientField | null = null;
   private targetingOverlay: TargetingOverlay | null = null;
   private worldOverlay!: Phaser.GameObjects.Graphics;
+  private worldOverlayIdleVisible = false;
   private duelRealmBackdrop!: Phaser.GameObjects.TileSprite;
   private duelRealmMaskGraphics!: Phaser.GameObjects.Graphics;
   private duelRealmBoundary!: Phaser.GameObjects.Graphics;
@@ -494,7 +498,12 @@ export class VillageArenaScene extends Phaser.Scene {
 
     renderVillageMap(this);
     this.addWorldFrame();
-    this.ambientField = new AmbientField(this);
+    this.ambientField = new AmbientField(
+      this,
+      this.touchCamera
+        ? { maxParticles: 28, spawnIntervalMultiplier: 1.65 }
+        : undefined
+    );
     this.targetingOverlay = new TargetingOverlay(this);
 
     this.duelRealmMaskGraphics = this.make.graphics({ x: 0, y: 0 });
@@ -711,7 +720,11 @@ export class VillageArenaScene extends Phaser.Scene {
       (this.queuedMouseAttack || this.mouseAttackDragging);
     const queuedSkillCast = this.consumeQueuedSkillCast(self, this.snapshot.serverTime);
     const pointerAimPoint = this.getPointerAimPoint(mouseAttack);
-    const mobileAimPoint = this.getMobileAimPoint(hudState.mobileAim, self);
+    const rawMobileAimPoint = this.getMobileAimPoint(hudState.mobileAim, self);
+    const mobileAimPoint =
+      rawMobileAimPoint && hudState.mobileAim.action === "attack"
+        ? this.getMobileBasicAttackAimPoint(hudState.mobileAim, self, rawMobileAimPoint)
+        : rawMobileAimPoint;
     const useMobileAim = mobileAimPoint !== null && (
       ((mobileAttackRequested || hudInput.attack) && hudState.mobileAim.action === "attack") ||
       (this.armedSkillSlot !== null && hudState.mobileAim.action === this.armedSkillSlot)
@@ -770,7 +783,11 @@ export class VillageArenaScene extends Phaser.Scene {
     const self = this.getSelf();
     const serverTime = this.snapshot?.serverTime ?? Date.now();
     const activeInputSlot = this.armedSkillSlot;
-    const mobileAimPoint = self ? this.getMobileAimPoint(hudState.mobileAim, self) : null;
+    const rawMobileAimPoint = self ? this.getMobileAimPoint(hudState.mobileAim, self) : null;
+    const mobileAimPoint =
+      self && rawMobileAimPoint && hudState.mobileAim.action === "attack"
+        ? this.getMobileBasicAttackAimPoint(hudState.mobileAim, self, rawMobileAimPoint)
+        : rawMobileAimPoint;
     const useMobileAim = mobileAimPoint !== null && (
       (activeInputSlot !== null && hudState.mobileAim.action === activeInputSlot) ||
       (hudState.mobileAim.active && hudState.mobileAim.action === "attack")
@@ -990,6 +1007,24 @@ export class VillageArenaScene extends Phaser.Scene {
     return project({ x: self.x, y: self.y }, angle, COMBAT.mageBeamLength);
   }
 
+  private getMobileBasicAttackAimPoint(
+    aim: MobileAimInput,
+    self: PublicPlayer,
+    fallbackAimPoint: { x: number; y: number }
+  ) {
+    const snapshot = this.snapshot;
+    if (!snapshot) {
+      return fallbackAimPoint;
+    }
+    return resolveMobileBasicAttackAimPoint({
+      dragX: aim.dragX,
+      dragY: aim.dragY,
+      fallbackAimPoint,
+      self,
+      snapshot
+    });
+  }
+
   private isArenaPointerTarget(pointer: Phaser.Input.Pointer) {
     if (!this.pointerOverArenaCanvas) {
       return false;
@@ -1121,7 +1156,14 @@ export class VillageArenaScene extends Phaser.Scene {
       death: { duration: 190, intensity: 0.0056, flash: [164, 46, 42] as const, flashAlpha: 0.18, cooldown: 240 }
     }[kind];
 
-    this.cameras.main.shake(impact.duration, impact.intensity, true);
+    const touchIntensity =
+      kind === "hit" || kind === "assist"
+        ? 0
+        : impact.intensity * 0.45;
+    const intensity = this.touchCamera ? touchIntensity : impact.intensity;
+    if (intensity > 0) {
+      this.cameras.main.shake(impact.duration, intensity, true);
+    }
     this.playScreenFlash(impact);
     this.nextCameraImpactAt = now + impact.cooldown;
   }
@@ -1316,7 +1358,10 @@ export class VillageArenaScene extends Phaser.Scene {
       return;
     }
 
-    const interval = player.sprinting ? MOVEMENT_TRAIL_SPRINT_INTERVAL_MS : MOVEMENT_TRAIL_INTERVAL_MS;
+    const baseInterval = player.sprinting ? MOVEMENT_TRAIL_SPRINT_INTERVAL_MS : MOVEMENT_TRAIL_INTERVAL_MS;
+    const interval = baseInterval * (
+      this.touchCamera ? TOUCH_MOVEMENT_TRAIL_INTERVAL_MULTIPLIER : 1
+    );
     if (now - view.lastTrailAt < interval) {
       return;
     }
@@ -1352,7 +1397,10 @@ export class VillageArenaScene extends Phaser.Scene {
       baseHeight
     });
 
-    while (this.movementTrails.length > MAX_MOVEMENT_TRAILS) {
+    const maxTrails = this.touchCamera
+      ? TOUCH_MAX_MOVEMENT_TRAILS
+      : MAX_MOVEMENT_TRAILS;
+    while (this.movementTrails.length > maxTrails) {
       this.movementTrails.shift()?.image.destroy();
     }
   }
@@ -2154,12 +2202,18 @@ export class VillageArenaScene extends Phaser.Scene {
 
   private renderEffects() {
     const snapshot = this.snapshot;
-    this.worldOverlay.clear();
 
     if (!snapshot) {
+      this.worldOverlay.clear();
       this.renderVfxSprites([], Date.now());
       this.drawIdleLight();
+      this.worldOverlayIdleVisible = true;
       return;
+    }
+
+    if (this.worldOverlayIdleVisible) {
+      this.worldOverlay.clear();
+      this.worldOverlayIdleVisible = false;
     }
 
     this.renderVfxSprites(snapshot.effects, snapshot.serverTime);
@@ -2167,15 +2221,19 @@ export class VillageArenaScene extends Phaser.Scene {
   }
 
   private renderDuelRealm(realm: DuelRealmState | null) {
-    this.duelRealmMaskGraphics.clear();
-    this.duelRealmBoundary.clear();
-
     const serverTime = this.snapshot?.serverTime ?? Date.now();
     if (!realm || serverTime >= realm.endsAt) {
-      this.duelRealmBackdrop.setVisible(false);
-      this.duelRealmBoundary.setVisible(false);
+      if (this.duelRealmBackdrop.visible || this.duelRealmBoundary.visible) {
+        this.duelRealmMaskGraphics.clear();
+        this.duelRealmBoundary.clear();
+        this.duelRealmBackdrop.setVisible(false);
+        this.duelRealmBoundary.setVisible(false);
+      }
       return;
     }
+
+    this.duelRealmMaskGraphics.clear();
+    this.duelRealmBoundary.clear();
 
     const intro = Phaser.Math.Clamp(
       (serverTime - realm.startedAt) / ARENA_DUEL_REALM.transitionMs,
