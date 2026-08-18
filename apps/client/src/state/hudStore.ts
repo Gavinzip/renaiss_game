@@ -89,6 +89,7 @@ interface HudStore {
   armedSkillAction: HudSkillAction | null;
   hudSkillArmQueue: Record<HudSkillAction, number>;
   mobileSkillGestureQueue: MobileSkillGestureCommand[];
+  mobileAttackQueue: number;
   setSelectedClass: (classId: ClassId) => void;
   setSelectedMode: (mode: ArenaGameMode) => void;
   setEngineerTurretKind: (kind: EngineerTurretKind) => void;
@@ -123,6 +124,8 @@ interface HudStore {
   consumeHudSkillArms: () => Record<HudSkillAction, number>;
   queueMobileSkillGesture: (command: MobileSkillGestureCommand) => void;
   consumeMobileSkillGestures: () => MobileSkillGestureCommand[];
+  queueMobileAttack: () => void;
+  consumeMobileAttacks: () => number;
   leaveArena: () => void;
 }
 
@@ -154,6 +157,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
   armedSkillAction: null,
   hudSkillArmQueue: emptySkillArmQueue(),
   mobileSkillGestureQueue: [],
+  mobileAttackQueue: 0,
   setSelectedClass: (classId) => set({ selectedClass: classId }),
   setSelectedMode: (selectedMode) => {
     window.localStorage.setItem("renaiss.arena.mode", selectedMode);
@@ -325,6 +329,15 @@ export const useHudStore = create<HudStore>((set, get) => ({
     set({ mobileSkillGestureQueue: [] });
     return queue;
   },
+  queueMobileAttack: () =>
+    set((state) => ({ mobileAttackQueue: state.mobileAttackQueue + 1 })),
+  consumeMobileAttacks: () => {
+    const queued = get().mobileAttackQueue;
+    if (queued > 0) {
+      set({ mobileAttackQueue: 0 });
+    }
+    return queued;
+  },
   leaveArena: () => set({
     joined: false,
     connection: "idle",
@@ -345,7 +358,8 @@ export const useHudStore = create<HudStore>((set, get) => ({
     mobileControlsActive: false,
     armedSkillAction: null,
     hudSkillArmQueue: emptySkillArmQueue(),
-    mobileSkillGestureQueue: []
+    mobileSkillGestureQueue: [],
+    mobileAttackQueue: 0
   })
 }));
 

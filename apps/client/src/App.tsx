@@ -1287,6 +1287,7 @@ function MobileSkillButton({
   const setHudAction = useHudStore((state) => state.setHudAction);
   const armedSkillAction = useHudStore((state) => state.armedSkillAction);
   const queueMobileSkillGesture = useHudStore((state) => state.queueMobileSkillGesture);
+  const queueMobileAttack = useHudStore((state) => state.queueMobileAttack);
   const setMobileAim = useHudStore((state) => state.setMobileAim);
   const resetMobileAim = useHudStore((state) => state.resetMobileAim);
   const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
@@ -1340,8 +1341,6 @@ function MobileSkillButton({
     if (isSkill) {
       queueMobileSkillGesture({ action: action as HudSkillAction, phase: "begin" });
       onAimGestureChange({ action: action as HudSkillAction, cancelling: false });
-    } else {
-      setHudAction(action, true);
     }
     updateAim(event);
   };
@@ -1375,7 +1374,7 @@ function MobileSkillButton({
       onAimGestureChange(null);
     } else {
       updateAim(event);
-      resetMobileAim();
+      queueMobileAttack();
     }
   };
 
