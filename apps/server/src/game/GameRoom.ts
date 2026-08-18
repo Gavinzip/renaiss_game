@@ -76,6 +76,7 @@ interface PlayerEntity extends Omit<PublicPlayer, "statuses"> {
   lastProcessedInputSequence: number;
   lastAttackAt: number;
   archerChargeStartedAt: number;
+  archerChargeAimAngle: number;
   action: PlayerActionState | null;
   actionStartedAt: number;
   actionEndsAt: number;
@@ -875,6 +876,7 @@ export class GameRoom {
       lastProcessedInputSequence: 0,
       lastAttackAt: 0,
       archerChargeStartedAt: 0,
+      archerChargeAimAngle: 0,
       action: null,
       actionSkillId: null,
       actionStartedAt: 0,
@@ -1928,6 +1930,7 @@ export class GameRoom {
       }
 
       this.faceAim(attacker);
+      attacker.archerChargeAimAngle = attacker.angle;
       this.setArcherChargePose(attacker, now);
       return;
     }
@@ -1940,6 +1943,7 @@ export class GameRoom {
     }
 
     this.faceAim(attacker);
+    attacker.archerChargeAimAngle = attacker.angle;
     this.releaseSpawnGuardForAction(attacker, now);
     attacker.archerChargeStartedAt = now;
     this.setArcherChargePose(attacker, now);
@@ -1950,7 +1954,7 @@ export class GameRoom {
       return;
     }
 
-    this.faceAim(attacker);
+    attacker.angle = attacker.archerChargeAimAngle;
     attacker.lastAttackAt = now;
     this.resetArcherCharge(attacker);
     this.setActionPose(attacker, now, 320, "attack");
