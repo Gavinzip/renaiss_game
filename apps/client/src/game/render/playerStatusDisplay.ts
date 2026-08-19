@@ -17,6 +17,11 @@ import {
   ARENA_SHIELD_PRESENTATION,
   getArenaStatusPresentation
 } from "./arenaStatusVisualPolicy";
+import {
+  setTextColorIfChanged,
+  setTextFontSizeIfChanged,
+  setTextStrokeIfChanged
+} from "./textStyle";
 
 const STATUS_LABEL_BASE_Y = -116;
 const STUN_STATUS_LABEL_BASE_Y = -154;
@@ -128,10 +133,10 @@ export class PlayerStatusDisplay {
       label
         .setVisible(true)
         .setText(formatArenaStatusLabel(status, language))
-        .setFontSize(language === "en" ? 12 : 14)
-        .setColor(palette.text)
-        .setStroke(palette.stroke, 5)
         .setPosition(0, baseY - index * STATUS_LABEL_SPACING);
+      setTextFontSizeIfChanged(label, language === "en" ? 12 : 14);
+      setTextColorIfChanged(label, palette.text);
+      setTextStrokeIfChanged(label, palette.stroke, 5);
     });
   }
 

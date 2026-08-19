@@ -87,8 +87,3 @@ export function advanceArenaCameraFocus({
 
   return { x: nextX, y: nextY };
 }
-
-/** Align a world-space scroll value to a backing-canvas pixel at this zoom. */
-export function alignArenaCameraScroll(value: number, zoom: number) {
-  return Math.round(value * zoom) / zoom;
-}

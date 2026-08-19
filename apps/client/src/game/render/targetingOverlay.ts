@@ -14,6 +14,7 @@ import {
   isTargetReachableFromConfiguredSource,
   isTurretSkillTelegraph
 } from "./turretTargetingTelegraphs";
+import { setTextColorIfChanged } from "./textStyle";
 
 const SKILL_PREVIEW_COLOR = 0xff4f45;
 const SKILL_PREVIEW_GLOW = 0xffd4c7;
@@ -564,8 +565,8 @@ export class TargetingOverlay {
       this.lockLabel
         .setText("範圍內無目標\n左鍵確定 · 右鍵取消")
         .setPosition(cursor.x, cursor.y - 28)
-        .setColor("#d9bca2")
         .setVisible(true);
+      setTextColorIfChanged(this.lockLabel, "#d9bca2");
       return;
     }
 
@@ -618,8 +619,8 @@ export class TargetingOverlay {
     this.lockLabel
       .setText(`${target.name}\n左鍵確定 · 右鍵取消`)
       .setPosition(target.x, target.y - 92)
-      .setColor("#fff0aa")
       .setVisible(true);
+    setTextColorIfChanged(this.lockLabel, "#fff0aa");
   }
 
   private drawConfirmPrompt(intent: TargetingIntent) {
@@ -627,8 +628,8 @@ export class TargetingOverlay {
     this.lockLabel
       .setText(`${hotkey} 已選取\n左鍵施放 · 右鍵取消`)
       .setPosition(intent.aimPoint.x, intent.aimPoint.y - 28)
-      .setColor("#fff0aa")
       .setVisible(true);
+    setTextColorIfChanged(this.lockLabel, "#fff0aa");
   }
 
   private drawTargetReticle(

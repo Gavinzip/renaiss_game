@@ -83,11 +83,11 @@ import { renderVillageMap } from "../render/villageMap";
 import { frameRateIndependentAlpha } from "../render/frameRate";
 import {
   advanceArenaCameraFocus,
-  alignArenaCameraScroll,
   getArenaCameraZoom,
   isCoarsePointerViewport,
   type ArenaCameraPoint
 } from "../render/arenaCameraMotion";
+import { setTextColorIfChanged } from "../render/textStyle";
 import {
   drawArenaCatalogImpactAccent,
   needsArenaCatalogImpactAccent
@@ -501,7 +501,7 @@ export class VillageArenaScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, WORLD.width, WORLD.height);
     this.touchCamera = isCoarsePointerViewport();
     this.cameras.main.setZoom(getArenaCameraZoom(this.touchCamera));
-    this.cameras.main.roundPixels = true;
+    this.cameras.main.roundPixels = !this.touchCamera;
     this.cameras.main.centerOn(WORLD.width / 2 + 150, WORLD.height / 2 - 80);
 
     renderVillageMap(this);
@@ -1339,13 +1339,12 @@ export class VillageArenaScene extends Phaser.Scene {
       const isSelf = player.id === this.snapshot?.selfId;
       const teamColor =
         player.team === "red" ? "#ff8a75" : player.team === "blue" ? "#7bc6ff" : null;
-      view.name.setColor(
-        player.alive
-          ? isSelf
-            ? "#9ef06a"
-            : teamColor ?? (player.bot ? "#ff604f" : "#f0c3a0")
-          : "#b99a82"
-      );
+      const nameColor = player.alive
+        ? isSelf
+          ? "#9ef06a"
+          : teamColor ?? (player.bot ? "#ff604f" : "#f0c3a0")
+        : "#b99a82";
+      setTextColorIfChanged(view.name, nameColor);
       view.shadow.setFillStyle(0x050403, isSelf && player.alive ? 0.36 : 0.28);
     }
   }
@@ -3263,7 +3262,6 @@ export class VillageArenaScene extends Phaser.Scene {
         .setScale(entryPop);
       view.back.setFillStyle(tone.back, tone.backAlpha * (0.84 + Math.sin(progress * Math.PI) * 0.16));
       view.accent.setFillStyle(tone.accent, alpha * 0.92);
-      view.text.setColor(tone.text);
     }
   }
 
@@ -3376,8 +3374,8 @@ export class VillageArenaScene extends Phaser.Scene {
     const mobileFocusOffset = camera.width < 760 ? 180 / camera.zoom : 0;
     const targetY = focus.y - camera.height / (2 * camera.zoom) + mobileFocusOffset;
     if (useTouchCamera) {
-      camera.scrollX = alignArenaCameraScroll(targetX, camera.zoom);
-      camera.scrollY = alignArenaCameraScroll(targetY, camera.zoom);
+      camera.scrollX = targetX;
+      camera.scrollY = targetY;
     } else {
       camera.scrollX = Phaser.Math.Linear(camera.scrollX, targetX, cameraAlpha(0.12));
       camera.scrollY = Phaser.Math.Linear(camera.scrollY, targetY, cameraAlpha(0.12));
