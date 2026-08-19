@@ -144,6 +144,7 @@ import {
   releaseArenaSkillRuntimeSourceTextures,
   type ArenaSkillRuntimePathCore
 } from "../assets/arenaSkillRuntime";
+import { prepareArenaAssetsWithRetry } from "../assets/arenaAssetRecovery";
 import { getHealthPackVariant } from "../assets/healthPackVariants";
 import { generatedAssetPath } from "../assets/generatedAssets";
 import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
@@ -363,6 +364,7 @@ export class VillageArenaScene extends Phaser.Scene {
   private lastSentAt = 0;
   private allSkillsReadyPromise: Promise<void> | null = null;
   private unsubscribeJoin?: () => void;
+  private unsubscribeArenaAssetRetry?: () => void;
   private lastHudSync = 0;
   private lastArenaAimPoint: { x: number; y: number } | null = null;
   private pointerOverArenaCanvas = false;
@@ -549,8 +551,13 @@ export class VillageArenaScene extends Phaser.Scene {
       }
     });
 
-    this.allSkillsReadyPromise = this.prepareAllSkills();
-    void this.allSkillsReadyPromise.catch(() => undefined);
+    this.unsubscribeArenaAssetRetry = useHudStore.subscribe((state, previousState) => {
+      if (state.arenaAssetRetryRequestId === previousState.arenaAssetRetryRequestId) {
+        return;
+      }
+      this.startAllSkillsPreparation();
+    });
+    this.startAllSkillsPreparation();
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       window.removeEventListener("pointermove", this.updatePointerArenaTarget, true);
@@ -558,6 +565,7 @@ export class VillageArenaScene extends Phaser.Scene {
       window.removeEventListener("contextmenu", this.handleArenaContextMenu, true);
       this.cancelArmedSkill();
       this.unsubscribeJoin?.();
+      this.unsubscribeArenaAssetRetry?.();
       this.socket?.disconnect();
       this.movementTrails.forEach((trail) => trail.image.destroy());
       this.movementTrails = [];
@@ -639,21 +647,43 @@ export class VillageArenaScene extends Phaser.Scene {
   private async prepareAllSkills() {
     const hud = useHudStore.getState();
     try {
-      await prepareAllArenaSkillRuntimeAssets(this, (loaded, total) => {
-        if (this.game.isRunning) {
-          useHudStore.getState().setArenaAssetProgress(loaded, total);
-        }
+      await prepareArenaAssetsWithRetry({
+        onAttemptStart: () => {
+          if (this.game.isRunning && this.sys.isActive()) {
+            useHudStore.getState().beginArenaAssetPreparation(
+              ARENA_SKILL_RUNTIME_ENTRY_COUNT
+            );
+          }
+        },
+        prepare: (attempt) => prepareAllArenaSkillRuntimeAssets(
+          this,
+          (loaded, total) => {
+            if (this.game.isRunning && this.sys.isActive()) {
+              useHudStore.getState().setArenaAssetProgress(loaded, total);
+            }
+          },
+          { refreshCachedResponses: attempt > 1 }
+        )
       });
-      if (this.game.isRunning) {
+      if (this.game.isRunning && this.sys.isActive()) {
         useHudStore.getState().finishArenaAssetPreparation();
       }
     } catch (error) {
-      if (this.game.isRunning) {
+      if (this.game.isRunning && this.sys.isActive()) {
         hud.failArenaAssetPreparation();
         console.error("Arena all-skill preparation failed", error);
       }
       throw error;
     }
+  }
+
+  private startAllSkillsPreparation() {
+    // create() runs just before Phaser marks the scene active. The subscription
+    // is removed on shutdown, so game liveness is the correct start guard here.
+    if (!this.game.isRunning) return;
+    const preparation = this.prepareAllSkills();
+    this.allSkillsReadyPromise = preparation;
+    void preparation.catch(() => undefined);
   }
 
   private async switchArenaClass(request: ClassSwitchRequest) {

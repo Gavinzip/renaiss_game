@@ -1027,10 +1027,13 @@ export function ensureArenaSkillRuntimeTextures(
 const prefetchedRuntimeSourceUrls = new Set<string>();
 const RUNTIME_SOURCE_PREFETCH_CONCURRENCY = 4;
 
-async function prefetchRuntimeSourceAsset(asset: ArenaSkillRuntimeSourceAsset) {
+async function prefetchRuntimeSourceAsset(
+  asset: ArenaSkillRuntimeSourceAsset,
+  refreshCachedResponse: boolean
+) {
   if (prefetchedRuntimeSourceUrls.has(asset.url)) return;
   const response = await fetch(asset.url, {
-    cache: "force-cache",
+    cache: refreshCachedResponse ? "reload" : "force-cache",
     credentials: "same-origin"
   });
   if (!response.ok) {
@@ -1042,7 +1045,11 @@ async function prefetchRuntimeSourceAsset(asset: ArenaSkillRuntimeSourceAsset) {
   // allocating one large ArrayBuffer. Decoding and GPU upload happen only for
   // the skills listed by the server's current match manifest.
   if (!response.body) {
-    throw new Error(`Arena runtime asset response has no body: ${asset.url}`);
+    // Older iOS Web App runtimes may not expose a ReadableStream even though
+    // the response is valid. Consume one asset at a time through Blob instead.
+    await response.blob();
+    prefetchedRuntimeSourceUrls.add(asset.url);
+    return;
   }
   const reader = response.body.getReader();
   while (!(await reader.read()).done) {
@@ -1053,7 +1060,8 @@ async function prefetchRuntimeSourceAsset(asset: ArenaSkillRuntimeSourceAsset) {
 
 export async function prepareAllArenaSkillRuntimeAssets(
   scene: Phaser.Scene,
-  onProgress?: (loaded: number, total: number) => void
+  onProgress?: (loaded: number, total: number) => void,
+  options: { refreshCachedResponses?: boolean } = {}
 ) {
   const entries = manifest.entries;
   onProgress?.(0, entries.length);
@@ -1069,7 +1077,10 @@ export async function prepareAllArenaSkillRuntimeAssets(
       const entry = entries[index];
       if (hasArenaSkillRuntimeFrames(entry)) {
         for (const asset of runtimeEntrySourceAssets(entry)) {
-          await prefetchRuntimeSourceAsset(asset);
+          await prefetchRuntimeSourceAsset(
+            asset,
+            options.refreshCachedResponses === true
+          );
         }
       }
       completed += 1;
@@ -1077,12 +1088,16 @@ export async function prepareAllArenaSkillRuntimeAssets(
       await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     }
   };
-  await Promise.all(
+  const results = await Promise.allSettled(
     Array.from(
       { length: Math.min(RUNTIME_SOURCE_PREFETCH_CONCURRENCY, entries.length) },
       () => worker()
     )
   );
+  const failure = results.find(
+    (result): result is PromiseRejectedResult => result.status === "rejected"
+  );
+  if (failure) throw failure.reason;
 }
 
 async function ensureArenaSkillRuntimeTexturesNow(

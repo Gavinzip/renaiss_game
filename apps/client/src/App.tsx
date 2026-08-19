@@ -1,4 +1,4 @@
-import { GearSix, MapTrifold, PencilSimple, Question, Sparkle, UsersThree, EnvelopeSimple } from "@phosphor-icons/react";
+import { ArrowClockwise, GearSix, MapTrifold, PencilSimple, Question, Sparkle, UsersThree, EnvelopeSimple } from "@phosphor-icons/react";
 import {
   ARENA_LOADOUT_SLOTS,
   CLASS_META,
@@ -79,6 +79,7 @@ import { ArenaTutorialModal, useFirstRunTutorial } from "./components/RpgTutoria
 import { formatScore } from "./utils/formatScore";
 import { ArenaI18nProvider, ARENA_LANGUAGES, useArenaI18n } from "./i18n/arena";
 import { useOwnedPointerRelease } from "./hooks/useOwnedPointerRelease";
+import { restartWebAppForAssetRecovery } from "./runtime/webAppVersion";
 
 const LANGUAGE_SELECTION_STORAGE_KEY = "renaiss:first-language-selected:v2";
 const ENTRY_LANGUAGE_OPTIONS = ARENA_LANGUAGES;
@@ -338,6 +339,7 @@ function StartPanel({
   const setSelectedClass = useHudStore((state) => state.setSelectedClass);
   const setSelectedMode = useHudStore((state) => state.setSelectedMode);
   const requestJoin = useHudStore((state) => state.requestJoin);
+  const requestArenaAssetRetry = useHudStore((state) => state.requestArenaAssetRetry);
   const [name, setName] = useState(xPlayerName(authUser));
   const connectionLoop = useRef<GameUiSoundHandle | null>(null);
   const previousConnection = useRef(connection);
@@ -586,7 +588,7 @@ function StartPanel({
           className="enter-button"
           type="button"
           data-arena-assets-progress={`${arenaAssets.loaded}/${arenaAssets.total}`}
-          disabled={catalogLoadoutComplete && (
+          disabled={arenaAssets.status !== "error" && catalogLoadoutComplete && (
             arenaAssets.status !== "ready" ||
             catalogLoadoutSyncPending > 0 ||
             Boolean(catalogLoadoutSyncError) ||
@@ -594,12 +596,17 @@ function StartPanel({
             connection === "preparing" ||
             connection === "reconnecting"
           )}
-          onClick={catalogLoadoutComplete ? enterArena : () => {
-            onSetupViewChange("skills");
-            playGameUiSound("open");
-          }}
+          onClick={arenaAssets.status === "error" ? () => {
+            requestArenaAssetRetry();
+            playGameUiSound("forward");
+          } : catalogLoadoutComplete ? enterArena : () => {
+              onSetupViewChange("skills");
+              playGameUiSound("open");
+            }}
         >
-          {!catalogLoadoutComplete
+          {arenaAssets.status === "error"
+            ? t.ui.assetPreparationRetry
+            : !catalogLoadoutComplete
             ? t.ui.equipBeforeEntry
             : catalogLoadoutSyncPending > 0
               ? language === "zh" ? "保存技能配置中" : language === "ko" ? "스킬 설정 저장 중" : "Saving skill loadout"
@@ -609,21 +616,29 @@ function StartPanel({
               ? t.ui.preparingAllSkills(arenaAssets.loaded, arenaAssets.total)
               : arenaAssets.status === "idle"
                 ? t.ui.preparingAssets
-                : arenaAssets.status === "error"
-                  ? t.ui.assetPreparationError
-                  : connection === "preparing"
-                    ? t.ui.preparingAssets
-                    : connection === "reconnecting"
-                      ? t.ui.reconnecting
-                      : connection === "connecting"
-                        ? t.ui.connecting
-                        : t.ui.enterArena}
+                : connection === "preparing"
+                  ? t.ui.preparingAssets
+                  : connection === "reconnecting"
+                    ? t.ui.reconnecting
+                    : connection === "connecting"
+                      ? t.ui.connecting
+                      : t.ui.enterArena}
         </button>
         <div className="arena-start-secondary-actions">
-          <button className="arena-skill-forge-link" type="button" onClick={openSkillForge}>
-            <Sparkle size={17} weight="fill" />
-            <span>{language === "zh" ? "大廳抽技能" : language === "ko" ? "로비 스킬 뽑기" : "Lobby skill draw"}</span>
-          </button>
+          {arenaAssets.status === "error" ? (
+            <button className="arena-skill-forge-link" type="button" onClick={() => {
+              playGameUiSound("forward");
+              void restartWebAppForAssetRecovery();
+            }}>
+              <ArrowClockwise size={17} weight="bold" />
+              <span>{t.ui.assetPreparationRestart}</span>
+            </button>
+          ) : (
+            <button className="arena-skill-forge-link" type="button" onClick={openSkillForge}>
+              <Sparkle size={17} weight="fill" />
+              <span>{language === "zh" ? "大廳抽技能" : language === "ko" ? "로비 스킬 뽑기" : "Lobby skill draw"}</span>
+            </button>
+          )}
           <button className="arena-tutorial-button" type="button" onClick={() => {
             arenaTutorial.openTutorial();
             playGameUiSound("open");

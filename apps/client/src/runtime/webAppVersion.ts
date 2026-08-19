@@ -55,6 +55,7 @@ export function checkForWebAppUpdate() {
   activeCheck = fetchLatestWebBuildVersion()
     .then((latest) => {
       if (latest.buildId === CURRENT_WEB_BUILD_ID) return;
+      reloadInProgress = true;
       const nextUrl = new URL(window.location.href);
       nextUrl.searchParams.set("appVersion", latest.buildId);
       window.location.replace(nextUrl.toString());
@@ -66,6 +67,16 @@ export function checkForWebAppUpdate() {
       activeCheck = null;
     });
   return activeCheck;
+}
+
+export async function restartWebAppForAssetRecovery() {
+  await checkForWebAppUpdate();
+  if (reloadInProgress) return;
+
+  reloadInProgress = true;
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set("assetRecovery", Date.now().toString(36));
+  window.location.replace(nextUrl.toString());
 }
 
 async function fetchLatestWebBuildVersion(): Promise<RemoteWebBuildVersion> {

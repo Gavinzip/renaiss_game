@@ -65,6 +65,7 @@ interface HudStore {
     loaded: number;
     total: number;
   };
+  arenaAssetRetryRequestId: number;
   selectedClass: ClassId;
   selectedMode: ArenaGameMode;
   engineerTurretKind: EngineerTurretKind;
@@ -110,6 +111,7 @@ interface HudStore {
   setArenaAssetProgress: (loaded: number, total: number) => void;
   finishArenaAssetPreparation: () => void;
   failArenaAssetPreparation: () => void;
+  requestArenaAssetRetry: () => void;
   resetArenaAssetPreparation: () => void;
   setJoined: (playerId: string) => void;
   setSnapshot: (snapshot: GameSnapshot) => void;
@@ -133,6 +135,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
   joined: false,
   connection: "idle",
   arenaAssets: { status: "idle", loaded: 0, total: 0 },
+  arenaAssetRetryRequestId: 0,
   selectedClass: "warrior",
   selectedMode: loadArenaMode(),
   engineerTurretKind: loadEngineerTurretKind(),
@@ -291,6 +294,14 @@ export const useHudStore = create<HudStore>((set, get) => ({
   })),
   failArenaAssetPreparation: () => set((state) => ({
     arenaAssets: { ...state.arenaAssets, status: "error" }
+  })),
+  requestArenaAssetRetry: () => set((state) => ({
+    arenaAssetRetryRequestId: state.arenaAssetRetryRequestId + 1,
+    arenaAssets: {
+      status: "loading",
+      loaded: 0,
+      total: state.arenaAssets.total
+    }
   })),
   resetArenaAssetPreparation: () => set({
     arenaAssets: { status: "idle", loaded: 0, total: 0 }
