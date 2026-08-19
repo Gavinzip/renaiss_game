@@ -8155,9 +8155,9 @@
         "pathCore": {
           "kind": "segment",
           "outerColor": 16764234,
-          "outerWidth": 6,
+          "outerWidth": 10,
           "innerColor": 16776402,
-          "innerWidth": 3
+          "innerWidth": 4
         },
         "projectileLaunchScale": true,
         "fixedDisplay": false

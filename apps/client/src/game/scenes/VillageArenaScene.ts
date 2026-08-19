@@ -81,6 +81,7 @@ import { getMageActionFxProfile, shouldShowMageActionFx } from "../render/mageAc
 import { getWarriorActionFxProfile, shouldShowWarriorActionFx } from "../render/warriorActionFx";
 import { renderVillageMap } from "../render/villageMap";
 import { frameRateIndependentAlpha } from "../render/frameRate";
+import { estimateArenaRenderServerTime } from "../render/arenaRenderClock";
 import {
   advanceArenaCameraFocus,
   getArenaCameraZoom,
@@ -1654,9 +1655,7 @@ export class VillageArenaScene extends Phaser.Scene {
     if (player.id !== this.snapshot?.selfId || player.concealmentEndsAt <= 0) {
       return false;
     }
-    const estimatedServerTime =
-      this.snapshot.serverTime +
-      Math.max(0, performance.now() - this.snapshotReceivedAtMs);
+    const estimatedServerTime = this.getRenderServerTime();
     return player.concealmentEndsAt > estimatedServerTime;
   }
 
@@ -1885,7 +1884,7 @@ export class VillageArenaScene extends Phaser.Scene {
       return null;
     }
 
-    const serverTime = this.snapshot?.serverTime ?? Date.now();
+    const serverTime = this.getRenderServerTime();
     const elapsed = Math.max(0, serverTime - player.actionStartedAt);
     const maxElapsed = this.getArcherMaxChargeDuration();
     const ratio = Phaser.Math.Clamp(elapsed / maxElapsed, 0, 1);
@@ -2062,7 +2061,7 @@ export class VillageArenaScene extends Phaser.Scene {
       const visual = this.interpolatePoint(view.visualX, view.visualY, turret.x, turret.y, SLOW_ENTITY_INTERPOLATION, SLOW_ENTITY_SNAP_DISTANCE);
       view.visualX = visual.x;
       view.visualY = visual.y;
-      const serverTime = this.snapshot?.serverTime ?? Date.now();
+      const serverTime = this.getRenderServerTime();
       const deployProgress = Phaser.Math.Clamp(
         (serverTime - turret.deployedAt) / (14 * 90),
         0,
@@ -2261,12 +2260,13 @@ export class VillageArenaScene extends Phaser.Scene {
       this.worldOverlayIdleVisible = false;
     }
 
-    this.renderVfxSprites(snapshot.effects, snapshot.serverTime);
-    this.renderFloatingTexts(snapshot.effects, snapshot.serverTime, snapshot.selfId);
+    const renderServerTime = this.getRenderServerTime();
+    this.renderVfxSprites(snapshot.effects, renderServerTime);
+    this.renderFloatingTexts(snapshot.effects, renderServerTime, snapshot.selfId);
   }
 
   private renderDuelRealm(realm: DuelRealmState | null) {
-    const serverTime = this.snapshot?.serverTime ?? Date.now();
+    const serverTime = this.getRenderServerTime();
     if (!realm || serverTime >= realm.endsAt) {
       if (this.duelRealmBackdrop.visible || this.duelRealmBoundary.visible) {
         this.duelRealmMaskGraphics.clear();
@@ -2368,16 +2368,10 @@ export class VillageArenaScene extends Phaser.Scene {
     for (const snapshotEffect of vfxEffects) {
       const effect = this.resolveDynamicVfxGeometry(snapshotEffect);
       const spec = getEffectVfxSpec(effect);
-      // engineer_06 has authored 72–136 ms impact holds. Advancing those
-      // frames from snapshot.serverTime alone quantizes the animation to the
-      // server's roughly 100 ms broadcast cadence and can skip real source
-      // frames. Interpolate only this skill between snapshots so every
-      // accepted frame is rendered at the intended normal-speed cadence.
-      const effectRenderTime =
-        effect.skillId === "engineer_06" && this.snapshotReceivedAtMs > 0
-          ? serverTime + Math.max(0, performance.now() - this.snapshotReceivedAtMs)
-          : serverTime;
-      const elapsedMs = Math.max(0, effectRenderTime - effect.startedAt);
+      // Visual time advances between the authoritative 20 Hz snapshots. This
+      // keeps every skill timeline smooth at the display refresh rate without
+      // changing collision, damage, cooldown, or any other server state.
+      const elapsedMs = Math.max(0, serverTime - effect.startedAt);
       const progress = Phaser.Math.Clamp(elapsedMs / effect.duration, 0, 1);
       if (!spec) {
         continue;
@@ -3107,6 +3101,33 @@ export class VillageArenaScene extends Phaser.Scene {
     const contract = runtime
       ? getArenaSkillRuntimeVisualContract(runtime)
       : null;
+    if (
+      effect.skillId === "mage_00" &&
+      contract?.anchor === "path" &&
+      owner &&
+      Number.isFinite(effect.angle) &&
+      Number.isFinite(effect.radius)
+    ) {
+      // Solar Beam is a cast-direction segment, not a tether. The target id
+      // records who took the first hit; it must never shorten or steer the
+      // visual after the cast. Re-anchor the immutable direction/range to the
+      // matching staff pose so the line still begins at the orb.
+      const origin = getMageStaffAnchor({
+        x: owner.x,
+        y: owner.y,
+        angle: effect.angle
+      });
+      const end = project(origin, effect.angle, effect.radius);
+      return {
+        ...effect,
+        x: (origin.x + end.x) / 2,
+        y: (origin.y + end.y) / 2,
+        endX: end.x,
+        endY: end.y,
+        radius: Math.hypot(end.x - origin.x, end.y - origin.y)
+      };
+    }
+
     if (contract?.anchor === "path" && owner && target) {
       const origin =
         owner.classId === "mage"
@@ -4195,8 +4216,20 @@ export class VillageArenaScene extends Phaser.Scene {
     if (!player.action || player.actionStartedAt <= 0 || player.actionEndsAt <= player.actionStartedAt) {
       return 0;
     }
-    const serverTime = this.snapshot?.serverTime ?? Date.now();
+    const serverTime = this.getRenderServerTime();
     return Phaser.Math.Clamp((serverTime - player.actionStartedAt) / (player.actionEndsAt - player.actionStartedAt), 0, 1);
+  }
+
+  private getRenderServerTime() {
+    const snapshot = this.snapshot;
+    if (!snapshot) {
+      return Date.now();
+    }
+    return estimateArenaRenderServerTime(
+      snapshot.serverTime,
+      this.snapshotReceivedAtMs,
+      performance.now()
+    );
   }
 
   private getActionMotion(player: PublicPlayer, progress: number): PlayerActionMotion {
