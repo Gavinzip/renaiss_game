@@ -36,21 +36,38 @@ const MEDIA_TYPES = new Map([
 ]);
 
 function parseArgs() {
-  const args = new Set(process.argv.slice(2));
-  const unknown = [...args].filter(
-    (value) => !["--publish", "--verify", "--include-web-runtime"].includes(value)
-  );
-  if (unknown.length > 0) {
-    throw new Error(`Unknown option: ${unknown.join(", ")}`);
+  const raw = process.argv.slice(2);
+  const options = {
+    publish: false,
+    verify: false,
+    includeWebRuntime: false,
+    skillIds: new Set(),
+    roles: new Set(),
+    reportPath: null
+  };
+  for (let index = 0; index < raw.length; index += 1) {
+    const value = raw[index];
+    if (value === "--publish") options.publish = true;
+    else if (value === "--verify") options.verify = true;
+    else if (value === "--include-web-runtime") options.includeWebRuntime = true;
+    else if (value === "--skill-id" || value === "--role" || value === "--report") {
+      const selected = raw[index + 1];
+      if (!selected || selected.startsWith("--")) {
+        throw new Error(`${value} requires a value`);
+      }
+      index += 1;
+      if (value === "--skill-id") options.skillIds.add(selected);
+      else if (value === "--role") options.roles.add(selected);
+      else options.reportPath = selected;
+    } else {
+      throw new Error(`Unknown option: ${value}`);
+    }
   }
-  if (args.has("--publish") && args.has("--verify")) {
+  if (options.publish && options.verify) {
     throw new Error("Use either --publish or --verify, not both");
   }
-  return {
-    publish: args.has("--publish"),
-    verify: args.has("--publish") || args.has("--verify"),
-    includeWebRuntime: args.has("--include-web-runtime")
-  };
+  options.verify = options.publish || options.verify;
+  return options;
 }
 
 async function sha256File(path) {
@@ -345,8 +362,17 @@ async function verifyAsset(asset) {
 
 async function main() {
   const args = parseArgs();
-  const assets = await loadAssets(args.includeWebRuntime);
-  const uploadAssets = args.includeWebRuntime
+  const allAssets = await loadAssets(args.includeWebRuntime);
+  const scoped = args.skillIds.size > 0 || args.roles.size > 0;
+  const assets = allAssets.filter(
+    (asset) =>
+      (args.skillIds.size === 0 || args.skillIds.has(asset.skillId)) &&
+      (args.roles.size === 0 || args.roles.has(asset.role))
+  );
+  if (assets.length === 0) {
+    throw new Error("Scoped asset selection is empty");
+  }
+  const uploadAssets = args.includeWebRuntime && !scoped
     ? assets.filter((asset) => asset.role !== "preview")
     : assets;
   const releaseId = sha256Text(
@@ -387,7 +413,11 @@ async function main() {
     publicBaseUrl: BASE_URL,
     publicEndpointKind: BASE_URL.includes(".r2.dev") ? "r2-dev-public-url" : "custom-domain",
     cacheControl: CACHE_CONTROL,
-    scope: args.includeWebRuntime ? "arena-web-runtime" : "arena-configuration-previews",
+    scope: scoped
+      ? "arena-scoped-publish"
+      : args.includeWebRuntime
+      ? "arena-web-runtime"
+      : "arena-configuration-previews",
     assetCount: assets.length,
     uploadedAssetCount: args.publish ? uploadAssets.length : 0,
     videoCount: assets.filter((asset) => asset.mediaType === "video/webm").length,
@@ -401,10 +431,16 @@ async function main() {
     remote,
     fallbackUsed: false
   };
-  const reportPath = resolve(
-    REPORT_ROOT,
-    args.includeWebRuntime ? "cdn-web-runtime-publish-report.json" : "cdn-publish-report.json"
-  );
+  const reportPath = args.reportPath
+    ? resolve(ROOT, args.reportPath)
+    : resolve(
+        REPORT_ROOT,
+        scoped
+          ? "cdn-scoped-publish-report.json"
+          : args.includeWebRuntime
+          ? "cdn-web-runtime-publish-report.json"
+          : "cdn-publish-report.json"
+      );
   await mkdir(dirname(reportPath), { recursive: true });
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
   console.log(`${report.status}: ${reportPath}`);

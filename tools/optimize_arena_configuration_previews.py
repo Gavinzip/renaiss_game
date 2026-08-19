@@ -50,6 +50,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--crf", type=int, default=34)
     parser.add_argument("--ffmpeg", type=Path)
+    parser.add_argument(
+        "--skill-id",
+        action="append",
+        default=[],
+        help="limit write/check work to one or more skill ids",
+    )
+    parser.add_argument(
+        "--report",
+        type=Path,
+        help="write the audit report to this repo-relative or absolute path",
+    )
     return parser.parse_args()
 
 
@@ -106,6 +117,21 @@ def video_entries(manifest: dict[str, Any]) -> list[dict[str, Any]]:
         for entry in manifest.get("entries", [])
         if entry.get("previewMediaType") == MEDIA_TYPE
     ]
+
+
+def selected_video_entries(
+    manifest: dict[str, Any], skill_ids: list[str]
+) -> list[dict[str, Any]]:
+    entries = video_entries(manifest)
+    if not skill_ids:
+        return entries
+    requested = set(skill_ids)
+    selected = [entry for entry in entries if entry.get("skillId") in requested]
+    found = {entry["skillId"] for entry in selected}
+    missing = sorted(requested - found)
+    if missing:
+        raise ValueError(f"Unknown or non-video skill ids: {', '.join(missing)}")
+    return selected
 
 
 def source_crop(entry: dict[str, Any], vfx: dict[str, Any]) -> list[int]:
@@ -298,7 +324,9 @@ def preview_contract(
         "sourceVideo": relative_to_repo(result["source"]),
         "sourceVideoSha256": result["sourceSha256"],
         "sourceSize": previous.get("sourceSize", [1920, 1080]),
-        "sourceFrameRate": previous.get("frameRate"),
+        "sourceFrameRate": previous.get(
+            "sourceFrameRate", previous.get("frameRate")
+        ),
         "previewSize": list(OUTPUT_SIZE),
         "outputSize": list(OUTPUT_SIZE),
         "crop": result["sourceCrop"],
@@ -334,13 +362,14 @@ def install_contracts(
     manifest: dict[str, Any],
     package_index: dict[str, Any],
     results: list[dict[str, Any]],
+    entries: list[dict[str, Any]],
     crf: int,
 ) -> None:
     result_by_id = {result["skillId"]: result for result in results}
     package_by_id = {
         entry["skillId"]: entry for entry in package_index.get("entries", [])
     }
-    for entry in video_entries(manifest):
+    for entry in entries:
         result = result_by_id[entry["skillId"]]
         vfx_path = public_path(f"{entry['packageUrl']}/vfx.json")
         vfx = read_json(vfx_path)
@@ -406,7 +435,9 @@ def check_assets(
     ffmpeg: Path,
     manifest: dict[str, Any],
     package_index: dict[str, Any],
+    entries: list[dict[str, Any]],
     crf: int,
+    report_path: Path,
 ) -> dict[str, Any]:
     package_by_id = {
         entry["skillId"]: entry for entry in package_index.get("entries", [])
@@ -414,7 +445,7 @@ def check_assets(
     checks: list[dict[str, Any]] = []
     total_source_bytes = 0
     total_output_bytes = 0
-    for entry in video_entries(manifest):
+    for entry in entries:
         failures: list[str] = []
         skill_id = entry["skillId"]
         source = source_video(entry)
@@ -490,21 +521,31 @@ def check_assets(
         )
 
     failures = [check for check in checks if not check["passed"]]
-    image_count = sum(
-        1
-        for entry in manifest.get("entries", [])
-        if entry.get("previewMediaType") == "image/webp"
+    full_inventory = len(entries) == len(video_entries(manifest))
+    image_count = (
+        sum(
+            1
+            for entry in manifest.get("entries", [])
+            if entry.get("previewMediaType") == "image/webp"
+        )
+        if full_inventory
+        else 0
     )
-    status = (
-        "GREEN"
-        if len(checks) == 59 and image_count == 1 and not failures
-        else "RED"
+    expected_inventory_ok = (
+        len(checks) == 59 and image_count == 1
+        if full_inventory
+        else len(checks) == len(entries) and len(entries) > 0
     )
+    status = "GREEN" if expected_inventory_ok and not failures else "RED"
     report = {
         "schemaVersion": 1,
         "status": status,
         "generatedAt": "2026-08-17",
-        "scope": "59 Arena WebM configuration previews plus one repaired animated WebP",
+        "scope": (
+            "59 Arena WebM configuration previews plus one repaired animated WebP"
+            if full_inventory
+            else f"{len(entries)} selected Arena WebM configuration preview(s)"
+        ),
         "optimizationVersion": OPTIMIZATION_VERSION,
         "encoding": encoding_label(crf),
         "outputSize": list(OUTPUT_SIZE),
@@ -523,7 +564,7 @@ def check_assets(
         "failures": failures,
         "fallbackUsed": False,
     }
-    write_json(REPORT_PATH, report)
+    write_json(report_path, report)
     return report
 
 
@@ -536,9 +577,17 @@ def main() -> None:
     ffmpeg = resolve_ffmpeg(args.ffmpeg)
     manifest = read_json(MANIFEST_PATH)
     package_index = read_json(PACKAGE_INDEX_PATH)
-    entries = video_entries(manifest)
-    if len(entries) != 59:
-        raise ValueError(f"Expected 59 video previews, found {len(entries)}")
+    all_entries = video_entries(manifest)
+    if len(all_entries) != 59:
+        raise ValueError(f"Expected 59 video previews, found {len(all_entries)}")
+    entries = selected_video_entries(manifest, args.skill_id)
+    report_path = (
+        args.report.resolve()
+        if args.report and args.report.is_absolute()
+        else REPO_ROOT / args.report
+        if args.report
+        else REPORT_PATH
+    )
 
     if args.write:
         with ThreadPoolExecutor(max_workers=args.workers) as pool:
@@ -548,11 +597,19 @@ def main() -> None:
                     entries,
                 )
             )
-        install_contracts(manifest, package_index, results, args.crf)
+        install_contracts(manifest, package_index, results, entries, args.crf)
         manifest = read_json(MANIFEST_PATH)
         package_index = read_json(PACKAGE_INDEX_PATH)
+        entries = selected_video_entries(manifest, args.skill_id)
 
-    report = check_assets(ffmpeg, manifest, package_index, args.crf)
+    report = check_assets(
+        ffmpeg,
+        manifest,
+        package_index,
+        entries,
+        args.crf,
+        report_path,
+    )
     passed = report["videoCount"] - len(report["failures"])
     print(
         f"{report['status']}: {passed}/{report['videoCount']} video previews; "
@@ -560,7 +617,7 @@ def main() -> None:
         f"{report['totalOutputBytes'] / 1048576:.2f} MiB; "
         f"fallbackUsed={str(report['fallbackUsed']).lower()}"
     )
-    print(REPORT_PATH)
+    print(report_path)
     if report["status"] != "GREEN":
         raise SystemExit(1)
 

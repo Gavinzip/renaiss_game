@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "status": "GREEN",
+  "generatedAt": "2026-08-17",
+  "scope": "1 selected Arena WebM configuration preview(s)",
+  "optimizationVersion": "arena-config-cdn-preview-v1",
+  "encoding": "vp9-webm-crf34-30fps-physical-crop",
+  "outputSize": [
+    896,
+    504
+  ],
+  "outputFrameRate": 30,
+  "videoCount": 1,
+  "imageCount": 0,
+  "totalSourceBytes": 7466659,
+  "totalOutputBytes": 634772,
+  "totalReductionBytes": 6831887,
+  "totalReductionRatio": 0.914986,
+  "checks": [
+    {
+      "skillId": "archer_00",
+      "classId": "archer",
+      "name": "月牙刃",
+      "sourceBytes": 7466659,
+      "outputBytes": 634772,
+      "reductionRatio": 0.914986,
+      "measured": {
+        "width": 896,
+        "height": 504,
+        "frameCount": 114,
+        "durationSec": 3.8,
+        "averageFrameRate": 30.0,
+        "containerDurationFinite": true,
+        "decodedWithoutError": true
+      },
+      "passed": true,
+      "failures": []
+    }
+  ],
+  "failures": [],
+  "fallbackUsed": false
+}
