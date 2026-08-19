@@ -1,4 +1,5 @@
 import type { RoundState } from "@renaiss-game/shared";
+import { memo } from "react";
 import { useArenaI18n } from "../i18n/arena";
 
 interface RoundHudProps {
@@ -6,7 +7,7 @@ interface RoundHudProps {
   serverTime: number;
 }
 
-export function RoundHud({ round, serverTime }: RoundHudProps) {
+export const RoundHud = memo(function RoundHud({ round, serverTime }: RoundHudProps) {
   const { t } = useArenaI18n();
   const remaining = Math.max(0, (round.phase === "finished" ? round.nextRoundAt ?? serverTime : round.endsAt) - serverTime);
   const progress = round.phase === "playing"
@@ -38,6 +39,28 @@ export function RoundHud({ round, serverTime }: RoundHudProps) {
       </footer>
     </section>
   );
+}, areRoundHudPropsEqual);
+
+function areRoundHudPropsEqual(previous: RoundHudProps, next: RoundHudProps) {
+  const previousRemaining = getRemainingSeconds(previous.round, previous.serverTime);
+  const nextRemaining = getRemainingSeconds(next.round, next.serverTime);
+  return (
+    previousRemaining === nextRemaining &&
+    previous.round.phase === next.round.phase &&
+    previous.round.mode === next.round.mode &&
+    previous.round.scoreLimit === next.round.scoreLimit &&
+    previous.round.durationMs === next.round.durationMs &&
+    previous.round.restartMs === next.round.restartMs &&
+    previous.round.teamScores.red === next.round.teamScores.red &&
+    previous.round.teamScores.blue === next.round.teamScores.blue &&
+    previous.round.winner?.id === next.round.winner?.id &&
+    previous.round.winner?.score === next.round.winner?.score
+  );
+}
+
+function getRemainingSeconds(round: RoundState, serverTime: number) {
+  const endAt = round.phase === "finished" ? round.nextRoundAt ?? serverTime : round.endsAt;
+  return Math.max(0, Math.ceil((endAt - serverTime) / 1000));
 }
 
 function formatClock(ms: number) {

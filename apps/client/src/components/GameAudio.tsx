@@ -1,5 +1,5 @@
 import type { CombatEvent, GameSnapshot, SkillKey } from "@renaiss-game/shared";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { PixelAudioEngine, type CombatAudioCue } from "../audio/PixelAudioEngine";
 
 interface GameAudioProps {
@@ -11,7 +11,7 @@ interface GameAudioProps {
 
 const SKILL_KEYS: SkillKey[] = ["skillF", "skillQ", "skillE", "skillR"];
 
-export function GameAudio({ snapshot, selfId, enabled, volume }: GameAudioProps) {
+export const GameAudio = memo(function GameAudio({ snapshot, selfId, enabled, volume }: GameAudioProps) {
   const engine = useRef(new PixelAudioEngine());
   const seenEvents = useRef<Set<string>>(new Set());
   const previousCooldowns = useRef<Record<SkillKey, number> | null>(null);
@@ -95,6 +95,28 @@ export function GameAudio({ snapshot, selfId, enabled, volume }: GameAudioProps)
   }, [snapshot, selfId, enabled]);
 
   return null;
+}, areGameAudioPropsEqual);
+
+function areGameAudioPropsEqual(previous: GameAudioProps, next: GameAudioProps) {
+  if (
+    previous.selfId !== next.selfId ||
+    previous.enabled !== next.enabled ||
+    previous.volume !== next.volume ||
+    previous.snapshot?.round.phase !== next.snapshot?.round.phase
+  ) {
+    return false;
+  }
+  if (!previous.snapshot || !next.snapshot || !next.selfId) {
+    return previous.snapshot === next.snapshot;
+  }
+  const previousSelf = previous.snapshot.players.find((player) => player.id === previous.selfId);
+  const nextSelf = next.snapshot.players.find((player) => player.id === next.selfId);
+  if (previousSelf?.classId !== nextSelf?.classId) return false;
+  for (const skill of SKILL_KEYS) {
+    if ((previousSelf?.cooldowns[skill] ?? 0) !== (nextSelf?.cooldowns[skill] ?? 0)) return false;
+  }
+  if (previous.snapshot.events.length !== next.snapshot.events.length) return false;
+  return previous.snapshot.events.every((event, index) => event.id === next.snapshot?.events[index]?.id);
 }
 
 function getTriggeredSkill(cooldowns: Record<SkillKey, number>, previousCooldowns: Record<SkillKey, number> | null) {

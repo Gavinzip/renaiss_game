@@ -1,5 +1,5 @@
 import type { CombatEvent, GameSnapshot } from "@renaiss-game/shared";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useArenaI18n } from "../i18n/arena";
 
 interface CombatAnnouncerProps {
@@ -17,7 +17,7 @@ interface AnnouncementState {
   priority: number;
 }
 
-export function CombatAnnouncer({ snapshot, selfId }: CombatAnnouncerProps) {
+export const CombatAnnouncer = memo(function CombatAnnouncer({ snapshot, selfId }: CombatAnnouncerProps) {
   const { t } = useArenaI18n();
   const [announcement, setAnnouncement] = useState<AnnouncementState | null>(null);
   const seenEvents = useRef<Set<string>>(new Set());
@@ -80,6 +80,12 @@ export function CombatAnnouncer({ snapshot, selfId }: CombatAnnouncerProps) {
       {announcement.scoreDelta ? <b>{formatScoreDelta(announcement.scoreDelta)}</b> : null}
     </section>
   );
+}, areCombatAnnouncerPropsEqual);
+
+function areCombatAnnouncerPropsEqual(previous: CombatAnnouncerProps, next: CombatAnnouncerProps) {
+  if (previous.selfId !== next.selfId) return false;
+  if (previous.snapshot.events.length !== next.snapshot.events.length) return false;
+  return previous.snapshot.events.every((event, index) => event.id === next.snapshot.events[index]?.id);
 }
 
 function mapEventToAnnouncement(event: CombatEvent, selfId: string, serverTime: number, t: ReturnType<typeof useArenaI18n>["t"]): AnnouncementState | null {

@@ -285,6 +285,12 @@ interface PlayerActionMotion {
 }
 
 const SEND_RATE_MS = 1000 / 30;
+const DESKTOP_HUD_SYNC_INTERVAL_MS = 90;
+// The canvas consumes snapshots directly at the server broadcast rate. React
+// only needs a lower-rate copy for clocks, bars, cooldown labels and the feed;
+// publishing the complete snapshot at 10+ Hz forces the entire DOM HUD to
+// reconcile and stalls low-power phones.
+const TOUCH_HUD_SYNC_INTERVAL_MS = 250;
 const MOVEMENT_TRAIL_DURATION_MS = 420;
 const MOVEMENT_TRAIL_INTERVAL_MS = 86;
 const MOVEMENT_TRAIL_SPRINT_INTERVAL_MS = 58;
@@ -624,7 +630,10 @@ export class VillageArenaScene extends Phaser.Scene {
           this.snapshotReceivedAtMs = performance.now();
           this.publishArenaDebugSnapshot(snapshot);
           const now = performance.now();
-          if (now - this.lastHudSync > 90) {
+          const hudSyncInterval = this.touchCamera
+            ? TOUCH_HUD_SYNC_INTERVAL_MS
+            : DESKTOP_HUD_SYNC_INTERVAL_MS;
+          if (now - this.lastHudSync > hudSyncInterval) {
             useHudStore.getState().setSnapshot(snapshot);
             this.lastHudSync = now;
           }
@@ -1061,8 +1070,8 @@ export class VillageArenaScene extends Phaser.Scene {
     }
 
     const canvasRect = this.game.canvas.getBoundingClientRect();
-    const clientX = canvasRect.left + pointer.x;
-    const clientY = canvasRect.top + pointer.y;
+    const clientX = canvasRect.left + pointer.x * canvasRect.width / this.scale.width;
+    const clientY = canvasRect.top + pointer.y * canvasRect.height / this.scale.height;
     if (Number.isFinite(clientX) && Number.isFinite(clientY)) {
       return document.elementFromPoint(clientX, clientY) === this.game.canvas;
     }
@@ -1078,8 +1087,8 @@ export class VillageArenaScene extends Phaser.Scene {
 
   private getPointerViewportTarget(pointer: Phaser.Input.Pointer) {
     const canvasRect = this.game.canvas.getBoundingClientRect();
-    const clientX = canvasRect.left + pointer.x;
-    const clientY = canvasRect.top + pointer.y;
+    const clientX = canvasRect.left + pointer.x * canvasRect.width / this.scale.width;
+    const clientY = canvasRect.top + pointer.y * canvasRect.height / this.scale.height;
     if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) {
       return pointer.event?.target instanceof Element ? pointer.event.target : null;
     }
@@ -1205,10 +1214,13 @@ export class VillageArenaScene extends Phaser.Scene {
 
     const [red, green, blue] = impact.flash;
     this.screenFlashTween?.stop();
+    const camera = this.cameras.main;
+    const viewportWidth = camera.width / Math.max(camera.zoom, 0.01);
+    const viewportHeight = camera.height / Math.max(camera.zoom, 0.01);
     this.screenFlash
       .setPosition(0, 0)
-      .setSize(this.scale.width, this.scale.height)
-      .setDisplaySize(this.scale.width, this.scale.height)
+      .setSize(viewportWidth, viewportHeight)
+      .setDisplaySize(viewportWidth, viewportHeight)
       .setFillStyle(Phaser.Display.Color.GetColor(red, green, blue), impact.flashAlpha)
       .setAlpha(impact.flashAlpha)
       .setVisible(true);
@@ -1551,8 +1563,12 @@ export class VillageArenaScene extends Phaser.Scene {
       tick.setY(ARCHER_CHARGE_BAR_Y + hudOffsetY);
     }
     const stepping = moving && (!player.action || walkingDraw);
-    const walkStep = stepping ? Math.sin(now / 72) : 0;
-    const footPlant = stepping ? Math.abs(walkStep) : 0;
+    // The accepted walk strips already contain their own planted-foot motion.
+    // Adding another continuous bob, lean and squash makes high-DPI phone
+    // sprites visibly tremble between their authored frames.
+    const syntheticStepping = stepping && !this.touchCamera;
+    const walkStep = syntheticStepping ? Math.sin(now / 72) : 0;
+    const footPlant = syntheticStepping ? Math.abs(walkStep) : 0;
     const actionProgress = this.getActionProgress(player);
     const actionMotion = this.getActionMotion(player, actionProgress);
     const lunge = project({ x: 0, y: 0 }, player.angle, actionMotion.kick);
@@ -1580,9 +1596,9 @@ export class VillageArenaScene extends Phaser.Scene {
       actionMotion.lift +
       lunge.y * 0.28 +
       recoil.y * 0.36;
-    const stepSquash = stepping ? 1 - footPlant * 0.018 : 1;
-    const stepLean = stepping && facingDirection !== "up" ? walkStep * 0.8 : 0;
-    const backStepSway = stepping && facingDirection === "up" ? walkStep * 1.15 : 0;
+    const stepSquash = syntheticStepping ? 1 - footPlant * 0.018 : 1;
+    const stepLean = syntheticStepping && facingDirection !== "up" ? walkStep * 0.8 : 0;
+    const backStepSway = syntheticStepping && facingDirection === "up" ? walkStep * 1.15 : 0;
 
     view.sprite
       .setOrigin(

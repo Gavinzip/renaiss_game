@@ -19,7 +19,7 @@ import {
   type SkillKey
 } from "@renaiss-game/shared";
 import type { CSSProperties, PointerEvent, ReactNode } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
   configureGameUiSounds,
   playGameUiSound,
@@ -799,6 +799,9 @@ function StatBar({ label, value, max }: { label: string; value: number; max: num
 
 function HudOverlay() {
   const { t } = useArenaI18n();
+  const touchLayout = window.matchMedia(
+    "(orientation: landscape) and (any-pointer: coarse) and (max-height: 620px)"
+  ).matches;
   const snapshot = useHudStore((state) => state.snapshot);
   const selfId = useHudStore((state) => state.selfId);
   const connection = useHudStore((state) => state.connection);
@@ -950,7 +953,7 @@ function HudOverlay() {
         />
       ) : null}
 
-      {!activeDrawer ? (
+      {!touchLayout && !activeDrawer ? (
         <section className="status-chip">
           <span className={connection === "connected" ? "status-dot connected" : "status-dot"} />
           {connection === "connected"
@@ -967,17 +970,17 @@ function HudOverlay() {
 
       {joined && snapshot ? <RoundHud round={snapshot.round} serverTime={snapshot.serverTime} /> : null}
       {joined && snapshot && displayPrefs.combatPopups ? <CombatAnnouncer snapshot={snapshot} selfId={selfId} /> : null}
-      {joined && snapshot && displayPrefs.combatPopups ? <CombatToast snapshot={snapshot} selfId={selfId} /> : null}
+      {joined && snapshot && displayPrefs.combatPopups && !touchLayout ? <CombatToast snapshot={snapshot} selfId={selfId} /> : null}
       {joined && snapshot && displayPrefs.combatPopups ? <ArenaKillFeed snapshot={snapshot} selfId={selfId} /> : null}
-      {joined && snapshot ? <RoundRewards round={snapshot.round} /> : null}
-      {joined && snapshot && displayPrefs.minimap && activeDrawer !== "map" ? <Minimap snapshot={snapshot} selfId={selfId} /> : null}
+      {joined && snapshot && !touchLayout ? <RoundRewards round={snapshot.round} /> : null}
+      {joined && snapshot && !touchLayout && displayPrefs.minimap && activeDrawer !== "map" ? <Minimap snapshot={snapshot} selfId={selfId} /> : null}
       {joined && snapshot ? <SelfStatusOverlay player={self} /> : null}
-      {joined && snapshot ? <RoundResultOverlay round={snapshot.round} serverTime={snapshot.serverTime} leaderboard={snapshot.leaderboard} selfId={selfId} /> : null}
-      {joined && snapshot?.round.phase !== "finished" ? <DeathOverlay player={self} serverTime={snapshot?.serverTime ?? Date.now()} /> : null}
+      {joined && snapshot?.round.phase === "finished" ? <RoundResultOverlay round={snapshot.round} serverTime={snapshot.serverTime} leaderboard={snapshot.leaderboard} selfId={selfId} /> : null}
+      {joined && snapshot && snapshot.round.phase !== "finished" && self && !self.alive ? <DeathOverlay player={self} serverTime={snapshot.serverTime} /> : null}
 
-      {joined && snapshot?.round.mode === "team_3v3" ? (
+      {!touchLayout && joined && snapshot?.round.mode === "team_3v3" ? (
         <TeamStatusPanel snapshot={snapshot} selfId={selfId} />
-      ) : joined ? (
+      ) : !touchLayout && joined ? (
         <section className="leaderboard">
           <header>
             <UsersThree size={18} weight="fill" />
@@ -997,7 +1000,7 @@ function HudOverlay() {
         </section>
       ) : null}
 
-      {joined ? (
+      {joined && !touchLayout ? (
         <div className={`combat-skill-dock ${displayClass === "engineer" ? "has-engineer-core" : ""}`}>
           {displayClass === "engineer" ? (
             <section className="engineer-turret-selector" aria-label={t.ui.turretType}>
@@ -1086,7 +1089,7 @@ function HudOverlay() {
           disabled={actionsDisabled}
         />
       ) : null}
-      {joined ? <ArenaControlHint classId={displayClass} /> : null}
+      {joined && !touchLayout ? <ArenaControlHint classId={displayClass} /> : null}
       <ArenaTutorialModal open={arenaTutorialOpen} onClose={() => setArenaTutorialOpen(false)} />
     </div>
   );
@@ -1115,15 +1118,7 @@ function MobileLandscapeGate() {
   );
 }
 
-function MobileArenaControls({
-  classId,
-  loadout,
-  catalogLoadout,
-  skillLabels,
-  actionTooltips,
-  skillCooldowns,
-  disabled
-}: {
+interface MobileArenaControlsProps {
   classId: ClassId;
   loadout: ArenaLoadout;
   catalogLoadout: ArenaCatalogLoadout;
@@ -1131,7 +1126,17 @@ function MobileArenaControls({
   actionTooltips: Record<HudAction, ActionTooltip>;
   skillCooldowns: Record<HudSkillAction, number> | null;
   disabled: boolean;
-}) {
+}
+
+const MobileArenaControls = memo(function MobileArenaControls({
+  classId,
+  loadout,
+  catalogLoadout,
+  skillLabels,
+  actionTooltips,
+  skillCooldowns,
+  disabled
+}: MobileArenaControlsProps) {
   const { t } = useArenaI18n();
   const setMobileMove = useHudStore((state) => state.setMobileMove);
   const resetMobileMove = useHudStore((state) => state.resetMobileMove);
@@ -1268,6 +1273,37 @@ function MobileArenaControls({
       </div>
     </section>
   );
+}, areMobileArenaControlPropsEqual);
+
+function areMobileArenaControlPropsEqual(
+  previous: MobileArenaControlsProps,
+  next: MobileArenaControlsProps
+) {
+  if (
+    previous.classId !== next.classId ||
+    previous.disabled !== next.disabled ||
+    previous.skillLabels !== next.skillLabels ||
+    previous.actionTooltips !== next.actionTooltips
+  ) {
+    return false;
+  }
+
+  for (const slot of ARENA_LOADOUT_SLOTS) {
+    if (
+      previous.loadout[slot] !== next.loadout[slot] ||
+      previous.catalogLoadout[slot] !== next.catalogLoadout[slot]
+    ) {
+      return false;
+    }
+  }
+
+  for (const action of ["skillF", "skillQ", "skillE", "skillR"] as const) {
+    if ((previous.skillCooldowns?.[action] ?? 0) !== (next.skillCooldowns?.[action] ?? 0)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function MobileSkillButton({

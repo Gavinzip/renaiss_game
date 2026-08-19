@@ -1,4 +1,5 @@
 import type { GameSnapshot } from "@renaiss-game/shared";
+import { memo } from "react";
 import { useArenaI18n } from "../i18n/arena";
 
 interface ArenaKillFeedProps {
@@ -9,7 +10,7 @@ interface ArenaKillFeedProps {
 const FEED_LIFETIME_MS = 5_200;
 const MAX_VISIBLE_KILLS = 3;
 
-export function ArenaKillFeed({ snapshot, selfId }: ArenaKillFeedProps) {
+export const ArenaKillFeed = memo(function ArenaKillFeed({ snapshot, selfId }: ArenaKillFeedProps) {
   const { t } = useArenaI18n();
   const visibleKills = snapshot.events
     .filter((event) => event.type === "kill" && snapshot.serverTime - event.at <= FEED_LIFETIME_MS)
@@ -46,4 +47,17 @@ export function ArenaKillFeed({ snapshot, selfId }: ArenaKillFeedProps) {
       })}
     </ol>
   );
+}, areArenaKillFeedPropsEqual);
+
+function areArenaKillFeedPropsEqual(previous: ArenaKillFeedProps, next: ArenaKillFeedProps) {
+  if (
+    previous.selfId !== next.selfId ||
+    Math.floor(previous.snapshot.serverTime / 1000) !== Math.floor(next.snapshot.serverTime / 1000)
+  ) {
+    return false;
+  }
+  const previousKills = previous.snapshot.events.filter((event) => event.type === "kill");
+  const nextKills = next.snapshot.events.filter((event) => event.type === "kill");
+  if (previousKills.length !== nextKills.length) return false;
+  return previousKills.every((event, index) => event.id === nextKills[index]?.id);
 }
