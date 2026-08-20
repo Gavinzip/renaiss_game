@@ -16,16 +16,22 @@ COPY packages/shared/package.json packages/shared/package.json
 
 RUN pnpm install --frozen-lockfile
 
-COPY . .
+COPY apps/client ./apps/client
+COPY apps/server ./apps/server
+COPY packages/shared ./packages/shared
+COPY ops ./ops
+COPY tools/audit_static_assets.mjs tools/manage_static_asset_release.mjs ./tools/
 
 ARG VITE_GAME_SERVER_URL
-ARG VITE_STATIC_ASSET_BASE_URL=https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game
+ARG VITE_STATIC_ASSET_BASE_URL
 ENV VITE_GAME_SERVER_URL=${VITE_GAME_SERVER_URL}
 ENV VITE_STATIC_ASSET_BASE_URL=${VITE_STATIC_ASSET_BASE_URL}
 
 RUN pnpm --filter @renaiss-game/client build
 RUN pnpm --filter @renaiss-game/server typecheck
 RUN node tools/audit_static_assets.mjs
+RUN node tools/manage_static_asset_release.mjs --assert-build
+RUN pnpm --filter @renaiss-game/server deploy --prod --legacy /runtime/server
 
 FROM node:24-bookworm-slim AS runtime
 
@@ -44,10 +50,8 @@ RUN apt-get update \
   && corepack enable \
   && mkdir -p /data/renaiss-game
 
-COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/apps ./apps
-COPY --from=build /app/packages ./packages
+COPY --from=build /runtime/server ./server
+COPY --from=build /app/packages/shared ./packages/shared
 COPY --from=build /app/ops ./ops
 COPY --from=build /app/apps/client/dist /usr/share/nginx/html
 COPY ops/nginx.conf /etc/nginx/conf.d/default.conf

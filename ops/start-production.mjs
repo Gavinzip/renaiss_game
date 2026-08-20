@@ -42,7 +42,7 @@ process.on("SIGINT", () => {
   stopChildren();
 });
 
-start("game-server", "node_modules/.bin/tsx", ["apps/server/src/index.ts"], {
+start("game-server", "server/node_modules/.bin/tsx", ["server/src/index.ts"], {
   env: {
     ...process.env,
     PORT: serverPort

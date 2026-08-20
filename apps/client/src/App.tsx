@@ -62,7 +62,7 @@ import type { XAuthUser } from "./api/auth";
 import { type SkillIconSlot } from "./game/assets/crops";
 import { generatedAssetPath } from "./game/assets/generatedAssets";
 import { warmArenaStartupAssetCache } from "./game/assets/arenaStartupAssets";
-import { installStaticAssetCssVariables, staticAssetUrl } from "./game/assets/staticAssets";
+import { staticAssetUrl } from "./game/assets/staticAssets";
 import { createGame } from "./game/createGame";
 import { createRpgGame } from "./game/createRpgGame";
 import { isMapPreviewMode, loadStoredMapDraftProps } from "./game/mapDraft";
@@ -99,10 +99,6 @@ type ArenaSetupView = "arena" | "skills";
 export function App() {
   const appParams = new URLSearchParams(window.location.search);
   const arenaStatusReviewMode = appParams.get("statusReview") === "1";
-
-  useEffect(() => {
-    installStaticAssetCssVariables();
-  }, []);
 
   return (
     <ArenaI18nProvider>

@@ -6,18 +6,7 @@
  * main stylesheet; this file owns the shared arena material language.
  */
 
-@font-face {
-  font-family: "ArenaPixel";
-  src: url("/assets/ui/sprout-lands/pixelFont-7-8x14-sproutLands.ttf") format("truetype");
-  font-display: swap;
-}
-
 :root {
-  --arena-chrome-panel: url("/assets/generated/arena-ui/arena-panel-frame.png");
-  --arena-chrome-inset: url("/assets/generated/arena-ui/arena-inset-frame.png");
-  --arena-chrome-gold: url("/assets/generated/arena-ui/arena-gold-button.png");
-  --arena-chrome-primary: url("/assets/generated/arena-ui/arena-primary-button.png");
-  --arena-chrome-square: url("/assets/generated/arena-ui/arena-square-button.png");
   --arena-chrome-ink: #100916;
   --arena-chrome-plum: #2f2038;
   --arena-chrome-plum-deep: #1a1021;

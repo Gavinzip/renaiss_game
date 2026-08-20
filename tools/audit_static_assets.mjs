@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, statSync } from "node:fs";
 import { relative, resolve, sep } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -51,6 +51,7 @@ function isForbiddenPublicSource(path) {
 }
 
 function auditForbiddenSourceFiles(label, dir) {
+  if (!existsSync(dir)) return [];
   const forbidden = listFiles(dir).filter(isForbiddenPublicSource);
   if (forbidden.length === 0) return [];
 

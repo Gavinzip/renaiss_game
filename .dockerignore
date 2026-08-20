@@ -3,6 +3,15 @@ apps/*/node_modules
 packages/*/node_modules
 apps/client/dist
 apps/server/dist
+apps/client/public/assets
+apps/client/tools
+apps/godot-client
+apps/unity-arena-client
+docs
+work
+tools/**
+!tools/audit_static_assets.mjs
+!tools/manage_static_asset_release.mjs
 dist
 .vite
 .git

@@ -1,4 +1,4 @@
-const DEFAULT_PRODUCTION_STATIC_ASSET_BASE_URL = "https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game";
+import releaseManifest from "./staticAssetReleaseManifest.json";
 
 const CSS_ASSET_URLS: Record<string, string> = {
   "--asset-vinci-login-cover-village": "/assets/generated/vinci-login-cover-village.jpg",
@@ -9,14 +9,29 @@ const CSS_ASSET_URLS: Record<string, string> = {
   "--asset-rpg-ui-square-green": "/assets/ui/sprout-lands/button-square-green.png",
   "--asset-rpg-ui-dialog-big": "/assets/ui/sprout-lands/dialog-box-big.png",
   "--asset-rpg-ui-dialog-medium": "/assets/ui/sprout-lands/dialog-box-medium.png",
-  "--asset-rpg-ui-dialog-small": "/assets/ui/sprout-lands/dialog-box-small.png"
+  "--asset-rpg-ui-dialog-small": "/assets/ui/sprout-lands/dialog-box-small.png",
+  "--arena-chrome-panel": "/assets/generated/arena-ui/arena-panel-frame.png",
+  "--arena-chrome-inset": "/assets/generated/arena-ui/arena-inset-frame.png",
+  "--arena-chrome-gold": "/assets/generated/arena-ui/arena-gold-button.png",
+  "--arena-chrome-primary": "/assets/generated/arena-ui/arena-primary-button.png",
+  "--arena-chrome-square": "/assets/generated/arena-ui/arena-square-button.png",
+  "--rpg-arena-url": "/assets/generated/rpg-battle-arena.png"
 };
 const SPROUT_FONT_STYLE_ID = "renaiss-sprout-pixel-font-cdn";
+const RELEASE_BASE_URL = trimTrailingSlash(releaseManifest.publicBaseUrl);
 
 export function staticAssetBaseUrl() {
   const configured = (import.meta.env.VITE_STATIC_ASSET_BASE_URL as string | undefined)?.trim();
-  if (configured) return trimTrailingSlash(configured);
-  return import.meta.env.PROD ? DEFAULT_PRODUCTION_STATIC_ASSET_BASE_URL : "";
+  if (configured) {
+    const normalized = trimTrailingSlash(configured);
+    if (import.meta.env.PROD && normalized !== RELEASE_BASE_URL) {
+      throw new Error(
+        `Static asset release mismatch: expected ${RELEASE_BASE_URL}, received ${normalized}`
+      );
+    }
+    return normalized;
+  }
+  return RELEASE_BASE_URL;
 }
 
 export function staticAssetUrl(path: string) {
@@ -47,6 +62,11 @@ function installSproutPixelFontFace() {
   style.textContent = `
 @font-face {
   font-family: "SproutPixel";
+  src: url("${staticAssetUrl("/assets/ui/sprout-lands/pixelFont-7-8x14-sproutLands.ttf")}") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "ArenaPixel";
   src: url("${staticAssetUrl("/assets/ui/sprout-lands/pixelFont-7-8x14-sproutLands.ttf")}") format("truetype");
   font-display: swap;
 }

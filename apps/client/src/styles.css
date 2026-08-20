@@ -17,15 +17,6 @@
   --ui-wood-base: #4b2a17;
   --ui-wood-warm: #6b3f22;
   --ui-wood-gold: #d59a51;
-  --asset-vinci-login-cover-village: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/generated/vinci-login-cover-village.jpg");
-  --asset-rpg-ui-panel: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/button-large.png");
-  --asset-rpg-ui-panel-hover: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/button-large-hover.png");
-  --asset-rpg-ui-square: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/button-square.png");
-  --asset-rpg-ui-square-hover: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/button-square-hover.png");
-  --asset-rpg-ui-square-green: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/button-square-green.png");
-  --asset-rpg-ui-dialog-big: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/dialog-box-big.png");
-  --asset-rpg-ui-dialog-medium: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/dialog-box-medium.png");
-  --asset-rpg-ui-dialog-small: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/dialog-box-small.png");
 }
 
 * {
@@ -76,7 +67,7 @@ input {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: var(--asset-vinci-login-cover-village, url("/assets/generated/vinci-login-cover-village.jpg"));
+  background-image: var(--asset-vinci-login-cover-village);
   background-position: center;
   background-size: cover;
   filter: brightness(0.54) saturate(0.82) contrast(1.08);
@@ -6131,7 +6122,7 @@ button.rpg-equipped-card-slot {
 .rpg-battle-field {
   position: relative;
   min-height: 0;
-  background: var(--rpg-arena-url, url("/assets/generated/rpg-battle-arena.png")) center / cover no-repeat;
+  background: var(--rpg-arena-url) center / cover no-repeat;
   image-rendering: pixelated;
   overflow: hidden;
   isolation: isolate;
@@ -6970,7 +6961,7 @@ button.rpg-field-pet {
     linear-gradient(color-mix(in srgb, var(--fx-a) 18%, transparent), transparent) 0 0 / 100% 100%;
   background-repeat: no-repeat;
   border: 8px solid transparent;
-  border-image: var(--rpg-ui-panel-small, var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"))) 8 fill / 8px / 0 stretch;
+  border-image: var(--rpg-ui-panel-small, var(--asset-rpg-ui-panel)) 8 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(84, 58, 42, 0.18);
   transform: translateX(-50%);
   animation: rpg-fx-card-rise 980ms steps(6, end) both;
@@ -6985,7 +6976,7 @@ button.rpg-field-pet {
   color: #5b3d2f;
   background: transparent;
   border: 6px solid transparent;
-  border-image: var(--rpg-ui-square, var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png"))) 5 fill / 6px / 0 stretch;
+  border-image: var(--rpg-ui-square, var(--asset-rpg-ui-square)) 5 fill / 6px / 0 stretch;
   font-family: "SproutPixel", "Noto Sans TC", "PingFang TC", Arial, sans-serif;
   font-size: 13px;
 }
@@ -7152,7 +7143,7 @@ button.rpg-field-pet {
   color: #fff1bf;
   background:
     linear-gradient(rgba(11, 17, 10, 0.62), rgba(11, 17, 10, 0.72)),
-    var(--rpg-arena-url, url("/assets/generated/rpg-battle-arena.png")) center / cover no-repeat;
+    var(--rpg-arena-url) center / cover no-repeat;
   image-rendering: pixelated;
 }
 
@@ -7339,7 +7330,7 @@ button.rpg-field-pet {
   color: #fff1bf;
   background:
     linear-gradient(rgba(11, 15, 11, 0.54), rgba(11, 15, 11, 0.74)),
-    var(--rpg-arena-url, url("/assets/generated/rpg-battle-arena.png")) center / cover no-repeat;
+    var(--rpg-arena-url) center / cover no-repeat;
   image-rendering: pixelated;
 }
 
@@ -7401,7 +7392,7 @@ button.rpg-field-pet {
   min-height: 0;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: var(--rpg-arena-url, url("/assets/generated/rpg-battle-arena.png")) center / cover no-repeat;
+  background: var(--rpg-arena-url) center / cover no-repeat;
   border: 4px solid #20120b;
   box-shadow:
     inset 0 0 0 3px rgba(255, 232, 168, 0.08),
@@ -8087,11 +8078,11 @@ button.rpg-field-pet {
   --rpg-paper: #5a3c2f;
   --rpg-panel: #efd4a5;
   --rpg-panel-dark: #d9ad80;
-  --rpg-ui-panel: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"));
-  --rpg-ui-panel-small: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"));
-  --rpg-ui-button: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"));
-  --rpg-ui-button-hover: var(--asset-rpg-ui-panel-hover, url("/assets/ui/sprout-lands/button-large-hover.png"));
-  --rpg-ui-square: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png"));
+  --rpg-ui-panel: var(--asset-rpg-ui-panel);
+  --rpg-ui-panel-small: var(--asset-rpg-ui-panel);
+  --rpg-ui-button: var(--asset-rpg-ui-panel);
+  --rpg-ui-button-hover: var(--asset-rpg-ui-panel-hover);
+  --rpg-ui-square: var(--asset-rpg-ui-square);
   min-height: 100vh;
   padding: 18px;
   color: var(--rpg-paper);
@@ -8285,7 +8276,7 @@ button.rpg-field-pet {
   color: #fff0bd;
   background:
     linear-gradient(rgba(12, 17, 12, 0.74), rgba(15, 9, 6, 0.92)),
-    var(--rpg-arena-url, url("/assets/generated/rpg-battle-arena.png")) center / cover no-repeat;
+    var(--rpg-arena-url) center / cover no-repeat;
   image-rendering: pixelated;
 }
 
@@ -9883,12 +9874,6 @@ button.rpg-field-pet {
   }
 }
 
-@font-face {
-  font-family: "SproutPixel";
-  src: url("https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/assets/ui/sprout-lands/pixelFont-7-8x14-sproutLands.ttf") format("truetype");
-  font-display: swap;
-}
-
 /* Sprout Lands RPG UI skin. Keep this after the base/mobile RPG rules so the
    asset-backed style stays authoritative over the previous wood-board skin. */
 .rpg-app-shell {
@@ -9897,13 +9882,13 @@ button.rpg-field-pet {
   --rpg-paper: #5a3c2f;
   --rpg-panel: #efd4a5;
   --rpg-panel-dark: #d9ad80;
-  --rpg-ui-panel: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"));
-  --rpg-ui-panel-small: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"));
-  --rpg-ui-button: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png"));
-  --rpg-ui-button-hover: var(--asset-rpg-ui-panel-hover, url("/assets/ui/sprout-lands/button-large-hover.png"));
-  --rpg-ui-square: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png"));
-  --rpg-ui-square-hover: var(--asset-rpg-ui-square-hover, url("/assets/ui/sprout-lands/button-square-hover.png"));
-  --rpg-ui-square-green: var(--asset-rpg-ui-square-green, url("/assets/ui/sprout-lands/button-square-green.png"));
+  --rpg-ui-panel: var(--asset-rpg-ui-panel);
+  --rpg-ui-panel-small: var(--asset-rpg-ui-panel);
+  --rpg-ui-button: var(--asset-rpg-ui-panel);
+  --rpg-ui-button-hover: var(--asset-rpg-ui-panel-hover);
+  --rpg-ui-square: var(--asset-rpg-ui-square);
+  --rpg-ui-square-hover: var(--asset-rpg-ui-square-hover);
+  --rpg-ui-square-green: var(--asset-rpg-ui-square-green);
 }
 
 .rpg-layer {
@@ -12644,7 +12629,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #f1d6a7;
   border: 12px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-big, url("/assets/ui/sprout-lands/dialog-box-big.png")) 8 fill / 12px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-big) 8 fill / 12px / 0 stretch;
   box-shadow:
     0 12px 0 rgba(30, 14, 7, 0.48),
     0 0 0 4px rgba(28, 12, 6, 0.72);
@@ -12661,7 +12646,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #f6dfb4;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(126, 79, 47, 0.2);
 }
 
@@ -12671,7 +12656,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: transparent;
   border: 6px solid transparent;
-  border-image: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png")) 6 fill / 6px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square) 6 fill / 6px / 0 stretch;
   box-shadow: none;
 }
 
@@ -12694,7 +12679,7 @@ button.rpg-field-pet {
   height: 48px;
   color: #4f3323;
   border: 6px solid transparent;
-  border-image: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png")) 6 fill / 6px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square) 6 fill / 6px / 0 stretch;
   background: transparent;
   box-shadow: 0 4px 0 rgba(126, 79, 47, 0.24);
 }
@@ -12707,7 +12692,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #e8c28b;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(126, 79, 47, 0.18);
 }
 
@@ -12715,7 +12700,7 @@ button.rpg-field-pet {
 .rpg-layer .rpg-profile-button .class-portrait {
   background: #f6dfb4;
   border: 7px solid transparent;
-  border-image: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png")) 6 fill / 7px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square) 6 fill / 7px / 0 stretch;
   box-shadow: 0 4px 0 rgba(91, 54, 31, 0.26);
 }
 
@@ -12731,7 +12716,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #fff1c8;
   border: 5px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 5 fill / 5px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 5 fill / 5px / 0 stretch;
   box-shadow: none;
 }
 
@@ -12767,7 +12752,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: transparent;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 8px / 0 stretch;
   box-shadow: 0 4px 0 rgba(126, 79, 47, 0.22);
   font-size: 13px;
 }
@@ -12778,7 +12763,7 @@ button.rpg-field-pet {
   padding: 8px;
   background: #e8c28b;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 6 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 6 fill / 8px / 0 stretch;
 }
 
 .rpg-layer .rpg-element-filter button {
@@ -12787,7 +12772,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: transparent;
   border: 7px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 7px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 7px / 0 stretch;
   box-shadow: 0 4px 0 rgba(126, 79, 47, 0.18);
   font-size: 13px;
 }
@@ -12795,7 +12780,7 @@ button.rpg-field-pet {
 .rpg-layer .rpg-element-filter button.is-active {
   color: #fff5ce;
   background: #8f5937;
-  border-image: var(--asset-rpg-ui-square-green, url("/assets/ui/sprout-lands/button-square-green.png")) 6 fill / 7px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square-green) 6 fill / 7px / 0 stretch;
   box-shadow:
     0 0 0 3px rgba(255, 236, 164, 0.42),
     0 4px 0 rgba(75, 42, 25, 0.25);
@@ -12813,7 +12798,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #fff1c8;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(126, 79, 47, 0.18);
 }
 
@@ -12840,7 +12825,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #d9b17a;
   border: 10px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-medium, url("/assets/ui/sprout-lands/dialog-box-medium.png")) 8 fill / 10px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-medium) 8 fill / 10px / 0 stretch;
   box-shadow: 0 6px 0 rgba(105, 64, 37, 0.22);
 }
 
@@ -12877,7 +12862,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #f6dfb4;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 6 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 6 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(126, 79, 47, 0.18);
 }
 
@@ -12886,7 +12871,7 @@ button.rpg-field-pet {
   padding: 7px 10px;
   background: #fff1c8;
   border: 6px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 6px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 6px / 0 stretch;
   box-shadow: none;
 }
 
@@ -12905,7 +12890,7 @@ button.rpg-field-pet {
   color: #fff5ce;
   background: #8f5937;
   border: 5px solid transparent;
-  border-image: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png")) 6 fill / 5px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square) 6 fill / 5px / 0 stretch;
   box-shadow: 0 3px 0 rgba(75, 42, 25, 0.2);
   font-size: 10px;
 }
@@ -12935,7 +12920,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #fff1c8;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 6 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 6 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(126, 79, 47, 0.2);
 }
 
@@ -12945,7 +12930,7 @@ button.rpg-field-pet {
 }
 
 .rpg-layer .rpg-wallet-card.is-expanded {
-  border-image: var(--asset-rpg-ui-dialog-medium, url("/assets/ui/sprout-lands/dialog-box-medium.png")) 8 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-medium) 8 fill / 8px / 0 stretch;
   box-shadow:
     0 0 0 3px rgba(211, 154, 56, 0.24),
     0 7px 0 rgba(126, 79, 47, 0.22);
@@ -12966,7 +12951,7 @@ button.rpg-field-pet {
   width: 72px;
   background: #3b2418;
   border: 6px solid transparent;
-  border-image: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png")) 6 fill / 6px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square) 6 fill / 6px / 0 stretch;
   box-shadow: 0 4px 0 rgba(91, 54, 31, 0.22);
 }
 
@@ -12974,7 +12959,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #f3ca80;
   border: 5px solid transparent;
-  border-image: var(--asset-rpg-ui-panel, url("/assets/ui/sprout-lands/button-large.png")) 8 fill / 5px / 0 stretch;
+  border-image: var(--asset-rpg-ui-panel) 8 fill / 5px / 0 stretch;
   box-shadow: inset 5px 0 0 var(--element, #d7aa64);
 }
 
@@ -13003,7 +12988,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #f6dfb4;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 6 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 6 fill / 8px / 0 stretch;
   box-shadow: none;
 }
 
@@ -13012,7 +12997,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #fff1c8;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 6 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 6 fill / 8px / 0 stretch;
   box-shadow: none;
 }
 
@@ -13022,7 +13007,7 @@ button.rpg-field-pet {
   color: #4f3323;
   background: #efd0a0;
   border: 8px solid transparent;
-  border-image: var(--asset-rpg-ui-dialog-small, url("/assets/ui/sprout-lands/dialog-box-small.png")) 6 fill / 8px / 0 stretch;
+  border-image: var(--asset-rpg-ui-dialog-small) 6 fill / 8px / 0 stretch;
   box-shadow: 0 5px 0 rgba(126, 79, 47, 0.16);
 }
 
@@ -13088,7 +13073,7 @@ button.rpg-field-pet {
   color: #fff4cd;
   background: #8f5937;
   border: 4px solid transparent;
-  border-image: var(--asset-rpg-ui-square, url("/assets/ui/sprout-lands/button-square.png")) 6 fill / 4px / 0 stretch;
+  border-image: var(--asset-rpg-ui-square) 6 fill / 4px / 0 stretch;
   font-size: 10px;
   line-height: 1;
 }
@@ -17283,7 +17268,7 @@ body[data-rpg-guide-target="onboarding-name"] [data-rpg-guide-target~="onboardin
   isolation: isolate;
   background:
     linear-gradient(rgba(24, 15, 8, 0.04), rgba(24, 15, 8, 0.08)),
-    var(--rpg-arena-url, url("/assets/generated/rpg-battle-arena.png")) center / cover no-repeat;
+    var(--rpg-arena-url) center / cover no-repeat;
   border: 4px solid var(--gym-ink);
   box-shadow:
     inset 0 0 0 4px rgba(255, 232, 171, 0.2),

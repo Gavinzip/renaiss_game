@@ -9,3 +9,18 @@ __pycache__/
 .env
 .env.*
 !.env.example
+# Runtime media is published as an immutable Cloudflare R2 release. Keep the
+# lightweight JSON/Markdown contracts in Git because the authoring tools use
+# them, while binary media stays in the local authoring/cache workspace.
+apps/client/public/assets/**/*.avif
+apps/client/public/assets/**/*.gif
+apps/client/public/assets/**/*.jpeg
+apps/client/public/assets/**/*.jpg
+apps/client/public/assets/**/*.mp4
+apps/client/public/assets/**/*.png
+apps/client/public/assets/**/*.svg
+apps/client/public/assets/**/*.ttf
+apps/client/public/assets/**/*.webm
+apps/client/public/assets/**/*.webp
+apps/client/public/assets/**/*.woff
+apps/client/public/assets/**/*.woff2

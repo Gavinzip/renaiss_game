@@ -1,0 +1,1933 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "c8244efe1f6429182d60",
+  "publicBaseUrl": "https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/releases/c8244efe1f6429182d60",
+  "bucket": "renaiss-game-media",
+  "rootPrefix": "renaiss-game",
+  "cacheControl": "public, max-age=31536000, immutable",
+  "assetCount": 320,
+  "totalBytes": 112436025,
+  "fallbackUsed": false,
+  "assets": [
+    {
+      "urlPath": "/assets/arena-draw/archer-reveal.mp4",
+      "bytes": 2054023,
+      "sha256": "5324504afd84d42fd5fe1d5a91b75d38f9fe0e05156e677fd6514cf6f7c7e2bd",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/arena-draw/engineer-reveal.mp4",
+      "bytes": 1776935,
+      "sha256": "022145cc395306e5fc62e9240e4e78582de61cd679039aa9d93cd77ea02a4502",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/arena-draw/mage-reveal.mp4",
+      "bytes": 1842246,
+      "sha256": "5a5f592ca2d605e4803066d98343facfe39e8f3eab613c1ca87934922066ddaf",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/arena-draw/warrior-reveal.mp4",
+      "bytes": 1998994,
+      "sha256": "fbf79be45703ec95200f2a1a982bc07844200f1b11fa4a6032cc21f96f3c9171",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/icon.png",
+      "bytes": 3772,
+      "sha256": "4dd78d1e2022aa1a9613bb1f49c2d1f88fb7f072b7695d1cd15f0d16026760ca",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/preview/gameplay-preview-v1.webm",
+      "bytes": 634772,
+      "sha256": "58368396b4279fd42e5a2e97923407f06d4fe9fe25308520efd9c5dda5f1bd34",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/runtime/body.png",
+      "bytes": 321896,
+      "sha256": "46fa7aaeef0165e0a24bf70e204bb53e66a4fb54cbc2f9a9b72f0fbbdb7103a3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/01_月牙刃_archer_00/runtime/primary.png",
+      "bytes": 64560,
+      "sha256": "5b03e8a57363c9fe6a5c0652a3d492e7cbee7eb8a5eaa3ba4126b16ddcdce6bd",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/icon.png",
+      "bytes": 2299,
+      "sha256": "707fe660387fa5cfe39e97590580ed917eb385298538dd6b972043d4daf7a7a2",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/preview/gameplay-preview-v1.webm",
+      "bytes": 925549,
+      "sha256": "e44b195b1235aa7918fbc526ac962ab57590060967cc2f90594fd18fdab69550",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/body.png",
+      "bytes": 447532,
+      "sha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/02_森林翻滾_archer_01/runtime/primary.png",
+      "bytes": 17625,
+      "sha256": "ff73edfb74ed5f90253954d80bd3f27e2416ae30f0fb0029b65646677add120e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/icon.png",
+      "bytes": 2467,
+      "sha256": "7e8fed099a1a6c6e0ab20cd5117f4e26bc56f6d5e8ff6043142693e0bef0c08a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/preview/gameplay-preview-v1.webm",
+      "bytes": 385813,
+      "sha256": "5133babec4f00a63a60971e63b0f2757e474140abc9fd970ab158f363b344584",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/runtime/body.png",
+      "bytes": 1310022,
+      "sha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/03_穿葉箭_archer_02/runtime/primary.png",
+      "bytes": 40707,
+      "sha256": "90192b9b65e5c54f79bee0fb79e0dfbde43e4639f000096336efa7c28cbe3716",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/icon.png",
+      "bytes": 1150,
+      "sha256": "8c762135aa0fca1c9d4fbc69a209ede43124638fc21410da7465c7fa44539204",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/preview/gameplay-preview-v1.webm",
+      "bytes": 844897,
+      "sha256": "798607b4baeca8c5d278ee870e683c486b281480a1f631fffcb0c89809a950f4",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/body.png",
+      "bytes": 93116,
+      "sha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/04_荊刺陷阱_archer_03/runtime/primary.png",
+      "bytes": 3936,
+      "sha256": "0072c92cec1bdf09975d58173a00b0c7bb46107f568b4bc73feb106259381659",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04/icon.png",
+      "bytes": 3114,
+      "sha256": "0517e1dea1793f76a03af882c20d2529acaa5a6ffe4841183e09bb83c8a4d50c",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/05_隱形_archer_04/preview/gameplay-preview-v1.webm",
+      "bytes": 1288333,
+      "sha256": "170c8617d0e502e2df100c36fde341963c2f2189eeb2378ff7e947ad6db95682",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/icon.png",
+      "bytes": 3416,
+      "sha256": "ea4ffa1e5edf9a6b96d51565d55acaa215f106103999e96a1e09065c0279b36a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/preview/gameplay-preview-v1.webm",
+      "bytes": 720044,
+      "sha256": "7a37d9c722ff2474c880cc2fec7c060edb4461af9e9c13f691de03f7e0b23179",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/body.png",
+      "bytes": 93116,
+      "sha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/06_追獵標記_archer_05/runtime/primary.png",
+      "bytes": 62514,
+      "sha256": "55cebf9aac51c855dd2dcf8160e5082ceeb48846ecc4e7b33c19df90687173c9",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/icon.png",
+      "bytes": 1711,
+      "sha256": "79bd888e7756d4602ecd06cac6b8aa8d7ad8cdcf197c2a41c159a1c776dc9111",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/preview/gameplay-preview-v1.webm",
+      "bytes": 850655,
+      "sha256": "2c85b24ed4048b9107bd651f0fb4b9f8c55b49a5a9dd2a15bbb6552b964b0a82",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/runtime/body.png",
+      "bytes": 521326,
+      "sha256": "af1b53e2564b3bacd639ee409ba61eef90777300b571bda3caf210298dad8cec",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/1_Q_初階/07_風切步_archer_06/runtime/primary.png",
+      "bytes": 9716,
+      "sha256": "a204c5b9480ce5e37473d6205e3334fd6994824f4bfb7af5985b10e612087b0b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/icon.png",
+      "bytes": 1454,
+      "sha256": "d89974a18a735482af6ecba943a540e63d81b334905a040c621a655d38b42ff1",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",
+      "bytes": 1106898,
+      "sha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/body.png",
+      "bytes": 514200,
+      "sha256": "4f2e67fcc3209beb3d638ce036fd43072cccc5ea9e81ca2ee78082b8e52e0cb8",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/primary.png",
+      "bytes": 9627,
+      "sha256": "20a538d0dceae03b7658e337dbabc42bbc7bd21317b7b7f1fbb827f1ba66ad56",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/runtime/tether.png",
+      "bytes": 1411,
+      "sha256": "52322bcfca178bdcd770acdde7d370dd40a1f689d7e92df9da25590689ff077b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/icon.png",
+      "bytes": 4246,
+      "sha256": "2bb1fc5d364dcb9c4a2f5a073d2977cea99123f348e18ecb97de8a67f0f94d1d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/preview/gameplay-preview-v1.webm",
+      "bytes": 375668,
+      "sha256": "f8225b839c9d3a6b29cb512db145055f106312a484f0b54448051e9cc2a6e33d",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/runtime/body.png",
+      "bytes": 93116,
+      "sha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/09_根縛_archer_08/runtime/primary.png",
+      "bytes": 57477,
+      "sha256": "e8b982c4f061a3820fedc9ca10123c2a180c685f75b9267c52e23d270f47baf5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/icon.png",
+      "bytes": 4870,
+      "sha256": "bbca43007a44e9e44124bfc314b27b38eb8a0f25928c92b607a5dc858ddfb5bd",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/preview/gameplay-preview-v1.webm",
+      "bytes": 2955751,
+      "sha256": "e429367d92a852eb5dc4934dd658fe8aea81fdde4866c327c0ad0ff6491da531",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/body.png",
+      "bytes": 266165,
+      "sha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/10_穩心瞄準_archer_09/runtime/primary.png",
+      "bytes": 110301,
+      "sha256": "803b718b6701a5dc94ea7f4e5ca69c146c9ccd17156f32f0a3ed5742db348963",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/icon.png",
+      "bytes": 3107,
+      "sha256": "fe55ff6c33408f2ae8f1b8c853258be8352a1c407c19c774d0b7e7b52e602b7d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/preview/gameplay-clean-v3.webp",
+      "bytes": 1716864,
+      "sha256": "6895855d5002bbb58d0eb189f1f44479ee790133bc259cb0476f59ffe832725d",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/body.png",
+      "bytes": 93116,
+      "sha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/11_藤網收束_archer_10/runtime/primary.png",
+      "bytes": 22848,
+      "sha256": "7c30cd7d1608adfb3f2e8cefe0b20ad036693c998da4bba87a71e7c9f458f3f5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/icon.png",
+      "bytes": 964,
+      "sha256": "87a18ef7cbd18d3cd226c5a278af0c34982b07ebb50ba75913d6081b9e1b80a9",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/preview/gameplay-preview-v1.webm",
+      "bytes": 415334,
+      "sha256": "ec005073a444fcece7cfe9d85700a60e3a25078057c0d1f6360f87d8e93021b9",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/body.png",
+      "bytes": 1310022,
+      "sha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/12_貫穿箭_archer_11/runtime/primary.png",
+      "bytes": 24375,
+      "sha256": "b4365591512bf2168c4f501524bd07157322f8ada8f19d1a28c4d8dda4a5de98",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/icon.png",
+      "bytes": 3204,
+      "sha256": "5327a2bcac8720f48d47aba6e7e953ba3a7e142aa06ad4ed43e26ed5a913bfd8",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/preview/gameplay-preview-v1.webm",
+      "bytes": 557119,
+      "sha256": "01f18227b7d10180ffc2dfd13a438cd89077484820b65334bf551f8d4ee8e118",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/runtime/body.png",
+      "bytes": 1310022,
+      "sha256": "ad817d98bf3596a53ec961765fb290cfdfdf839a520c71b6b465b328c759154e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/13_星痕狙殺_archer_12/runtime/primary.png",
+      "bytes": 56487,
+      "sha256": "4ade56414e1d3fbc53000876bedf5a620f29636df5a10212bf6901f0cfb482d5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/icon.png",
+      "bytes": 391,
+      "sha256": "383b13d4fc57f80eb8a0a555f71510cb5b7c7bbdd4c4bc4dc2bfe1c110bb0594",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
+      "bytes": 892908,
+      "sha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/body.png",
+      "bytes": 93116,
+      "sha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/primary.png",
+      "bytes": 18416,
+      "sha256": "22fc6663a1e42f2b26349f15f6d4f92c71998509d236c0254d542a4df682101b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/icon.png",
+      "bytes": 5092,
+      "sha256": "a5955634846936d7a039b9530a79514d31e3fe5b0cb4438368f1d12a44cc6828",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/preview/gameplay-preview-v1.webm",
+      "bytes": 1101584,
+      "sha256": "6b859d24041df8c1c7a82c99ba23cc3a94382dcf8924f9ab65f80611ab0ca6d9",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/runtime/body.png",
+      "bytes": 507420,
+      "sha256": "66943d1fa9895fbb1e148da621a52944491ecc3b3c693ab611ecd9c238c3f612",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/15_隼影處刑_archer_14/runtime/primary.png",
+      "bytes": 112408,
+      "sha256": "8ff034620978e341ca001ae885c08583da54f2c2343907645cad970e3ab0a42b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/icon.png",
+      "bytes": 4515,
+      "sha256": "4a0c8bc53af7b46249e175c1db27128a80e8f0c3e79fd9a06be2360e7794ff41",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/preview/gameplay-preview-magic-v1.webm",
+      "bytes": 765696,
+      "sha256": "faf90b5a5fcc9da40810b98d9be68a1afa9183305a2dd646a3be59498d8ef1af",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/preview/gameplay-preview-mechanical-v1.webm",
+      "bytes": 811435,
+      "sha256": "71ffa3265d6675dc26c2cb3fa833b1ba8283dfaf786925cf07e30e9c52bd647e",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/basic-shot-magic.png",
+      "bytes": 4921,
+      "sha256": "888f1adb619307c237692be78b6219e2db493e152993ab35768254bb5170d446",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/basic-shot-mechanical.png",
+      "bytes": 2260,
+      "sha256": "dd4d0e7a9306611c07db0c2988521f8b9ad0a107fdd538bc0d6f0e3c9a8ff724",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/deploy-magic.png",
+      "bytes": 33335,
+      "sha256": "44e6670b22d5c2f349870436a49dbdbbfc050fea581da0a3cdb1c47973e3578b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/deploy-mechanical.png",
+      "bytes": 9817,
+      "sha256": "a749cfc743bd040c6cc90bf95ea6c734a7ccb1913e759d10f8c0fac9e15ae50e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-muzzle.png",
+      "bytes": 1472,
+      "sha256": "623e83cec146896559181eb0b8546688732c2654dcd171662225bea53f91feef",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-shield.png",
+      "bytes": 6378,
+      "sha256": "d89c82820a1468bfecbd6a9cb57843f9ccc9ffd7f8a3369e76d8c3a67f7a7bf6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret-fire.png",
+      "bytes": 30294,
+      "sha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/magic-turret.png",
+      "bytes": 12958,
+      "sha256": "d890969d7f992975c0d023567229b17050da9feaba67d10afe2e1e1d97cb7d7d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/0_F_核心/00_部署砲台_engineer_00/runtime/mechanical-turret-atlas.png",
+      "bytes": 669045,
+      "sha256": "a4333048ae7b54326a7378a622aaf59ee70ba2ee577612dc13e758a4ca9c5101",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/icon.png",
+      "bytes": 2387,
+      "sha256": "cf25fa240a2a5324350e6183bf474bc48e831e185ca45935caa7396f3a5cc72a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/preview/gameplay-preview-v1.webm",
+      "bytes": 864604,
+      "sha256": "9ee76fcf2b8f1cb5b84c352fae7a517958f2d478f675458afc8a0e7eec7c59b3",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/runtime/primary.png",
+      "bytes": 54423,
+      "sha256": "1e4dd1a8719488554e8e9483530bb74546a0c9091682d7570a9c4513ef19b607",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/01_標定彈匣_engineer_01/runtime/projectile.png",
+      "bytes": 4088,
+      "sha256": "3c28d39aeec92d01a3895be1019db5f84b1a1d2a5d6f15642eb96925f38d8c54",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02/icon.png",
+      "bytes": 1855,
+      "sha256": "25ddf931bdf8b8a646a7a4bfd1e0e30b5128e7b92732166910aeb83d459b706d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02/preview/gameplay-preview-v1.webm",
+      "bytes": 460613,
+      "sha256": "f58362d2aa430f074c0ccca08d437d6b77a040b63395fdb8cbadda52d932c84f",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/02_散射_engineer_02/runtime/primary.png",
+      "bytes": 11746,
+      "sha256": "5f24bb107bc5f2db5a720a1da069729c4bbf2801232eba11861b036e263e24cb",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/icon.png",
+      "bytes": 1309,
+      "sha256": "92140ffa5843d996817079ef0dd5bd92a8d1359fd64cc5c64747cbc203430e46",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/preview/gameplay-preview-v1.webm",
+      "bytes": 597863,
+      "sha256": "b2698f5471bf4ef861225111f753eb3f244eb85398edd8f68223aa062e257c26",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/03_穿甲鐵芯_engineer_03/runtime/primary.png",
+      "bytes": 8118,
+      "sha256": "0b42745ccd38ab815b192a951d301e6af93f68425307f9b059c3860cf1e9fc41",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/icon.png",
+      "bytes": 565,
+      "sha256": "f8f71895b9af5886ce5641d89dea01df88e59c25e4baa1bf9ba5e9c0888705a1",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/preview/gameplay-preview-v1.webm",
+      "bytes": 469477,
+      "sha256": "6a34969387cb72b7728bceda3036532311d6e6f87644a24d6b3186d386679a2c",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/07_震爆彈筒_engineer_07/runtime/primary.png",
+      "bytes": 17332,
+      "sha256": "e91fe0e897d1e905cac03209f3af34429822d8089aba05a9ce326ee45df836cd",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/icon.png",
+      "bytes": 231,
+      "sha256": "81540f75570f9714abe8572d5469d0e1e6f5106ecb710ce6f61bb69027d2ac13",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/preview/gameplay-preview-v1.webm",
+      "bytes": 777069,
+      "sha256": "39487258158680975ca85894c77b4277fe4fa309f4ffa1c6537b53ba8de1af2c",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/08_屏障節點_engineer_08/runtime/primary.png",
+      "bytes": 3297,
+      "sha256": "e65d5c03785b041e029482c3bcaea74ea3b4b0681edada8278e35baa456beb77",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/icon.png",
+      "bytes": 1019,
+      "sha256": "e096f00f28f683d55d27e704b8330d145fe4449b32699ee74d405c6ffe279a46",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/preview/gameplay-preview-v1.webm",
+      "bytes": 467111,
+      "sha256": "b03878d102731b235918abf5829d27e9f059abb53240b044aa08a881aee6eedf",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/12_同步追跡彈_engineer_12/runtime/primary.png",
+      "bytes": 4080,
+      "sha256": "c5adfd2ef91763ad6865fe0211e8039e86baf1c0101645a0cfe55e6323a4ab87",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/icon.png",
+      "bytes": 3029,
+      "sha256": "c38e0ded74d7b7a7b6ffe84df491d66782a7ddca62814849ec76b62171b61b7f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/preview/gameplay-preview-v1.webm",
+      "bytes": 645110,
+      "sha256": "d058696153b504c560a22e260a99d950b9305c642a346f47d8054dab6b07c7fc",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/runtime/primary.png",
+      "bytes": 33779,
+      "sha256": "1948b2b20b443c093610ae32465fa83586228e7a2dc13ae0bdd9da430214667f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/1_Q_初階/13_魔導鎖標_engineer_13/runtime/projectile.png",
+      "bytes": 6224,
+      "sha256": "e0cbed212362c3affb3f0c50183e17aac54ec00e0a968dc8c609c176c16e1dca",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/icon.png",
+      "bytes": 2760,
+      "sha256": "7427a641891bc1cf5f50e6ce749d67c94a013d9d2acc98758ea703040503765e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/preview/gameplay-preview-v1.webm",
+      "bytes": 465123,
+      "sha256": "ada6ab02feeaec832eda29c38e3ea9df402dda47f6dff4f9696639b5f34b4721",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/04_壓制掃射_engineer_04/runtime/primary.png",
+      "bytes": 15043,
+      "sha256": "df70ac2c54194a4759a7430913e66c8b5b3cb93b248d9b7ea15ff3c18333bfb4",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/icon.png",
+      "bytes": 2736,
+      "sha256": "c8d448162edcc9ea8eb04dffe41e3b6662c933818597f181e6fb6436b79b9101",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/preview/gameplay-preview-v1.webm",
+      "bytes": 700532,
+      "sha256": "835f107174877bac95b71f508662b93a2f4d5021c7edc27bf608f1dd7d1ad387",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/05_鎖定齊射_engineer_05/runtime/primary.png",
+      "bytes": 28018,
+      "sha256": "9c436683c03d344696f9c1090257929cd63f94b3f41670717087bf7f478365ef",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/icon.png",
+      "bytes": 3970,
+      "sha256": "4a0c4c4f99e200554a1d0d4dcb67a4be98427187476d9c537b642c9bc3ec5e09",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/preview/gameplay-preview-v1.webm",
+      "bytes": 709451,
+      "sha256": "3bad3ad044e0269849e32b6c0a10ca68acc0ecc669595cbfc77812a3f264e2c2",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/runtime/alternate.png",
+      "bytes": 64843,
+      "sha256": "d88419bd8c7e3243cdb915f0683dc0d4dba6337b60c6cbdfa0696230e711cd09",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/09_支撐砲架_engineer_09/runtime/primary.png",
+      "bytes": 75442,
+      "sha256": "f769bcf27c878b886e8754fc4ca2e9a7b3eb456508597ecccc5a9b13ff374dc3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/icon.png",
+      "bytes": 1646,
+      "sha256": "ac449f9bdf49f61e2b59f9f11e8f6f84fa5096b3b5983e1e1bccdded0ce05062",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/preview/gameplay-preview-v1.webm",
+      "bytes": 489738,
+      "sha256": "0528c50e5ff64c357745a8b98db329eb6cf887b62e57f67d18e56149b107dbed",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/10_破陣鉤彈_engineer_10/runtime/primary.png",
+      "bytes": 20509,
+      "sha256": "2e736fdd105564c535043fd4a4522795d117e3bf68a6d06f7fbf42a99494fbcc",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/icon.png",
+      "bytes": 1922,
+      "sha256": "d9c16a35988488b72d4eaeb133282f0676b357fcb32968b3bd16fbcb382d0e56",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/preview/gameplay-preview-v1.webm",
+      "bytes": 695220,
+      "sha256": "2b1942db1f8adcb77042453f254d729a0f064066c86666ba311adb423c2de12e",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/2_E_中階/14_裂星魔彈_engineer_14/runtime/primary.png",
+      "bytes": 10752,
+      "sha256": "8abdd4e18f2049841326c15bfb93c200f38bbb3f46a333c37d87481f29350faa",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/icon.png",
+      "bytes": 2817,
+      "sha256": "e77ee98021699387dda094bc235a7edf4316280fdacfd73e4a0f8440d1a9acb5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/preview/gameplay-preview-v1.webm",
+      "bytes": 1233939,
+      "sha256": "a56395866a7293bc0402264740181e926785c68a841548b45bf2d8c85078cf62",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/body.png",
+      "bytes": 144901,
+      "sha256": "2761c10d406f6d03f817f5232fc7265866947aa37ddad791b8d5fadb2fe2a5ea",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/impact.png",
+      "bytes": 1960995,
+      "sha256": "b2999bb0b46c4500a3d09de9da1b4f53c34874a9bd1ed7350bbe2f55f4f0366b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/06_攻城模式_engineer_06/runtime/primary.png",
+      "bytes": 25642,
+      "sha256": "bae371670b65894e0b803f21dc4bd7243cb9de719e8c3eaf3c63c1cc27a8e861",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/icon.png",
+      "bytes": 3338,
+      "sha256": "bbdf550d3fa07a4dea4f68924ce01c457edcbb9f7bdb4dc5d88d529f2778feca",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/preview/gameplay-preview-v1.webm",
+      "bytes": 624903,
+      "sha256": "7b3dc17be2e1b0fc115e3961d225913ee5c71035fcc7e2bb8ef4af89f873f091",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/11_砲台迅爆_engineer_11/runtime/primary.png",
+      "bytes": 50496,
+      "sha256": "256f76ebe15198a81944df7ee1ab4e308540c795b684a45938247154f2ca1c03",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/icon.png",
+      "bytes": 4122,
+      "sha256": "6df23fd549fb5b170a7a36c805b82c2ab63159656d154f076f64b0269b3c05ce",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/preview/gameplay-preview-v1.webm",
+      "bytes": 930575,
+      "sha256": "188b86a34e7f04283683607dd602a99b96b46185819e6531215626b4988c4d5a",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/runtime/primary.png",
+      "bytes": 58549,
+      "sha256": "1de58c657181e156a14c8b0cc449dbb4628d0e3208723899f6df50afa25cfdeb",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/engineer_工程師/3_R_高階/15_魔導飛彈矩陣_engineer_15/runtime/projectile.png",
+      "bytes": 4921,
+      "sha256": "888f1adb619307c237692be78b6219e2db493e152993ab35768254bb5170d446",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/icon.png",
+      "bytes": 816,
+      "sha256": "2e9575c71fe5c132bb9f75c62f8743249fa033d7ac976bc9cc17a01a63538498",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/preview/gameplay-preview-v1.webm",
+      "bytes": 374366,
+      "sha256": "3b8b35a77763276d4feff5b32b3e97dcf931a7571abeac8aba65cc01255dec4a",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/01_日耀光束_mage_00/runtime/primary.png",
+      "bytes": 12439,
+      "sha256": "813d8263b0e92a78183aa56d73a29d4a82afbcd18e8d10179d0426cf5c803f7a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/icon.png",
+      "bytes": 391,
+      "sha256": "b3534c10c9188ed87de32bbbf5adb59c3062eacc17d2cb796b9e732f881edb18",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/preview/gameplay-preview-v1.webm",
+      "bytes": 810406,
+      "sha256": "5e89b080b9b2f3169922ed274e05f95e5433d8d65b07169ad6688869c1ad5977",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/primary.png",
+      "bytes": 1598,
+      "sha256": "ad75d71deb4c34f0ae6119ead80978714282917e0ef77e496593ffe84ca00ccf",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/02_毒針咒_mage_01/runtime/status.png",
+      "bytes": 9766,
+      "sha256": "d3d64ead139c643297efe1d760cbbe887588b2610af2c92a51f59d216189b5b3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/icon.png",
+      "bytes": 4029,
+      "sha256": "b9883681c8d364c28b1c9be548f2095e3695e132d8ced62b6084e0d3ee431073",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/preview/gameplay-preview-v1.webm",
+      "bytes": 415526,
+      "sha256": "c796878e59446879a08c3a87a267b732381dff077da98d31dc4d00f506da80bf",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/03_汲魂之手_mage_02/runtime/primary.png",
+      "bytes": 49757,
+      "sha256": "369b2e11581f8f320c41b0e917eab9ee06207abc14c73de443ecfd9618b7b0ca",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/icon.png",
+      "bytes": 4520,
+      "sha256": "7a635dc3e7f8fc64e9f845be39259cfd42e22204a43961659214163ec774f911",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/preview/gameplay-preview-v1.webm",
+      "bytes": 573188,
+      "sha256": "a60868dfb854150f68d8e5639d9ac1d222e26e4345439294593dcf4b6a9cb560",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/04_灼光烙印_mage_03/runtime/primary.png",
+      "bytes": 58024,
+      "sha256": "4a7c0edb2f655a005b0826b5c8342003ae95f69199ad5f471a79912c325bd7b5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/icon.png",
+      "bytes": 5745,
+      "sha256": "1b376ed4eb9f515ab43dc5bb79890619191979372be5345e377a54ad6ac9bd83",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/preview/gameplay-preview-v1.webm",
+      "bytes": 395972,
+      "sha256": "a98a1b1987f508568d37e96a841d86371e4a50396e7126a1e858bec5c742198a",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/05_禁言符_mage_04/runtime/primary.png",
+      "bytes": 68790,
+      "sha256": "d1923b067b72b3e4824ed91870dda1bb3b720861a6d84adc4e7c5733e8cd9f81",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/icon.png",
+      "bytes": 3668,
+      "sha256": "f9fe7c60e8d4454c122ff671ec0212e71bab34deb7bae0fcca8c6c66c3fb987e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v2.webm",
+      "bytes": 217435,
+      "sha256": "cc049865011a311818420db5ab035f573fd1ad7bcb615080afa69cf98af14a11",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png",
+      "bytes": 46907,
+      "sha256": "15f2073950bb067cf5addc62f8eee240c5c9e141c7e5085fba868e89370b5faf",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/icon.png",
+      "bytes": 472,
+      "sha256": "ed56d72818463682e0a617602af10ecf773a00c59f05f8892220c3b049c4d4dc",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/preview/gameplay-preview-v1.webm",
+      "bytes": 534307,
+      "sha256": "ee1500a4b888fbe614dc9be1b98d768147b54756a9270b14bbf24131127efce4",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/runtime/primary.png",
+      "bytes": 5747,
+      "sha256": "a50e24ba57d3c5a511bd403554a277d5c918d4562e78c34df6de849e33e73b8e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/1_Q_初階/07_虛空球_mage_06/runtime/status.png",
+      "bytes": 3485,
+      "sha256": "6412c560ddf76f3668234260a81f1b616be0757add316eed22ee9a1583b2d917",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/icon.png",
+      "bytes": 337,
+      "sha256": "ab1ec24f2b664abb96060dfa71ef6e5a5b35d94e4dfef32abc2ace5b1ea4b8c6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/preview/gameplay-preview-v1.webm",
+      "bytes": 575675,
+      "sha256": "2659fb888e2f16f71092229667def18c0ecdcba16566c65209e54ae4715173c1",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/08_復甦爆發_mage_07/runtime/primary.png",
+      "bytes": 8744,
+      "sha256": "84dbe7a0ee71e3765c7a8b95349f43b6e6152a192f7deb3f92c6288fbae43b4a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/icon.png",
+      "bytes": 1649,
+      "sha256": "95caa1d7754825dad937c8b3af1450e398a0765c63357f1db441f33ecfb80295",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/preview/gameplay-preview-v1.webm",
+      "bytes": 779080,
+      "sha256": "78829396997da01d4cb59e71075f6728c62cc2b9d09551f1d1ac449926c8500d",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/09_瘴霧坩堝_mage_08/runtime/primary.png",
+      "bytes": 43484,
+      "sha256": "28c941b2d2404ec6c6070b6da162440a447d3801d54e715bbda805c0c9dfcf4b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/icon.png",
+      "bytes": 4470,
+      "sha256": "8fdb6221036a4a1e8e3b4f5f3f558ea7d06f30773e2c74d6925090bca74ad54b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/preview/gameplay-preview-v1.webm",
+      "bytes": 821772,
+      "sha256": "f37c28afba8d1ef8690c6bdf33c8d7d402406ce0c6fc1bc587843674ac01209c",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/10_聚焦透鏡_mage_09/runtime/primary.png",
+      "bytes": 62638,
+      "sha256": "f5971d255d0e38a6c5aba14b7fad0870e7a1049c68cd066ac2ff2045c8737183",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/icon.png",
+      "bytes": 4889,
+      "sha256": "670c82f1bcc23354fa5cff3939ab81d1f9826e8e3960d5de8d3c91293489f292",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/preview/gameplay-preview-v1.webm",
+      "bytes": 722597,
+      "sha256": "14465a2a199c47e80d40d6b3ebb9f6a407624fcbdc2443a0bd0a2de1406217aa",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/11_重力井_mage_10/runtime/primary.png",
+      "bytes": 70620,
+      "sha256": "45f9954fd07c1e499ed19165a10f785e3705c15293f654b3998aed6b9614e672",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/icon.png",
+      "bytes": 2102,
+      "sha256": "f5b5fb3fa8e8ae95386ee897f85298f62b2b4eebce7e402e4bf498ee666c0782",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/preview/gameplay-preview-v1.webm",
+      "bytes": 641658,
+      "sha256": "e564d78bbb2df4aeee0ccb6345a9c76872a96365827203b02b9b06cb225eb00d",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/2_E_中階/12_鎖魂鏈_mage_11/runtime/primary.png",
+      "bytes": 24574,
+      "sha256": "8de075163c88aee2948ff4119757c5dcd1205f5d93e2020a8eb522f64a0f1e0f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/icon.png",
+      "bytes": 3196,
+      "sha256": "7774710d5e9ed33518658dfc7ad3d1dc8388afe008d9676645e60b6c1cfbee29",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/preview/gameplay-preview-v1.webm",
+      "bytes": 737361,
+      "sha256": "95537e1887201db290f8fe6181b972e90dc21ec92a86820472c308815b97b392",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/13_淨化風暴_mage_12/runtime/primary.png",
+      "bytes": 62265,
+      "sha256": "8075b63523b61a9671eba5b479e362b05f711bbf077d3e56bb6fd544e2ccbeec",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/14_禁時星盤_mage_13/icon.png",
+      "bytes": 3059,
+      "sha256": "a487bbcf8ffc6a5e669073a8a3e1935db8fcfcf1499c1e7b9443eb711c6bb6a7",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/14_禁時星盤_mage_13/preview/gameplay-preview-v1.webm",
+      "bytes": 799450,
+      "sha256": "6fa404e63751993dd9257160dd338a3b8bcd11fa6497e0cf6eef4b643ae0ab7c",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/14_禁時星盤_mage_13/runtime/primary.png",
+      "bytes": 25805,
+      "sha256": "4b27bf893223d7392261b72e2437e75158bf9ec6d6365f98c890b5ee074a42ac",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/icon.png",
+      "bytes": 1377,
+      "sha256": "cdf6d45050d90dff1f198c5a74af34cef27d8b218ac5357aae4298bfebd0261b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/preview/gameplay-preview-v1.webm",
+      "bytes": 1141802,
+      "sha256": "e8aa990c0fbc4554b81089f657cbd0412e17e3994e6e1415791617c1e567afdf",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/mage_法師/3_R_高階/15_血月祭壇_mage_14/runtime/primary.png",
+      "bytes": 7121,
+      "sha256": "cfd8f65f756c3638da0f6e1c53da01e589b702beea34c3098ec6f786336dda2f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/icon.png",
+      "bytes": 2671,
+      "sha256": "90c3640a514092fd919721aa1cb655c62a916b96067921ca37100709eee8585e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/preview/gameplay-preview-v1.webm",
+      "bytes": 413512,
+      "sha256": "625f463f0dddbf92d26a78451a26ad6ff6a75cc083aaa8539f62298a1ec24314",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/01_守線橫斬_warrior_00/runtime/primary.png",
+      "bytes": 80510,
+      "sha256": "a6c09ebfdb44d4d20e5cf3fb9c6aef271dda5bec9edcded4b5bc55d81a251328",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/icon.png",
+      "bytes": 741,
+      "sha256": "5682557ba7927f74855e751f054ea9c9283cfb4ad373036b9a833c3c205c1bfa",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/preview/gameplay-preview-v1.webm",
+      "bytes": 2504346,
+      "sha256": "8b762c90dee4c88f62b3cf0cf237f32cf2a28483014a8724a9993ec68033be77",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/02_烈焰狂行_warrior_01/runtime/primary.png",
+      "bytes": 5859,
+      "sha256": "e9bbc8f921061e10d2107dc39d9a8515e4c63679fcb2a4a5a53d60a769cd8824",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/icon.png",
+      "bytes": 1948,
+      "sha256": "cedaa44ecb9f0c0c9b670ad36b371727d12e7178db06036975e4772ae225816b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/preview/gameplay-preview-v1.webm",
+      "bytes": 377850,
+      "sha256": "7da10c2624cd206d1f6af40a02e295e8b5011c4d1c668b898c6655671ee0cd9f",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/runtime/body.png",
+      "bytes": 383293,
+      "sha256": "af878d3ce6cead4e4a48a62473596f35276791febe9e90dd67143f29bfc9cb30",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/03_戰環斬_warrior_02/runtime/primary.png",
+      "bytes": 88528,
+      "sha256": "60e9c158be709a46df8dd8a3f7e06d65e679b0c1f0f2adca21a2fbad1659a4a7",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/icon.png",
+      "bytes": 4231,
+      "sha256": "a0360ef9c8a79025f19c98d4633edafe67d883318c0f03b4624a22e2705f2426",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/04_斬鋒附魔_warrior_03/preview/gameplay-preview-v1.webm",
+      "bytes": 660043,
+      "sha256": "19ce227477e16edb97c576d314272d14130f0d8da5a223bbcb3a438f3c097d8f",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/icon.png",
+      "bytes": 1500,
+      "sha256": "ce2ac7babc3d2d1d078b81f79b137e1e8d8a660adf79b886f2786e65e69da55c",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/preview/gameplay-preview-v1.webm",
+      "bytes": 704542,
+      "sha256": "8ba1349b74c41cba5e3c0d5dfa878c057a9943c28c38ba8a2fcc6c9517f677cd",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/05_正義衝鋒_warrior_04/runtime/primary.png",
+      "bytes": 21957,
+      "sha256": "837a349467f3619816b488b1a6fd723a03a4bfab735d6ce1fd55161a0beb1d96",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/icon.png",
+      "bytes": 5881,
+      "sha256": "0d7cea102ae9b154ec4b44962c946cffb6538d727cd2aaebb9c6ad9bd12ee4d5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/preview/gameplay-preview-v1.webm",
+      "bytes": 409079,
+      "sha256": "43a64a0d6eb33a48fb12018b29d99502d73e650b7b52c5d2885cf855c61face0",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/runtime/body.png",
+      "bytes": 436766,
+      "sha256": "b2da3f9ca8ddc8277f004211ebc4f410ae7372fba31f292fc93bfe3c0f99f757",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/06_盾首震擊_warrior_05/runtime/primary.png",
+      "bytes": 490560,
+      "sha256": "27a9a463aaf55f48bb4b17c9106e5f10ab5ab3fbaed79c74c445049937111021",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/icon.png",
+      "bytes": 4113,
+      "sha256": "5f91ec13a4dc30cd6fab76ee745bd52c8a9349b21e02f6f87b5e89abc102c3fa",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/preview/gameplay-preview-v1.webm",
+      "bytes": 434341,
+      "sha256": "c4ca5530aa735d08ffe9fdb742c558849b5952a7d2978f841d72d749b6778981",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/1_Q_初階/07_裂甲斬_warrior_06/runtime/primary.png",
+      "bytes": 152522,
+      "sha256": "ace179973e2cc1ea6557e9fb7dea5a42f2e863f865bdbc21dd8d2c824e76f283",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/icon.png",
+      "bytes": 1024,
+      "sha256": "e9c7f1f2eb956e6007836cf3cc0a6b68ce664b41f4868c868605964a48eb7c06",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/preview/gameplay-preview-v1.webm",
+      "bytes": 382177,
+      "sha256": "6dde6c95e90246c6c59c9517c93e7c1be3b8f9f9695ac5f0db237b6c71ce3a6c",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/08_反擊姿態_warrior_07/runtime/primary.png",
+      "bytes": 22917,
+      "sha256": "a17e892a568758427abecc471b43a956b35d0a70bdfe8fd70043d78c5586a07c",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/09_和平護盾_warrior_08/icon.png",
+      "bytes": 3452,
+      "sha256": "8563f71c04674d9311b2dc389ef6bdfdf63f96a5f7dce3ef1752c7875eeaf685",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/09_和平護盾_warrior_08/preview/gameplay-preview-v1.webm",
+      "bytes": 685275,
+      "sha256": "198d47d898ce3080f48b7564663a3324d7387892ce6ae14fb0eef33744db1f7c",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/09_和平護盾_warrior_08/runtime/primary.png",
+      "bytes": 4155,
+      "sha256": "34428fbe686702a4efe85b06a6b786bf26cd499ff4413bd3756e8d009cdfa73b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/icon.png",
+      "bytes": 1348,
+      "sha256": "e398ebc0a42b43afe49fbabf0e4d45fbdacad32b92b033949ae1bdf88a124724",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/preview/gameplay-preview-v1.webm",
+      "bytes": 554630,
+      "sha256": "0b18edf62c227d5b8fb4af5aedb7b72b7610879dcc9ce474f32c4b7899ac8ad1",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/10_戰陣號令_warrior_09/runtime/primary.png",
+      "bytes": 2162,
+      "sha256": "87034dcd555a35b2086a3538197724c2b3ab5acb027f8f16cb1499ee6a9844ae",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/icon.png",
+      "bytes": 5065,
+      "sha256": "d2d0e8702b316d63fb56ed6a112f289766503176d6d3b6aac6a25713556d751b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/preview/gameplay-preview-v1.webm",
+      "bytes": 386557,
+      "sha256": "0594d170dee3e06a3877858d590d33f880928a3b0ba2f33cfee1ba2bad095d38",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/body.png",
+      "bytes": 465984,
+      "sha256": "2088edaecf316fba67b8a2c43ae1b8217d497e7ee11cb74061920870be5be2ee",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/11_獵首突刺_warrior_10/runtime/primary.png",
+      "bytes": 370742,
+      "sha256": "475d2719710e3b35a52599955043a51191f257c7c1f98d32086455c6e5d20aa3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/icon.png",
+      "bytes": 2334,
+      "sha256": "1e4bb194d13491214ae0077cad84409c1fb35828bb4beca9581a09c6ed816c3b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/preview/gameplay-preview-v1.webm",
+      "bytes": 432943,
+      "sha256": "3b246caee5b3e4e689e94b8f9160ea389b8b2084283528f81ae6800cd4943d96",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/2_E_中階/12_裂地震_warrior_11/runtime/primary.png",
+      "bytes": 78421,
+      "sha256": "9f94c3bf2fa7eeadc33f621f8ad79a1b04b9e4fd0223acb31bc7e13c81ac5ced",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/icon.png",
+      "bytes": 1087,
+      "sha256": "30f09402e68c01fb1ba51a3f88d52b9113947eeea576754b30a5c442ec351ec3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/preview/gameplay-preview-v1.webm",
+      "bytes": 612065,
+      "sha256": "506a4d80409037e7c6fb0aba5bc9d43926ee85706ae48b806a84ac48fea3d2c3",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/runtime/body.png",
+      "bytes": 490666,
+      "sha256": "2473cf8aa6396dedc0b050e65940a91436316645546ea557844d53fe333bea75",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/13_斷城震落_warrior_12/runtime/primary.png",
+      "bytes": 28085,
+      "sha256": "07216969cae78b20f1e8d2d1c14bfb4e985afa2a0ee365e74819fbe2d46ec07c",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/icon.png",
+      "bytes": 2860,
+      "sha256": "97c5878a01d46672682717d79164fc8a328656ff98c99504d74c69d9c474f362",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/preview/gameplay-preview-v1.webm",
+      "bytes": 877826,
+      "sha256": "a551b9d394b13279a1e373a120171db06df4a999fe519f611f33bf5b148dd63d",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/14_死鬥宣言_warrior_13/runtime/primary.png",
+      "bytes": 2545950,
+      "sha256": "76735e138816b8ada1f22cfdd88893ed311159b419de5789163778d245897331",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/icon.png",
+      "bytes": 1223,
+      "sha256": "c57442080f44be016ba2b01f64840c204a341fd0f0090f090d0fda8683984f6d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/preview/gameplay-preview-v1.webm",
+      "bytes": 688208,
+      "sha256": "078de3c353f97e60d343c4a6e5fac6c0338a339962a37a17073e83c828f1e16f",
+      "contentType": "video/webm"
+    },
+    {
+      "urlPath": "/assets/arena-skills/warrior_戰士/3_R_高階/15_裁決_warrior_14/runtime/primary.png",
+      "bytes": 482140,
+      "sha256": "b2dfaf0a4cdffaf34c8a9623ef24703435cf6059c277c01468b32d8d29eff697",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/ability-effects.png",
+      "bytes": 130723,
+      "sha256": "8ea7b71fe8635fcdd5c00cd241ca72ac731666a6e82579e8829e80373abdaa33",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/archer-attack-sprites.png",
+      "bytes": 270353,
+      "sha256": "c87f2c3a1d1bae55a268c9e82f2998a544d9806aa1d809583d38936d8ac47724",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-decals.png",
+      "bytes": 806661,
+      "sha256": "23b5c9a10d6cd8ea40fbbd36db34421b819c15a5001092dfa5346e7b34f0d6b4",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-skill-icons-v2.png",
+      "bytes": 113895,
+      "sha256": "16f27965582c996fcc8f7153021c1925b2c53d6438740565dfffdf4fb0e99446",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-ui/arena-gold-button.png",
+      "bytes": 12541,
+      "sha256": "d6d59dcc4175d0720bb25b73903d5c1338c53b5c39f633cbf562a0a971c581fa",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-ui/arena-inset-frame.png",
+      "bytes": 17728,
+      "sha256": "ddc75b59d60a6978ffbb357e9d4ab4c03578a2db9ecc53f327d81866d55a100d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-ui/arena-panel-frame.png",
+      "bytes": 46209,
+      "sha256": "818f12c6aa98c4c7c2170e4ca65660a42b8c07525a9735958805a163446301b2",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-ui/arena-primary-button.png",
+      "bytes": 13614,
+      "sha256": "6ed61ef7311d1dd5475917fb52f84bd8e83da431a09c1cda918a3e117ace0533",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/arena-ui/arena-square-button.png",
+      "bytes": 10477,
+      "sha256": "e7b2b549307f1a3eb1758af9931813786bbcae7b0a22d6b2134bda3d03341e6e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/attack-boost-fx.png",
+      "bytes": 11945,
+      "sha256": "2177168993d675bfaa7d4ecbcc2871d10acad366acf4d1650192954d5c9a78c6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/attack-mushroom.png",
+      "bytes": 655,
+      "sha256": "59cfa155647deb818358d4b16b6f7309b55319251d63bb4cd805aad243cd928b",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/archer/forest-roll-8dir.png",
+      "bytes": 447532,
+      "sha256": "1b08ef4e29d4473398c2294d800dcac062744c659cc46de0fcbfbaadf556a3f2",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/archer/moving-full-draw-8dir.png",
+      "bytes": 1313388,
+      "sha256": "2e071065950c34fd1f78d61a97681f150c2c7b9c830bca2f4eeb3cab91cbface",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/archer/standing-full-draw-8dir.png",
+      "bytes": 266165,
+      "sha256": "8e2c0a981d9a0574b5d77021a53ef1afaf3741263fede02af54f9887ac202aac",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/archer/walk-8dir.png",
+      "bytes": 727934,
+      "sha256": "700f2e2bcb486ae57a7df3b3643328d70436a0827cf28510b659484d9a9c5912",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/engineer/walk-8dir.png",
+      "bytes": 570599,
+      "sha256": "017b0a3a83c3702fdc3d1f13b4e5c9e28b97e205e1c7f1bee47ba40335fdac28",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/mage/staff-cast-8dir.png",
+      "bytes": 686115,
+      "sha256": "8e68eca643784ed267cd4dd581580f455df810a6c714be37d91df9f4c338ab04",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/mage/walk-8dir.png",
+      "bytes": 663377,
+      "sha256": "d3dbc5d9374f43bd1d41ee4b16c35aa1661ccba885fb1959244e0d44e0e57428",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/warrior/melee-m1-8dir.png",
+      "bytes": 430692,
+      "sha256": "05392a32b889a2a3f49bf9d62e8a3bea8fba944b97976018c35dd0042f1668c1",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/new-compatible/warrior/walk-8dir.png",
+      "bytes": 792830,
+      "sha256": "16baf4658b189b3141b6477018fb83e78a0b60c58e5bf7f55fd2538b5b8b1294",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/characters/runtime-asset-provenance.json",
+      "bytes": 2516,
+      "sha256": "e607f7ac9d323bbbb92047345a380b0bf4474d1dcdbea976ab25d325eda6ae1f",
+      "contentType": "application/json"
+    },
+    {
+      "urlPath": "/assets/generated/class-sprites.png",
+      "bytes": 882449,
+      "sha256": "536cd9b6b5617670e5502718c8d009f4a335ab200ccd08b09afb95c0340c3dba",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/combat-effects.png",
+      "bytes": 106203,
+      "sha256": "d221c3c54f7f2fb811445b90110b118210189ff1711b8c9cb39c513b1bde3668",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/combat-fx-warrior-verdict.png",
+      "bytes": 4833,
+      "sha256": "b183cbbe9936cd42fc1c765c73dd57b4bf4962d2bad8068ad5ab1ba58ea8399c",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/combat-objects.png",
+      "bytes": 669045,
+      "sha256": "a4333048ae7b54326a7378a622aaf59ee70ba2ee577612dc13e758a4ca9c5101",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-action-sprites.png",
+      "bytes": 280977,
+      "sha256": "9542c6b29ab18842cb2ee839f90e4aca8acd2ec3779cbf24130592aab3c62cfa",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-effects.png",
+      "bytes": 54559,
+      "sha256": "1c3f5f6fc3ab98d4c1fa2e3aba3f068d51d6e7d9e10cd0d154c77dbab58fe950",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-missile-basic.png",
+      "bytes": 468,
+      "sha256": "5b1d1dddd20fc3d90b39aeb636541be89ccce832981bad3bd1f6b1c8ca5920f2",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-missile-fragment.png",
+      "bytes": 387,
+      "sha256": "c678e927c138c5ffe445d46671cb204daed5c5710918a2b54d4c84d3726cbce7",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-missile-matrix.png",
+      "bytes": 538,
+      "sha256": "34564e554ef9c6d9fbf2b65c7ba62bc3652b7a699574672aba1e03e36dcb4f4e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-missile-split.png",
+      "bytes": 526,
+      "sha256": "eacb794cba9bdfea39dfabeb9b6d9866f0d0e4b39e13d2bcbbeffaf978103152",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-missile-sync.png",
+      "bytes": 415,
+      "sha256": "b8d20e75b51b4be3494c321aa3038f9049801770415b4ce3046d4e3d3fa74b81",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-muzzle.png",
+      "bytes": 1472,
+      "sha256": "623e83cec146896559181eb0b8546688732c2654dcd171662225bea53f91feef",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-shield.png",
+      "bytes": 6378,
+      "sha256": "d89c82820a1468bfecbd6a9cb57843f9ccc9ffd7f8a3369e76d8c3a67f7a7bf6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-turret-fire.png",
+      "bytes": 30294,
+      "sha256": "1be8f89b3bfe3670029cbba1b7fc5d621fb1a53bed5bb388be47f08683e7bf35",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/engineer-magic-turret.png",
+      "bytes": 12958,
+      "sha256": "d890969d7f992975c0d023567229b17050da9feaba67d10afe2e1e1d97cb7d7d",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/mage-attack-sprites.png",
+      "bytes": 291272,
+      "sha256": "e1cb473337eab4cd67e9c52c274c7fd68ab6aa780913b534a46cdd5a04f84048",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/mage-effects.png",
+      "bytes": 57624,
+      "sha256": "0a32f2203ffb114654f67cde4172f96fa2950a1ec0514769f8bd8a9b31ffabe4",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/mage-field-effects.png",
+      "bytes": 94796,
+      "sha256": "a6f04b550ea5480963b3a61fff93dd2e40fed4e37aee86a99aeb5d0ea500ec28",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-battle-arena.png",
+      "bytes": 312089,
+      "sha256": "7b49881ba32e3d4931e1125c3da72e33d848db57c342d495d0a6081449879a00",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-external-vfx-manifest.json",
+      "bytes": 38827,
+      "sha256": "b23465b51c2c1a1a5d9258be1961eeeb501ee2b2447b324177d3f31b9dc642a0",
+      "contentType": "application/json"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-pet-direction-walk.png",
+      "bytes": 537006,
+      "sha256": "f1745d78cf345c4b5879aef1023035c18c40099c9278a420cd93e2bf995d4768",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-pet-directions.png",
+      "bytes": 338775,
+      "sha256": "bc75e0b7efbf5df6ec479662ab430a8f0e3520a1b38fc53acb91a6e00e928fa9",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-pet-sprites.png",
+      "bytes": 1063761,
+      "sha256": "b84aa97ab6e7d04d892549bca024ccae383ecdb90dcc45ab6c3d1d18751d0110",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-skill-projectiles.png",
+      "bytes": 33709,
+      "sha256": "41914013f2a1b1fa25f835e5e2ab594f64667ee66a7e659652f4d2e197101201",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-skill-vfx-dark.png",
+      "bytes": 531298,
+      "sha256": "4032ffae714700691a1bfbac6a7fddf6486ab2b3e6d4b2d7a8539103917a65d6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-skill-vfx-fire.png",
+      "bytes": 594893,
+      "sha256": "82343c1b81d23ff8eb7c1884685b89dba815dd3b5ce1b6549e98c5fa03beef7e",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-skill-vfx-grass.png",
+      "bytes": 404128,
+      "sha256": "0eabe35938ab15b7cff2525525295b2c9fcad4e66e7694d4b1ea4871ef12938a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-skill-vfx-light.png",
+      "bytes": 427258,
+      "sha256": "001b620afc65da5c5d43bfde631fe9fdc1c3718b9c4f20a45a485d67df66837f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-skill-vfx-water.png",
+      "bytes": 319334,
+      "sha256": "82fe662d1ec0d81feb73337239f078af5ed5fb4d2a4df867e7ba5f66e425c013",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/rpg-status-vfx.png",
+      "bytes": 68680,
+      "sha256": "6f9f3c43f55f2bfb6b5e4bd7d2f77c1987da4a5049affc7b322834e4e9282108",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/skill-effects.png",
+      "bytes": 133387,
+      "sha256": "3d6278c1fee5ef337c9aa7d666a3baed62ff3de8a746ff4b55379aea764b1459",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/skill-icons.png",
+      "bytes": 23733,
+      "sha256": "a9562aef1f80a98deece671a0b432cd986e1e85698744fcb2d70fd5113a81400",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/status-effects.png",
+      "bytes": 16852,
+      "sha256": "684e9cf694b9e448294674b4960d203c0dd91b63cbdf9c8d8256fd29d9bbda86",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/turret-pixel-preview-v1.png",
+      "bytes": 21100,
+      "sha256": "bab1b5146e508306e4fb617cea3d93d8b5ba6da47e49b84a5e912db956575075",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/village-assets.png",
+      "bytes": 2225108,
+      "sha256": "b7da9cd1658ea78ae36dac00aebe3501ead8ce2161997d6aee7516dd4491413a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/vinci-favicon.png",
+      "bytes": 417,
+      "sha256": "04362e26a8a1f0601558e7bc85f8242ec3a91c7e30bbbf98b913f23aa76f4b00",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/vinci-login-bg.png",
+      "bytes": 16877,
+      "sha256": "f8ecf59d9bf30eefa6e695f8805212102d720de0857acb7d784da9568bc50f81",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/vinci-login-cover-village.jpg",
+      "bytes": 1068588,
+      "sha256": "f7ab4e5902d21456cb228a188aac44fcc6537697d8004d69cde6435862e37d68",
+      "contentType": "image/jpeg"
+    },
+    {
+      "urlPath": "/assets/generated/warrior-archer-effects.png",
+      "bytes": 103655,
+      "sha256": "5a289b6e5d1c6343a0658576d8fdf9b07b57b4c7f6ad3982225b223f64e54db6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/warrior-attack-sprites.png",
+      "bytes": 253846,
+      "sha256": "5c261c60165523adb459183a35453254d0c4accc99481d6158d7a5c53d0ee63f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/generated/warrior-vertical-slash.png",
+      "bytes": 4832,
+      "sha256": "4ccb0430716330831978b563ff0f2fe63130bde3baff08b755b6f4820d41b608",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/rewards/round-reward-1.webp",
+      "bytes": 73512,
+      "sha256": "fd6445f67bf6266285a135c6ac119905e35e01eab527722986bc776f0ac4d1a9",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/rewards/round-reward-2.webp",
+      "bytes": 78330,
+      "sha256": "9b8c6c2a14a2b219b5d03fb68209124922746072ca7376fc77082a65ecbe0766",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/rewards/round-reward-3.webp",
+      "bytes": 91678,
+      "sha256": "17de45f0b3094c895227a728228ccf11cf22c0cf69e1a05151970a48d77c1af2",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/rewards/round-reward-4.webp",
+      "bytes": 97666,
+      "sha256": "dda0dee4101dc4387d9fde84ed690580c25db2794ba920d157e0abbcb4218c26",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/skill-openings/dark.mp4",
+      "bytes": 5024458,
+      "sha256": "977e4fb8775b78c66c8871bda44176cbab0ee0be4b37dd02fad69d6759260f9a",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/skill-openings/fire.mp4",
+      "bytes": 1266664,
+      "sha256": "f263ca39e914213eaeaf5a3ea05aa941f32d42adebcedd213ef8f1edf4b69be0",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/skill-openings/grass.mp4",
+      "bytes": 5210710,
+      "sha256": "e252a942f6f888dcdf443891e997b9d938dfbb23e7767efdfde17687bc34c481",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/skill-openings/light.mp4",
+      "bytes": 5677343,
+      "sha256": "a1f7828c55eaadcae605afa12eccaa6c90ac5b371363d84b00313dfee2d5c8a0",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/skill-openings/water.mp4",
+      "bytes": 4331128,
+      "sha256": "17d733717a00d50ca39c07bcf87eeb4c81bd8d1d11b3bda38823547393ca55b7",
+      "contentType": "video/mp4"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-big-play.png",
+      "bytes": 971,
+      "sha256": "0476a6007a829e30fd637201266e8f2b9827a86812ea7d0fd09903349c85fff0",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-large-hover.png",
+      "bytes": 306,
+      "sha256": "ee21ae3c84983486cef38ef10b45ce1c505f0df2667853b1aa577bbaa2628a61",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-large.png",
+      "bytes": 342,
+      "sha256": "72863217379539d1335f9acb990745b902b0f55ef559f5ffc60c6daf393dee60",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-settings.png",
+      "bytes": 3323,
+      "sha256": "69b8dfa4b53ca9f60287dde0eaf572e80476237e0e7a4d8fe9ed92f1a38eccfd",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-square-green.png",
+      "bytes": 234,
+      "sha256": "635509be34598de8964132e92da07bbc0e2da8de3bebcf996a09ece5dbe093a5",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-square-hover.png",
+      "bytes": 214,
+      "sha256": "a27e31019d7a0d8ef9aeae5fd44023c496761931325d21b571a04bfc9d5dc9db",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/button-square.png",
+      "bytes": 236,
+      "sha256": "63bd08559c77d687bb3a419cad4e6dc96109fa96c2f74b367f349713e475478c",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/buttons-small-square.png",
+      "bytes": 1584,
+      "sha256": "caf802f8084af87383f8769824eb8b2ef482aa9312b1b3a4d89bb2ea9b1d1dcb",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/buttons-square-19x26.png",
+      "bytes": 1314,
+      "sha256": "93886b8497a12f97060f1fab3653b29ad451c2ea611e4ca37e4754156ffdca89",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/buttons-square-26x19.png",
+      "bytes": 1316,
+      "sha256": "c68906a6b15fe24c7e773becd6a3769d5ba052226416d56ee0e2f75f62fd091f",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/buttons-square-26x26.png",
+      "bytes": 1410,
+      "sha256": "249c4337da568adec91842ebe06d66fc160146507dc8394c35b34ef731175745",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/dialog-box-big.png",
+      "bytes": 515,
+      "sha256": "30b0aaa489a42a2d37c641f4e20c1737ba4538ee6012076b50121a4f6c10cdc4",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/dialog-box-medium.png",
+      "bytes": 539,
+      "sha256": "22a49ed5fc56fae85b88944c147f38b89f49d4d3ef083561d618e904e3dd30e6",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/dialog-box-small.png",
+      "bytes": 491,
+      "sha256": "f2b7227b6e12c48db287614e4c31e1ac3ba4c2053ff6448cd9ee2ac43b47e76a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/icons-all.png",
+      "bytes": 2292,
+      "sha256": "8cd848f0b6986a6be3036afb06ab74ffdd608e6a01d24816063e1c98dda03b3a",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/icons-white.png",
+      "bytes": 832,
+      "sha256": "cce218758fb9762db5d95350da83288f95ec4123eb1ce2ffc878540cf13758c1",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/inventory-spritesheet.png",
+      "bytes": 10413,
+      "sha256": "e8b954a1d6dcb7c5d14754cb4764500ec4e8aa59810af8ae3d4b4ddd389cf347",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/pixelFont-7-8x14-sproutLands.ttf",
+      "bytes": 118342,
+      "sha256": "b56cddeab11eeb74a8a2ac598c475f6817406cf89e18ab0c44b30df168cde012",
+      "contentType": "font/ttf"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/premade-dialog-box-big.png",
+      "bytes": 958,
+      "sha256": "332287245099844d41f45d36d1137f60bee29b8ab41b7f379a31dd8f4d2f2bb3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/premade-dialog-box-medium.png",
+      "bytes": 921,
+      "sha256": "b22e6393b02627625ef0f96ad18fb158b6d24c82ffbbf8f5690329cb241484a3",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/ui/sprout-lands/premade-dialog-box-small.png",
+      "bytes": 852,
+      "sha256": "2d9dbe34774f867b02f2daee6ec6a6dd8d09191d2352e44ca938f48ccd5debbd",
+      "contentType": "image/png"
+    },
+    {
+      "urlPath": "/assets/vinci-world/house/standard/standard_base.webp",
+      "bytes": 20990,
+      "sha256": "acbd964ab5520a9f3e7ceb8e95eaadc57b896855eca042573c9548d0717de54c",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/vinci-world/house/standard/standard_entity.webp",
+      "bytes": 84880,
+      "sha256": "3fae41d9d35d04c4341ed9e034840d185d19d2397a5e8c053d60d8cb908bd930",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/vinci-world/house/standard/standard_props.webp",
+      "bytes": 12718,
+      "sha256": "803da6f371238bc678694b5eecbdb4334db42700485a270dfd386ca1cac9b8a1",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/vinci-world/showroom/standard/standard_base.webp",
+      "bytes": 49538,
+      "sha256": "f2724612f3c6820e3cd01d8639d538c8f5c4eb5a0122ec024a2ef3175fc736a0",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/vinci-world/showroom/standard/standard_entity.webp",
+      "bytes": 105794,
+      "sha256": "bd6e17b888bb29cdc076b739c51055190be13684d1380175608e2a9044ec48cb",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/vinci-world/showroom/standard/standard_overlay.webp",
+      "bytes": 7536,
+      "sha256": "1577aa490af5fdab587cbca8688408b5d722edf5be1cdf0098aa3d508a170a64",
+      "contentType": "image/webp"
+    },
+    {
+      "urlPath": "/assets/vinci-world/showroom/standard/standard_props.webp",
+      "bytes": 136616,
+      "sha256": "74d7e0c597a7463353faedb639f8de49d2cd1053ba3b3f37487a00216387eab8",
+      "contentType": "image/webp"
+    }
+  ]
+}
