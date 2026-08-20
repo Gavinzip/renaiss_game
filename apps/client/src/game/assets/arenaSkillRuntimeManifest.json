@@ -3121,13 +3121,13 @@
         "rotate": false,
         "referenceActorHeight": 66,
         "renderKind": "overlay",
-      "referenceSize": [
-        104,
-        94
-      ],
-      "referenceOffset": [
-        0,
-        -46
+        "referenceSize": [
+          104,
+          94
+        ],
+        "referenceOffset": [
+          0,
+          -46
         ],
         "blendMode": "normal",
         "radiusAspect": null,
@@ -8139,9 +8139,9 @@
         "rotate": true,
         "referenceActorHeight": 66,
         "renderKind": "segment",
-      "referenceSize": [
-        0,
-        30
+        "referenceSize": [
+          0,
+          30
         ],
         "referenceOffset": [
           0,
@@ -8971,7 +8971,7 @@
       "classId": "mage",
       "name": "稜鏡碎裂",
       "persistent": false,
-      "previewSha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
+      "previewSha256": "cc049865011a311818420db5ab035f573fd1ad7bcb615080afa69cf98af14a11",
       "visualContract": {
         "anchor": "target",
         "layer": "ground",
@@ -8979,12 +8979,12 @@
         "referenceActorHeight": 66,
         "renderKind": "overlay",
         "referenceSize": [
-          52,
-          42
+          86,
+          80
         ],
         "referenceOffset": [
           0,
-          -5
+          -8
         ],
         "blendMode": "normal",
         "radiusAspect": null,
@@ -8996,23 +8996,23 @@
         "fixedDisplay": false
       },
       "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
-      "acceptedAnimationId": "configuration:mage-motion-continuity-v8-accepted:c1554b416a0f3c5c",
-      "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-mage_05-hq.webm",
-      "configPreviewSourceSha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd",
-      "configPreviewOutputSha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
+      "acceptedAnimationId": "pixel-debug:mage-prism-shatter-r3:15f2073950bb067c",
+      "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/mage-05-prism-redesign-20260820-r6/random-mage_05-hq.webm",
+      "configPreviewSourceSha256": "c24b782acf5b242f4e77cba719254067f878500ee3fb5fc736d396f23a4aac5e",
+      "configPreviewOutputSha256": "cc049865011a311818420db5ab035f573fd1ad7bcb615080afa69cf98af14a11",
       "file": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png",
       "frameWidth": 165,
       "frameHeight": 165,
       "frameCount": 6,
       "unionBounds": [
-        32,
-        34,
-        132,
-        134
+        23,
+        30,
+        141,
+        142
       ],
-      "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-0fc56338f12cc290.png",
-      "sourceSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
-      "outputSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+      "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-15f2073950bb067c.png",
+      "sourceSha256": "15f2073950bb067cf5addc62f8eee240c5c9e141c7e5085fba868e89370b5faf",
+      "outputSha256": "15f2073950bb067cf5addc62f8eee240c5c9e141c7e5085fba868e89370b5faf",
       "frameDurationsMs": [
         78,
         78,
@@ -9026,68 +9026,68 @@
         "applied": false,
         "beforeEdgeMargins": [
           [
-            67,
-            113,
-            67,
-            33
-          ],
-          [
-            61,
-            76,
-            61,
-            33
-          ],
-          [
-            56,
-            36,
-            56,
-            33
-          ],
-          [
-            41,
-            63,
-            42,
-            43
-          ],
-          [
+            23,
             34,
-            95,
-            35,
-            37
+            24,
+            23
           ],
           [
-            69,
-            121,
-            69,
-            37
+            35,
+            30,
+            36,
+            23
+          ],
+          [
+            27,
+            30,
+            27,
+            23
+          ],
+          [
+            23,
+            49,
+            24,
+            23
+          ],
+          [
+            23,
+            41,
+            24,
+            23
+          ],
+          [
+            36,
+            112,
+            37,
+            23
           ]
         ]
       },
       "frameDurationMs": 78,
-      "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+      "candidateOrigin": "pixel-debug-reviewed-user-requested-redesign",
       "sourceLineage": [
         {
           "role": "vfx",
-          "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-0fc56338f12cc290.png",
-          "sha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
-          "originalPath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png"
+          "path": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-15f2073950bb067c.png",
+          "sha256": "15f2073950bb067cf5addc62f8eee240c5c9e141c7e5085fba868e89370b5faf",
+          "originalPath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter.png"
         }
       ],
       "packagePath": "mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
       "packageUrl": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05",
-      "sourceSelection": "current-8766-runtime",
-      "previewFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v1.webm",
-      "previewFileSha256": "7a996b1f5d01c694078a930ec4632c84a9ea8eeda1fd506dc0384c3ae5d89468",
+      "sourceSelection": "pixel-debug-user-requested-redesign-20260820",
+      "previewFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/preview/gameplay-preview-v2.webm",
+      "previewFileSha256": "cc049865011a311818420db5ab035f573fd1ad7bcb615080afa69cf98af14a11",
       "iconFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/icon.png",
-      "iconFileSha256": "66998dfd74798f0364c8b0cc7d8b437a7c3cac50deaa88b591983416c6202cd4",
-      "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-mage_05:source-b4b038355972d6e7:output-7a996b1f5d01c694",
-      "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+      "iconFileSha256": "f9fe7c60e8d4454c122ff671ec0212e71bab34deb7bae0fcca8c6c66c3fb987e",
+      "previewAcceptedAnimationId": "actual-gameplay-cdn-v2:random-mage_05:source-c24b782acf5b242f:output-cc049865011a3118",
+      "previewSourceRecording": "mage-05-prism-redesign-20260820-r6",
       "previewSourceScenario": "random-mage_05",
-      "previewSourceSequenceSha256": "b4b038355972d6e707a236841f4e056d3c53bc1983b335b275f610f76e529cdd",
+      "previewSourceSequenceSha256": "c24b782acf5b242f4e77cba719254067f878500ee3fb5fc736d396f23a4aac5e",
       "previewFallbackUsed": false,
       "fallbackUsed": false,
       "previewMediaType": "video/webm",
-      "previewFrameRate": 30.029,
+      "previewFrameRate": 30.0,
       "previewSourceSize": [
         896,
         504
@@ -9099,14 +9099,14 @@
         504
       ],
       "configPreviewSourceCrop": [
-        820,
-        356,
+        192,
+        108,
         896,
         504
       ],
-      "configPreviewOptimizationVersion": "arena-config-cdn-preview-v1",
-      "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
-      "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-0fc56338f12cc290.png"
+      "configPreviewOptimizationVersion": "arena-config-cdn-preview-v2",
+      "originalSourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter.png",
+      "sourceFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-15f2073950bb067c.png"
     },
     {
       "skillId": "mage_06",

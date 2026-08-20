@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { ARENA_CONTENT_MANIFEST_V1_SOURCE_SHA256, ARENA_PROTOCOL_V1_SCHEMA_SHA256, CLASS_ORDER, MAP_PROP_TYPES, RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, drawRpgSkillTicket, getRpgMoveById, getRpgWalletCardElement, isArenaCatalogLoadout, isArenaGameMode, isArenaLoadout, isEngineerTurretKind, type AssetsReadyRequest, type ClassId, type Collider, type ClassSwitchRequest, type JoinRequest, type MapProp, type MatchAssetManifest, type MatchPrepareRequest, type RpgVersusJoinRequest, type RpgVersusRematchRequest, type RpgVersusSubmitActions } from "@renaiss-game/shared";
+import { ARENA_CONTENT_MANIFEST_V1_SOURCE_SHA256, ARENA_PROTOCOL_V1_SCHEMA_SHA256, CLASS_ORDER, MAP_PROP_TYPES, RPG_ELEMENT_META, RPG_STARTER_PETS, WORLD, drawRpgSkillTicket, getRpgMoveById, getRpgWalletCardElement, isArenaCatalogLoadout, isArenaCatalogLoadoutCompatibleWithTurretKind, isArenaGameMode, isArenaLoadout, isEngineerTurretKind, type AssetsReadyRequest, type ClassId, type Collider, type ClassSwitchRequest, type JoinRequest, type MapProp, type MatchAssetManifest, type MatchPrepareRequest, type RpgVersusJoinRequest, type RpgVersusRematchRequest, type RpgVersusSubmitActions } from "@renaiss-game/shared";
 import { loadServerEnv } from "./env";
 import { GameRoom } from "./game/GameRoom";
 import { ArenaMatchRegistry } from "./game/ArenaMatchRegistry";
@@ -592,7 +592,12 @@ io.on("connection", (socket) => {
       !isArenaLoadout(request.loadout) ||
       !isArenaCatalogLoadout(request.classId, request.catalogLoadout) ||
       (request.engineerTurretKind !== undefined &&
-        !isEngineerTurretKind(request.engineerTurretKind))
+        !isEngineerTurretKind(request.engineerTurretKind)) ||
+      !isArenaCatalogLoadoutCompatibleWithTurretKind(
+        request.classId,
+        request.catalogLoadout ?? { skillQ: null, skillE: null, skillR: null },
+        request.engineerTurretKind ?? "mechanical"
+      )
     ) {
       socket.emit("switch_class_error", { message: "Invalid class or loadout selection." });
       return;
@@ -897,6 +902,11 @@ function isValidArenaJoinRequest(request: Partial<JoinRequest> | null | undefine
     isClassId(request.classId) &&
     isArenaLoadout(request.loadout) &&
     isArenaCatalogLoadout(request.classId, request.catalogLoadout) &&
+    isArenaCatalogLoadoutCompatibleWithTurretKind(
+      request.classId,
+      request.catalogLoadout,
+      request.engineerTurretKind ?? "mechanical"
+    ) &&
     (request.mode === undefined || isArenaGameMode(request.mode)) &&
     (request.engineerTurretKind === undefined ||
       isEngineerTurretKind(request.engineerTurretKind));

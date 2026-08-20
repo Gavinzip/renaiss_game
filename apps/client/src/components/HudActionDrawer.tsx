@@ -24,6 +24,8 @@ interface HudActionDrawerProps {
   onSetHudScale: (scale: HudScale) => void;
   onSetAudioVolume: (volume: number) => void;
   onSetAudioPack: (pack: GameUiSoundPack) => void;
+  showMobileControlLayout: boolean;
+  onEditMobileControlLayout: () => void;
   onExitArena: () => void;
 }
 
@@ -37,6 +39,8 @@ export function HudActionDrawer({
   onSetHudScale,
   onSetAudioVolume,
   onSetAudioPack,
+  showMobileControlLayout,
+  onEditMobileControlLayout,
   onExitArena
 }: HudActionDrawerProps) {
   if (mode === "map") {
@@ -54,6 +58,8 @@ export function HudActionDrawer({
       onSetHudScale={onSetHudScale}
       onSetAudioVolume={onSetAudioVolume}
       onSetAudioPack={onSetAudioPack}
+      showMobileControlLayout={showMobileControlLayout}
+      onEditMobileControlLayout={onEditMobileControlLayout}
       onExitArena={onExitArena}
     />
   );
@@ -171,6 +177,8 @@ function SettingsDrawer({
   onSetHudScale,
   onSetAudioVolume,
   onSetAudioPack,
+  showMobileControlLayout,
+  onEditMobileControlLayout,
   onExitArena
 }: {
   displayPrefs: HudDisplayPrefs;
@@ -178,6 +186,8 @@ function SettingsDrawer({
   onSetHudScale: (scale: HudScale) => void;
   onSetAudioVolume: (volume: number) => void;
   onSetAudioPack: (pack: GameUiSoundPack) => void;
+  showMobileControlLayout: boolean;
+  onEditMobileControlLayout: () => void;
   onExitArena: () => void;
 }) {
   const { language, setLanguage, t } = useArenaI18n();
@@ -268,6 +278,16 @@ function SettingsDrawer({
             ))}
           </div>
         </div>
+        {showMobileControlLayout ? (
+          <button
+            type="button"
+            className="drawer-control-layout-button"
+            onClick={onEditMobileControlLayout}
+          >
+            <span>{t.ui.customizeControls}</span>
+            <i>{t.ui.customizeControlsHint}</i>
+          </button>
+        ) : null}
         <div className="drawer-language-row">
           <span>{t.ui.language}</span>
           <div>

@@ -179,6 +179,14 @@ export interface ArenaText {
     hudScaleLarge: string;
     highContrast: string;
     reducedMotion: string;
+    customizeControls: string;
+    customizeControlsHint: string;
+    controlLayoutTitle: string;
+    controlLayoutHint: string;
+    controlLayoutActions: string;
+    controlLayoutReset: string;
+    controlLayoutCancel: string;
+    controlLayoutSave: string;
     skills: string;
     attack: string;
     cancelCast: string;
@@ -638,6 +646,14 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       hudScaleLarge: "大",
       highContrast: "高對比",
       reducedMotion: "減少動畫",
+      customizeControls: "自訂手機鍵位",
+      customizeControlsHint: "拖曳搖桿與每一個按鍵",
+      controlLayoutTitle: "調整手機鍵位",
+      controlLayoutHint: "直接拖曳搖桿、Q、E、R 與普攻；完成後按儲存。",
+      controlLayoutActions: "鍵位配置操作",
+      controlLayoutReset: "恢復預設",
+      controlLayoutCancel: "取消",
+      controlLayoutSave: "儲存鍵位",
       skills: "技能",
       attack: "普攻",
       cancelCast: "拖到這裡取消",
@@ -863,6 +879,14 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       hudScaleLarge: "Large",
       highContrast: "High contrast",
       reducedMotion: "Reduced motion",
+      customizeControls: "Customize mobile controls",
+      customizeControlsHint: "Drag the joystick and each action button",
+      controlLayoutTitle: "Adjust mobile controls",
+      controlLayoutHint: "Drag the joystick, Q, E, R, and Attack, then save.",
+      controlLayoutActions: "Control layout actions",
+      controlLayoutReset: "Reset",
+      controlLayoutCancel: "Cancel",
+      controlLayoutSave: "Save layout",
       skills: "Skills",
       attack: "Attack",
       cancelCast: "Drag here to cancel",
@@ -1088,6 +1112,14 @@ export const ARENA_TEXT: Record<ArenaLanguage, ArenaText> = {
       hudScaleLarge: "크게",
       highContrast: "고대비",
       reducedMotion: "동작 줄이기",
+      customizeControls: "모바일 조작키 설정",
+      customizeControlsHint: "조이스틱과 각 버튼을 드래그하세요",
+      controlLayoutTitle: "모바일 조작키 조정",
+      controlLayoutHint: "조이스틱, Q, E, R, 기본 공격을 드래그한 뒤 저장하세요.",
+      controlLayoutActions: "조작키 배치 작업",
+      controlLayoutReset: "기본값",
+      controlLayoutCancel: "취소",
+      controlLayoutSave: "배치 저장",
       skills: "스킬",
       attack: "기본 공격",
       cancelCast: "여기로 끌어 취소",

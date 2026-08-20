@@ -4,7 +4,7 @@
   "fallbackUsed": false,
   "iconCount": 61,
   "atlasPath": "apps/client/public/assets/generated/arena-skill-catalog-icons.png",
-  "atlasSha256": "2d622e9b73f5327669cb6ee2241e5faf0b802f04a9b6453633774a27b939bfdf",
+  "atlasSha256": "49695395fb0154e08169da9a97e5aa8c074dda6f9b2a31d5b58d057e1f900eb4",
   "cellSize": 64,
   "atlasColumns": 16,
   "minimumTransparentMargin": 6,
@@ -2362,43 +2362,43 @@
       "iconColumn": 5,
       "iconRow": 3,
       "sourceKind": "arena-runtime",
-      "sourcePath": "docs/design/arena-skill-vfx-sources/mage-prism-shatter-refraction-r2.png",
-      "sourceSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+      "sourcePath": "apps/client/public/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/source/primary-source-15f2073950bb067c.png",
+      "sourceSha256": "15f2073950bb067cf5addc62f8eee240c5c9e141c7e5085fba868e89370b5faf",
       "runtimeFile": "/assets/arena-skills/mage_法師/1_Q_初階/06_稜鏡碎裂_mage_05/runtime/primary.png",
-      "runtimeOutputSha256": "0fc56338f12cc2901a35944ab5a6594ac6caf93365805b71a69b8ea845740a48",
+      "runtimeOutputSha256": "15f2073950bb067cf5addc62f8eee240c5c9e141c7e5085fba868e89370b5faf",
       "sourceFrameCount": 6,
       "selectionMethod": "auto-readable-apex",
       "resampling": "nearest",
-      "sourceFrameIndex": 1,
+      "sourceFrameIndex": 2,
       "sourceFrameBounds": [
-        61,
-        76,
-        104,
-        132
+        27,
+        30,
+        138,
+        142
       ],
-      "sourceFrameSha256": "8494c1f584af271fe477843aba1e611a0463802d638078c91a44c5f5ccf90c8f",
-      "sourceFrameScore": 696.0174,
-      "fittedVisibleArea": 1336.4796,
-      "fittedEnergy": 817.6919,
-      "scale": 0.928571,
+      "sourceFrameSha256": "213e8d77cf8de9474b50b90e297ec6439c01b6b4b11845e4058e3309567e6b5a",
+      "sourceFrameScore": 695.5901,
+      "fittedVisibleArea": 785.7207,
+      "fittedEnergy": 488.9192,
+      "scale": 0.464286,
       "outputBounds": [
-        12,
         6,
-        52,
+        7,
+        58,
         58
       ],
       "margins": [
-        12,
         6,
-        12,
+        7,
+        6,
         6
       ],
       "visualCenter": [
-        32.216,
-        33.846
+        31.042,
+        34.502
       ],
-      "visualCenterOffset": 1.859,
-      "outputCellSha256": "5a01c5f9b578a85f42f238ff664cd150e29578ee16d0aaef1b143f4be6a1a564",
+      "visualCenterOffset": 2.68,
+      "outputCellSha256": "5ddb480715371211e33957d3281998845cf3f41514d704e24c4f515f7ab80e40",
       "pixelAdaptation": "none"
     },
     {

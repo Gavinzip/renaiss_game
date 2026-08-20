@@ -79,6 +79,11 @@ import {
 } from "../render/playerConcealmentPresentation";
 import { getMageActionFxProfile, shouldShowMageActionFx } from "../render/mageActionFx";
 import { getWarriorActionFxProfile, shouldShowWarriorActionFx } from "../render/warriorActionFx";
+import {
+  ARENA_DUEL_REALM_BACKDROP_DEPTH,
+  ARENA_DUEL_REALM_BOUNDARY_DEPTH,
+  getArenaPlayerRenderDepth
+} from "../render/arenaPlayerDepth";
 import { renderVillageMap } from "../render/villageMap";
 import { frameRateIndependentAlpha } from "../render/frameRate";
 import { estimateArenaRenderServerTime } from "../render/arenaRenderClock";
@@ -86,6 +91,7 @@ import {
   advanceArenaCameraFocus,
   getArenaCameraZoom,
   isCoarsePointerViewport,
+  snapArenaCameraScrollToScreenPixel,
   type ArenaCameraPoint
 } from "../render/arenaCameraMotion";
 import { setTextColorIfChanged } from "../render/textStyle";
@@ -110,7 +116,6 @@ import {
   buildRuntimeTextures,
   getMagicTurretFrameTexture,
   getNewCompatibleWalkFrameTexture,
-  NEW_COMPATIBLE_WALK_CLASS_IDS,
   NEW_COMPATIBLE_WALK_FRAME_COUNT,
   releaseArenaRuntimeSourceTextures,
 } from "../assets/runtimeTextures";
@@ -147,7 +152,7 @@ import {
 } from "../assets/arenaSkillRuntime";
 import { prepareArenaAssetsWithRetry } from "../assets/arenaAssetRecovery";
 import { getHealthPackVariant } from "../assets/healthPackVariants";
-import { generatedAssetPath } from "../assets/generatedAssets";
+import { ARENA_STARTUP_IMAGE_ASSETS } from "../assets/arenaStartupAssets";
 import { shouldLoadStaticAssetsWithCors } from "../assets/staticAssets";
 import { ARENA_TEXT, resolveArenaLanguage } from "../../i18n/arena";
 
@@ -309,7 +314,6 @@ const PLAYER_SPRITE_DISPLAY_SIZE = ARENA_WEB_PLAYER.displaySize;
 // the semantic head-to-foot height within 1% of ordinary walking without the
 // old 137px jump. NW/NE visual-mass normalization lives in the accepted atlas.
 const ARCHER_FULL_DRAW_DISPLAY_SIZE = ARENA_WEB_ARCHER_FULL_DRAW.displaySize;
-const ARCHER_DRAW_ASSET_VERSION = "2026-08-11-moving-full-draw-v5-west-palette-corrected";
 // The Mage staff-cast atlas is a fixed 256px source grid so the sideways
 // release pose can keep both the full staff and the blue orb. Match the new
 // compatible walk source-pixel density instead of shrinking the Mage body.
@@ -435,50 +439,9 @@ export class VillageArenaScene extends Phaser.Scene {
     // per-frame GPU textures are built only for the current match manifest.
     if (shouldLoadStaticAssetsWithCors()) this.load.setCORS("anonymous");
     preloadArenaSkillRuntimeTextures(this, ["warrior_13"]);
-    for (const classId of NEW_COMPATIBLE_WALK_CLASS_IDS) {
-      this.load.image(
-        `newCompatibleWalk_${classId}`,
-        generatedAssetPath(`characters/new-compatible/${classId}/walk-8dir`)
-      );
+    for (const asset of ARENA_STARTUP_IMAGE_ASSETS) {
+      this.load.image(asset.key, asset.url);
     }
-    this.load.image("villageAssets", generatedAssetPath("village-assets"));
-    this.load.image("skillEffects", generatedAssetPath("skill-effects"));
-    this.load.image("combatObjects", generatedAssetPath("combat-objects"));
-    this.load.image("healthLogo", generatedAssetPath("vinci-favicon"));
-    this.load.image("attackMushroom", generatedAssetPath("attack-mushroom"));
-    this.load.image("statusEffects", generatedAssetPath("status-effects"));
-    this.load.image("abilityEffects", generatedAssetPath("ability-effects"));
-    this.load.image("warriorVerticalSlash", generatedAssetPath("warrior-vertical-slash"));
-    this.load.image("warriorArcherEffects", generatedAssetPath("warrior-archer-effects"));
-    this.load.image("combatEffects", generatedAssetPath("combat-effects"));
-    this.load.image("arenaDecals", generatedAssetPath("arena-decals"));
-    this.load.image(
-      "warriorM1Sprites",
-      generatedAssetPath("characters/new-compatible/warrior/melee-m1-8dir")
-    );
-    this.load.image(
-      "archerMovingBowSprites",
-      generatedAssetPath(
-        "characters/new-compatible/archer/moving-full-draw-8dir",
-        ARCHER_DRAW_ASSET_VERSION
-      )
-    );
-    this.load.image(
-      "archerStandingFullDrawSprites",
-      generatedAssetPath(
-        "characters/new-compatible/archer/standing-full-draw-8dir",
-        ARCHER_DRAW_ASSET_VERSION
-      )
-    );
-    this.load.image(
-      "archerForestRollSprites",
-      generatedAssetPath("characters/new-compatible/archer/forest-roll-8dir")
-    );
-    this.load.image("engineerActionSprites", generatedAssetPath("engineer-action-sprites"));
-    this.load.image(
-      "mageStaffCastSprites",
-      generatedAssetPath("characters/new-compatible/mage/staff-cast-8dir")
-    );
   }
 
   create() {
@@ -502,6 +465,9 @@ export class VillageArenaScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, WORLD.width, WORLD.height);
     this.touchCamera = isCoarsePointerViewport();
     this.cameras.main.setZoom(getArenaCameraZoom(this.touchCamera));
+    // Phaser rounds world coordinates before applying zoom. That works for the
+    // desktop zoom, but creates shifting sample phases at the phone's 0.76x
+    // zoom. Touch scroll is instead snapped in screen space in updateCamera().
     this.cameras.main.roundPixels = !this.touchCamera;
     this.cameras.main.centerOn(WORLD.width / 2 + 150, WORLD.height / 2 - 80);
 
@@ -513,7 +479,12 @@ export class VillageArenaScene extends Phaser.Scene {
         ? { maxParticles: 28, spawnIntervalMultiplier: 1.65 }
         : undefined
     );
-    this.targetingOverlay = new TargetingOverlay(this);
+    this.targetingOverlay = new TargetingOverlay(this, {
+      // Touch aim changes only when the finger moves. Keeping the same crisp
+      // telegraph geometry between those events avoids rebuilding dozens of
+      // Graphics paths every frame on mobile GPUs.
+      animate: !this.touchCamera
+    });
 
     this.duelRealmMaskGraphics = this.make.graphics({ x: 0, y: 0 });
     this.duelRealmMask = this.duelRealmMaskGraphics.createGeometryMask();
@@ -528,12 +499,12 @@ export class VillageArenaScene extends Phaser.Scene {
       )
       .setOrigin(0)
       .setTileScale(0.5)
-      .setDepth(5800)
+      .setDepth(ARENA_DUEL_REALM_BACKDROP_DEPTH)
       .setMask(this.duelRealmMask)
       .setVisible(false);
     this.duelRealmBoundary = this.add
       .graphics()
-      .setDepth(6100)
+      .setDepth(ARENA_DUEL_REALM_BOUNDARY_DEPTH)
       .setVisible(false);
 
     this.worldOverlay = this.add.graphics().setDepth(6000);
@@ -729,11 +700,6 @@ export class VillageArenaScene extends Phaser.Scene {
 
     const pointer = this.input.activePointer;
     const hudState = useHudStore.getState();
-    if (self.classId === "engineer" && Phaser.Input.Keyboard.JustDown(this.keys.T)) {
-      hudState.setEngineerTurretKind(
-        hudState.engineerTurretKind === "mechanical" ? "magic_missile" : "mechanical"
-      );
-    }
     const hudInput = hudState.hudInput;
     const mobileAttackRequested = hudState.consumeMobileAttacks() > 0;
     const mobileMove = hudState.mobileMove;
@@ -1314,7 +1280,14 @@ export class VillageArenaScene extends Phaser.Scene {
       view.lastAlive = player.alive;
 
       view.container.setPosition(view.visualX, view.visualY);
-      view.container.setDepth(view.visualY + (player.alive ? 20 : 24));
+      view.container.setDepth(
+        getArenaPlayerRenderDepth(
+          player.id,
+          view.visualY,
+          player.alive,
+          this.snapshot?.duelRealm ?? null
+        )
+      );
       view.container.setAlpha(1);
 
       const renderAngle = player.action ? player.angle : moving ? view.lastMoveAngle : player.angle;
@@ -3378,6 +3351,7 @@ export class VillageArenaScene extends Phaser.Scene {
     if (camera.zoom !== expectedZoom) {
       camera.setZoom(expectedZoom);
     }
+    camera.roundPixels = !useTouchCamera;
     const focus = useTouchCamera
       ? advanceArenaCameraFocus({
           current: this.cameraFocus,
@@ -3395,8 +3369,12 @@ export class VillageArenaScene extends Phaser.Scene {
     const mobileFocusOffset = camera.width < 760 ? 180 / camera.zoom : 0;
     const targetY = focus.y - camera.height / (2 * camera.zoom) + mobileFocusOffset;
     if (useTouchCamera) {
-      camera.scrollX = targetX;
-      camera.scrollY = targetY;
+      const snappedScroll = snapArenaCameraScrollToScreenPixel(
+        { x: targetX, y: targetY },
+        camera.zoom
+      );
+      camera.scrollX = snappedScroll.x;
+      camera.scrollY = snappedScroll.y;
     } else {
       camera.scrollX = Phaser.Math.Linear(camera.scrollX, targetX, cameraAlpha(0.12));
       camera.scrollY = Phaser.Math.Linear(camera.scrollY, targetY, cameraAlpha(0.12));

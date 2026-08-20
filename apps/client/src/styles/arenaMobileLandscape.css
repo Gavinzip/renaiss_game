@@ -1119,3 +1119,51 @@
     height: 62px;
   }
 }
+
+/* Shared phone readability floor for Arena setup and the skill forge. */
+@media (orientation: landscape) and (max-height: 620px) and (max-width: 1100px) {
+  .arena-loadout-banner .language-switcher button,
+  .start-panel .class-card strong,
+  .start-panel .skill-glyph b,
+  .arena-loadout-summary-slot small,
+  .arena-loadout-summary-slot strong,
+  .start-panel > .start-copy label,
+  .arena-skill-forge-classes small,
+  .arena-skill-reveal-idle strong,
+  .arena-skill-reveal-idle small,
+  .arena-skill-showcase-card > header small,
+  .arena-skill-showcase-card > p,
+  .arena-skill-showcase-actions dt,
+  .arena-skill-showcase-actions dd,
+  .arena-skill-collection-tier > header strong,
+  .arena-skill-collection-tier > header small,
+  .arena-skill-equipped-summary > em,
+  .arena-skill-equipped-summary > span,
+  .arena-skill-collection-tier .arena-skill-equipped-badge,
+  .arena-skill-footer-draw > button.is-draw small,
+  .arena-skill-forge-message {
+    font-size: 7px;
+  }
+
+  .arena-mode-selector header strong,
+  .arena-mode-selector button strong,
+  .arena-loadout-summary > header strong,
+  .arena-loadout-summary-slot > button > b,
+  .arena-configure-skills-button,
+  .start-panel > .start-copy input,
+  .arena-skill-forge-header span,
+  .arena-skill-forge-classes strong,
+  .arena-skill-reveal-idle span,
+  .arena-skill-showcase-card h2,
+  .arena-skill-equip-button,
+  .arena-skill-collection-grid > header span,
+  .arena-skill-collection-grid > header strong,
+  .arena-skill-footer-draw > button,
+  .arena-skill-footer-nav > button {
+    font-size: 8px;
+  }
+
+  .start-panel > .start-copy .enter-button {
+    font-size: 10px;
+  }
+}

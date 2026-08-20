@@ -970,6 +970,21 @@
   text-transform: uppercase;
 }
 
+.arena-combat-hud .engineer-turret-selector > strong {
+  min-height: 20px;
+  display: grid;
+  place-items: center;
+  padding: 2px 7px;
+  color: #291625;
+  background: #d9a044;
+  box-shadow: inset 0 2px 0 #ffe09a, 1px 2px 0 #0b050e;
+  font-size: 7px;
+}
+
+.arena-combat-hud .engineer-turret-selector.is-locked {
+  pointer-events: none;
+}
+
 .arena-combat-hud .engineer-turret-selector button {
   min-width: 48px;
   min-height: 20px;
@@ -1463,6 +1478,37 @@
   box-shadow: inset 0 2px 0 #ffe09a;
 }
 
+.arena-combat-hud .drawer-control-layout-button {
+  min-height: 48px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: 7px 10px;
+  border: 7px solid transparent;
+  border-image: var(--arena-chrome-gold) 12 fill / 7px / 0 stretch;
+  color: #2b1728;
+  background: var(--combat-hud-gold);
+  box-shadow: 3px 4px 0 rgba(9, 4, 11, 0.42);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.arena-combat-hud .drawer-control-layout-button span {
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.arena-combat-hud .drawer-control-layout-button i {
+  color: #68402d;
+  font-size: 6px;
+  font-style: normal;
+}
+
+.mobile-control-layout-editor {
+  display: none;
+}
+
 .arena-combat-hud .drawer-audio-settings {
   display: grid;
   gap: 7px;
@@ -1778,6 +1824,100 @@
 }
 
 @media (orientation: landscape) and (any-pointer: coarse) and (max-height: 620px) {
+  .arena-combat-hud .hud-drawer {
+    z-index: 24;
+  }
+
+  .arena-combat-hud .top-actions {
+    z-index: 21;
+  }
+
+  .arena-combat-hud .mobile-arena-controls.is-layout-editing {
+    z-index: 30;
+  }
+
+  .arena-combat-hud [data-mobile-control-position="custom"] {
+    position: fixed !important;
+    left: var(--mobile-control-x) !important;
+    right: auto !important;
+    top: var(--mobile-control-y) !important;
+    bottom: auto !important;
+    translate: -50% -50%;
+  }
+
+  .arena-combat-hud .mobile-arena-controls.is-layout-editing [data-mobile-control-id] {
+    outline: 3px dashed #fff0a6;
+    outline-offset: 5px;
+    filter: brightness(1.08) saturate(1.08);
+    cursor: grab;
+  }
+
+  .arena-combat-hud .mobile-arena-controls.is-layout-editing [data-mobile-control-id]:active {
+    cursor: grabbing;
+    outline-color: #83e56f;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor {
+    position: fixed;
+    left: 50%;
+    top: max(8px, env(safe-area-inset-top));
+    z-index: 32;
+    width: min(520px, calc(100vw - 220px));
+    min-height: 45px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 7px 6px 10px;
+    border: 6px solid transparent;
+    border-image: var(--arena-chrome-panel) 14 fill / 6px / 0 stretch;
+    color: var(--combat-hud-copy);
+    background: var(--combat-hud-panel);
+    box-shadow: 3px 4px 0 var(--combat-hud-shadow);
+    transform: translateX(-50%);
+    pointer-events: auto;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor > div {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor strong {
+    color: var(--combat-hud-gold-bright);
+    font-size: 9px;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor span {
+    overflow: hidden;
+    color: var(--combat-hud-muted);
+    font-size: 6px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor button {
+    height: 28px;
+    padding: 0 7px;
+    border: 3px solid #120817;
+    color: var(--combat-hud-copy);
+    background: #25152c;
+    font: inherit;
+    font-size: 7px;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor button.is-primary {
+    color: #241422;
+    background: var(--combat-hud-gold);
+    box-shadow: inset 0 2px 0 #ffe09a;
+  }
+
   .arena-combat-hud .combat-skill-dock,
   .arena-combat-hud .round-rewards,
   .arena-combat-hud .combat-toast,
@@ -1981,6 +2121,54 @@
     bottom: max(8px, env(safe-area-inset-bottom));
     min-width: 126px;
     transform: translateX(-50%);
+  }
+
+  /* Keep persistent combat information legible on high-DPR phones. Scaling
+   * the whole panels below 0.85 made 5-7px text effectively unreadable. */
+  .arena-combat-hud .self-vitals {
+    width: 184px;
+    transform: scale(calc(0.92 * var(--combat-hud-scale)));
+  }
+
+  .arena-combat-hud .self-vitals header > span,
+  .arena-combat-hud .round-hud header span,
+  .arena-combat-hud .round-hud footer span,
+  .arena-combat-hud .round-hud footer b {
+    font-size: 8px;
+  }
+
+  .arena-combat-hud .self-vitals header b {
+    font-size: 7px;
+  }
+
+  .arena-combat-hud .self-vital-row > b,
+  .arena-combat-hud .self-vital-row > em,
+  .arena-combat-hud .self-vitals > small {
+    font-size: 8px;
+  }
+
+  .arena-combat-hud .arena-kill-feed {
+    width: 166px;
+    transform: scale(calc(0.88 * var(--combat-hud-scale)));
+  }
+
+  .arena-combat-hud .arena-kill-feed li {
+    min-height: 20px;
+    font-size: 8px;
+  }
+
+  .arena-combat-hud .arena-kill-feed b {
+    height: 13px;
+    font-size: 6px;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor strong,
+  .arena-combat-hud .mobile-control-layout-editor button {
+    font-size: 9px;
+  }
+
+  .arena-combat-hud .mobile-control-layout-editor span {
+    font-size: 8px;
   }
 }
 

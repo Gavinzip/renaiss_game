@@ -3,7 +3,7 @@ import { getArenaSkillPackagePreview } from "./arenaSkillPackageCatalog";
 import type { ArenaCatalogSkillId } from "@renaiss-game/shared";
 
 export const GENERATED_ASSET_VERSION =
-  "2026-08-09-packaged-arena-skills-v4-warrior-11-layered-seismic-v1";
+  "2026-08-20-mage-05-prism-shatter-r3";
 
 export function generatedAssetPath(fileName: string, version = GENERATED_ASSET_VERSION) {
   return `${staticAssetUrl(`/assets/generated/${fileName}.png`)}?v=${version}`;

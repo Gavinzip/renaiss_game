@@ -32,13 +32,21 @@ export interface TargetingIntent {
   aimPoint: { x: number; y: number };
 }
 
+interface TargetingOverlayOptions {
+  animate: boolean;
+}
+
 export class TargetingOverlay {
   private readonly graphics: Phaser.GameObjects.Graphics;
   private readonly lockLabel: Phaser.GameObjects.Text;
   private focusAlpha = 0;
   private hasRenderedTelegraph = false;
+  private lastStaticRenderSignature: string | null = null;
 
-  constructor(private readonly scene: Phaser.Scene) {
+  constructor(
+    private readonly scene: Phaser.Scene,
+    private readonly options: TargetingOverlayOptions = { animate: true }
+  ) {
     this.graphics = scene.add.graphics().setDepth(8750);
     this.lockLabel = scene.add
       .text(0, 0, "", {
@@ -70,16 +78,31 @@ export class TargetingOverlay {
       return;
     }
 
+    const telegraph = getArenaSkillTelegraph(intent.activeSkillId);
+    // Only target-lock skills render or label a live opponent. Resolving the
+    // nearest player for every other telegraph made an unrelated moving bot
+    // invalidate the mobile render cache on every server snapshot.
+    const target = telegraph?.kind === "target-lock"
+      ? this.getFocusTarget(snapshot, self, intent)
+      : null;
+    const targetAlpha = target ? 0.86 : 0.62;
+    if (!this.options.animate) {
+      const signature = this.getStaticRenderSignature(snapshot, self, target, intent);
+      if (signature === this.lastStaticRenderSignature) {
+        return;
+      }
+      this.lastStaticRenderSignature = signature;
+      this.focusAlpha = targetAlpha;
+      time = 0;
+    } else {
+      this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, targetAlpha, target ? 0.42 : 0.36);
+    }
     this.graphics.clear();
     this.lockLabel.setVisible(false);
     this.hasRenderedTelegraph = true;
-    const target = this.getFocusTarget(snapshot, self, intent);
-    const targetAlpha = target ? 0.86 : 0.62;
-    this.focusAlpha = Phaser.Math.Linear(this.focusAlpha, targetAlpha, target ? 0.42 : 0.36);
     const accent = Phaser.Display.Color.HexStringToColor(CLASS_META[self.classId].accent).color;
     this.drawSkillTelegraph(snapshot, self, target, intent, accent, this.focusAlpha, time);
     const skillArmed = intent.skillF || intent.skillQ || intent.skillE || intent.skillR;
-    const telegraph = getArenaSkillTelegraph(intent.activeSkillId);
     if (skillArmed && telegraph?.kind !== "target-lock") {
       this.drawConfirmPrompt(intent);
     }
@@ -97,6 +120,50 @@ export class TargetingOverlay {
     this.graphics.clear();
     this.lockLabel.setVisible(false);
     this.hasRenderedTelegraph = false;
+    this.lastStaticRenderSignature = null;
+  }
+
+  private getStaticRenderSignature(
+    snapshot: GameSnapshot,
+    self: PublicPlayer,
+    target: PublicPlayer | null,
+    intent: TargetingIntent
+  ) {
+    const round = (value: number) => Math.round(value);
+    const action = this.getPrimaryAction(intent) ?? "none";
+    const focusLensActive = self.focusLensEndsAt > snapshot.serverTime ? 1 : 0;
+    const turretState = self.classId === "engineer"
+      ? snapshot.turrets
+          .filter((turret) => turret.ownerId === self.id && turret.health > 0)
+          .map((turret) =>
+            [
+              turret.id,
+              turret.kind,
+              round(turret.x),
+              round(turret.y),
+              round(turret.angle),
+              turret.health
+            ].join(":")
+          )
+          .join("|")
+      : "";
+    return [
+      action,
+      intent.activeSkillId ?? "basic",
+      intent.hotkeyLabel ?? "",
+      self.id,
+      self.classId,
+      round(self.x),
+      round(self.y),
+      round(self.angle),
+      round(intent.aimPoint.x),
+      round(intent.aimPoint.y),
+      focusLensActive,
+      target?.id ?? "",
+      target ? round(target.x) : "",
+      target ? round(target.y) : "",
+      turretState
+    ].join(";");
   }
 
   private drawSkillTelegraph(
@@ -323,6 +390,31 @@ export class TargetingOverlay {
   }
 
   private drawGroundEllipse(cx: number, cy: number, radiusX: number, radiusY: number, color: number, alpha: number, time: number, label: string) {
+    if (!this.options.animate) {
+      const warningAlpha = Math.max(alpha, 0.72);
+      this.graphics.fillStyle(color, warningAlpha * 0.14);
+      this.graphics.fillEllipse(cx, cy, radiusX * 2, radiusY * 2);
+      this.graphics.lineStyle(8, 0x190706, warningAlpha * 0.58);
+      this.graphics.strokeEllipse(cx, cy + 2, radiusX * 2.06, radiusY * 2.06);
+      this.graphics.lineStyle(4, color, warningAlpha * 0.96);
+      this.graphics.strokeEllipse(cx, cy, radiusX * 2, radiusY * 2);
+      this.graphics.lineStyle(1, SKILL_PREVIEW_GLOW, warningAlpha * 0.84);
+      this.graphics.strokeEllipse(cx, cy - 1, radiusX * 1.84, radiusY * 1.84);
+      this.graphics.lineStyle(3, SKILL_PREVIEW_GLOW, warningAlpha * 0.9);
+      this.graphics.beginPath();
+      for (let index = 0; index < 4; index += 1) {
+        const theta = (index / 4) * Math.PI * 2;
+        const innerX = cx + Math.cos(theta) * (radiusX - 9);
+        const innerY = cy + Math.sin(theta) * (radiusY - 6);
+        const outerX = cx + Math.cos(theta) * (radiusX + 9);
+        const outerY = cy + Math.sin(theta) * (radiusY + 6);
+        this.graphics.moveTo(innerX, innerY);
+        this.graphics.lineTo(outerX, outerY);
+      }
+      this.graphics.strokePath();
+      this.drawTelegraphLabel(cx, cy - radiusY - 26, label, color, warningAlpha);
+      return;
+    }
     const pulse = 1 + Math.sin(time / 150) * 0.025;
     const outerX = radiusX * pulse;
     const outerY = radiusY * pulse;

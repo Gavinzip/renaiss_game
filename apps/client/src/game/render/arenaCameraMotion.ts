@@ -39,6 +39,19 @@ export function getArenaCameraZoom(coarsePointer: boolean) {
 }
 
 /**
+ * Pixel art must land on whole screen pixels. Touch cameras move directly at
+ * render cadence, so their world scroll needs to be quantized after zoom is
+ * applied or the tile sampling phase changes on every frame.
+ */
+export function snapArenaCameraScrollToScreenPixel(point: ArenaCameraPoint, zoom: number): ArenaCameraPoint {
+  const safeZoom = Math.max(0.01, zoom);
+  return {
+    x: Math.round(point.x * safeZoom) / safeZoom,
+    y: Math.round(point.y * safeZoom) / safeZoom
+  };
+}
+
+/**
  * Keeps the local camera moving at render cadence while the authoritative
  * player snapshots continue to arrive at the server broadcast rate. The lead
  * is deliberately small and is continuously reconciled to the rendered player;

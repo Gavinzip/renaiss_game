@@ -23,6 +23,7 @@ export * from "./arenaSkillTargeting";
 export * from "./arenaStatusReviewExamples";
 export * from "./arenaStatuses";
 export * from "./balance";
+export * from "./engineerSkillCompatibility";
 export * from "./map";
 export * from "./mageSkills";
 export * from "./mageSkillTimelines";

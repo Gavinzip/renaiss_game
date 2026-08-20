@@ -7,7 +7,11 @@ import {
   getArenaCatalogSkill,
   getArenaCatalogSkillDetail,
   getArenaCatalogSkillsForClass,
+  getEngineerSkillTurretCompatibility,
   isArenaCatalogLoadoutComplete,
+  isArenaCatalogLoadoutCompatibleWithTurretKind,
+  isEngineerSkillCompatibleWithTurretKind,
+  normalizeEngineerCatalogLoadout,
   type ArenaCatalogSkill,
   type ArenaLoadoutSlot,
   type ArenaSkillTier,
@@ -15,7 +19,7 @@ import {
   type EngineerTurretKind
 } from "@renaiss-game/shared";
 import type { CSSProperties } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { playGameUiSound } from "../audio/gameUiSounds";
 import { useArenaI18n } from "../i18n/arena";
 import { useHudStore } from "../state/hudStore";
@@ -54,20 +58,31 @@ export function ArenaSkillLoadoutScreen({
   onClassChange: (classId: ClassId) => void;
   onClose: () => void;
 }) {
-  const { t } = useArenaI18n();
+  const { language, t } = useArenaI18n();
   const loadout = useHudStore((state) => state.arenaCatalogLoadouts[classId]);
   const setCatalogLoadoutSkill = useHudStore((state) => state.setCatalogLoadoutSkill);
   const engineerTurretKind = useHudStore((state) => state.engineerTurretKind);
-  const setEngineerTurretKind = useHudStore((state) => state.setEngineerTurretKind);
+  const setEngineerTurretConfiguration = useHudStore(
+    (state) => state.setEngineerTurretConfiguration
+  );
   const allSkills = useMemo(() => getArenaCatalogSkillsForClass(classId), [classId]);
+  const compatibleSkills = useMemo(
+    () => classId === "engineer"
+      ? allSkills.filter((skill) =>
+          isEngineerSkillCompatibleWithTurretKind(skill.id, engineerTurretKind)
+        )
+      : allSkills,
+    [allSkills, classId, engineerTurretKind]
+  );
   const coreSkill = useMemo(() => getArenaCatalogCoreSkill(classId), [classId]);
   const unlockedSkillIds = useArenaSkillCollectionStore((state) => state.unlockedSkillIds);
   const unlockedSkills = useMemo(() => new Set(unlockedSkillIds), [unlockedSkillIds]);
-  const firstUnlockedSkill = allSkills.find((skill) => unlockedSkills.has(skill.id)) ?? null;
+  const firstUnlockedSkill = compatibleSkills.find((skill) => unlockedSkills.has(skill.id)) ?? null;
   const [selectedSkillId, setSelectedSkillId] = useState(
     loadout.skillQ ?? firstUnlockedSkill?.id ?? null
   );
   const [selectedTurretPreview, setSelectedTurretPreview] = useState<EngineerTurretKind | null>(null);
+  const previousClassId = useRef(classId);
   const selectedSkill = getArenaCatalogSkill(selectedSkillId);
   const selectedSkillDetail = getArenaCatalogSkillDetail(selectedSkillId);
   const selectedTurretDetail = selectedTurretPreview === "mechanical"
@@ -88,9 +103,12 @@ export function ArenaSkillLoadoutScreen({
         }
       : null;
   const complete = isArenaCatalogLoadoutComplete(loadout) &&
-    ARENA_LOADOUT_SLOTS.every((slot) => Boolean(loadout[slot] && unlockedSkills.has(loadout[slot]!)));
+    ARENA_LOADOUT_SLOTS.every((slot) => Boolean(loadout[slot] && unlockedSkills.has(loadout[slot]!))) &&
+    isArenaCatalogLoadoutCompatibleWithTurretKind(classId, loadout, engineerTurretKind);
 
   useEffect(() => {
+    if (previousClassId.current === classId) return;
+    previousClassId.current = classId;
     setSelectedTurretPreview(null);
     setSelectedSkillId(
       loadout.skillQ ?? firstUnlockedSkill?.id ?? null
@@ -105,6 +123,12 @@ export function ArenaSkillLoadoutScreen({
 
   const selectAndEquipSkill = (skill: ArenaCatalogSkill) => {
     if (skill.tier === "core" || !unlockedSkills.has(skill.id)) return;
+    if (
+      classId === "engineer" &&
+      !isEngineerSkillCompatibleWithTurretKind(skill.id, engineerTurretKind)
+    ) {
+      return;
+    }
     setCatalogLoadoutSkill(classId, SLOT_BY_TIER[skill.tier], skill.id);
     setSelectedSkillId(skill.id);
     setSelectedTurretPreview(null);
@@ -112,11 +136,38 @@ export function ArenaSkillLoadoutScreen({
   };
 
   const selectTurretPreview = (kind: EngineerTurretKind) => {
-    setEngineerTurretKind(kind);
+    const nextLoadout = normalizeEngineerCatalogLoadout(loadout, kind, unlockedSkills);
+    setEngineerTurretConfiguration(kind, nextLoadout);
     setSelectedTurretPreview(kind);
     setSelectedSkillId(coreSkill?.id ?? null);
     playGameUiSound("select");
   };
+
+  const turretLabel = (kind: EngineerTurretKind) => {
+    if (language === "zh") return kind === "mechanical" ? "普通砲台" : "魔導砲台";
+    if (language === "ko") return kind === "mechanical" ? "일반 포탑" : "마도 포탑";
+    return kind === "mechanical" ? "Normal Turret" : "Magic Turret";
+  };
+
+  const compatibilityLabel = (skillId: ArenaCatalogSkill["id"]) => {
+    const compatibility = getEngineerSkillTurretCompatibility(skillId);
+    if (language === "zh") {
+      if (compatibility === "both") return "兩者通用";
+      return compatibility === "mechanical" ? "普通砲台" : "魔導砲台";
+    }
+    if (language === "ko") {
+      if (compatibility === "both") return "양쪽 공용";
+      return compatibility === "mechanical" ? "일반 포탑" : "마도 포탑";
+    }
+    if (compatibility === "both") return "Both turrets";
+    return compatibility === "mechanical" ? "Normal turret" : "Magic turret";
+  };
+
+  const engineerFilterHint = language === "zh"
+    ? `已篩選：${turretLabel(engineerTurretKind)}；切換砲台會自動更換不相容技能。`
+    : language === "ko"
+      ? `필터: ${turretLabel(engineerTurretKind)}. 포탑을 바꾸면 호환되지 않는 스킬이 자동 교체됩니다.`
+      : `Filtered for ${turretLabel(engineerTurretKind)}. Switching turrets replaces incompatible skills.`;
 
   const closeWithSound = (cue: "back" | "close" | "complete") => {
     playGameUiSound(cue);
@@ -240,9 +291,9 @@ export function ArenaSkillLoadoutScreen({
           <header>
             <div>
               <span>{t.ui.skillLibrary}</span>
-              <strong>{t.classes[classId].label} · {allSkills.filter((skill) => unlockedSkills.has(skill.id)).length}/{allSkills.length}</strong>
+              <strong>{t.classes[classId].label} · {compatibleSkills.filter((skill) => unlockedSkills.has(skill.id)).length}/{compatibleSkills.length}</strong>
             </div>
-            <small>{t.ui.selectSlotHint}</small>
+            <small>{classId === "engineer" ? engineerFilterHint : t.ui.selectSlotHint}</small>
           </header>
 
           <section className="arena-selected-skill-strip" aria-label={t.ui.currentLoadout}>
@@ -288,7 +339,8 @@ export function ArenaSkillLoadoutScreen({
                     aria-pressed={engineerTurretKind === "mechanical"}
                     onClick={() => selectTurretPreview("mechanical")}
                   >
-                    普通砲台
+                    <strong>{turretLabel("mechanical")}</strong>
+                    <small>{allSkills.filter((skill) => isEngineerSkillCompatibleWithTurretKind(skill.id, "mechanical")).length} {t.ui.skillCountUnit}</small>
                   </button>
                   <button
                     type="button"
@@ -296,7 +348,8 @@ export function ArenaSkillLoadoutScreen({
                     aria-pressed={engineerTurretKind === "magic_missile"}
                     onClick={() => selectTurretPreview("magic_missile")}
                   >
-                    魔導砲台
+                    <strong>{turretLabel("magic_missile")}</strong>
+                    <small>{allSkills.filter((skill) => isEngineerSkillCompatibleWithTurretKind(skill.id, "magic_missile")).length} {t.ui.skillCountUnit}</small>
                   </button>
                 </div>
               ) : null}
@@ -307,7 +360,7 @@ export function ArenaSkillLoadoutScreen({
             {TIER_ORDER.map((tier) => {
               const slot = SLOT_BY_TIER[tier];
               const key = SLOT_KEYS[slot];
-              const skills = allSkills.filter((skill) => skill.tier === tier);
+              const skills = compatibleSkills.filter((skill) => skill.tier === tier);
               return (
                 <section key={tier} className={`arena-skill-icon-group tier-${tier}`}>
                   <header>
@@ -328,11 +381,16 @@ export function ArenaSkillLoadoutScreen({
                           className={[equipped ? "is-equipped" : "", unlocked ? "is-unlocked" : "is-locked"].filter(Boolean).join(" ")}
                           aria-pressed={equipped}
                           disabled={!unlocked}
-                          title={unlocked ? `${skill.name} · ${key}` : "未解鎖"}
+                          title={unlocked ? `${skill.name} · ${key}${classId === "engineer" ? ` · ${compatibilityLabel(skill.id)}` : ""}` : "未解鎖"}
                           onClick={() => selectAndEquipSkill(skill)}
                         >
                           {unlocked ? <ArenaCatalogSkillIcon skillId={skill.id} /> : <span className="arena-skill-locked-icon"><LockKey size={18} weight="fill" /></span>}
                           <strong>{unlocked ? skill.name : "????"}</strong>
+                          {classId === "engineer" && unlocked ? (
+                            <small className={`arena-engineer-skill-compatibility is-${getEngineerSkillTurretCompatibility(skill.id)}`}>
+                              {compatibilityLabel(skill.id)}
+                            </small>
+                          ) : null}
                           <span className="arena-skill-check" aria-hidden="true">
                             {equipped ? <Check size={15} weight="bold" /> : null}
                           </span>

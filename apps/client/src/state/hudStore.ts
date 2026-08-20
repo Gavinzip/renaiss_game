@@ -1,8 +1,13 @@
 import { create } from "zustand";
 import {
+  isArenaCatalogLoadout,
+  isArenaCatalogLoadoutCompatibleWithTurretKind,
   isArenaCatalogSkillAllowedInSlot,
   isArenaCatalogLoadoutComplete,
   isArenaSkillAllowedInSlot,
+  isEngineerSkillCompatibleWithTurretKind,
+  normalizeEngineerCatalogLoadout,
+  type ArenaCatalogLoadout,
   type ArenaCatalogLoadouts,
   type ArenaCatalogSkillId,
   type ArenaGameMode,
@@ -94,6 +99,10 @@ interface HudStore {
   setSelectedClass: (classId: ClassId) => void;
   setSelectedMode: (mode: ArenaGameMode) => void;
   setEngineerTurretKind: (kind: EngineerTurretKind) => void;
+  setEngineerTurretConfiguration: (
+    kind: EngineerTurretKind,
+    loadout: ArenaCatalogLoadout
+  ) => void;
   setLoadoutSkill: (classId: ClassId, slot: ArenaLoadoutSlot, skill: SkillKey) => void;
   setCatalogLoadoutSkill: (
     classId: ClassId,
@@ -170,6 +179,41 @@ export const useHudStore = create<HudStore>((set, get) => ({
     window.localStorage.setItem("renaiss.engineer.turret-kind", engineerTurretKind);
     set({ engineerTurretKind });
   },
+  setEngineerTurretConfiguration: (engineerTurretKind, nextLoadout) => {
+    if (
+      !isArenaCatalogLoadout("engineer", nextLoadout) ||
+      !isArenaCatalogLoadoutCompatibleWithTurretKind(
+        "engineer",
+        nextLoadout,
+        engineerTurretKind
+      )
+    ) {
+      return;
+    }
+    const state = get();
+    const arenaCatalogLoadouts = {
+      ...state.arenaCatalogLoadouts,
+      engineer: { ...nextLoadout }
+    };
+    window.localStorage.setItem("renaiss.engineer.turret-kind", engineerTurretKind);
+    saveArenaCatalogLoadouts(arenaCatalogLoadouts);
+    set((current) => ({
+      engineerTurretKind,
+      arenaCatalogLoadouts,
+      catalogLoadoutSyncPending: current.catalogLoadoutSyncPending + 1,
+      catalogLoadoutSyncError: null
+    }));
+    void persistArenaCatalogLoadout("engineer", nextLoadout).then(
+      () => set((current) => ({
+        catalogLoadoutSyncPending: Math.max(0, current.catalogLoadoutSyncPending - 1)
+      })),
+      (error) => set((current) => ({
+        catalogLoadoutSyncPending: Math.max(0, current.catalogLoadoutSyncPending - 1),
+        catalogLoadoutSyncError:
+          error instanceof Error ? error.message : "Unable to save Arena skill loadout."
+      }))
+    );
+  },
   setLoadoutSkill: (classId, slot, skill) =>
     set((state) => {
       if (!isArenaSkillAllowedInSlot(slot, skill)) {
@@ -187,6 +231,12 @@ export const useHudStore = create<HudStore>((set, get) => ({
   setCatalogLoadoutSkill: (classId, slot, skill) => {
     if (!isArenaCatalogSkillAllowedInSlot(classId, slot, skill)) return;
     const state = get();
+    if (
+      classId === "engineer" &&
+      !isEngineerSkillCompatibleWithTurretKind(skill, state.engineerTurretKind)
+    ) {
+      return;
+    }
     const nextLoadout = {
       ...state.arenaCatalogLoadouts[classId],
       [slot]: skill
@@ -233,6 +283,16 @@ export const useHudStore = create<HudStore>((set, get) => ({
           merged[slot] = localSkill;
         }
       }
+      if (classId === "engineer") {
+        const normalized = normalizeEngineerCatalogLoadout(
+          merged,
+          state.engineerTurretKind,
+          unlocked
+        );
+        merged.skillQ = normalized.skillQ;
+        merged.skillE = normalized.skillE;
+        merged.skillR = normalized.skillR;
+      }
       arenaCatalogLoadouts[classId] = merged;
       if (slots.some((slot) => merged[slot] !== serverLoadout[slot])) {
         migrations.push(classId);
@@ -260,7 +320,12 @@ export const useHudStore = create<HudStore>((set, get) => ({
   },
   requestJoin: (request) => set({ joinRequest: request, selectedClass: request.classId, connection: "connecting" }),
   requestClassSwitch: (classId) =>
-    set((state) => isArenaCatalogLoadoutComplete(state.arenaCatalogLoadouts[classId]) ? ({
+    set((state) => isArenaCatalogLoadoutComplete(state.arenaCatalogLoadouts[classId]) &&
+      isArenaCatalogLoadoutCompatibleWithTurretKind(
+        classId,
+        state.arenaCatalogLoadouts[classId],
+        state.engineerTurretKind
+      ) ? ({
       classSwitchRequest: {
         classId,
         loadout: { ...state.arenaLoadouts[classId] },

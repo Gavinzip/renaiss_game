@@ -8,6 +8,7 @@ import {
   getArenaCatalogCoreSkill,
   getArenaCatalogSkill,
   getArenaCatalogSkillDetail,
+  isArenaCatalogLoadoutCompatibleWithTurretKind,
   isArenaCatalogLoadoutComplete,
   type ActionTooltip,
   type ArenaCatalogLoadout,
@@ -44,6 +45,7 @@ import { GameAudio } from "./components/GameAudio";
 import { HudActionDrawer, type HudActionMode } from "./components/HudActionDrawer";
 import { MapEditor } from "./components/MapEditor";
 import { Minimap } from "./components/Minimap";
+import { MobileControlLayoutEditor } from "./components/MobileControlLayoutEditor";
 import { MobileJoystick } from "./components/MobileJoystick";
 import { RoundHud } from "./components/RoundHud";
 import { RoundRewards } from "./components/RoundRewards";
@@ -59,6 +61,7 @@ import { UnityArenaLauncher } from "./components/UnityArenaLauncher";
 import type { XAuthUser } from "./api/auth";
 import { type SkillIconSlot } from "./game/assets/crops";
 import { generatedAssetPath } from "./game/assets/generatedAssets";
+import { warmArenaStartupAssetCache } from "./game/assets/arenaStartupAssets";
 import { installStaticAssetCssVariables, staticAssetUrl } from "./game/assets/staticAssets";
 import { createGame } from "./game/createGame";
 import { createRpgGame } from "./game/createRpgGame";
@@ -71,6 +74,14 @@ import {
   type HudScale,
   type HudTogglePreference
 } from "./state/hudPreferences";
+import {
+  clampMobileArenaControlPosition,
+  loadMobileArenaControlLayout,
+  saveMobileArenaControlLayout,
+  type MobileArenaControlId,
+  type MobileArenaControlLayout,
+  type MobileArenaControlPosition
+} from "./state/mobileArenaControlLayout";
 import { useRpgStore } from "./state/rpgStore";
 import { RpgOverlay } from "./components/RpgOverlay";
 import { RpgMobileControls } from "./components/RpgMobileControls";
@@ -192,6 +203,16 @@ function GameApp({ authUser }: { authUser: XAuthUser }) {
       hydrateCatalogLoadouts(serverCatalogLoadouts, unlockedSkillIds);
     }
   }, [collectionStatus, hydrateCatalogLoadouts, serverCatalogLoadouts, unlockedSkillIds]);
+
+  useEffect(() => {
+    if (editorMode || arenaMode || arenaStatusReviewMode) return;
+    // Start the complete Arena download as soon as the authenticated lobby is
+    // available. The Arena scene still performs the authoritative readiness
+    // check before joining, but normally reads these responses from cache.
+    void warmArenaStartupAssetCache().catch((error) => {
+      console.error("Arena lobby asset warmup failed", error);
+    });
+  }, [arenaMode, arenaStatusReviewMode, editorMode]);
 
   useEffect(() => {
     if (
@@ -331,6 +352,7 @@ function StartPanel({
   const arenaAssets = useHudStore((state) => state.arenaAssets);
   const selectedClass = useHudStore((state) => state.selectedClass);
   const selectedMode = useHudStore((state) => state.selectedMode);
+  const engineerTurretKind = useHudStore((state) => state.engineerTurretKind);
   const arenaCatalogLoadouts = useHudStore((state) => state.arenaCatalogLoadouts);
   const catalogLoadoutSyncPending = useHudStore((state) => state.catalogLoadoutSyncPending);
   const catalogLoadoutSyncError = useHudStore((state) => state.catalogLoadoutSyncError);
@@ -352,6 +374,11 @@ function StartPanel({
   const unlockedSkillSet = useMemo(() => new Set(unlockedSkillIds), [unlockedSkillIds]);
   const catalogLoadoutComplete = collectionStatus === "ready" &&
     isArenaCatalogLoadoutComplete(catalogLoadout) &&
+    isArenaCatalogLoadoutCompatibleWithTurretKind(
+      classId,
+      catalogLoadout,
+      engineerTurretKind
+    ) &&
     ARENA_LOADOUT_SLOTS.every((slot) => {
       const skillId = catalogLoadout[slot];
       return Boolean(skillId && unlockedSkillSet.has(skillId));
@@ -810,7 +837,6 @@ function HudOverlay() {
   const arenaLoadouts = useHudStore((state) => state.arenaLoadouts);
   const arenaCatalogLoadouts = useHudStore((state) => state.arenaCatalogLoadouts);
   const engineerTurretKind = useHudStore((state) => state.engineerTurretKind);
-  const setEngineerTurretKind = useHudStore((state) => state.setEngineerTurretKind);
   const leaveArena = useHudStore((state) => state.leaveArena);
   const self = snapshot?.players.find((player) => player.id === selfId) ?? null;
   const displayClass = self?.classId ?? selectedClass;
@@ -837,6 +863,9 @@ function HudOverlay() {
   const [activeDrawer, setActiveDrawer] = useState<HudActionMode | null>(null);
   const [displayPrefs, setDisplayPrefs] = useState(loadHudDisplayPrefs);
   const [arenaTutorialOpen, setArenaTutorialOpen] = useState(false);
+  const [mobileControlLayout, setMobileControlLayout] = useState(loadMobileArenaControlLayout);
+  const [mobileControlLayoutDraft, setMobileControlLayoutDraft] = useState<MobileArenaControlLayout>({});
+  const [mobileControlLayoutEditing, setMobileControlLayoutEditing] = useState(false);
   const effectiveAudioVolume = displayPrefs.audioVolume * (displayPrefs.reducedMotion ? 0.72 : 1);
   useEffect(() => {
     saveHudDisplayPrefs(displayPrefs);
@@ -889,6 +918,25 @@ function HudOverlay() {
     configureGameUiSounds({ pack: audioPack, enabled: displayPrefs.audio });
     setDisplayPrefs((current) => ({ ...current, audioPack }));
     playGameUiSound("select");
+  };
+  const beginMobileControlLayoutEdit = () => {
+    setMobileControlLayoutDraft({ ...mobileControlLayout });
+    setMobileControlLayoutEditing(true);
+    setActiveDrawer(null);
+    playGameUiSound("open");
+  };
+  const cancelMobileControlLayoutEdit = () => {
+    setMobileControlLayoutDraft({});
+    setMobileControlLayoutEditing(false);
+  };
+  const resetMobileControlLayoutDraft = () => {
+    setMobileControlLayoutDraft({});
+  };
+  const saveMobileControlLayoutDraft = () => {
+    const nextLayout = { ...mobileControlLayoutDraft };
+    setMobileControlLayout(nextLayout);
+    saveMobileArenaControlLayout(nextLayout);
+    setMobileControlLayoutEditing(false);
   };
   const exitArena = () => {
     leaveArena();
@@ -949,7 +997,17 @@ function HudOverlay() {
           onSetHudScale={setHudScale}
           onSetAudioVolume={setAudioVolume}
           onSetAudioPack={setAudioPack}
+          showMobileControlLayout={touchLayout}
+          onEditMobileControlLayout={beginMobileControlLayoutEdit}
           onExitArena={exitArena}
+        />
+      ) : null}
+
+      {mobileControlLayoutEditing ? (
+        <MobileControlLayoutEditor
+          onCancel={cancelMobileControlLayoutEdit}
+          onReset={resetMobileControlLayoutDraft}
+          onSave={saveMobileControlLayoutDraft}
         />
       ) : null}
 
@@ -1003,32 +1061,13 @@ function HudOverlay() {
       {joined && !touchLayout ? (
         <div className={`combat-skill-dock ${displayClass === "engineer" ? "has-engineer-core" : ""}`}>
           {displayClass === "engineer" ? (
-            <section className="engineer-turret-selector" aria-label={t.ui.turretType}>
+            <section className="engineer-turret-selector is-locked" aria-label={t.ui.turretType}>
               <span>{t.ui.turretType}</span>
-              <button
-                type="button"
-                className={engineerTurretKind === "mechanical" ? "is-active" : ""}
-                aria-pressed={engineerTurretKind === "mechanical"}
-                onClick={() => {
-                  if (engineerTurretKind === "mechanical") return;
-                  setEngineerTurretKind("mechanical");
-                  playGameUiSound("select");
-                }}
-              >
-                {t.ui.mechanicalTurret}
-              </button>
-              <button
-                type="button"
-                className={engineerTurretKind === "magic_missile" ? "is-active" : ""}
-                aria-pressed={engineerTurretKind === "magic_missile"}
-                onClick={() => {
-                  if (engineerTurretKind === "magic_missile") return;
-                  setEngineerTurretKind("magic_missile");
-                  playGameUiSound("select");
-                }}
-              >
-                {t.ui.magicTurret}
-              </button>
+              <strong>
+                {engineerTurretKind === "mechanical"
+                  ? t.ui.mechanicalTurret
+                  : t.ui.magicTurret}
+              </strong>
             </section>
           ) : null}
           <section className="skill-bar" aria-label={t.ui.skills}>
@@ -1087,6 +1126,9 @@ function HudOverlay() {
           actionTooltips={actionTooltips}
           skillCooldowns={self?.cooldowns ?? null}
           disabled={actionsDisabled}
+          editingLayout={mobileControlLayoutEditing}
+          controlLayout={mobileControlLayoutEditing ? mobileControlLayoutDraft : mobileControlLayout}
+          onControlLayoutChange={setMobileControlLayoutDraft}
         />
       ) : null}
       {joined && !touchLayout ? <ArenaControlHint classId={displayClass} /> : null}
@@ -1126,6 +1168,9 @@ interface MobileArenaControlsProps {
   actionTooltips: Record<HudAction, ActionTooltip>;
   skillCooldowns: Record<HudSkillAction, number> | null;
   disabled: boolean;
+  editingLayout: boolean;
+  controlLayout: MobileArenaControlLayout;
+  onControlLayoutChange: (layout: MobileArenaControlLayout) => void;
 }
 
 const MobileArenaControls = memo(function MobileArenaControls({
@@ -1135,7 +1180,10 @@ const MobileArenaControls = memo(function MobileArenaControls({
   skillLabels,
   actionTooltips,
   skillCooldowns,
-  disabled
+  disabled,
+  editingLayout,
+  controlLayout,
+  onControlLayoutChange
 }: MobileArenaControlsProps) {
   const { t } = useArenaI18n();
   const setMobileMove = useHudStore((state) => state.setMobileMove);
@@ -1144,6 +1192,14 @@ const MobileArenaControls = memo(function MobileArenaControls({
   const setHudAction = useHudStore((state) => state.setHudAction);
   const setMobileControlsActive = useHudStore((state) => state.setMobileControlsActive);
   const cancelZoneRef = useRef<HTMLDivElement | null>(null);
+  const controlLayoutDragRef = useRef<{
+    pointerId: number;
+    controlId: MobileArenaControlId;
+    grabOffsetX: number;
+    grabOffsetY: number;
+    width: number;
+    height: number;
+  } | null>(null);
   const [aimGesture, setAimGesture] = useState<{
     action: HudSkillAction;
     cancelling: boolean;
@@ -1162,14 +1218,67 @@ const MobileArenaControls = memo(function MobileArenaControls({
     : actionTooltips.skillF;
 
   useEffect(() => {
-    if (!disabled) {
+    if (!disabled && !editingLayout) {
       return;
     }
     resetMobileMove();
     resetMobileAim();
     setHudAction("attack", false);
     setAimGesture(null);
-  }, [disabled, resetMobileAim, resetMobileMove, setHudAction]);
+  }, [disabled, editingLayout, resetMobileAim, resetMobileMove, setHudAction]);
+
+  const updateControlLayoutDrag = (event: PointerEvent<HTMLElement>) => {
+    const drag = controlLayoutDragRef.current;
+    if (!editingLayout || !drag || drag.pointerId !== event.pointerId) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    const position = clampMobileArenaControlPosition(
+      event.clientX - drag.grabOffsetX,
+      event.clientY - drag.grabOffsetY,
+      { width: window.innerWidth, height: window.innerHeight },
+      { width: drag.width, height: drag.height }
+    );
+    onControlLayoutChange({ ...controlLayout, [drag.controlId]: position });
+  };
+
+  const beginControlLayoutDrag = (
+    controlId: MobileArenaControlId,
+    event: PointerEvent<HTMLElement>
+  ) => {
+    if (!editingLayout) return;
+    event.preventDefault();
+    event.stopPropagation();
+    tryPointerCapture(event.currentTarget, event.pointerId);
+    const bounds = event.currentTarget.getBoundingClientRect();
+    controlLayoutDragRef.current = {
+      pointerId: event.pointerId,
+      controlId,
+      grabOffsetX: event.clientX - (bounds.left + bounds.width / 2),
+      grabOffsetY: event.clientY - (bounds.top + bounds.height / 2),
+      width: bounds.width,
+      height: bounds.height
+    };
+    updateControlLayoutDrag(event);
+  };
+
+  const endControlLayoutDrag = (event: PointerEvent<HTMLElement>) => {
+    if (controlLayoutDragRef.current?.pointerId !== event.pointerId) return;
+    updateControlLayoutDrag(event);
+    controlLayoutDragRef.current = null;
+  };
+
+  const controlPositionProps = (controlId: MobileArenaControlId) => {
+    const position = controlLayout[controlId];
+    return {
+      controlId,
+      customPosition: position,
+      editMode: editingLayout,
+      onEditPointerDown: (event: PointerEvent<HTMLElement>) => beginControlLayoutDrag(controlId, event),
+      onEditPointerMove: updateControlLayoutDrag,
+      onEditPointerUp: endControlLayoutDrag
+    };
+  };
 
   const isPointInCancelZone = (clientX: number, clientY: number) => {
     const bounds = cancelZoneRef.current?.getBoundingClientRect();
@@ -1183,12 +1292,16 @@ const MobileArenaControls = memo(function MobileArenaControls({
   };
 
   return (
-    <section className="mobile-arena-controls" aria-label="Mobile arena controls">
+    <section
+      className={editingLayout ? "mobile-arena-controls is-layout-editing" : "mobile-arena-controls"}
+      aria-label="Mobile arena controls"
+    >
       <MobileJoystick
         ariaLabel="Movement joystick"
         disabled={disabled}
         onEngage={() => setMobileControlsActive(true)}
         onMove={setMobileMove}
+        {...controlPositionProps("joystick")}
       />
 
       <div
@@ -1209,6 +1322,7 @@ const MobileArenaControls = memo(function MobileArenaControls({
             disabled={disabled}
             isPointInCancelZone={isPointInCancelZone}
             onAimGestureChange={setAimGesture}
+            {...controlPositionProps("skillF")}
           />
         ) : null}
         {ARENA_LOADOUT_SLOTS.map((loadoutSlot) => {
@@ -1241,6 +1355,7 @@ const MobileArenaControls = memo(function MobileArenaControls({
               disabled={disabled}
               isPointInCancelZone={isPointInCancelZone}
               onAimGestureChange={setAimGesture}
+              {...controlPositionProps(loadoutSlot)}
             />
           );
         })}
@@ -1256,6 +1371,7 @@ const MobileArenaControls = memo(function MobileArenaControls({
           disabled={disabled}
           isPointInCancelZone={isPointInCancelZone}
           onAimGestureChange={setAimGesture}
+          {...controlPositionProps("attack")}
         />
       </div>
       <div
@@ -1282,6 +1398,8 @@ function areMobileArenaControlPropsEqual(
   if (
     previous.classId !== next.classId ||
     previous.disabled !== next.disabled ||
+    previous.editingLayout !== next.editingLayout ||
+    previous.controlLayout !== next.controlLayout ||
     previous.skillLabels !== next.skillLabels ||
     previous.actionTooltips !== next.actionTooltips
   ) {
@@ -1306,6 +1424,14 @@ function areMobileArenaControlPropsEqual(
   return true;
 }
 
+function getMobileArenaControlPositionStyle(position?: MobileArenaControlPosition) {
+  if (!position) return undefined;
+  return {
+    "--mobile-control-x": `${position.x * 100}vw`,
+    "--mobile-control-y": `${position.y * 100}dvh`
+  } as CSSProperties;
+}
+
 function MobileSkillButton({
   classId,
   slot,
@@ -1318,7 +1444,13 @@ function MobileSkillButton({
   endAt,
   disabled = false,
   isPointInCancelZone,
-  onAimGestureChange
+  onAimGestureChange,
+  controlId,
+  customPosition,
+  editMode,
+  onEditPointerDown,
+  onEditPointerMove,
+  onEditPointerUp
 }: {
   classId: ClassId;
   slot: SkillIconSlot;
@@ -1334,6 +1466,12 @@ function MobileSkillButton({
   onAimGestureChange: (
     state: { action: HudSkillAction; cancelling: boolean } | null
   ) => void;
+  controlId: MobileArenaControlId;
+  customPosition?: MobileArenaControlPosition;
+  editMode: boolean;
+  onEditPointerDown: (event: PointerEvent<HTMLElement>) => void;
+  onEditPointerMove: (event: PointerEvent<HTMLElement>) => void;
+  onEditPointerUp: (event: PointerEvent<HTMLElement>) => void;
 }) {
   const now = useHudStore((state) => state.snapshot?.serverTime ?? 0);
   const setHudAction = useHudStore((state) => state.setHudAction);
@@ -1366,6 +1504,10 @@ function MobileSkillButton({
   };
 
   const cancelAction = (event?: PointerEvent<HTMLButtonElement>) => {
+    if (editMode) {
+      if (event) onEditPointerUp(event);
+      return;
+    }
     if (event && pointerIdRef.current !== event.pointerId) {
       return;
     }
@@ -1381,6 +1523,10 @@ function MobileSkillButton({
   };
 
   const pressAction = (event: PointerEvent<HTMLButtonElement>) => {
+    if (editMode) {
+      onEditPointerDown(event);
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     if (event.button !== 0 || !active) {
@@ -1400,6 +1546,10 @@ function MobileSkillButton({
   };
 
   const moveAction = (event: PointerEvent<HTMLButtonElement>) => {
+    if (editMode) {
+      onEditPointerMove(event);
+      return;
+    }
     if (pointerIdRef.current !== event.pointerId || disabled) {
       return;
     }
@@ -1409,6 +1559,10 @@ function MobileSkillButton({
   };
 
   const releaseAction = (event: PointerEvent<HTMLButtonElement>) => {
+    if (editMode) {
+      onEditPointerUp(event);
+      return;
+    }
     if (pointerIdRef.current !== event.pointerId) {
       return;
     }
@@ -1458,12 +1612,15 @@ function MobileSkillButton({
   return (
     <button
       type="button"
-      className={["mobile-action-button", actionClass, cooling ? "cooling" : "", readyPulse ? "is-ready" : "", isArmed ? "is-armed" : "", disabled ? "disabled" : ""].filter(Boolean).join(" ")}
+      className={["mobile-action-button", actionClass, cooling ? "cooling" : "", readyPulse ? "is-ready" : "", isArmed ? "is-armed" : "", disabled ? "disabled" : "", editMode ? "is-layout-editing" : ""].filter(Boolean).join(" ")}
       data-action={action}
+      data-mobile-control-id={controlId}
+      data-mobile-control-position={customPosition ? "custom" : "default"}
       data-skill-id={catalogSkillId ?? undefined}
       aria-label={`${title} (${keyLabel}) - ${tooltip.description}`}
       aria-pressed={isSkill ? isArmed : undefined}
-      disabled={!active}
+      disabled={!editMode && !active}
+      style={getMobileArenaControlPositionStyle(customPosition)}
       onPointerDown={pressAction}
       onPointerMove={moveAction}
       onPointerUp={releaseAction}

@@ -485,11 +485,11 @@ export const ARENA_SKILL_SPECS: Record<ArenaCatalogSkillId, ArenaSkillSpec> = {
   ),
   mage_05: skill(
     "在目標腳邊升起日耀稜鏡，裂開後朝兩側折射碎光；傷害只計算一次，烙印的 25% 易傷由通用傷害規則處理。",
-    "26",
+    "13",
     6000,
     "瞬間",
     "target",
-    { damage: [26], range: 520 }
+    { damage: [13], range: 520 }
   ),
   mage_06: skill(
     "由法師前方射出紫黑虛空球，接觸敵人後收束並緩速。",

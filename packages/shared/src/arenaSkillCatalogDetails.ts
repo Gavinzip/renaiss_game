@@ -29,7 +29,7 @@ const EFFECTIVE_DAMAGE_LABELS: Partial<Record<ArenaCatalogSkillId, string>> = {
   mage_00: `${getEffectiveArenaSkillDamage("mage_00", 24)}`,
   mage_01: `${getEffectiveArenaSkillDamage("mage_01", 12)}＋${COMBAT.poisonTickDamage} × ${POISON_TICK_COUNT}；總計 ${getEffectiveArenaSkillDamage("mage_01", 12) + COMBAT.poisonTickDamage * POISON_TICK_COUNT}`,
   mage_02: `${getEffectiveArenaSkillDamage("mage_02", 16)}；治療 8／16`,
-  mage_05: `${getEffectiveArenaSkillDamage("mage_05", 26)}`,
+  mage_05: `${getEffectiveArenaSkillDamage("mage_05", 13)}`,
   mage_06: `${getEffectiveArenaSkillDamage("mage_06", 18)}`,
   mage_07: `${getEffectiveArenaSkillDamage("mage_07", 28)}`,
   mage_08: `${getEffectiveArenaSkillDamage("mage_08", 8)} × 4；另中毒 ${COMBAT.poisonTickDamage}／秒`,

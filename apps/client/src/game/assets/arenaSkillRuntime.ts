@@ -728,6 +728,19 @@ function runtimeEntrySourceAssets(entry: ArenaSkillRuntimeVisualEntry) {
   return [...new Map(assets.map((asset) => [asset.url, asset])).values()];
 }
 
+function engineerCoreRuntimeSourceAssets() {
+  const core = getArenaSkillCoreRuntimeEntry("engineer_00");
+  if (!core) return [];
+  return [
+    ...new Map(
+      Object.values(core.runtimeAssets).map((asset) => {
+        const url = `${asset.file}?v=${asset.sha256.slice(0, 12)}`;
+        return [url, { url }] as const;
+      })
+    ).values()
+  ];
+}
+
 function queueRuntimeEntrySources(
   scene: Phaser.Scene,
   entry: ArenaSkillRuntimeVisualEntry,
@@ -1063,6 +1076,14 @@ export async function prepareAllArenaSkillRuntimeAssets(
   onProgress?: (loaded: number, total: number) => void,
   options: { refreshCachedResponses?: boolean } = {}
 ) {
+  return warmAllArenaSkillRuntimeAssets(onProgress, options, () => scene.game.isRunning);
+}
+
+export async function warmAllArenaSkillRuntimeAssets(
+  onProgress?: (loaded: number, total: number) => void,
+  options: { refreshCachedResponses?: boolean } = {},
+  shouldContinue: () => boolean = () => true
+) {
   const entries = manifest.entries;
   onProgress?.(0, entries.length);
   let nextIndex = 0;
@@ -1071,7 +1092,7 @@ export async function prepareAllArenaSkillRuntimeAssets(
     while (nextIndex < entries.length) {
       const index = nextIndex;
       nextIndex += 1;
-      if (!scene.game.isRunning) {
+      if (!shouldContinue()) {
         throw new Error("Arena scene stopped before all skill assets were downloaded.");
       }
       const entry = entries[index];
@@ -1098,6 +1119,25 @@ export async function prepareAllArenaSkillRuntimeAssets(
     (result): result is PromiseRejectedResult => result.status === "rejected"
   );
   if (failure) throw failure.reason;
+
+  const coreAssets = engineerCoreRuntimeSourceAssets();
+  let nextCoreIndex = 0;
+  const coreWorker = async () => {
+    while (nextCoreIndex < coreAssets.length) {
+      const index = nextCoreIndex;
+      nextCoreIndex += 1;
+      if (!shouldContinue()) {
+        throw new Error("Arena scene stopped before Engineer core assets were downloaded.");
+      }
+      await prefetchRuntimeSourceAsset(
+        coreAssets[index],
+        options.refreshCachedResponses === true
+      );
+    }
+  };
+  await Promise.all(
+    Array.from({ length: Math.min(3, coreAssets.length) }, () => coreWorker())
+  );
 }
 
 async function ensureArenaSkillRuntimeTexturesNow(

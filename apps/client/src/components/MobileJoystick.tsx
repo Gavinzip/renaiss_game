@@ -1,5 +1,9 @@
 import type { CSSProperties, PointerEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type {
+  MobileArenaControlId,
+  MobileArenaControlPosition
+} from "../state/mobileArenaControlLayout";
 
 export interface MobileMoveVector {
   x: number;
@@ -11,6 +15,12 @@ interface MobileJoystickProps {
   disabled?: boolean;
   onEngage?: () => void;
   onMove: (move: MobileMoveVector) => void;
+  controlId?: MobileArenaControlId;
+  customPosition?: MobileArenaControlPosition;
+  editMode?: boolean;
+  onEditPointerDown?: (event: PointerEvent<HTMLElement>) => void;
+  onEditPointerMove?: (event: PointerEvent<HTMLElement>) => void;
+  onEditPointerUp?: (event: PointerEvent<HTMLElement>) => void;
 }
 
 const ZERO_MOVE: MobileMoveVector = { x: 0, y: 0 };
@@ -25,7 +35,18 @@ function tryPointerCapture(target: HTMLElement, pointerId: number) {
   }
 }
 
-export function MobileJoystick({ ariaLabel, disabled = false, onEngage, onMove }: MobileJoystickProps) {
+export function MobileJoystick({
+  ariaLabel,
+  disabled = false,
+  onEngage,
+  onMove,
+  controlId,
+  customPosition,
+  editMode = false,
+  onEditPointerDown,
+  onEditPointerMove,
+  onEditPointerUp
+}: MobileJoystickProps) {
   const activePointerId = useRef<number | null>(null);
   const onEngageRef = useRef(onEngage);
   const onMoveRef = useRef(onMove);
@@ -74,6 +95,10 @@ export function MobileJoystick({ ariaLabel, disabled = false, onEngage, onMove }
   };
 
   const press = (event: PointerEvent<HTMLDivElement>) => {
+    if (editMode) {
+      onEditPointerDown?.(event);
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     if (disabled) return;
@@ -84,6 +109,10 @@ export function MobileJoystick({ ariaLabel, disabled = false, onEngage, onMove }
   };
 
   const move = (event: PointerEvent<HTMLDivElement>) => {
+    if (editMode) {
+      onEditPointerMove?.(event);
+      return;
+    }
     if (activePointerId.current !== event.pointerId || disabled) return;
     event.preventDefault();
     event.stopPropagation();
@@ -91,6 +120,10 @@ export function MobileJoystick({ ariaLabel, disabled = false, onEngage, onMove }
   };
 
   const release = (event: PointerEvent<HTMLDivElement>) => {
+    if (editMode) {
+      onEditPointerUp?.(event);
+      return;
+    }
     if (activePointerId.current !== event.pointerId) return;
     event.preventDefault();
     event.stopPropagation();
@@ -99,10 +132,16 @@ export function MobileJoystick({ ariaLabel, disabled = false, onEngage, onMove }
 
   return (
     <div
-      className="mobile-joystick-zone"
+      className={editMode ? "mobile-joystick-zone is-layout-editing" : "mobile-joystick-zone"}
       role="group"
       aria-label={ariaLabel}
       data-mobile-joystick="true"
+      data-mobile-control-id={controlId}
+      data-mobile-control-position={customPosition ? "custom" : "default"}
+      style={customPosition ? ({
+        "--mobile-control-x": `${customPosition.x * 100}vw`,
+        "--mobile-control-y": `${customPosition.y * 100}dvh`
+      } as CSSProperties) : undefined}
       onPointerDown={press}
       onPointerMove={move}
       onPointerUp={release}

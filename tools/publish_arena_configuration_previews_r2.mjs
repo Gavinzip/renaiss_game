@@ -24,7 +24,10 @@ const BASE_URL = trimTrailingSlash(
     "https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game"
 );
 const CACHE_CONTROL = "public, max-age=31536000, immutable";
-const EXPECTED_VIDEO_COUNT = 59;
+// 59 selectable-skill WebMs plus the Engineer core's two mutually exclusive
+// turret deployment previews.  The core videos used to be omitted here,
+// which left valid local files returning 404 from the production CDN.
+const EXPECTED_VIDEO_COUNT = 61;
 const EXPECTED_IMAGE_COUNT = 1;
 const DEFAULT_WORKERS = 4;
 
@@ -183,6 +186,34 @@ async function loadAssets(includeWebRuntime) {
     });
   }
 
+  for (const core of manifest.coreEntries || []) {
+    for (const [variant, preview] of Object.entries(
+      core.configurationPreviews || {}
+    )) {
+      const mediaType = preview.mediaType;
+      if (
+        !preview.file ||
+        !preview.sha256 ||
+        !MEDIA_TYPES.has(mediaType) ||
+        preview.fallbackUsed !== false
+      ) {
+        throw new Error(
+          `${core.skillId}:${variant}: core preview contract is incomplete`
+        );
+      }
+      await addAsset(assetsByPath, {
+        id: `${core.skillId}:${variant}`,
+        skillId: core.skillId,
+        classId: core.classId,
+        name: `${core.name} ${variant}`,
+        role: "core-preview",
+        urlPath: preview.file,
+        expectedSha256: preview.sha256,
+        mediaType: MEDIA_TYPES.get(mediaType)
+      });
+    }
+  }
+
   let assets = [...assetsByPath.values()];
   const videoCount = assets.filter((asset) => asset.mediaType === "video/webm").length;
   const imageCount = assets.filter((asset) => asset.mediaType === "image/webp").length;
@@ -192,7 +223,7 @@ async function loadAssets(includeWebRuntime) {
     imageCount !== EXPECTED_IMAGE_COUNT
   ) {
     throw new Error(
-      `Expected 59 WebM plus one WebP, found ${videoCount} WebM plus ${imageCount} WebP`
+      `Expected 61 WebM plus one WebP, found ${videoCount} WebM plus ${imageCount} WebP`
     );
   }
 

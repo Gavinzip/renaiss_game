@@ -533,3 +533,35 @@
     min-height: 31px;
   }
 }
+
+/* Phone readability floor. The pixel font loses whole strokes below 7px on
+ * high-DPR iOS screens, so secondary copy starts at 7px and actionable copy
+ * starts at 8px without enlarging the surrounding panels. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1100px) {
+  .arena-skill-loadout-header p,
+  .arena-loadout-class-rail button small,
+  .arena-skill-animation-preview figcaption,
+  .arena-skill-facts dt,
+  .arena-selected-skill-strip small,
+  .arena-loadout-core-skill span,
+  .arena-loadout-core-skill small,
+  .arena-skill-icon-group > header small {
+    font-size: 7px;
+  }
+
+  .arena-loadout-back-button,
+  .arena-loadout-class-rail button strong,
+  .arena-skill-preview-copy > span,
+  .arena-skill-preview-copy > p,
+  .arena-skill-facts dd,
+  .arena-skill-icon-picker > header span,
+  .arena-selected-skill-strip strong,
+  .arena-core-turret-choice button,
+  .arena-loadout-core-skill strong,
+  .arena-skill-icon-group > header strong,
+  .arena-skill-icon-group button > strong,
+  .arena-skill-loadout-footer > div > strong,
+  .arena-skill-loadout-footer > button {
+    font-size: 8px;
+  }
+}

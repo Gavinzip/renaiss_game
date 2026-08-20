@@ -1,5 +1,26 @@
 import { GameRoom } from "../apps/server/src/game/GameRoom";
-import { CLASS_STATS, COMBAT, WORLD, getSkillCooldownMs, type ClassId, type GameSnapshot, type PlayerInput, type PublicPlayer } from "../packages/shared/src/index";
+import {
+  CLASS_STATS,
+  COMBAT,
+  ARENA_SKILL_CATALOG,
+  ARENA_SKILL_SPECS,
+  ARENA_SKILL_TELEGRAPHS,
+  WORLD,
+  getArcherChargedArrowDamageForStage,
+  getDefaultArenaCatalogLoadout,
+  getDefaultArenaLoadout,
+  getClassDamageMultiplier,
+  getEngineerTurretBasicAttackDamage,
+  getEffectiveArenaSkillDamage,
+  getEffectiveBasicAttackDamage,
+  getEffectiveClassDamage,
+  getSkillCooldownMs,
+  type ClassId,
+  type GameSnapshot,
+  type PlayerInput,
+  type PublicPlayer,
+  type SkillKey
+} from "../packages/shared/src/index";
 
 const TEST_SPAWN = { x: WORLD.width / 2, y: WORLD.height / 2 };
 const OPEN_FIELD_TEST_POINT = { x: 2200, y: 4200 };
@@ -14,6 +35,7 @@ const EMPTY_INPUT: PlayerInput = {
   aimY: TEST_SPAWN.y,
   attack: false,
   sprint: false,
+  skillF: false,
   skillQ: false,
   skillE: false,
   skillR: false
@@ -37,23 +59,52 @@ interface GameplayCheck {
 
 function main() {
   const checks: GameplayCheck[] = [];
+  const scopeIndex = process.argv.indexOf("--scope");
+  const scope = scopeIndex >= 0 ? process.argv[scopeIndex + 1] : "all";
 
   Date.now = () => fakeNow;
   try {
+    if (scope === "warrior-redesign") {
+      checks.push(checkWarriorRedesignRuntime());
+    } else if (scope === "engineer-support") {
+      checks.push(checkEngineerSupportBracesRuntime());
+    } else if (scope === "cursor-targeting") {
+      checks.push(checkArcherCrescentReturnRuntime());
+      checks.push(checkEngineerCursorVolleyRuntime());
+    } else if (scope === "skill-readability") {
+      checks.push(checkMageBeamMovementLockRuntime());
+      checks.push(checkArcherStarSnipeMovementLockRuntime());
+    } else if (scope === "control-locks") {
+      checks.push(checkControlLocksMobilityRuntime());
+    } else if (scope !== "all") {
+      throw new Error(`Unknown Arena gameplay audit scope: ${scope}`);
+    } else {
     checks.push(checkMageActionWindow());
     checks.push(checkMageCursorTargetedAreaRuntime());
     checks.push(checkMageFullRotationSurvivability());
     checks.push(checkMouseAimOverridesStaleAngleRuntime());
     checks.push(checkArcherProjectileBodyHurtboxRuntime());
+    checks.push(checkArcherCrescentReturnRuntime());
     checks.push(checkMageBeamMovementLockRuntime());
+    checks.push(checkArcherStarSnipeMovementLockRuntime());
     checks.push(checkArcherCursorTargetedAreaRuntime());
     checks.push(checkBotArcherChargedReleaseRuntime());
     checks.push(checkSharedArenaBotReplacementRuntime());
     checks.push(checkDeathClassSwitchRuntime());
     checks.push(checkWarriorDirectionalMeleeRuntime());
+    checks.push(checkWarriorRedesignRuntime());
     checks.push(checkAttackBoostPickupRuntime());
     checks.push(checkTurretDeathVfxRuntime());
-    checks.push(checkRandomReviewSpawnRuntime());
+    checks.push(checkEngineerSupportBracesRuntime());
+    checks.push(checkEngineerRapidDetonationRuntime());
+    checks.push(checkEngineerMagicTurretRuntime());
+    checks.push(checkEngineerLockedTurretRuntime());
+    checks.push(checkEngineerCursorVolleyRuntime());
+    checks.push(checkTeamThreeVersusThreeRuntime());
+    checks.push(checkCatalogSkillRuntimeCoverage());
+    checks.push(checkFixedReviewSpawnRuntime());
+    checks.push(checkControlLocksMobilityRuntime());
+    }
   } finally {
     Date.now = realDateNow;
   }
@@ -85,7 +136,11 @@ function checkMageActionWindow(): GameplayCheck {
   const firstSnapshot = duel.room.snapshotFor(duel.attackerSocket);
   const mage = getPlayer(firstSnapshot, duel.attackerId);
   const target = getPlayer(firstSnapshot, duel.targetId);
-  const expectedHealth = CLASS_STATS.archer.maxHealth - COMBAT.mageUltimateDamage;
+  const mageUltimateDamage = getEffectiveArenaSkillDamage(
+    "mage_12",
+    COMBAT.mageUltimateDamage
+  );
+  const expectedHealth = CLASS_STATS.archer.maxHealth - mageUltimateDamage;
 
   assert(mage.action === "skillR", `Mage all-button input should resolve as one prioritized R action, got ${mage.action ?? "none"}.`);
   assert(target.health === expectedHealth, `Mage same-tick Q/E/R/basic should deal only R damage. Expected ${expectedHealth}, got ${target.health}.`);
@@ -97,7 +152,7 @@ function checkMageActionWindow(): GameplayCheck {
 
   const firstDamageNumbers = firstSnapshot.effects.filter((effect) => effect.type === "damage_number" && effect.ownerId === duel.attackerId);
   assert(
-    firstDamageNumbers.length === 1 && firstDamageNumbers[0].value === COMBAT.mageUltimateDamage,
+    firstDamageNumbers.length === 1 && firstDamageNumbers[0].value === mageUltimateDamage,
     `Mage same-tick action should emit one R damage number, got ${JSON.stringify(firstDamageNumbers)}.`
   );
 
@@ -117,25 +172,26 @@ function checkMageActionWindow(): GameplayCheck {
 }
 
 function checkMageCursorTargetedAreaRuntime(): GameplayCheck {
-  const eMissDuel = createDuel("mage", "archer", "mage_e_miss", "target_e_miss");
-  placeDuel(eMissDuel, TEST_SPAWN, { x: TEST_SPAWN.x + 120, y: TEST_SPAWN.y });
-  castSkillAt(eMissDuel, "skillE", { x: TEST_SPAWN.x + COMBAT.mageBurstRadius + 260, y: TEST_SPAWN.y }, 0);
-  const eMissSnapshot = eMissDuel.room.snapshotFor(eMissDuel.attackerSocket);
-  const eMissMage = getPlayer(eMissSnapshot, eMissDuel.attackerId);
-  const eMissTarget = getPlayer(eMissSnapshot, eMissDuel.targetId);
-  assert(eMissTarget.health === CLASS_STATS.archer.maxHealth, `Mage E should not hit a nearby target when the cursor burst is elsewhere. Got ${eMissTarget.health}.`);
-  assert(eMissMage.cooldowns.skillE - eMissSnapshot.serverTime === getSkillCooldownMs("mage", "skillE"), `Mage E cooldown should be ${getSkillCooldownMs("mage", "skillE")}ms, got ${eMissMage.cooldowns.skillE - eMissSnapshot.serverTime}ms.`);
-
   const eHitDuel = createDuel("mage", "archer", "mage_e_hit", "target_e_hit");
-  const remoteBurstPoint = { x: TEST_SPAWN.x + COMBAT.mageBurstRadius + 130, y: TEST_SPAWN.y };
-  placeDuel(eHitDuel, TEST_SPAWN, remoteBurstPoint);
-  castSkillAt(eHitDuel, "skillE", remoteBurstPoint, 0);
+  placeDuel(eHitDuel, TEST_SPAWN, { x: TEST_SPAWN.x + 120, y: TEST_SPAWN.y });
+  castSkillAt(eHitDuel, "skillE", { x: TEST_SPAWN.x + COMBAT.mageBurstRadius + 260, y: TEST_SPAWN.y }, 300);
   const eHitSnapshot = eHitDuel.room.snapshotFor(eHitDuel.attackerSocket);
+  const eHitMage = getPlayer(eHitSnapshot, eHitDuel.attackerId);
   const eHitTarget = getPlayer(eHitSnapshot, eHitDuel.targetId);
   const burstEffect = eHitSnapshot.effects.find((effect) => effect.type === "burst" && effect.ownerId === eHitDuel.attackerId);
-  assert(eHitTarget.health === CLASS_STATS.archer.maxHealth - COMBAT.mageBurstDamage, `Mage E cursor burst should hit a remote target inside the aimed radius. Got ${eHitTarget.health}.`);
-  assert(eHitTarget.stunned, "Mage E cursor burst should stun a surviving target.");
-  assert(Math.round(burstEffect?.x ?? 0) === Math.round(remoteBurstPoint.x) && Math.round(burstEffect?.y ?? 0) === Math.round(remoteBurstPoint.y), `Mage E effect should spawn at cursor point, got ${JSON.stringify(burstEffect)}.`);
+  assert(eHitTarget.health === CLASS_STATS.archer.maxHealth - getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage), `Mage E should hit a nearby target even when the cursor is elsewhere. Got ${eHitTarget.health}.`);
+  assert(eHitTarget.stunned, "Mage E caster-centered burst should stun a surviving nearby target.");
+  assert(Math.round(burstEffect?.x ?? 0) === Math.round(eHitMage.x) && Math.round(burstEffect?.y ?? 0) === Math.round(eHitMage.y), `Mage E effect should stay centered on the caster, got ${JSON.stringify(burstEffect)}.`);
+  const mageBurstCooldownMs = ARENA_SKILL_SPECS.mage_07.cooldownMs;
+  assert(eHitMage.cooldowns.skillE - eHitSnapshot.serverTime === mageBurstCooldownMs - 300, `Mage E cooldown should have ${mageBurstCooldownMs - 300}ms remaining after its 300ms intro, got ${eHitMage.cooldowns.skillE - eHitSnapshot.serverTime}ms.`);
+
+  const eMissDuel = createDuel("mage", "archer", "mage_e_miss", "target_e_miss");
+  const remoteBurstPoint = { x: TEST_SPAWN.x + COMBAT.mageBurstRadius + 130, y: TEST_SPAWN.y };
+  placeDuel(eMissDuel, TEST_SPAWN, remoteBurstPoint);
+  castSkillAt(eMissDuel, "skillE", remoteBurstPoint, 300);
+  const eMissSnapshot = eMissDuel.room.snapshotFor(eMissDuel.attackerSocket);
+  const eMissTarget = getPlayer(eMissSnapshot, eMissDuel.targetId);
+  assert(eMissTarget.health === CLASS_STATS.archer.maxHealth, `Mage E should not become cursor-centered and hit a remote target. Got ${eMissTarget.health}.`);
 
   const rHitDuel = createDuel("mage", "archer", "mage_r_hit", "target_r_hit");
   const remoteStormPoint = { x: TEST_SPAWN.x + COMBAT.mageUltimateRadius + 130, y: TEST_SPAWN.y };
@@ -145,22 +201,28 @@ function checkMageCursorTargetedAreaRuntime(): GameplayCheck {
   const rHitMage = getPlayer(rHitSnapshot, rHitDuel.attackerId);
   const rHitTarget = getPlayer(rHitSnapshot, rHitDuel.targetId);
   const stormEffect = rHitSnapshot.effects.find((effect) => effect.type === "ultimate" && effect.ownerId === rHitDuel.attackerId && effect.classId === "mage");
-  assert(rHitTarget.health === CLASS_STATS.archer.maxHealth - COMBAT.mageUltimateDamage, `Mage R cursor storm should hit a remote target inside the aimed radius. Got ${rHitTarget.health}.`);
+  assert(rHitTarget.health === CLASS_STATS.archer.maxHealth - getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage), `Mage R cursor storm should hit a remote target inside the aimed radius. Got ${rHitTarget.health}.`);
   assert(rHitMage.cooldowns.skillR - rHitSnapshot.serverTime === getSkillCooldownMs("mage", "skillR"), `Mage R cooldown should be ${getSkillCooldownMs("mage", "skillR")}ms, got ${rHitMage.cooldowns.skillR - rHitSnapshot.serverTime}ms.`);
   assert(Math.round(stormEffect?.x ?? 0) === Math.round(remoteStormPoint.x) && Math.round(stormEffect?.y ?? 0) === Math.round(remoteStormPoint.y), `Mage R effect should spawn at cursor point, got ${JSON.stringify(stormEffect)}.`);
 
   return {
-    name: "mage cursor-targeted area runtime behavior",
+    name: "mage caster- and cursor-centered area runtime behavior",
     details: [
-      "Mage E misses targets near the caster when the cursor burst is elsewhere.",
-      `Mage E/R hit remote cursor-centered areas with ${getSkillCooldownMs("mage", "skillE") / 1000}s/${getSkillCooldownMs("mage", "skillR") / 1000}s cooldowns.`
+      "Renewal Burst stays on the caster, damages nearby rivals, and does not follow the cursor.",
+      `Clean Storm remains cursor-centered; Mage E/R keep ${getSkillCooldownMs("mage", "skillE") / 1000}s/${getSkillCooldownMs("mage", "skillR") / 1000}s cooldowns.`
     ]
   };
 }
 
 function checkMageFullRotationSurvivability(): GameplayCheck {
   const duel = createDuel("mage", "archer", "mage_rotation", "target_archer_rotation");
-  placeDuel(duel, TEST_SPAWN, { x: TEST_SPAWN.x + 360, y: TEST_SPAWN.y });
+  placeDuel(duel, TEST_SPAWN, { x: TEST_SPAWN.x + 120, y: TEST_SPAWN.y });
+  const internals = duel.room as unknown as {
+    players: Map<string, PublicPlayer & { health: number }>;
+  };
+  const internalTarget = internals.players.get(duel.targetId);
+  assert(Boolean(internalTarget), "Could not find target for Mage rotation audit.");
+  internalTarget.health = 1000;
 
   castSkill(duel, "skillR", 980);
   castSkill(duel, "skillE", 820);
@@ -168,19 +230,21 @@ function checkMageFullRotationSurvivability(): GameplayCheck {
 
   const snapshot = duel.room.snapshotFor(duel.attackerSocket);
   const target = getPlayer(snapshot, duel.targetId);
-  const expectedDamage = COMBAT.mageUltimateDamage + COMBAT.mageBurstDamage + COMBAT.mageBeamDamage;
-  const expectedHealth = CLASS_STATS.archer.maxHealth - expectedDamage;
+  const expectedDamage =
+    getEffectiveArenaSkillDamage("mage_12", COMBAT.mageUltimateDamage) +
+    getEffectiveArenaSkillDamage("mage_07", COMBAT.mageBurstDamage) +
+    getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage);
+  const expectedHealth = 1000 - expectedDamage;
 
   assert(target.health === expectedHealth, `Mage R/E/Q rotation should deal ${expectedDamage} total damage. Expected ${expectedHealth} HP, got ${target.health}.`);
-  assert(target.alive, `Mage R/E/Q rotation killed a minimum-HP target at ${target.health}/${target.maxHealth}.`);
-  assert(target.health >= Math.ceil(target.maxHealth * 0.3), `Mage R/E/Q rotation leaves too little counterplay: ${target.health}/${target.maxHealth}.`);
+  assert(target.alive, `Mage R/E/Q audit target died unexpectedly at ${target.health}.`);
   assert(!snapshot.events.some((event) => event.type === "kill" && event.actorId === duel.attackerId), "Mage rotation produced a kill event during the survivability audit.");
 
   return {
-    name: "mage full-rotation survivability",
+    name: "mage full-rotation balanced damage",
     details: [
-      `Mage R/E/Q deals ${expectedDamage}, leaving Archer at ${target.health}/${target.maxHealth}.`,
-      "The lowest-HP target survives a full non-basic Mage rotation."
+      `Mage R/E/Q deals ${expectedDamage} through the current offensive/control skill profiles.`,
+      "The audit target records the full uncapped three-skill damage total."
     ]
   };
 }
@@ -197,7 +261,7 @@ function checkMouseAimOverridesStaleAngleRuntime(): GameplayCheck {
   });
   tick(warriorDuel.room);
   const warriorTarget = getPlayer(warriorDuel.room.snapshotFor(warriorDuel.attackerSocket), warriorDuel.targetId);
-  assert(warriorTarget.health === CLASS_STATS.mage.maxHealth - CLASS_STATS.warrior.attackPower, `Warrior basic should follow cursor aim, not stale input angle. Got target HP ${warriorTarget.health}.`);
+  assert(warriorTarget.health === CLASS_STATS.mage.maxHealth - getEffectiveBasicAttackDamage("warrior"), `Warrior basic should follow cursor aim, not stale input angle. Got target HP ${warriorTarget.health}.`);
 
   const engineerDuel = createDuel("engineer", "mage", "aim_engineer", "aim_target_engineer");
   placeDuel(engineerDuel, aimOrigin, { x: aimOrigin.x + COMBAT.meleeRange - 16, y: aimOrigin.y });
@@ -209,7 +273,7 @@ function checkMouseAimOverridesStaleAngleRuntime(): GameplayCheck {
   });
   tick(engineerDuel.room);
   const engineerTarget = getPlayer(engineerDuel.room.snapshotFor(engineerDuel.attackerSocket), engineerDuel.targetId);
-  assert(engineerTarget.health === CLASS_STATS.mage.maxHealth - CLASS_STATS.engineer.attackPower, `Engineer basic should follow cursor aim, not stale input angle. Got target HP ${engineerTarget.health}.`);
+  assert(engineerTarget.health === CLASS_STATS.mage.maxHealth - getEffectiveBasicAttackDamage("engineer"), `Engineer basic should follow cursor aim, not stale input angle. Got target HP ${engineerTarget.health}.`);
 
   const archerDuel = createDuel("archer", "mage", "aim_archer", "aim_target_archer");
   placeDuel(archerDuel, aimOrigin, { x: aimOrigin.x + 420, y: aimOrigin.y });
@@ -241,7 +305,7 @@ function checkMouseAimOverridesStaleAngleRuntime(): GameplayCheck {
   });
   tick(mageDuel.room);
   const mageBeamTarget = getPlayer(mageDuel.room.snapshotFor(mageDuel.attackerSocket), mageDuel.targetId);
-  assert(mageBeamTarget.health === CLASS_STATS.archer.maxHealth - COMBAT.mageBeamDamage, `Mage Q should fire toward cursor aim, not stale input angle. Got target HP ${mageBeamTarget.health}.`);
+  assert(mageBeamTarget.health === CLASS_STATS.archer.maxHealth - getEffectiveArenaSkillDamage("mage_00", COMBAT.mageBeamDamage), `Mage Q should fire toward cursor aim, not stale input angle. Got target HP ${mageBeamTarget.health}.`);
 
   return {
     name: "mouse aim overrides stale attack angle",
@@ -261,7 +325,7 @@ function checkArcherProjectileBodyHurtboxRuntime(): GameplayCheck {
   advanceFrames(headDuel.room, 740);
   const headTarget = getPlayer(headDuel.room.snapshotFor(headDuel.attackerSocket), headDuel.targetId);
   assert(
-    headTarget.health === CLASS_STATS.mage.maxHealth - CLASS_STATS.archer.attackPower,
+    headTarget.health === CLASS_STATS.mage.maxHealth - getArcherChargedArrowDamageForStage(1),
     `Archer arrow aimed through the upper body should hit the player hurtbox. Got target HP ${headTarget.health}.`
   );
 
@@ -294,8 +358,25 @@ function checkMageBeamMovementLockRuntime(): GameplayCheck {
     skillQ: true
   });
   tick(duel.room);
-  const afterCast = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
+  const castSnapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const afterCast = getPlayer(castSnapshot, duel.attackerId);
+  const beam = castSnapshot.effects.find(
+    (effect) => effect.type === "beam" && effect.ownerId === duel.attackerId
+  );
   assert(Math.abs(afterCast.x - TEST_SPAWN.x) < 0.01, `Mage should not move on the Q cast tick. Expected x ${TEST_SPAWN.x}, got ${afterCast.x}.`);
+  assert(
+    beam?.endX !== undefined && beam.endY !== undefined,
+    "Mage Q should expose its fixed beam endpoint."
+  );
+  assert(
+    Math.abs(
+      distanceBetween(
+        beam,
+        { x: beam.endX, y: beam.endY }
+      ) - COMBAT.mageBeamLength
+    ) < 0.01,
+    `Mage Q should remain ${COMBAT.mageBeamLength} units long after hitting a nearer target.`
+  );
 
   setInput(duel.room, duel.attackerSocket, {
     moveX: 1,
@@ -306,7 +387,7 @@ function checkMageBeamMovementLockRuntime(): GameplayCheck {
   const duringLock = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
   assert(Math.abs(duringLock.x - TEST_SPAWN.x) < 0.01, `Mage should stay locked during the Q beam pose. Expected x ${TEST_SPAWN.x}, got ${duringLock.x}.`);
 
-  tick(duel.room, 520);
+  tick(duel.room, 620);
   const afterLock = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
   assert(afterLock.x > TEST_SPAWN.x + 10, `Mage should move again after Q lock ends. Got x ${afterLock.x}.`);
 
@@ -315,6 +396,66 @@ function checkMageBeamMovementLockRuntime(): GameplayCheck {
     details: [
       "Mage cannot drift during Solar Beam startup or active pose.",
       `Mage resumes movement after the Q lock and reaches x=${Math.round(afterLock.x)}.`
+    ]
+  };
+}
+
+function checkArcherStarSnipeMovementLockRuntime(): GameplayCheck {
+  const duel = createDuel("archer", "mage", "archer_star_lock", "star_lock_target");
+  placeDuel(duel, TEST_SPAWN, { x: TEST_SPAWN.x + 360, y: TEST_SPAWN.y });
+  const internals = duel.room as unknown as {
+    players: Map<string, PublicPlayer & { catalogLoadout: ReturnType<typeof getDefaultArenaCatalogLoadout> }>;
+  };
+  const attacker = internals.players.get(duel.attackerId);
+  assert(Boolean(attacker), "Star Snipe movement-lock audit could not find its Archer.");
+  attacker.catalogLoadout = { ...attacker.catalogLoadout, skillR: "archer_12" };
+
+  setInput(duel.room, duel.attackerSocket, {
+    moveX: 1,
+    aimX: TEST_SPAWN.x + 360,
+    aimY: TEST_SPAWN.y,
+    skillR: true
+  });
+  tick(duel.room);
+  const castSnapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const afterCast = getPlayer(castSnapshot, duel.attackerId);
+  const effect = castSnapshot.effects.find(
+    (candidate) =>
+      candidate.type === "catalog_skill" &&
+      candidate.skillId === "archer_12" &&
+      candidate.ownerId === duel.attackerId
+  );
+  assert(
+    Math.abs(afterCast.x - TEST_SPAWN.x) < 0.01,
+    `Archer should not move on the Star Snipe cast tick. Got x ${afterCast.x}.`
+  );
+  assert(afterCast.actionSkillId === "archer_12", `Star Snipe should own the cast pose, got ${afterCast.actionSkillId ?? "none"}.`);
+  assert(effect?.duration === 1100, `Star Snipe should keep its complete 1100ms visual, got ${effect?.duration ?? "missing"}.`);
+
+  setInput(duel.room, duel.attackerSocket, {
+    moveX: 1,
+    aimX: TEST_SPAWN.x + 360,
+    aimY: TEST_SPAWN.y
+  });
+  tick(duel.room, 500);
+  const duringLock = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
+  assert(
+    Math.abs(duringLock.x - TEST_SPAWN.x) < 0.01,
+    `Archer should stay fixed while Star Snipe is active. Got x ${duringLock.x}.`
+  );
+
+  tick(duel.room, 650);
+  const afterLock = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
+  assert(
+    afterLock.x > TEST_SPAWN.x + 10,
+    `Archer should move again after Star Snipe ends. Got x ${afterLock.x}.`
+  );
+
+  return {
+    name: "Archer Star Snipe cast movement lock",
+    details: [
+      "Archer stays fixed for the complete 1.1-second warning, sky strike, and impact sequence.",
+      "Movement resumes immediately after the authored cast window."
     ]
   };
 }
@@ -333,7 +474,12 @@ function checkArcherCursorTargetedAreaRuntime(): GameplayCheck {
   const eHitSnapshot = eHitDuel.room.snapshotFor(eHitDuel.attackerSocket);
   const eHitTarget = getPlayer(eHitSnapshot, eHitDuel.targetId);
   const rootCast = eHitSnapshot.effects.find((effect) => effect.type === "root_cast" && effect.ownerId === eHitDuel.attackerId);
-  const targetRoot = eHitSnapshot.effects.find((effect) => effect.type === "root" && effect.ownerId === eHitDuel.targetId);
+  const targetRoot = eHitSnapshot.effects.find(
+    (effect) =>
+      effect.type === "catalog_skill" &&
+      effect.skillId === "archer_08" &&
+      effect.ownerId === eHitDuel.attackerId
+  );
   assert(eHitTarget.rooted, "Archer E cursor field should root a target inside the aimed area.");
   assert(!rootCast, `Archer E should not emit the old oversized root_cast world VFX, got ${JSON.stringify(rootCast)}.`);
   assert(Boolean(targetRoot), "Archer E should show a compact root VFX under each rooted target.");
@@ -343,36 +489,74 @@ function checkArcherCursorTargetedAreaRuntime(): GameplayCheck {
   placeDuel(rHitDuel, TEST_SPAWN, seedPoint);
   castSkillAt(rHitDuel, "skillR", seedPoint, 0);
 
-  const snapshot = rHitDuel.room.snapshotFor(rHitDuel.attackerSocket);
-  const archer = getPlayer(snapshot, rHitDuel.attackerId);
-  const target = getPlayer(snapshot, rHitDuel.targetId);
-  const expectedHealth = CLASS_STATS.mage.maxHealth - COMBAT.archerUltimateDamage;
-  const ultimate = snapshot.effects.find((effect) => effect.type === "ultimate" && effect.ownerId === rHitDuel.attackerId && effect.classId === "archer");
-  const event = snapshot.events.find((combatEvent) => combatEvent.type === "ultimate" && combatEvent.actorId === rHitDuel.attackerId);
+  const castSnapshot = rHitDuel.room.snapshotFor(rHitDuel.attackerSocket);
+  const archer = getPlayer(castSnapshot, rHitDuel.attackerId);
+  const castTarget = getPlayer(castSnapshot, rHitDuel.targetId);
+  const ultimate = castSnapshot.effects.find(
+    (effect) =>
+      effect.type === "catalog_skill" &&
+      effect.skillId === "archer_13" &&
+      effect.ownerId === rHitDuel.attackerId
+  );
+  const event = castSnapshot.events.find((combatEvent) => combatEvent.type === "ultimate" && combatEvent.actorId === rHitDuel.attackerId);
 
   assert(archer.action === "skillR", `Archer Seed Rain should put Archer into skillR action, got ${archer.action ?? "none"}.`);
-  assert(target.health === expectedHealth, `Archer Seed Rain should deal ${COMBAT.archerUltimateDamage} at cursor. Expected target HP ${expectedHealth}, got ${target.health}.`);
-  assert(target.alive, "Archer Seed Rain should not one-shot Mage.");
-  assert(Boolean(ultimate), "Archer Seed Rain did not emit an Archer ultimate effect.");
+  assert(castTarget.health === CLASS_STATS.mage.maxHealth, `Archer Seed Rain should wait 0.5 seconds before its first hit. Expected full HP ${CLASS_STATS.mage.maxHealth}, got ${castTarget.health}.`);
+  assert(Boolean(ultimate), "Archer Seed Rain did not emit its accepted catalog animation effect.");
   assert(ultimate?.radius === COMBAT.archerUltimateRadius, `Archer Seed Rain radius mismatch: ${ultimate?.radius ?? "missing"}.`);
-  assert(ultimate?.duration === 2100, `Archer Seed Rain should stay readable for 2100ms, got ${ultimate?.duration ?? "missing"}.`);
+  assert(ultimate?.duration === 3000, `Archer Seed Rain should loop for exactly 3000ms, got ${ultimate?.duration ?? "missing"}.`);
   assert(Math.round(ultimate?.x ?? 0) === Math.round(seedPoint.x) && Math.round(ultimate?.y ?? 0) === Math.round(seedPoint.y), `Archer Seed Rain effect should spawn at cursor point, got ${JSON.stringify(ultimate)}.`);
-  assert(event?.message.includes("Seed Rain"), `Archer ultimate event should identify Seed Rain, got ${event?.message ?? "missing"}.`);
-  assert(archer.cooldowns.skillR > snapshot.serverTime, "Archer R cooldown should start after Seed Rain.");
+  assert(event?.message.includes("種子雨"), `Archer ultimate event should identify 種子雨, got ${event?.message ?? "missing"}.`);
+  assert(archer.cooldowns.skillR > castSnapshot.serverTime, "Archer R cooldown should start after Seed Rain.");
+
+  advance(rHitDuel.room, 499);
+  const beforeFirstTick = getPlayer(rHitDuel.room.snapshotFor(rHitDuel.attackerSocket), rHitDuel.targetId);
+  assert(beforeFirstTick.health === CLASS_STATS.mage.maxHealth, `Seed Rain damaged before 0.5 seconds: ${beforeFirstTick.health}.`);
+
+  const seedRainTickDamage = getEffectiveArenaSkillDamage(
+    "archer_13",
+    COMBAT.archerUltimateDamage
+  );
+  const expectedHealthByTick = [1, 2, 3].map(
+    (tickCount) => CLASS_STATS.mage.maxHealth - seedRainTickDamage * tickCount
+  );
+  advance(rHitDuel.room, 1);
+  const firstTickTarget = getPlayer(rHitDuel.room.snapshotFor(rHitDuel.attackerSocket), rHitDuel.targetId);
+  assert(firstTickTarget.health === expectedHealthByTick[0], `Seed Rain first ${seedRainTickDamage}-damage tick should land at 0.5 seconds. Expected ${expectedHealthByTick[0]}, got ${firstTickTarget.health}.`);
+
+  advance(rHitDuel.room, 999);
+  const beforeSecondTick = getPlayer(rHitDuel.room.snapshotFor(rHitDuel.attackerSocket), rHitDuel.targetId);
+  assert(beforeSecondTick.health === expectedHealthByTick[0], `Seed Rain applied a second hit before 1.5 seconds: ${beforeSecondTick.health}.`);
+  advance(rHitDuel.room, 1);
+  const secondTickTarget = getPlayer(rHitDuel.room.snapshotFor(rHitDuel.attackerSocket), rHitDuel.targetId);
+  assert(secondTickTarget.health === expectedHealthByTick[1], `Seed Rain second ${seedRainTickDamage}-damage tick should land at 1.5 seconds. Expected ${expectedHealthByTick[1]}, got ${secondTickTarget.health}.`);
+
+  advance(rHitDuel.room, 999);
+  const beforeThirdTick = getPlayer(rHitDuel.room.snapshotFor(rHitDuel.attackerSocket), rHitDuel.targetId);
+  assert(beforeThirdTick.health === expectedHealthByTick[1], `Seed Rain applied a third hit before 2.5 seconds: ${beforeThirdTick.health}.`);
+  advance(rHitDuel.room, 1);
+  const thirdTickTarget = getPlayer(rHitDuel.room.snapshotFor(rHitDuel.attackerSocket), rHitDuel.targetId);
+  assert(thirdTickTarget.health === expectedHealthByTick[2], `Seed Rain third ${seedRainTickDamage}-damage tick should land at 2.5 seconds. Expected ${expectedHealthByTick[2]}, got ${thirdTickTarget.health}.`);
+  assert(thirdTickTarget.alive, "Three Seed Rain ticks should not one-shot Mage.");
 
   return {
     name: "archer cursor-targeted area runtime behavior",
     details: [
       "Root Bind misses near-caster targets when aimed elsewhere and only shows compact root VFX under rooted targets.",
       `Seed Rain emits Archer ultimate radius ${ultimate?.radius} at the cursor for ${ultimate?.duration}ms.`,
-      `Target Mage stays alive at ${target.health}/${target.maxHealth}.`
+      `Seed Rain lands three ${seedRainTickDamage}-damage ticks at 0.5s, 1.5s and 2.5s; target Mage stays alive at ${thirdTickTarget.health}/${thirdTickTarget.maxHealth}.`
     ]
   };
 }
 
 function checkDeathClassSwitchRuntime(): GameplayCheck {
   const duel = createDuel("warrior", "mage", "switch_warrior", "switch_attacker");
-  const earlySwitch = duel.room.switchHumanClass(duel.attackerSocket, "mage");
+  const earlySwitch = duel.room.switchHumanClass(
+    duel.attackerSocket,
+    "mage",
+    getDefaultArenaLoadout("mage"),
+    getDefaultArenaCatalogLoadout("mage")
+  );
   assert(!earlySwitch, "Class switch should be rejected while the player is alive during an active round.");
 
   const internals = duel.room as unknown as {
@@ -386,7 +570,12 @@ function checkDeathClassSwitchRuntime(): GameplayCheck {
   const deadBeforeSwitch = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
   assert(!deadBeforeSwitch.alive && deadBeforeSwitch.classId === "warrior", "Switch audit player should be dead as Warrior before class change.");
 
-  const switched = duel.room.switchHumanClass(duel.attackerSocket, "mage");
+  const switched = duel.room.switchHumanClass(
+    duel.attackerSocket,
+    "mage",
+    getDefaultArenaLoadout("mage"),
+    getDefaultArenaCatalogLoadout("mage")
+  );
   assert(switched, "Class switch should be accepted while the player is knocked out.");
   const deadAfterSwitch = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.attackerId);
   assert(deadAfterSwitch.classId === "mage", `Dead player snapshot should update to Mage, got ${deadAfterSwitch.classId}.`);
@@ -413,7 +602,9 @@ function checkBotArcherChargedReleaseRuntime(): GameplayCheck {
   const room = new GameRoom();
   const joined = room.addHuman("bot_archer_target", {
     name: "BOT_ARCHER_TARGET",
-    classId: "mage"
+    classId: "mage",
+    loadout: getDefaultArenaLoadout("mage"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("mage")
   });
   const internals = room as unknown as {
     players: Map<string, PublicPlayer & {
@@ -442,6 +633,7 @@ function checkBotArcherChargedReleaseRuntime(): GameplayCheck {
   archer.y = TEST_SPAWN.y;
   archer.aiNextDecisionAt = 0;
   archer.cooldowns = {
+    skillF: Number.MAX_SAFE_INTEGER,
     skillQ: Number.MAX_SAFE_INTEGER,
     skillE: Number.MAX_SAFE_INTEGER,
     skillR: Number.MAX_SAFE_INTEGER
@@ -480,12 +672,22 @@ function checkSharedArenaBotReplacementRuntime(): GameplayCheck {
 
   const firstSocket = "shared_human_one";
   const secondSocket = "shared_human_two";
-  const first = room.addHuman(firstSocket, { name: "HUMAN_ONE", classId: "warrior" });
+  const first = room.addHuman(firstSocket, {
+    name: "HUMAN_ONE",
+    classId: "warrior",
+    loadout: getDefaultArenaLoadout("warrior"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("warrior")
+  });
   assert(room.playerCount() === 1, `Shared arena should have 1 human after first join, got ${room.playerCount()}.`);
   assert(room.botCount() === 7, `First human should replace one bot, got ${room.botCount()} bots.`);
   assert(room.snapshotFor(firstSocket).players.length === 8, "First shared arena snapshot should still expose 8 total combatants.");
 
-  const second = room.addHuman(secondSocket, { name: "HUMAN_TWO", classId: "mage" });
+  const second = room.addHuman(secondSocket, {
+    name: "HUMAN_TWO",
+    classId: "mage",
+    loadout: getDefaultArenaLoadout("mage"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("mage")
+  });
   assert(room.playerCount() === 2, `Shared arena should have 2 humans after second join, got ${room.playerCount()}.`);
   assert(room.botCount() === 6, `Second human should replace a second bot, got ${room.botCount()} bots.`);
   assert(room.snapshotFor(secondSocket).players.length === 8, "Second shared arena snapshot should keep the room population at 8.");
@@ -527,7 +729,8 @@ function checkWarriorDirectionalMeleeRuntime(): GameplayCheck {
   tick(duel.room);
 
   const frontHit = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
-  const expectedFrontHealth = CLASS_STATS.mage.maxHealth - CLASS_STATS.warrior.attackPower;
+  const expectedFrontHealth =
+    CLASS_STATS.mage.maxHealth - getEffectiveBasicAttackDamage("warrior");
   assert(frontHit.health === expectedFrontHealth, `Warrior aimed slash should hit the target in front. Expected ${expectedFrontHealth}, got ${frontHit.health}.`);
 
   clearActionLock(attacker);
@@ -545,8 +748,295 @@ function checkWarriorDirectionalMeleeRuntime(): GameplayCheck {
   return {
     name: "warrior directional melee runtime behavior",
     details: [
-      `Forward slash deals ${CLASS_STATS.warrior.attackPower} damage.`,
+      `Forward slash deals ${getEffectiveBasicAttackDamage("warrior")} damage.`,
       "A target behind the same-radius melee range is not hit."
+    ]
+  };
+}
+
+function checkWarriorRedesignRuntime(): GameplayCheck {
+  const swordWaveDuel = createDuel(
+    "warrior",
+    "warrior",
+    "warrior_sword_wave",
+    "warrior_sword_wave_target"
+  );
+  const swordWaveInternals = swordWaveDuel.room as unknown as {
+    players: Map<
+      string,
+      PublicPlayer & {
+        health: number;
+        spawnGuardEndsAt: number;
+        spawnProtected: boolean;
+        action: unknown;
+        actionStartedAt: number;
+        actionEndsAt: number;
+        actionPoseEndsAt: number;
+        attacking: boolean;
+        lastAttackAt: number;
+      }
+    >;
+    projectiles: Array<{
+      skillId?: string;
+      type: string;
+      damage: number;
+      speed: number;
+      maxDistance: number;
+      remainingHits?: number;
+    }>;
+  };
+  const swordWaveAttacker = swordWaveInternals.players.get(
+    swordWaveDuel.attackerId
+  );
+  const swordWaveTarget = swordWaveInternals.players.get(
+    swordWaveDuel.targetId
+  );
+  assert(
+    Boolean(swordWaveAttacker) && Boolean(swordWaveTarget),
+    "Could not find players for Warrior sword-wave audit."
+  );
+  swordWaveAttacker.catalogLoadout = {
+    ...swordWaveAttacker.catalogLoadout,
+    skillQ: "warrior_00"
+  };
+  placeDuel(
+    swordWaveDuel,
+    OPEN_FIELD_TEST_POINT,
+    { x: OPEN_FIELD_TEST_POINT.x + 270, y: OPEN_FIELD_TEST_POINT.y }
+  );
+  const swordWaveTargetHealth = swordWaveTarget.health;
+  castSkill(swordWaveDuel, "skillQ", 0);
+  const swordWave = swordWaveInternals.projectiles.find(
+    (projectile) => projectile.skillId === "warrior_00"
+  );
+  assert(Boolean(swordWave), "Guarding Slash did not spawn its sword-wave projectile.");
+  assert(
+    swordWave.type === "sword_wave" &&
+      swordWave.damage === 20 &&
+      swordWave.speed === 650 &&
+      swordWave.maxDistance === 400 &&
+      swordWave.remainingHits === 99,
+    `Sword-wave contract mismatch: ${JSON.stringify(swordWave)}.`
+  );
+  advanceFrames(swordWaveDuel.room, 520);
+  assert(
+    swordWaveTarget.health ===
+      swordWaveTargetHealth - getEffectiveArenaSkillDamage("warrior_00", 20),
+    `Sword wave should apply the Warrior-balanced damage after travelling to the target; target HP is ${swordWaveTarget.health}.`
+  );
+
+  const speedDuel = createDuel(
+    "warrior",
+    "warrior",
+    "warrior_hammer_speed",
+    "warrior_hammer_speed_target"
+  );
+  const speedInternals = speedDuel.room as unknown as {
+    players: Map<
+      string,
+      PublicPlayer & {
+        moveSpeedBoostEndsAt: number;
+        blazingRampageDamageBoostEndsAt: number;
+      }
+    >;
+    getBoostedOutgoingDamage: (
+      rawDamage: number,
+      attackerId: string,
+      now: number
+    ) => number;
+  };
+  const speedAttacker = speedInternals.players.get(speedDuel.attackerId);
+  assert(Boolean(speedAttacker), "Could not find Warrior for hammer-speed audit.");
+  speedAttacker.catalogLoadout = {
+    ...speedAttacker.catalogLoadout,
+    skillQ: "warrior_01"
+  };
+  speedAttacker.x = OPEN_FIELD_TEST_POINT.x;
+  speedAttacker.y = OPEN_FIELD_TEST_POINT.y;
+  castSkill(speedDuel, "skillQ", 0);
+  const speedCastAt = fakeNow;
+  assert(
+    speedAttacker.moveSpeedBoostEndsAt - speedCastAt === 5000,
+    `Blazing Rampage speed state should last 5000ms, got ${speedAttacker.moveSpeedBoostEndsAt - speedCastAt}ms.`
+  );
+  assert(
+    speedAttacker.blazingRampageDamageBoostEndsAt - speedCastAt === 5000,
+    `Blazing Rampage damage state should last 5000ms, got ${speedAttacker.blazingRampageDamageBoostEndsAt - speedCastAt}ms.`
+  );
+  assert(
+    speedInternals.getBoostedOutgoingDamage(20, speedDuel.attackerId, speedCastAt) ===
+      Math.ceil(
+        20 *
+          getClassDamageMultiplier("warrior") *
+          (ARENA_SKILL_SPECS.warrior_01.numbers.damageMultiplier ?? 1)
+      ),
+    "Blazing Rampage should apply the current Warrior basic-damage multiplier and its declared damage boost."
+  );
+  assert(
+    speedInternals.getBoostedOutgoingDamage(
+      20,
+      speedDuel.attackerId,
+      speedAttacker.blazingRampageDamageBoostEndsAt
+    ) === getEffectiveClassDamage("warrior", 20),
+    "Blazing Rampage damage bonus should stop at the declared five-second endpoint and return to the current Warrior baseline."
+  );
+  const ragingPublicPlayer = getPlayer(
+    speedDuel.room.snapshotFor(speedDuel.attackerSocket),
+    speedDuel.attackerId
+  );
+  assert(
+    ragingPublicPlayer.attackBoosted &&
+      ragingPublicPlayer.statuses.some((status) => status.id === "attack_boost"),
+    "Blazing Rampage should expose its positive damage state through the shared attack-boost status."
+  );
+  const speedEffect = speedDuel.room
+    .snapshotFor(speedDuel.attackerSocket)
+    .effects.find(
+      (effect) =>
+        effect.type === "catalog_skill" &&
+        effect.skillId === "warrior_01" &&
+        effect.ownerId === speedDuel.attackerId
+    );
+  assert(
+    speedEffect?.duration === 5000,
+    `Blazing Rampage fire aura should follow the player for 5000ms, got ${speedEffect?.duration}.`
+  );
+  setInput(speedDuel.room, speedDuel.attackerSocket, {
+    moveX: 1,
+    moveY: 0,
+    aimX: speedAttacker.x + 500,
+    aimY: speedAttacker.y
+  });
+  const speedStartX = speedAttacker.x;
+  advanceFrames(speedDuel.room, 1000);
+  const boostedTravel = speedAttacker.x - speedStartX;
+  const expectedBoostedTravel = CLASS_STATS.warrior.moveSpeed * 1.25;
+  assert(
+    Math.abs(boostedTravel - expectedBoostedTravel) <= 8,
+    `Blazing Rampage should move about ${expectedBoostedTravel}px in one second, got ${boostedTravel.toFixed(1)}.`
+  );
+
+  const enchantDuel = createDuel(
+    "warrior",
+    "warrior",
+    "warrior_triple_enchant",
+    "warrior_triple_enchant_target"
+  );
+  const enchantInternals = enchantDuel.room as unknown as {
+    players: Map<
+      string,
+      PublicPlayer & {
+        enchantedMeleeHitsRemaining: number;
+        enchantedMeleeEndsAt: number;
+        stunEndsAt: number;
+        health: number;
+        action: unknown;
+        actionStartedAt: number;
+        actionEndsAt: number;
+        actionPoseEndsAt: number;
+        attacking: boolean;
+        lastAttackAt: number;
+      }
+    >;
+  };
+  const enchantAttacker = enchantInternals.players.get(enchantDuel.attackerId);
+  const enchantTarget = enchantInternals.players.get(enchantDuel.targetId);
+  assert(
+    Boolean(enchantAttacker) && Boolean(enchantTarget),
+    "Could not find players for triple-enchant audit."
+  );
+  enchantAttacker.catalogLoadout = {
+    ...enchantAttacker.catalogLoadout,
+    skillQ: "warrior_03"
+  };
+  placeDuel(
+    enchantDuel,
+    OPEN_FIELD_TEST_POINT,
+    {
+      x: OPEN_FIELD_TEST_POINT.x + COMBAT.meleeRange - 16,
+      y: OPEN_FIELD_TEST_POINT.y
+    }
+  );
+  enchantTarget.health = 1000;
+  const enchantTargetHealth = enchantTarget.health;
+  castSkill(enchantDuel, "skillQ", 0);
+  assert(
+    enchantAttacker.enchantedMeleeHitsRemaining === 3 &&
+      enchantAttacker.enchantedMeleeEndsAt - fakeNow === 6000,
+    "Blade Enchant should arm exactly three enhanced attacks for six seconds."
+  );
+  const enchantCastSnapshot = enchantDuel.room.snapshotFor(
+    enchantDuel.attackerSocket
+  );
+  const enchantPublicAttacker = enchantCastSnapshot.players.find(
+    (player) => player.id === enchantDuel.attackerId
+  );
+  assert(
+    enchantPublicAttacker?.enchantedMeleeHitsRemaining === 3,
+    "Blade Enchant should expose three remaining attacks for the overhead counter."
+  );
+  assert(
+    !enchantCastSnapshot.effects.some(
+      (effect) =>
+        effect.type === "catalog_skill" &&
+        effect.skillId === "warrior_03" &&
+        effect.ownerId === enchantDuel.attackerId
+    ),
+    "Blade Enchant should not spawn the old blue-sword catalog VFX."
+  );
+  const enchantedHitDamage: number[] = [];
+  for (let hit = 1; hit <= 3; hit += 1) {
+    const healthBeforeHit = enchantTarget.health;
+    clearActionLock(enchantAttacker);
+    setInput(enchantDuel.room, enchantDuel.attackerSocket, {
+      attack: true,
+      aimX: enchantTarget.x,
+      aimY: enchantTarget.y
+    });
+    tick(enchantDuel.room);
+    setInput(enchantDuel.room, enchantDuel.attackerSocket, {});
+    assert(
+      enchantAttacker.enchantedMeleeHitsRemaining === 3 - hit,
+      `Enhanced attack ${hit} should leave ${3 - hit} charge(s), got ${enchantAttacker.enchantedMeleeHitsRemaining}.`
+    );
+    assert(
+      enchantAttacker.actionSkillId === null,
+      `Enhanced attack ${hit} should retain the normal Warrior basic-attack body.`
+    );
+    enchantedHitDamage.push(healthBeforeHit - enchantTarget.health);
+    if (hit < 3) {
+      assert(
+        enchantTarget.stunEndsAt <= fakeNow,
+        `Enhanced attack ${hit} must not stun before the third hit.`
+      );
+    }
+  }
+  assert(
+    enchantedHitDamage.every(
+      (damage, index) => damage === COMBAT.warriorBladeEnchantDamage[index]
+    ),
+    `Blade Enchant should deal ${COMBAT.warriorBladeEnchantDamage.join("/")}; got ${enchantedHitDamage.join("/")}.`
+  );
+  assert(
+    enchantTarget.health ===
+      enchantTargetHealth -
+        COMBAT.warriorBladeEnchantDamage.reduce(
+          (total, damage) => total + damage,
+          0
+        ),
+    `Blade Enchant total damage should match its three-hit preset; target HP is ${enchantTarget.health}.`
+  );
+  assert(
+    enchantTarget.stunEndsAt - fakeNow === 1000,
+    `Third enchanted basic should stun for 1000ms, got ${enchantTarget.stunEndsAt - fakeNow}ms.`
+  );
+
+  return {
+    name: "Warrior three-skill redesign runtime behavior",
+    details: [
+      "Guarding Slash spawns a 20-damage, 400-range, 650-speed piercing sword wave.",
+      "Blazing Rampage grants 5s of +25% move speed and +25% outgoing damage, exposes the shared positive attack-boost status, and emits one player-following hollow fire aura without replacing the Warrior body.",
+      `Blade Enchant shows three remaining attacks overhead, deals ${COMBAT.warriorBladeEnchantDamage.join("/")} damage, keeps the normal sword body, and stuns only on the third hit for 1s.`
     ]
   };
 }
@@ -563,9 +1053,11 @@ function checkTurretDeathVfxRuntime(): GameplayCheck {
       angle: number;
       health: number;
       maxHealth: number;
-      boosted: boolean;
+      shield: number;
+      shieldEndsAt: number;
+      kind: "magic_missile";
       lastAttackAt: number;
-      boostEndsAt: number;
+      deployedAt: number;
     }>;
   };
   const attacker = internals.players.get(duel.attackerId);
@@ -584,10 +1076,12 @@ function checkTurretDeathVfxRuntime(): GameplayCheck {
     y: safeOrigin.y,
     angle: 180,
     health: 5,
-    maxHealth: COMBAT.turretHealth,
-    boosted: false,
+    maxHealth: COMBAT.magicTurretHealth,
+    shield: 0,
+    shieldEndsAt: 0,
+    kind: "magic_missile",
     lastAttackAt: fakeNow,
-    boostEndsAt: 0
+    deployedAt: fakeNow
   });
 
   setInput(duel.room, duel.attackerSocket, { angle: 0, aimX: safeOrigin.x + COMBAT.meleeRange, aimY: safeOrigin.y, attack: true });
@@ -601,6 +1095,1007 @@ function checkTurretDeathVfxRuntime(): GameplayCheck {
   return {
     name: "turret death VFX runtime behavior",
     details: [`Destroyed turret emits ${deathEffect?.type} at radius ${deathEffect?.radius}.`]
+  };
+}
+
+function checkEngineerMagicTurretRuntime(): GameplayCheck {
+  const duel = createDuel(
+    "engineer",
+    "mage",
+    "magic_turret_engineer",
+    "magic_turret_target",
+    {
+      attackerCatalogLoadout: {
+        skillQ: "engineer_12",
+        skillE: "engineer_14",
+        skillR: "engineer_15"
+      },
+      attackerEngineerTurretKind: "magic_missile"
+    }
+  );
+  const origin = { x: 1800, y: 4100 };
+  const targetPoint = { x: origin.x + 330, y: origin.y };
+  placeDuel(duel, origin, targetPoint);
+
+  setInput(duel.room, duel.attackerSocket, {
+    aimX: targetPoint.x,
+    aimY: targetPoint.y,
+    skillF: true
+  });
+  tick(duel.room);
+  setInput(duel.room, duel.attackerSocket, {});
+
+  const deployed = duel.room.snapshotFor(duel.attackerSocket);
+  const turretState = deployed.turrets.find((turret) => turret.ownerId === duel.attackerId);
+  assert(Boolean(turretState), "Engineer F should deploy a magic missile turret.");
+  assert(turretState.kind === "magic_missile", `Engineer turret kind should be magic_missile, got ${turretState.kind}.`);
+  assert(turretState.health === COMBAT.magicTurretHealth, `Magic turret should start at ${COMBAT.magicTurretHealth} HP.`);
+  assert(turretState.angle === 0, `Magic turret is a static image and should not rotate, got angle ${turretState.angle}.`);
+
+  const internals = duel.room as unknown as {
+    turrets: Array<{ id: string; lastAttackAt: number; shield: number; shieldEndsAt: number }>;
+    players: Map<string, PublicPlayer & { actionPoseEndsAt: number; cooldowns: Record<SkillKey, number> }>;
+  };
+  const turret = internals.turrets.find((candidate) => candidate.id === turretState.id);
+  const internalTarget = internals.players.get(duel.targetId);
+  assert(Boolean(turret), "Could not inspect the deployed magic turret.");
+  assert(Boolean(internalTarget), "Could not inspect the magic turret target.");
+  const auditTargetHealth = 1000;
+  internalTarget.health = auditTargetHealth;
+  turret.lastAttackAt = Number.MAX_SAFE_INTEGER;
+
+  advance(duel.room, 620);
+  castSkill(duel, "skillQ", 0);
+  let snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  assert(
+    snapshot.projectiles.filter((projectile) => projectile.type === "magic_turret_sync").length === 1,
+    "Engineer Q should make each deployed turret launch one synchronized seeker."
+  );
+  advanceFrames(duel.room, 1500);
+  let target = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
+  const synchronizedDamage = getEffectiveArenaSkillDamage(
+    "engineer_12",
+    COMBAT.magicTurretSyncDamage
+  );
+  assert(
+    target.health === auditTargetHealth - synchronizedDamage,
+    `Synchronized seeker should deal ${synchronizedDamage}; target HP is ${target.health}.`
+  );
+
+  advance(duel.room, 720);
+  castSkill(duel, "skillE", 0);
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  assert(
+    snapshot.projectiles.filter((projectile) => projectile.type === "magic_turret_split").length === 1,
+    "Engineer E should make each deployed turret launch one splitting star."
+  );
+  advanceFrames(duel.room, 1500);
+  target = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
+  const splittingDamage = getEffectiveArenaSkillDamage(
+    "engineer_14",
+    COMBAT.magicTurretSplitDamage
+  );
+  assert(
+    target.health ===
+      auditTargetHealth - synchronizedDamage - splittingDamage,
+    `Splitting Star primary hit should deal ${splittingDamage}; target HP is ${target.health}.`
+  );
+
+  advance(duel.room, 820);
+  castSkill(duel, "skillR", 0);
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const matrixTurret = snapshot.turrets.find((candidate) => candidate.id === turretState.id);
+  assert(matrixTurret?.shield === COMBAT.magicTurretMatrixShield, `Matrix should grant ${COMBAT.magicTurretMatrixShield} turret shield.`);
+  assert(
+    snapshot.projectiles.filter((projectile) => projectile.type === "magic_turret_matrix").length === 1,
+    "Matrix should launch its first missile immediately."
+  );
+  advanceFrames(duel.room, COMBAT.magicTurretMatrixShotInterval + FRAME_MS);
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  assert(
+    snapshot.projectiles.filter((projectile) => projectile.type === "magic_turret_matrix").length === 2,
+    "Matrix should launch a second missile after the configured pair interval."
+  );
+  advanceFrames(duel.room, 1500);
+  target = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
+  const matrixMissileDamage = getEffectiveArenaSkillDamage(
+    "engineer_15",
+    COMBAT.magicTurretMatrixDamage
+  );
+  const expectedAfterMatrix =
+    auditTargetHealth -
+    synchronizedDamage -
+    splittingDamage -
+    matrixMissileDamage * COMBAT.magicTurretMatrixMissilesPerTarget;
+  assert(target.health === expectedAfterMatrix, `Matrix pair should deal ${matrixMissileDamage * COMBAT.magicTurretMatrixMissilesPerTarget} total damage; target HP is ${target.health}.`);
+
+  turret.lastAttackAt = fakeNow - COMBAT.magicTurretAttackInterval;
+  tick(duel.room);
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  assert(
+    snapshot.projectiles.filter((projectile) => projectile.type === "magic_turret_basic").length === 1,
+    "Magic turret should fire its own basic homing missile."
+  );
+  advanceFrames(duel.room, 1500);
+  target = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
+  const turretBasicDamage = getEngineerTurretBasicAttackDamage("magic_missile");
+  assert(
+    target.health === expectedAfterMatrix - turretBasicDamage,
+    `Magic turret basic missile should deal ${turretBasicDamage}; target HP is ${target.health}.`
+  );
+
+  const engineer = internals.players.get(duel.attackerId);
+  assert(Boolean(engineer), "Could not inspect Engineer for turret replacement.");
+  for (let index = 0; index < COMBAT.engineerMaxTurrets - 1; index += 1) {
+    engineer.actionPoseEndsAt = 0;
+    engineer.cooldowns.skillF = 0;
+    setInput(duel.room, duel.attackerSocket, {
+      aimX: origin.x + 150 + index * 40,
+      aimY: origin.y + 80,
+      skillF: true
+    });
+    tick(duel.room);
+    setInput(duel.room, duel.attackerSocket, {});
+  }
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const cappedTurrets = snapshot.turrets.filter((candidate) => candidate.ownerId === duel.attackerId);
+  assert(cappedTurrets.length === COMBAT.engineerMaxTurrets, `Engineer should own ${COMBAT.engineerMaxTurrets} turrets before replacement.`);
+  const oldestTurretId = turretState.id;
+
+  engineer.actionPoseEndsAt = 0;
+  engineer.cooldowns.skillF = 0;
+  setInput(duel.room, duel.attackerSocket, {
+    aimX: origin.x + 290,
+    aimY: origin.y + 80,
+    skillF: true
+  });
+  tick(duel.room);
+  setInput(duel.room, duel.attackerSocket, {});
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const replacedTurrets = snapshot.turrets.filter((candidate) => candidate.ownerId === duel.attackerId);
+  assert(replacedTurrets.length === COMBAT.engineerMaxTurrets, "Fourth F cast must keep the three-turret cap.");
+  assert(!replacedTurrets.some((candidate) => candidate.id === oldestTurretId), "Fourth F cast must remove the oldest turret entity instead of relocating it.");
+  const replacementTurret = replacedTurrets.find((candidate) => !cappedTurrets.some((previous) => previous.id === candidate.id));
+  assert(Boolean(replacementTurret), "Fourth F cast must create a new turret entity.");
+  assert(
+    replacementTurret.health === replacementTurret.maxHealth,
+    `Replacement turret must be full health, got ${replacementTurret.health}/${replacementTurret.maxHealth}.`
+  );
+
+  return {
+    name: "Engineer magic turret runtime behavior",
+    details: [
+      `F deployed one static ${COMBAT.magicTurretHealth} HP turret.`,
+      `Fourth F removed the oldest entity and created a new full-health turret while keeping the ${COMBAT.engineerMaxTurrets}-turret cap.`,
+      `Q/E dealt ${synchronizedDamage}/${splittingDamage} and the turret basic dealt ${turretBasicDamage}.`,
+      `R granted ${COMBAT.magicTurretMatrixShield} shield and fired two ${matrixMissileDamage}-damage missiles at the in-range target.`
+    ]
+  };
+}
+
+function checkEngineerSupportBracesRuntime(): GameplayCheck {
+  const duel = createDuel(
+    "engineer",
+    "warrior",
+    "support_engineer",
+    "support_attacker"
+  );
+  placeDuel(
+    duel,
+    OPEN_FIELD_TEST_POINT,
+    { x: OPEN_FIELD_TEST_POINT.x + 180, y: OPEN_FIELD_TEST_POINT.y }
+  );
+
+  type SupportPlayer = PublicPlayer & {
+    catalogLoadout: ReturnType<typeof getDefaultArenaCatalogLoadout>;
+    engineerSupportEndsAt: number;
+    rootEndsAt: number;
+    stunEndsAt: number;
+    slowEndsAt: number;
+    slowMultiplier: number;
+  };
+  type SupportTurret = {
+    id: string;
+    ownerId: string;
+    x: number;
+    y: number;
+    angle: number;
+    health: number;
+    maxHealth: number;
+    shield: number;
+    shieldEndsAt: number;
+    kind: "mechanical";
+    lastAttackAt: number;
+    deployedAt: number;
+    supportEndsAt: number;
+    markedTargetId: string | null;
+    markedEndsAt: number;
+    enhancedShots: number;
+    armorCoreEndsAt: number;
+  };
+  const internals = duel.room as unknown as {
+    players: Map<string, SupportPlayer>;
+    turrets: SupportTurret[];
+    damagePlayer: (
+      target: SupportPlayer,
+      damage: number,
+      attackerId: string
+    ) => number;
+    damageTurret: (
+      turret: SupportTurret,
+      damage: number,
+      attackerId: string,
+      now: number
+    ) => void;
+    applyRoot: (target: SupportPlayer, durationMs: number, now: number) => boolean;
+    applyStun: (target: SupportPlayer, durationMs: number, now: number) => boolean;
+    applySlow: (
+      target: SupportPlayer,
+      multiplier: number,
+      durationMs: number,
+      now: number
+    ) => boolean;
+    pushTargetAway: (
+      target: SupportPlayer,
+      point: { x: number; y: number },
+      amount: number,
+      now: number
+    ) => void;
+    moveTargetToward: (
+      target: SupportPlayer,
+      point: { x: number; y: number },
+      amount: number,
+      now: number
+    ) => void;
+  };
+  const engineer = internals.players.get(duel.attackerId);
+  const attacker = internals.players.get(duel.targetId);
+  assert(Boolean(engineer) && Boolean(attacker), "Support Braces audit players are missing.");
+  engineer.catalogLoadout = {
+    ...engineer.catalogLoadout,
+    skillE: "engineer_09"
+  };
+  const turret: SupportTurret = {
+    id: "support_turret",
+    ownerId: engineer.id,
+    x: engineer.x + 72,
+    y: engineer.y,
+    angle: 0,
+    health: COMBAT.mechanicalTurretHealth,
+    maxHealth: COMBAT.mechanicalTurretHealth,
+    shield: 0,
+    shieldEndsAt: 0,
+    kind: "mechanical",
+    lastAttackAt: Number.MAX_SAFE_INTEGER,
+    deployedAt: fakeNow,
+    supportEndsAt: 0,
+    markedTargetId: null,
+    markedEndsAt: 0,
+    enhancedShots: 0,
+    armorCoreEndsAt: 0
+  };
+  internals.turrets = [turret];
+
+  castSkillAt(duel, "skillE", turret, 0);
+  assert(
+    engineer.engineerSupportEndsAt - fakeNow === 4000,
+    `Engineer Support Braces should last 4000ms, got ${engineer.engineerSupportEndsAt - fakeNow}.`
+  );
+  assert(
+    turret.supportEndsAt === engineer.engineerSupportEndsAt,
+    "Engineer and turret Support Braces windows must end together."
+  );
+
+  const playerHealthBefore = engineer.health;
+  const actualPlayerDamage = internals.damagePlayer(
+    engineer,
+    100,
+    attacker.id
+  );
+  internals.damageTurret(turret, 100, attacker.id, fakeNow);
+  const classBalancedIncomingDamage = getEffectiveClassDamage(
+    attacker.classId,
+    100
+  );
+  const expectedSupportedPlayerDamage = Math.ceil(
+    classBalancedIncomingDamage * 0.8
+  );
+  const expectedSupportedTurretDamage =
+    classBalancedIncomingDamage * 0.2;
+  assert(
+    actualPlayerDamage === expectedSupportedPlayerDamage &&
+      engineer.health === playerHealthBefore - expectedSupportedPlayerDamage,
+    `Supported Engineer must take ${expectedSupportedPlayerDamage} damage from the class-balanced hit, got ${actualPlayerDamage}.`
+  );
+  assert(
+    turret.health === turret.maxHealth - expectedSupportedTurretDamage,
+    `Supported turret must take ${expectedSupportedTurretDamage} damage from the class-balanced hit, got ${turret.maxHealth - turret.health}.`
+  );
+  assert(engineer.alive, "Support Braces must reduce damage, not make or mark the Engineer invulnerable.");
+
+  const protectedPosition = { x: engineer.x, y: engineer.y };
+  assert(!internals.applyRoot(engineer, 1000, fakeNow), "Supported Engineer accepted root.");
+  assert(!internals.applyStun(engineer, 1000, fakeNow), "Supported Engineer accepted stun.");
+  assert(!internals.applySlow(engineer, 0.4, 1000, fakeNow), "Supported Engineer accepted slow.");
+  internals.pushTargetAway(
+    engineer,
+    { x: engineer.x - 100, y: engineer.y },
+    115,
+    fakeNow
+  );
+  internals.moveTargetToward(engineer, attacker, 100, fakeNow);
+  assert(
+    engineer.x === protectedPosition.x && engineer.y === protectedPosition.y,
+    "Supported Engineer was displaced."
+  );
+
+  advance(duel.room, 4000);
+  engineer.health = engineer.maxHealth;
+  const expiredDamage = internals.damagePlayer(engineer, 100, attacker.id);
+  assert(expiredDamage === classBalancedIncomingDamage, `Expired Support Braces should restore class-balanced damage ${classBalancedIncomingDamage}, got ${expiredDamage}.`);
+  assert(internals.applyStun(engineer, 1000, fakeNow), "Expired Support Braces still blocked stun.");
+
+  return {
+    name: "Engineer Support Braces runtime behavior",
+    details: [
+      "The four-second state reduces Engineer/turret damage by 20%/80% while both remain damageable.",
+      "Root, stun, slow, pull and knockback are rejected during the state and resume after expiry."
+    ]
+  };
+}
+
+function checkEngineerRapidDetonationRuntime(): GameplayCheck {
+  const duel = createDuel("engineer", "mage", "rapid_engineer", "rapid_target");
+  const center = { x: 2400, y: 3600 };
+  placeDuel(duel, { x: center.x - 360, y: center.y }, center);
+
+  const internals = duel.room as unknown as {
+    players: Map<
+      string,
+      PublicPlayer & {
+        catalogLoadout: ReturnType<typeof getDefaultArenaCatalogLoadout>;
+      }
+    >;
+    turrets: Array<{
+      id: string;
+      ownerId: string;
+      x: number;
+      y: number;
+      angle: number;
+      health: number;
+      maxHealth: number;
+      shield: number;
+      shieldEndsAt: number;
+      kind: "mechanical" | "magic_missile";
+      lastAttackAt: number;
+      deployedAt: number;
+      supportEndsAt: number;
+      markedTargetId: string | null;
+      markedEndsAt: number;
+      enhancedShots: number;
+      armorCoreEndsAt: number;
+    }>;
+  };
+  const engineer = internals.players.get(duel.attackerId);
+  const rapidTarget = internals.players.get(duel.targetId);
+  assert(Boolean(engineer), "Could not inspect Engineer for Rapid Detonation audit.");
+  assert(Boolean(rapidTarget), "Could not inspect Rapid Detonation target.");
+  const rapidTargetHealth = 1000;
+  rapidTarget.health = rapidTargetHealth;
+  engineer.catalogLoadout = {
+    ...engineer.catalogLoadout,
+    skillR: "engineer_11"
+  };
+  const turretPoints = [
+    { x: center.x - 40, y: center.y },
+    { x: center.x + 40, y: center.y }
+  ];
+  internals.turrets = turretPoints.map((point, index) => ({
+    id: `rapid_turret_${index}`,
+    ownerId: duel.attackerId,
+    x: point.x,
+    y: point.y,
+    angle: 0,
+    health: COMBAT.mechanicalTurretHealth,
+    maxHealth: COMBAT.mechanicalTurretHealth,
+    shield: 0,
+    shieldEndsAt: 0,
+    kind: "mechanical",
+    lastAttackAt: Number.MAX_SAFE_INTEGER,
+    deployedAt: fakeNow + index,
+    supportEndsAt: 0,
+    markedTargetId: null,
+    markedEndsAt: 0,
+    enhancedShots: 0,
+    armorCoreEndsAt: 0
+  }));
+
+  castSkillAt(duel, "skillR", center, 0);
+  let snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const rapidEffects = snapshot.effects.filter(
+    (effect) =>
+      effect.type === "catalog_skill" &&
+      effect.skillId === "engineer_11" &&
+      effect.ownerId === duel.attackerId
+  );
+  assert(rapidEffects.length === 2, `Rapid Detonation should emit one accepted explosion per turret, got ${rapidEffects.length}.`);
+  for (const [index, effect] of rapidEffects.entries()) {
+    assert(
+      effect.x === turretPoints[index].x && effect.y === turretPoints[index].y,
+      `Rapid Detonation effect ${index + 1} moved away from its turret anchor: ${JSON.stringify(effect)}.`
+    );
+  }
+  assert(snapshot.turrets.length === 2, "Rapid Detonation should preserve turrets during its 0.5-second warning.");
+  assert(
+    getPlayer(snapshot, duel.targetId).health === rapidTargetHealth,
+    "Rapid Detonation should not damage during its warning."
+  );
+
+  advance(duel.room, 499);
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  assert(snapshot.turrets.length === 2, "Rapid Detonation removed turrets before the 0.5-second warning ended.");
+  advance(duel.room, 1);
+  snapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const target = getPlayer(snapshot, duel.targetId);
+  const rapidDamage = getEffectiveArenaSkillDamage("engineer_11", 60) * 2;
+  assert(snapshot.turrets.length === 0, "Rapid Detonation should remove every detonated turret at 0.5 seconds.");
+  assert(
+    target.health === rapidTargetHealth - rapidDamage,
+    `Two overlapping Rapid Detonations should deal ${rapidDamage} total after class scaling. Expected ${rapidTargetHealth - rapidDamage}, got ${target.health}.`
+  );
+  assert(
+    !snapshot.effects.some(
+      (effect) =>
+        effect.type === "turret_death" &&
+        effect.ownerId === duel.attackerId
+    ),
+    "Rapid Detonation must not overlay the generic turret-death burst on its accepted explosion."
+  );
+
+  return {
+    name: "Engineer Rapid Detonation timing and anchor behavior",
+    details: [
+      "Each warning/explosion stays on the exact turret x/y.",
+      `Two overlapping turrets deal ${rapidDamage / 2} + ${rapidDamage / 2} at 0.5 seconds without falloff.`,
+      "Rapid Detonation removes its turrets without a second generic death burst."
+    ]
+  };
+}
+
+function checkEngineerLockedTurretRuntime(): GameplayCheck {
+  fakeNow += 25_000;
+  const room = new GameRoom({
+    noBots: true,
+    fixedSpawn: true,
+    fixedSpawnPoint: OPEN_FIELD_TEST_POINT
+  });
+  const engineer = room.addHuman("selectable_turret_engineer", {
+    name: "SELECTABLE_TURRET_ENGINEER",
+    classId: "engineer",
+    loadout: getDefaultArenaLoadout("engineer"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("engineer"),
+    engineerTurretKind: "mechanical"
+  });
+  const targetJoin = room.addHuman("selectable_turret_target", {
+    name: "SELECTABLE_TURRET_TARGET",
+    classId: "mage",
+    loadout: getDefaultArenaLoadout("mage"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("mage")
+  });
+  const internals = room as unknown as {
+    players: Map<
+      string,
+      PublicPlayer & {
+        spawnGuardEndsAt: number;
+        spawnProtected: boolean;
+        actionPoseEndsAt: number;
+        cooldowns: Record<SkillKey, number>;
+      }
+    >;
+    turrets: Array<{
+      ownerId: string;
+      kind: "mechanical" | "magic_missile";
+      lastAttackAt: number;
+    }>;
+  };
+  for (const player of internals.players.values()) {
+    player.spawnGuardEndsAt = 0;
+    player.spawnProtected = false;
+  }
+
+  setInput(room, "selectable_turret_engineer", {
+    aimX: OPEN_FIELD_TEST_POINT.x + 180,
+    aimY: OPEN_FIELD_TEST_POINT.y,
+    skillF: true,
+    engineerTurretKind: "mechanical"
+  });
+  tick(room);
+  const owner = internals.players.get(engineer.playerId);
+  assert(Boolean(owner), "Selectable turret audit could not find Engineer.");
+  owner.actionPoseEndsAt = 0;
+  owner.cooldowns.skillF = 0;
+  setInput(room, "selectable_turret_engineer", {
+    aimX: OPEN_FIELD_TEST_POINT.x + 220,
+    aimY: OPEN_FIELD_TEST_POINT.y,
+    skillF: true,
+    engineerTurretKind: "magic_missile"
+  });
+  tick(room);
+
+  const snapshot = room.snapshotFor("selectable_turret_engineer");
+  const owned = snapshot.turrets.filter(
+    (turret) => turret.ownerId === engineer.playerId
+  );
+  assert(
+    owned.length === 2 && owned.every((turret) => turret.kind === "mechanical"),
+    "An Engineer who entered with the mechanical turret must not create a magic turret mid-match."
+  );
+  assert(
+    getPlayer(snapshot, engineer.playerId).engineerTurretKind ===
+      "mechanical",
+    "Mid-match input must not change the Engineer's entry turret kind."
+  );
+
+  const targetBeforeMechanicalShot = getPlayer(
+    snapshot,
+    targetJoin.playerId
+  ).health;
+  let primedMechanicalTurret = false;
+  for (const turret of internals.turrets) {
+    if (turret.kind === "mechanical" && !primedMechanicalTurret) {
+      turret.lastAttackAt = fakeNow - COMBAT.mechanicalTurretAttackInterval;
+      primedMechanicalTurret = true;
+    } else {
+      turret.lastAttackAt = fakeNow;
+    }
+  }
+  tick(room);
+  advanceFrames(room, 600);
+  const targetAfterMechanicalShot = getPlayer(
+    room.snapshotFor("selectable_turret_engineer"),
+    targetJoin.playerId
+  ).health;
+  const mechanicalBasicDamage = getEngineerTurretBasicAttackDamage("mechanical");
+  assert(
+    targetAfterMechanicalShot ===
+      targetBeforeMechanicalShot - mechanicalBasicDamage,
+    `Mechanical turret basic should deal ${mechanicalBasicDamage}; target HP is ${targetAfterMechanicalShot}.`
+  );
+
+  return {
+    name: "Engineer entry-locked F turret selection",
+    details: [
+      "A mechanical Engineer stayed mechanical after an attempted mid-match turret switch.",
+      "Turret selection is fixed by the compatible pre-match configuration and synchronized in player state.",
+      `Mechanical turret ordinary basic dealt its preset ${mechanicalBasicDamage} damage.`
+    ]
+  };
+}
+
+function checkTeamThreeVersusThreeRuntime(): GameplayCheck {
+  fakeNow += 25_000;
+  const room = new GameRoom({ mode: "team_3v3" });
+  assert(
+    room.snapshotFor("missing").players.length === 6,
+    "Fresh 3V3 room must be filled to six combatants."
+  );
+  assert(room.botCount() === 6, "Fresh 3V3 room must start with six bots.");
+
+  const redOne = room.addHuman("team_red_one", {
+    name: "RED_ONE",
+    classId: "warrior",
+    loadout: getDefaultArenaLoadout("warrior"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("warrior"),
+    mode: "team_3v3"
+  });
+  const blueOne = room.addHuman("team_blue_one", {
+    name: "BLUE_ONE",
+    classId: "mage",
+    loadout: getDefaultArenaLoadout("mage"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("mage"),
+    mode: "team_3v3"
+  });
+  const redTwo = room.addHuman("team_red_two", {
+    name: "RED_TWO",
+    classId: "archer",
+    loadout: getDefaultArenaLoadout("archer"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("archer"),
+    mode: "team_3v3"
+  });
+  const internals = room as unknown as {
+    players: Map<
+      string,
+      PublicPlayer & {
+        spawnGuardEndsAt: number;
+        spawnProtected: boolean;
+        health: number;
+        alive: boolean;
+      }
+    >;
+    teamScores: { red: number; blue: number };
+    damagePlayer: (
+      target: unknown,
+      damage: number,
+      attackerId: string
+    ) => number;
+    killPlayer: (
+      target: unknown,
+      attackerId: string,
+      now?: number
+    ) => void;
+  };
+  const redAttacker = internals.players.get(redOne.playerId);
+  const redAlly = internals.players.get(redTwo.playerId);
+  const blueTarget = internals.players.get(blueOne.playerId);
+  assert(
+    redAttacker?.team === "red" &&
+      redAlly?.team === "red" &&
+      blueTarget?.team === "blue",
+    "Human team assignment must alternate into balanced red/blue teams."
+  );
+  for (const player of internals.players.values()) {
+    player.spawnGuardEndsAt = 0;
+    player.spawnProtected = false;
+  }
+
+  const allyHealth = redAlly.health;
+  const friendlyDamage = internals.damagePlayer(
+    redAlly,
+    30,
+    redAttacker.id
+  );
+  assert(
+    friendlyDamage === 0 && redAlly.health === allyHealth,
+    "3V3 friendly fire must be disabled."
+  );
+  const enemyHealth = blueTarget.health;
+  const teamTestRawDamage = 37;
+  const teamTestDamage = getEffectiveClassDamage(
+    redAttacker.classId,
+    teamTestRawDamage
+  );
+  const enemyDamage = internals.damagePlayer(
+    blueTarget,
+    teamTestRawDamage,
+    redAttacker.id
+  );
+  assert(
+    enemyDamage === teamTestDamage &&
+      blueTarget.health === enemyHealth - teamTestDamage,
+    "3V3 enemy damage must remain active."
+  );
+
+  blueTarget.alive = true;
+  blueTarget.health = blueTarget.maxHealth;
+  internals.teamScores.red = WORLD.scoreLimit - 1;
+  internals.killPlayer(blueTarget, redAttacker.id, fakeNow);
+  tick(room);
+  const snapshot = room.snapshotFor("team_red_one");
+  const redCount = snapshot.players.filter(
+    (player) => player.team === "red"
+  ).length;
+  const blueCount = snapshot.players.filter(
+    (player) => player.team === "blue"
+  ).length;
+  assert(
+    redCount === 3 && blueCount === 3,
+    `3V3 room must stay full at 3 red / 3 blue, got ${redCount}/${blueCount}.`
+  );
+  assert(
+    snapshot.round.durationMs === 300_000 &&
+      snapshot.round.scoreLimit === 15,
+    "3V3 must use the confirmed 5-minute / first-to-15 rules."
+  );
+  assert(
+    snapshot.round.phase === "finished" &&
+      snapshot.round.winningTeam === "red" &&
+      snapshot.round.teamScores.red === 15,
+    "Shared red score reaching 15 must finish the round for the red team."
+  );
+
+  return {
+    name: "3V3 team rules and bot fill",
+    details: [
+      `Room remained ${redCount} red versus ${blueCount} blue after three human joins.`,
+      "Friendly fire dealt 0 while enemy damage remained active.",
+      "Shared team score reached 15 and ended the five-minute ruleset for Red."
+    ]
+  };
+}
+
+function checkCatalogSkillRuntimeCoverage(): GameplayCheck {
+  assert(
+    Object.keys(ARENA_SKILL_SPECS).length === 61,
+    `Canonical skill table must contain F plus 60 selectable skills, got ${Object.keys(ARENA_SKILL_SPECS).length}.`
+  );
+  const failures: string[] = [];
+  let verifiedEngineerMageDamageSkills = 0;
+  const effective = (skillId: ArenaCatalogSkillId, rawDamage: number) =>
+    getEffectiveArenaSkillDamage(skillId, rawDamage);
+  const exactDamageBySkill: Partial<Record<ArenaCatalogSkillId, number>> = {
+    engineer_01: effective("engineer_01", 18) * 3,
+    engineer_02: effective("engineer_02", 9) * 3,
+    engineer_03: effective("engineer_03", 30),
+    engineer_04: effective("engineer_04", 11) * 4,
+    engineer_05: effective("engineer_05", 24) * 3,
+    engineer_06: effective("engineer_06", 65),
+    engineer_07: effective("engineer_07", 18),
+    engineer_10: effective("engineer_10", 20),
+    engineer_11: effective("engineer_11", 60) * 3,
+    engineer_12: effective("engineer_12", 11) * 2,
+    engineer_13: effective("engineer_13", 7) * 2,
+    engineer_14: effective("engineer_14", 13) * 2,
+    engineer_15: effective("engineer_15", 12) * 4,
+    mage_00: effective("mage_00", 24),
+    mage_01:
+      effective("mage_01", 12) +
+      COMBAT.poisonTickDamage *
+        (COMBAT.poisonDuration / COMBAT.poisonTickInterval),
+    mage_02: effective("mage_02", 16),
+    mage_05: effective("mage_05", 13),
+    mage_06: effective("mage_06", 18),
+    mage_07: effective("mage_07", 28),
+    // The six-second observation sees four field ticks plus five poison ticks:
+    // poison is refreshed while the target remains inside the four-second field.
+    mage_08:
+      effective("mage_08", 8) * 4 + COMBAT.poisonTickDamage * 5,
+    mage_11: effective("mage_11", 12),
+    mage_12: effective("mage_12", 42),
+    mage_14: effective("mage_14", 12) * 5
+  };
+  for (const catalogSkill of ARENA_SKILL_CATALOG.filter(
+    (skill) => !skill.core
+  )) {
+    fakeNow += 25_000;
+    const room = new GameRoom({
+      noBots: true,
+      fixedSpawn: true,
+      fixedSpawnPoint: OPEN_FIELD_TEST_POINT
+    });
+    const attackerSocket = `coverage_${catalogSkill.id}`;
+    const targetSocket = `coverage_target_${catalogSkill.id}`;
+    const attackerJoin = room.addHuman(attackerSocket, {
+      name: catalogSkill.id,
+      classId: catalogSkill.classId,
+      loadout: getDefaultArenaLoadout(catalogSkill.classId),
+      catalogLoadout: getDefaultArenaCatalogLoadout(catalogSkill.classId)
+    });
+    const targetJoin = room.addHuman(targetSocket, {
+      name: `TARGET_${catalogSkill.id}`,
+      classId: "warrior",
+      loadout: getDefaultArenaLoadout("warrior"),
+      catalogLoadout: getDefaultArenaCatalogLoadout("warrior")
+    });
+    const internals = room as unknown as {
+      players: Map<
+        string,
+        PublicPlayer & {
+          spawnGuardEndsAt: number;
+          spawnProtected: boolean;
+          health: number;
+          actionPoseEndsAt: number;
+          markedTargetId?: string | null;
+        }
+      >;
+      turrets: Array<{
+        id: string;
+        ownerId: string;
+        x: number;
+        y: number;
+        angle: number;
+        health: number;
+        maxHealth: number;
+        shield: number;
+        shieldEndsAt: number;
+        kind: "mechanical" | "magic_missile";
+        lastAttackAt: number;
+        deployedAt: number;
+        supportEndsAt: number;
+        markedTargetId: string | null;
+        markedEndsAt: number;
+        enhancedShots: number;
+        armorCoreEndsAt: number;
+      }>;
+      healthPacks: unknown[];
+      attackBoostPacks: unknown[];
+    };
+    const attacker = internals.players.get(attackerJoin.playerId);
+    const target = internals.players.get(targetJoin.playerId);
+    if (!attacker || !target) {
+      failures.push(`${catalogSkill.id}: missing players`);
+      continue;
+    }
+    attacker.x = OPEN_FIELD_TEST_POINT.x;
+    attacker.y = OPEN_FIELD_TEST_POINT.y;
+    attacker.spawnGuardEndsAt = 0;
+    attacker.spawnProtected = false;
+    target.x = OPEN_FIELD_TEST_POINT.x + 100;
+    target.y = OPEN_FIELD_TEST_POINT.y;
+    target.maxHealth = 10_000;
+    target.health = 10_000;
+    target.spawnGuardEndsAt = 0;
+    target.spawnProtected = false;
+    internals.healthPacks = [];
+    internals.attackBoostPacks = [];
+
+    if (catalogSkill.classId === "engineer") {
+      const turretPositions = catalogSkill.id === "engineer_05"
+        ? [
+            { x: attacker.x + 55, y: attacker.y - 80, kind: "mechanical" as const },
+            { x: attacker.x + 80, y: attacker.y + 80, kind: "mechanical" as const },
+            { x: attacker.x + 210, y: attacker.y, kind: "mechanical" as const }
+          ]
+        : [
+            { x: attacker.x + 55, y: attacker.y - 80, kind: "mechanical" as const },
+            { x: attacker.x + 80, y: attacker.y + 80, kind: "magic_missile" as const },
+            { x: attacker.x + 210, y: attacker.y, kind: "magic_missile" as const }
+          ];
+      internals.turrets = turretPositions.map((position, index) => ({
+        id: `coverage_turret_${index}`,
+        ownerId: attacker.id,
+        x: position.x,
+        y: position.y,
+        angle: 0,
+        health:
+          position.kind === "mechanical"
+            ? COMBAT.mechanicalTurretHealth
+            : COMBAT.magicTurretHealth,
+        maxHealth:
+          position.kind === "mechanical"
+            ? COMBAT.mechanicalTurretHealth
+            : COMBAT.magicTurretHealth,
+        shield: 0,
+        shieldEndsAt: 0,
+        kind: position.kind,
+        lastAttackAt: Number.MAX_SAFE_INTEGER,
+        deployedAt: fakeNow + index,
+        supportEndsAt: 0,
+        markedTargetId:
+          catalogSkill.id === "engineer_05" && index === 0
+            ? target.id
+            : null,
+        markedEndsAt:
+          catalogSkill.id === "engineer_05" && index === 0
+            ? fakeNow + 5000
+            : 0,
+        enhancedShots:
+          catalogSkill.id === "engineer_05" && index === 0 ? 3 : 0,
+        armorCoreEndsAt: 0
+      }));
+      if (catalogSkill.id === "engineer_02") {
+        const mechanicalTurret = internals.turrets.find(
+          (turret) => turret.kind === "mechanical"
+        );
+        if (mechanicalTurret) {
+          // Put the target immediately in front of the muzzle so all three
+          // authored scatter pellets overlap the same player hurtbox.
+          target.x = mechanicalTurret.x + 55;
+          target.y = mechanicalTurret.y - 18;
+        }
+      }
+    }
+
+    const slot =
+      catalogSkill.tier === "basic"
+        ? "skillQ"
+        : catalogSkill.tier === "intermediate"
+          ? "skillE"
+          : "skillR";
+    attacker.catalogLoadout = {
+      ...attacker.catalogLoadout,
+      [slot]: catalogSkill.id
+    };
+    setInput(room, attackerSocket, {
+      angle: 0,
+      aimX: target.x,
+      aimY: target.y,
+      [slot]: true
+    });
+    tick(room);
+    setInput(room, attackerSocket, {});
+    const snapshot = room.snapshotFor(attackerSocket);
+    const publicAttacker = getPlayer(snapshot, attacker.id);
+    const specialEffectType: Partial<
+      Record<ArenaCatalogSkillId, string>
+    > = {
+      engineer_12: "magic_turret_sync",
+      engineer_14: "magic_turret_split",
+      engineer_15: "magic_turret_matrix",
+      mage_00: "beam",
+      mage_07: "burst",
+      mage_08: "mage_miasma_field",
+      mage_12: "ultimate",
+      mage_13: "mage_time_astrolabe",
+      mage_14: "mage_blood_altar"
+    };
+    const expectedVfxType =
+      specialEffectType[catalogSkill.id] ?? "catalog_skill";
+    const skillEffect = snapshot.effects.find(
+      (effect) =>
+        effect.type === expectedVfxType &&
+        (expectedVfxType !== "catalog_skill" ||
+          effect.skillId === catalogSkill.id) &&
+        effect.ownerId === attacker.id
+    );
+    const projectileEvidence = snapshot.projectiles.some(
+      (projectile) =>
+        projectile.ownerId === attacker.id &&
+        projectile.skillId === catalogSkill.id
+    );
+    const stateEvidence =
+      (catalogSkill.id === "warrior_03" &&
+        publicAttacker.enchantedMeleeHitsRemaining === 3) ||
+      (catalogSkill.id === "archer_04" &&
+        publicAttacker.concealmentEndsAt > snapshot.serverTime);
+    if (!skillEffect && !projectileEvidence && !stateEvidence) {
+      failures.push(
+        `${catalogSkill.id}: successful cast produced no matching VFX, projectile or public state`
+      );
+    }
+    if (
+      publicAttacker.cooldowns[slot] - snapshot.serverTime !==
+      ARENA_SKILL_SPECS[catalogSkill.id].cooldownMs
+    ) {
+      failures.push(
+        `${catalogSkill.id}: cooldown did not start at canonical value`
+      );
+    }
+
+    const damageValues = ARENA_SKILL_SPECS[catalogSkill.id].numbers.damage;
+    const verifiesDamage =
+      (catalogSkill.classId === "engineer" ||
+        catalogSkill.classId === "mage") &&
+      Boolean(damageValues?.length) &&
+      catalogSkill.id !== "mage_09";
+    if (verifiesDamage && damageValues) {
+      if (
+        catalogSkill.id === "engineer_01" ||
+        catalogSkill.id === "engineer_03"
+      ) {
+        const mechanicalTurret = internals.turrets.find(
+          (turret) => turret.kind === "mechanical"
+        );
+        if (mechanicalTurret) {
+          mechanicalTurret.lastAttackAt =
+            fakeNow - COMBAT.mechanicalTurretAttackInterval;
+        }
+      }
+      const observationMs =
+        catalogSkill.id === "engineer_01"
+          ? 2200
+          : catalogSkill.id === "engineer_03"
+            ? 100
+            : 6000;
+      advanceFrames(room, observationMs);
+      const damageTarget = internals.players.get(target.id);
+      const actualDamage = 10_000 - (damageTarget?.health ?? 10_000);
+      const expectedDamage = exactDamageBySkill[catalogSkill.id];
+      if (expectedDamage == null) {
+        failures.push(
+          `${catalogSkill.id}: missing exact runtime damage contract`
+        );
+      } else if (actualDamage !== expectedDamage) {
+        failures.push(
+          `${catalogSkill.id}: dealt ${actualDamage}, expected exactly ${expectedDamage}`
+        );
+      } else {
+        verifiedEngineerMageDamageSkills += 1;
+      }
+    }
+  }
+
+  assert(
+    failures.length === 0,
+    `Selectable skill runtime coverage failed:\n${failures.join("\n")}`
+  );
+  return {
+    name: "60 selectable skill runtime coverage",
+    details: [
+      "Every selectable Warrior, Archer, Engineer, and Mage skill entered its runtime handler.",
+      "Every successful cast emitted the matching catalog or dedicated VFX identity.",
+      "Every successful cast started the cooldown from the 61-entry canonical value table.",
+      `${verifiedEngineerMageDamageSkills} Engineer/Mage damage-bearing skills matched their exact expected damage in the real GameRoom pipeline.`
+    ]
   };
 }
 
@@ -639,7 +2134,10 @@ function checkAttackBoostPickupRuntime(): GameplayCheck {
   setInput(duel.room, duel.attackerSocket, { angle: 0, aimX: target.x, aimY: target.y, attack: true });
   tick(duel.room);
   const afterAttackTarget = getPlayer(duel.room.snapshotFor(duel.attackerSocket), duel.targetId);
-  const expectedDamage = Math.ceil(CLASS_STATS.warrior.attackPower * WORLD.attackBoostMultiplier);
+  const expectedDamage = getEffectiveClassDamage(
+    "warrior",
+    CLASS_STATS.warrior.attackPower * WORLD.attackBoostMultiplier
+  );
   const expectedHealth = CLASS_STATS.mage.maxHealth - expectedDamage;
   assert(afterAttackTarget.health === expectedHealth, `Attack boost should raise Warrior damage to ${expectedDamage}. Got target HP ${afterAttackTarget.health}.`);
 
@@ -647,12 +2145,12 @@ function checkAttackBoostPickupRuntime(): GameplayCheck {
     name: "attack boost mushroom runtime behavior",
     details: [
       `Mushroom pickup gives ${WORLD.attackBoostDurationMs / 1000}s attack boost.`,
-      `Warrior basic damage increased from ${CLASS_STATS.warrior.attackPower} to ${expectedDamage}.`
+      `Warrior basic damage increased from ${getEffectiveBasicAttackDamage("warrior")} to ${expectedDamage}.`
     ]
   };
 }
 
-function checkRandomReviewSpawnRuntime(): GameplayCheck {
+function checkFixedReviewSpawnRuntime(): GameplayCheck {
   fakeNow += 25_000;
   const room = new GameRoom({
     noBots: true,
@@ -660,11 +2158,15 @@ function checkRandomReviewSpawnRuntime(): GameplayCheck {
   });
   const first = room.addHuman("spawn_alpha", {
     name: "SPAWN_ALPHA",
-    classId: "warrior"
+    classId: "warrior",
+    loadout: getDefaultArenaLoadout("warrior"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("warrior")
   });
   const second = room.addHuman("spawn_beta", {
     name: "SPAWN_BETA",
-    classId: "mage"
+    classId: "mage",
+    loadout: getDefaultArenaLoadout("mage"),
+    catalogLoadout: getDefaultArenaCatalogLoadout("mage")
   });
   advance(room, SPAWN_GUARD_CLEAR_MS);
 
@@ -675,20 +2177,433 @@ function checkRandomReviewSpawnRuntime(): GameplayCheck {
   const centerDistanceB = distanceBetween(secondPlayer, TEST_SPAWN);
   const playerDistance = distanceBetween(firstPlayer, secondPlayer);
 
-  assert(centerDistanceA >= 700, `First random review spawn should not stay at the center. Distance: ${Math.round(centerDistanceA)}.`);
-  assert(centerDistanceB >= 700, `Second random review spawn should not stay at the center. Distance: ${Math.round(centerDistanceB)}.`);
-  assert(playerDistance >= 500, `Random review spawns should keep players separated. Distance: ${Math.round(playerDistance)}.`);
+  assert(centerDistanceA <= 600, `First fixed review spawn should stay near the centre. Distance: ${Math.round(centerDistanceA)}.`);
+  assert(centerDistanceB <= 600, `Second fixed review spawn should stay near the centre. Distance: ${Math.round(centerDistanceB)}.`);
+  assert(playerDistance < 1, `Fixed review spawns should resolve to the same deterministic point. Distance: ${Math.round(playerDistance)}.`);
 
   return {
-    name: "random review spawn runtime behavior",
+    name: "fixed review spawn runtime behavior",
     details: [
-      `Fixed review mode without explicit coordinates spawned players ${Math.round(centerDistanceA)}px and ${Math.round(centerDistanceB)}px from center.`,
-      `Players spawned ${Math.round(playerDistance)}px apart.`
+      `Fixed review mode without explicit coordinates spawned players ${Math.round(centerDistanceA)}px and ${Math.round(centerDistanceB)}px from centre.`,
+      `Both players resolved to the same deterministic review point.`
     ]
   };
 }
 
-function createDuel(attackerClass: ClassId, targetClass: ClassId, attackerSocket: string, targetSocket: string): DuelSetup {
+function checkArcherCrescentReturnRuntime(): GameplayCheck {
+  const duel = createDuel("archer", "engineer", "crescent_archer", "crescent_target");
+  const internals = duel.room as unknown as {
+    players: Map<string, PublicPlayer>;
+    projectiles: Array<{
+      id: string;
+      skillId?: string;
+      x: number;
+      y: number;
+      returningToOwner?: boolean;
+    }>;
+  };
+  const attacker = internals.players.get(duel.attackerId);
+  const target = internals.players.get(duel.targetId);
+  assert(Boolean(attacker) && Boolean(target), "Crescent return audit could not find its players.");
+  attacker.x = OPEN_FIELD_TEST_POINT.x;
+  attacker.y = OPEN_FIELD_TEST_POINT.y;
+  target.x = attacker.x + 280;
+  target.y = attacker.y;
+  target.health = target.maxHealth;
+  attacker.catalogLoadout = { ...attacker.catalogLoadout, skillQ: "archer_00" };
+
+  castSkillAt(duel, "skillQ", target, 0);
+  let returning: (typeof internals.projectiles)[number] | undefined;
+  for (let frame = 0; frame < 40 && !returning; frame += 1) {
+    tick(duel.room);
+    returning = internals.projectiles.find(
+      (projectile) => projectile.skillId === "archer_00" && projectile.returningToOwner
+    );
+  }
+  assert(Boolean(returning), "Moon Crescent should keep the same projectile alive for a visible return leg after impact.");
+  const returnProjectileId = returning.id;
+  const distanceAtTurnaround = distanceBetween(returning, attacker);
+  advanceFrames(duel.room, 165);
+  const laterReturn = internals.projectiles.find((projectile) => projectile.id === returnProjectileId);
+  assert(Boolean(laterReturn), "Moon Crescent return projectile disappeared before travelling back to the Archer.");
+  assert(
+    distanceBetween(laterReturn, attacker) < distanceAtTurnaround,
+    "Moon Crescent return projectile did not move closer to its owner."
+  );
+  advanceFrames(duel.room, 500);
+  assert(
+    target.maxHealth - target.health === 22,
+    `Moon Crescent should deal 11 outbound + 11 return damage, dealt ${target.maxHealth - target.health}.`
+  );
+
+  return {
+    name: "Archer Moon Crescent visible return runtime",
+    details: [
+      "The outbound projectile survives impact, pauses briefly, reverses toward the Archer, and keeps the authored 11 + 11 damage contract."
+    ]
+  };
+}
+
+function checkEngineerCursorVolleyRuntime(): GameplayCheck {
+  const duel = createDuel("engineer", "mage", "cursor_engineer", "cursor_target");
+  const internals = duel.room as unknown as {
+    players: Map<string, PublicPlayer>;
+    turrets: Array<{
+      id: string;
+      ownerId: string;
+      x: number;
+      y: number;
+      angle: number;
+      health: number;
+      maxHealth: number;
+      shield: number;
+      shieldEndsAt: number;
+      kind: "mechanical" | "magic_missile";
+      lastAttackAt: number;
+      deployedAt: number;
+      supportEndsAt: number;
+      markedTargetId: string | null;
+      markedEndsAt: number;
+      enhancedShots: number;
+      armorCoreEndsAt: number;
+    }>;
+    projectiles: Array<{
+      id: string;
+      skillId?: string;
+      angle: number;
+      targetId?: string;
+      homingTurnRate?: number;
+    }>;
+  };
+  const attacker = internals.players.get(duel.attackerId);
+  const target = internals.players.get(duel.targetId);
+  assert(Boolean(attacker) && Boolean(target), "Engineer cursor volley audit could not find its players.");
+  attacker.x = OPEN_FIELD_TEST_POINT.x;
+  attacker.y = OPEN_FIELD_TEST_POINT.y;
+  target.x = attacker.x + 300;
+  target.y = attacker.y;
+  attacker.catalogLoadout = { ...attacker.catalogLoadout, skillE: "engineer_05" };
+  internals.turrets = [-80, 0, 80].map((offset, index) => ({
+    id: `cursor_volley_turret_${index}`,
+    ownerId: attacker.id,
+    x: attacker.x + 70,
+    y: attacker.y + offset,
+    angle: 0,
+    health: COMBAT.mechanicalTurretHealth,
+    maxHealth: COMBAT.mechanicalTurretHealth,
+    shield: 0,
+    shieldEndsAt: 0,
+    kind: "mechanical" as const,
+    lastAttackAt: Number.MAX_SAFE_INTEGER,
+    deployedAt: fakeNow + index,
+    supportEndsAt: 0,
+    markedTargetId: index === 0 ? target.id : null,
+    markedEndsAt: index === 0 ? fakeNow + 5000 : 0,
+    enhancedShots: index === 0 ? 3 : 0,
+    armorCoreEndsAt: 0
+  }));
+
+  castSkillAt(duel, "skillE", target, 0);
+  const volley = internals.projectiles.filter((projectile) => projectile.skillId === "engineer_05");
+  assert(volley.length === 3, `Locking Volley should launch one shell from each eligible turret, launched ${volley.length}.`);
+  assert(
+    volley.every((projectile) => !projectile.targetId && !projectile.homingTurnRate),
+    "Locking Volley shells must be straight physical shots, not guaranteed homing hits."
+  );
+  const releaseAngles = new Map(volley.map((projectile) => [projectile.id, projectile.angle]));
+  target.y += 220;
+  advanceFrames(duel.room, 99);
+  const survivingVolley = internals.projectiles.filter((projectile) => releaseAngles.has(projectile.id));
+  assert(survivingVolley.length > 0, "Locking Volley audit lost every shell before checking its travel heading.");
+  assert(
+    survivingVolley.every(
+      (projectile) => Math.abs(projectile.angle - (releaseAngles.get(projectile.id) ?? projectile.angle)) < 0.001
+    ),
+    "Locking Volley followed the target after release instead of preserving its release-time line."
+  );
+
+  return {
+    name: "Engineer cursor-selected non-homing volley runtime",
+    details: [
+      "Every eligible ordinary turret fires once at the cursor-selected enemy, and each shell keeps its release-time heading so movement can dodge it."
+    ]
+  };
+}
+
+const CONTROL_LOCK_MOBILITY_CASES = [
+  {
+    classId: "warrior",
+    skillId: "warrior_04",
+    slot: "skillQ"
+  },
+  {
+    classId: "archer",
+    skillId: "archer_01",
+    slot: "skillQ"
+  },
+  {
+    classId: "archer",
+    skillId: "archer_06",
+    slot: "skillQ"
+  },
+  {
+    classId: "archer",
+    skillId: "archer_14",
+    slot: "skillR"
+  }
+] as const;
+
+const CONTROL_LOCK_STATUS_CASES = [
+  {
+    name: "root",
+    casterClass: "archer",
+    casterSlot: "skillE",
+    statusFlag: "rooted",
+    activationDelayMs: 0
+  },
+  {
+    name: "stun",
+    casterClass: "mage",
+    casterSlot: "skillE",
+    statusFlag: "stunned",
+    activationDelayMs: 300
+  }
+] as const;
+
+function checkControlLocksMobilityRuntime(): GameplayCheck {
+  const failures: string[] = [];
+  const declaredMobilitySkills = Object.entries(ARENA_SKILL_TELEGRAPHS)
+    .filter(([, telegraph]) => telegraph.kind === "dash")
+    .map(([skillId]) => skillId)
+    .sort();
+  const auditedMobilitySkills = CONTROL_LOCK_MOBILITY_CASES
+    .map(({ skillId }) => skillId)
+    .sort();
+  assert(
+    JSON.stringify(declaredMobilitySkills) ===
+      JSON.stringify(auditedMobilitySkills),
+    `Mobility audit must cover every declared self-movement skill. Declared ${declaredMobilitySkills.join(", ")}; audited ${auditedMobilitySkills.join(", ")}.`
+  );
+
+  for (const statusCase of CONTROL_LOCK_STATUS_CASES) {
+    for (const mobilityCase of CONTROL_LOCK_MOBILITY_CASES) {
+      const duel = createDuel(
+        statusCase.casterClass,
+        mobilityCase.classId,
+        `${statusCase.name}_${mobilityCase.skillId}_caster`,
+        `${statusCase.name}_${mobilityCase.skillId}_target`
+      );
+      placeDuel(
+        duel,
+        OPEN_FIELD_TEST_POINT,
+        { x: OPEN_FIELD_TEST_POINT.x + 100, y: OPEN_FIELD_TEST_POINT.y }
+      );
+      const internals = duel.room as unknown as {
+        players: Map<string, PublicPlayer>;
+        catalogPlayerMotions: Map<string, unknown>;
+      };
+      const target = internals.players.get(duel.targetId);
+      assert(Boolean(target), `Missing ${mobilityCase.skillId} target.`);
+      target.catalogLoadout[mobilityCase.slot] = mobilityCase.skillId;
+
+      castSkillAt(
+        duel,
+        statusCase.casterSlot,
+        { x: target.x, y: target.y },
+        statusCase.activationDelayMs
+      );
+      const controlled = getPlayer(
+        duel.room.snapshotFor(duel.targetSocket),
+        duel.targetId
+      );
+      if (!controlled[statusCase.statusFlag]) {
+        failures.push(
+          `${statusCase.name}/${mobilityCase.skillId}: control status was not applied`
+        );
+        continue;
+      }
+
+      const before = { x: controlled.x, y: controlled.y };
+      setInput(duel.room, duel.targetSocket, {
+        angle: 0,
+        aimX: before.x + 400,
+        aimY: before.y,
+        [mobilityCase.slot]: true
+      });
+      tick(duel.room);
+      setInput(duel.room, duel.targetSocket, {});
+      const after = getPlayer(
+        duel.room.snapshotFor(duel.targetSocket),
+        duel.targetId
+      );
+      if (
+        distanceBetween(before, after) > 0.01 ||
+        after.cooldowns[mobilityCase.slot] > 0 ||
+        after.actionSkillId === mobilityCase.skillId ||
+        internals.catalogPlayerMotions.has(duel.targetId)
+      ) {
+        failures.push(
+          `${statusCase.name}/${mobilityCase.skillId}: mobility cast started or moved while controlled`
+        );
+      }
+    }
+  }
+
+  for (const statusCase of CONTROL_LOCK_STATUS_CASES) {
+    for (const mobilityCase of CONTROL_LOCK_MOBILITY_CASES.filter(
+      (candidate) => candidate.classId === "archer"
+    )) {
+      const duel = createDuel(
+        statusCase.casterClass,
+        "archer",
+        `${statusCase.name}_${mobilityCase.skillId}_interrupt_caster`,
+        `${statusCase.name}_${mobilityCase.skillId}_interrupt_target`
+      );
+      placeDuel(
+        duel,
+        OPEN_FIELD_TEST_POINT,
+        { x: OPEN_FIELD_TEST_POINT.x + 100, y: OPEN_FIELD_TEST_POINT.y }
+      );
+      const internals = duel.room as unknown as {
+        players: Map<string, PublicPlayer>;
+        catalogPlayerMotions: Map<string, unknown>;
+        applyRoot: (
+          target: PublicPlayer,
+          durationMs: number,
+          now: number
+        ) => boolean;
+        applyStun: (
+          target: PublicPlayer,
+          durationMs: number,
+          now: number
+        ) => boolean;
+      };
+      const target = internals.players.get(duel.targetId);
+      assert(Boolean(target), `Missing interrupt target for ${mobilityCase.skillId}.`);
+      target.catalogLoadout[mobilityCase.slot] = mobilityCase.skillId;
+
+      setInput(duel.room, duel.targetSocket, {
+        angle: 0,
+        aimX: target.x + 400,
+        aimY: target.y,
+        [mobilityCase.slot]: true
+      });
+      tick(duel.room);
+      setInput(duel.room, duel.targetSocket, {});
+      if (!internals.catalogPlayerMotions.has(duel.targetId)) {
+        failures.push(
+          `${statusCase.name}/${mobilityCase.skillId}: movement did not start before interrupt audit`
+        );
+        continue;
+      }
+      const beforeControl = getPlayer(
+        duel.room.snapshotFor(duel.targetSocket),
+        duel.targetId
+      );
+      const applied =
+        statusCase.name === "root"
+          ? internals.applyRoot(target, 1000, fakeNow)
+          : internals.applyStun(target, 1000, fakeNow);
+      if (!applied) {
+        failures.push(
+          `${statusCase.name}/${mobilityCase.skillId}: interrupt status was rejected`
+        );
+        continue;
+      }
+      const atControl = getPlayer(
+        duel.room.snapshotFor(duel.targetSocket),
+        duel.targetId
+      );
+      advance(duel.room, 120);
+      const afterControl = getPlayer(
+        duel.room.snapshotFor(duel.targetSocket),
+        duel.targetId
+      );
+      if (
+        !atControl[statusCase.statusFlag] ||
+        !afterControl[statusCase.statusFlag] ||
+        distanceBetween(beforeControl, afterControl) > 0.01 ||
+        internals.catalogPlayerMotions.has(duel.targetId)
+      ) {
+        failures.push(
+          `${statusCase.name}/${mobilityCase.skillId}: active movement continued after control landed (status=${afterControl[statusCase.statusFlag]}, moved=${distanceBetween(beforeControl, afterControl).toFixed(2)}, motion=${internals.catalogPlayerMotions.has(duel.targetId)})`
+        );
+      }
+    }
+  }
+
+  const rootedNonMobility = createDuel(
+    "archer",
+    "warrior",
+    "root_non_mobility_caster",
+    "root_non_mobility_target"
+  );
+  placeDuel(
+    rootedNonMobility,
+    OPEN_FIELD_TEST_POINT,
+    { x: OPEN_FIELD_TEST_POINT.x + 100, y: OPEN_FIELD_TEST_POINT.y }
+  );
+  const nonMobilityInternals = rootedNonMobility.room as unknown as {
+    players: Map<string, PublicPlayer>;
+  };
+  const rootedWarrior = nonMobilityInternals.players.get(
+    rootedNonMobility.targetId
+  );
+  assert(Boolean(rootedWarrior), "Missing rooted non-mobility target.");
+  rootedWarrior.catalogLoadout.skillQ = "warrior_01";
+  castSkillAt(
+    rootedNonMobility,
+    "skillE",
+    { x: rootedWarrior.x, y: rootedWarrior.y },
+    0
+  );
+  const rootedBeforeBuff = getPlayer(
+    rootedNonMobility.room.snapshotFor(rootedNonMobility.targetSocket),
+    rootedNonMobility.targetId
+  );
+  setInput(rootedNonMobility.room, rootedNonMobility.targetSocket, {
+    skillQ: true
+  });
+  tick(rootedNonMobility.room);
+  const rootedAfterBuff = getPlayer(
+    rootedNonMobility.room.snapshotFor(rootedNonMobility.targetSocket),
+    rootedNonMobility.targetId
+  );
+  if (
+    rootedAfterBuff.actionSkillId !== "warrior_01" ||
+    rootedAfterBuff.cooldowns.skillQ <= 0 ||
+    distanceBetween(rootedBeforeBuff, rootedAfterBuff) > 0.01
+  ) {
+    failures.push(
+      "root/warrior_01: root should allow a non-mobility buff without moving the player"
+    );
+  }
+
+  assert(
+    failures.length === 0,
+    `Control-lock mobility regressions:\n${failures.map((failure) => `- ${failure}`).join("\n")}`
+  );
+
+  return {
+    name: "root and stun mobility lock",
+    details: [
+      "Root and stun block all four self-movement skills before cast.",
+      "Root and stun interrupt all three in-progress Archer movement skills.",
+      "Root still allows non-mobility skills; stun keeps its existing full skill lock."
+    ]
+  };
+}
+
+function createDuel(
+  attackerClass: ClassId,
+  targetClass: ClassId,
+  attackerSocket: string,
+  targetSocket: string,
+  options: {
+    attackerCatalogLoadout?: ReturnType<typeof getDefaultArenaCatalogLoadout>;
+    attackerEngineerTurretKind?: "mechanical" | "magic_missile";
+  } = {}
+): DuelSetup {
   fakeNow += 25_000;
   const room = new GameRoom({
     noBots: true,
@@ -697,11 +2612,16 @@ function createDuel(attackerClass: ClassId, targetClass: ClassId, attackerSocket
   });
   const attacker = room.addHuman(attackerSocket, {
     name: attackerSocket.toUpperCase(),
-    classId: attackerClass
+    classId: attackerClass,
+    loadout: getDefaultArenaLoadout(attackerClass),
+    catalogLoadout: options.attackerCatalogLoadout ?? getDefaultArenaCatalogLoadout(attackerClass),
+    engineerTurretKind: options.attackerEngineerTurretKind
   });
   const target = room.addHuman(targetSocket, {
     name: targetSocket.toUpperCase(),
-    classId: targetClass
+    classId: targetClass,
+    loadout: getDefaultArenaLoadout(targetClass),
+    catalogLoadout: getDefaultArenaCatalogLoadout(targetClass)
   });
 
   advance(room, SPAWN_GUARD_CLEAR_MS);

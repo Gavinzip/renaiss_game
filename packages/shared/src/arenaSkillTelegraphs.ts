@@ -234,3 +234,15 @@ export function getArenaSkillTelegraph(
 ): ArenaSkillTelegraph | null {
   return skillId ? ARENA_SKILL_TELEGRAPHS[skillId] ?? null : null;
 }
+
+/**
+ * True when a catalog skill changes the caster's own world position.
+ *
+ * The cast preview and the authoritative server intentionally share this
+ * footprint contract so root/stun rules cannot drift away from targeting UI.
+ */
+export function isArenaSelfMovementSkill(
+  skillId: ArenaCatalogSkillId | null | undefined
+) {
+  return getArenaSkillTelegraph(skillId)?.kind === "dash";
+}

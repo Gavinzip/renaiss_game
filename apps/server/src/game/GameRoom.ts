@@ -19,10 +19,12 @@ import {
   roundDamage,
   getArcherChargedArrowBaseDamageForStage,
   getDefaultArenaCatalogLoadout,
+  getDefaultEngineerCatalogLoadoutForTurretKind,
   getDefaultArenaLoadout,
   getArenaSkillSpec,
   getArenaSkillDamageMultiplier,
   getArenaCatalogSkill,
+  isArenaSelfMovementSkill,
   getArcherBowAnchor,
   getArcherThrowAnchor,
   getMageStaffAnchor,
@@ -649,12 +651,7 @@ export class GameRoom {
     }
 
     const aimPoint = this.getSanitizedAimPoint(player, input);
-    const engineerTurretKind: EngineerTurretKind =
-      input.engineerTurretKind === undefined
-        ? player.engineerTurretKind
-        : input.engineerTurretKind === "magic_missile"
-          ? "magic_missile"
-          : "mechanical";
+    const engineerTurretKind = player.engineerTurretKind;
     player.input = {
       sequence: Number.isFinite(input.sequence)
         ? Math.max(0, Math.floor(input.sequence ?? 0))
@@ -676,7 +673,6 @@ export class GameRoom {
       skillR: player.input.skillR || Boolean(input.skillR),
       engineerTurretKind
     };
-    player.engineerTurretKind = engineerTurretKind;
   }
 
   update(deltaMs: number) {
@@ -1164,15 +1160,18 @@ export class GameRoom {
         continue;
       }
       const classId = CLASS_ORDER[i % CLASS_ORDER.length];
+      const engineerTurretKind = classId === "engineer" ? "magic_missile" : "mechanical";
       const player = this.createPlayer({
         id,
         socketId: null,
         name: BOT_NAMES[i],
         classId,
         loadout: getDefaultArenaLoadout(classId),
-        catalogLoadout: getDefaultArenaCatalogLoadout(classId),
+        catalogLoadout: classId === "engineer"
+          ? getDefaultEngineerCatalogLoadoutForTurretKind(engineerTurretKind)
+          : getDefaultArenaCatalogLoadout(classId),
         team: null,
-        engineerTurretKind: classId === "engineer" ? "magic_missile" : "mechanical",
+        engineerTurretKind,
         bot: true
       });
       const spawn = this.botSpawnPoint(i);
@@ -1206,6 +1205,7 @@ export class GameRoom {
         }
         const classOffset = team === "red" ? 0 : 2;
         const classId = CLASS_ORDER[(index + classOffset) % CLASS_ORDER.length];
+        const engineerTurretKind = classId === "engineer" ? "magic_missile" : "mechanical";
         const nameIndex = (team === "red" ? 0 : 4) + index;
         const player = this.createPlayer({
           id,
@@ -1213,9 +1213,11 @@ export class GameRoom {
           name: BOT_NAMES[nameIndex % BOT_NAMES.length],
           classId,
           loadout: getDefaultArenaLoadout(classId),
-          catalogLoadout: getDefaultArenaCatalogLoadout(classId),
+          catalogLoadout: classId === "engineer"
+            ? getDefaultEngineerCatalogLoadoutForTurretKind(engineerTurretKind)
+            : getDefaultArenaCatalogLoadout(classId),
           team,
-          engineerTurretKind: classId === "engineer" ? "magic_missile" : "mechanical",
+          engineerTurretKind,
           bot: true
         });
         const spawn = this.teamSpawnPoint(team, index);
@@ -1505,6 +1507,24 @@ export class GameRoom {
     );
   }
 
+  private isSelfMovementSkillBlocked(
+    player: PlayerEntity,
+    skillId: ArenaCatalogSkillId,
+    now: number
+  ) {
+    return (
+      isArenaSelfMovementSkill(skillId) &&
+      (player.rooted || player.stunned || this.isDashLocked(player, now))
+    );
+  }
+
+  private cancelSelfMovement(player: PlayerEntity, now: number) {
+    this.catalogPlayerMotions.delete(player.id);
+    if (player.dodgeEndsAt > now) {
+      player.dodgeEndsAt = 0;
+    }
+  }
+
   private scheduleCatalogAction(
     ownerId: string,
     runAt: number,
@@ -1516,8 +1536,16 @@ export class GameRoom {
   private updateCatalogPlayerMotions(now: number) {
     for (const [playerId, motion] of this.catalogPlayerMotions) {
       const player = this.players.get(playerId);
-      if (!player?.alive || player.actionSkillId !== motion.skillId) {
-        this.catalogPlayerMotions.delete(playerId);
+      if (
+        !player?.alive ||
+        player.actionSkillId !== motion.skillId ||
+        this.isSelfMovementSkillBlocked(player, motion.skillId, now)
+      ) {
+        if (player) {
+          this.cancelSelfMovement(player, now);
+        } else {
+          this.catalogPlayerMotions.delete(playerId);
+        }
         continue;
       }
       const duration = Math.max(1, motion.endsAt - motion.startedAt);
@@ -2186,6 +2214,9 @@ export class GameRoom {
     if (!skillId || !spec || !skillId.startsWith(`${player.classId}_`)) {
       return false;
     }
+    if (this.isSelfMovementSkillBlocked(player, skillId, now)) {
+      return false;
+    }
     const focusLensActive =
       player.classId === "mage" &&
       slot === "skillQ" &&
@@ -2260,7 +2291,7 @@ export class GameRoom {
       return true;
     }
     if (skillId === "warrior_04") {
-      if (this.isDashLocked(player, now)) return false;
+      if (this.isSelfMovementSkillBlocked(player, skillId, now)) return false;
       const next = this.resolveMapCollision(
         project(player, player.angle, 280),
         COMBAT.playerRadius
@@ -2459,7 +2490,7 @@ export class GameRoom {
     now: number
   ) {
     if (skillId === "archer_01" || skillId === "archer_06") {
-      if (this.isDashLocked(player, now)) return false;
+      if (this.isSelfMovementSkillBlocked(player, skillId, now)) return false;
       const movement = skillId === "archer_01" ? 330 : 210;
       const next = this.resolveMapCollision(
         project(player, player.angle, movement),
@@ -2716,6 +2747,9 @@ export class GameRoom {
     now: number
   ) {
     const skillId = "archer_14" as const;
+    if (this.isSelfMovementSkillBlocked(player, skillId, now)) {
+      return false;
+    }
     const executionSpec = getArenaSkillSpec(skillId);
     const lungeRange = executionSpec?.numbers.range;
     const impactRadius = executionSpec?.numbers.radius;
@@ -2877,7 +2911,7 @@ export class GameRoom {
       damageTarget?.kind === "turret"
     ) {
       const damage =
-        (skillId === "mage_02" ? 16 : 26) + focusDamageBonus;
+        (skillId === "mage_02" ? 16 : 13) + focusDamageBonus;
       this.damageTurret(
         damageTarget.target,
         damage,
@@ -2961,7 +2995,7 @@ export class GameRoom {
       return true;
     }
     if (skillId === "mage_05" && target) {
-      this.damagePlayer(target, 26 + focusDamageBonus, player.id, skillId);
+      this.damagePlayer(target, 13 + focusDamageBonus, player.id, skillId);
       this.addCatalogEffect(skillId, player, target, 94, 850, now, target);
       return true;
     }
@@ -3731,6 +3765,7 @@ export class GameRoom {
     }
     target.rootEndsAt = Math.max(target.rootEndsAt, now + durationMs);
     target.rooted = true;
+    this.cancelSelfMovement(target, now);
     return true;
   }
 
@@ -3744,6 +3779,7 @@ export class GameRoom {
     }
     target.stunEndsAt = Math.max(target.stunEndsAt, now + durationMs);
     target.stunned = true;
+    this.cancelSelfMovement(target, now);
     return true;
   }
 
