@@ -147,9 +147,16 @@
   }
 
   .arena-skill-animation-preview {
+    width: 100%;
+    max-width: none;
     border-width: 6px;
     border-image-width: 6px;
     box-shadow: 2px 3px 0 rgba(9, 4, 11, 0.5);
+  }
+
+  .arena-skill-animation-preview > .arena-skill-preview-media {
+    width: 100%;
+    max-width: none;
   }
 
   .arena-skill-animation-preview figcaption {

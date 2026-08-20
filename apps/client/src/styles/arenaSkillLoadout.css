@@ -571,6 +571,18 @@
   image-rendering: auto;
 }
 
+/* The packaged gameplay videos are already physically cropped to their final
+ * 16:9 frame. Keep full-frame videos in normal flow so iOS Safari does not
+ * resolve percentage dimensions against the surrounding compact grid and
+ * enlarge the video beyond its viewport. */
+.arena-skill-preview-media > video.is-full-frame {
+  position: static;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--arena-preview-ratio, 16 / 9);
+  object-fit: contain;
+}
+
 .arena-skill-preview-media > img {
   inset: 0;
   width: 100%;

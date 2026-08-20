@@ -37,21 +37,29 @@ export function ArenaSkillPreviewMedia({
 
   const [sourceWidth, sourceHeight] = sourceSize;
   const [cropX, cropY, cropWidth, cropHeight] = crop;
+  const isFullFrame =
+    cropX === 0 &&
+    cropY === 0 &&
+    cropWidth === sourceWidth &&
+    cropHeight === sourceHeight;
   const viewportStyle = {
     "--arena-preview-ratio": cropWidth / cropHeight,
     aspectRatio: `${cropWidth} / ${cropHeight}`
   } as CSSProperties;
-  const videoStyle: CSSProperties = {
-    width: `${(sourceWidth / cropWidth) * 100}%`,
-    height: `${(sourceHeight / cropHeight) * 100}%`,
-    left: `${-(cropX / cropWidth) * 100}%`,
-    top: `${-(cropY / cropHeight) * 100}%`
-  };
+  const videoStyle: CSSProperties | undefined = isFullFrame
+    ? undefined
+    : {
+        width: `${(sourceWidth / cropWidth) * 100}%`,
+        height: `${(sourceHeight / cropHeight) * 100}%`,
+        left: `${-(cropX / cropWidth) * 100}%`,
+        top: `${-(cropY / cropHeight) * 100}%`
+      };
 
   return (
     <div className="arena-skill-preview-media" style={viewportStyle}>
       <video
         key={`${skillId}:${preview.sha256}`}
+        className={isFullFrame ? "is-full-frame" : undefined}
         src={preview.url}
         style={videoStyle}
         aria-label={label}

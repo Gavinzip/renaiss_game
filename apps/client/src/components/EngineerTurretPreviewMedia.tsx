@@ -24,12 +24,19 @@ export function EngineerTurretPreviewMedia({
 
   const [sourceWidth, sourceHeight] = sourceSize;
   const [cropX, cropY, cropWidth, cropHeight] = crop;
-  const videoStyle = {
-    width: `${(sourceWidth / cropWidth) * 100}%`,
-    height: `${(sourceHeight / cropHeight) * 100}%`,
-    left: `${-(cropX / cropWidth) * 100}%`,
-    top: `${-(cropY / cropHeight) * 100}%`
-  };
+  const isFullFrame =
+    cropX === 0 &&
+    cropY === 0 &&
+    cropWidth === sourceWidth &&
+    cropHeight === sourceHeight;
+  const videoStyle = isFullFrame
+    ? undefined
+    : {
+        width: `${(sourceWidth / cropWidth) * 100}%`,
+        height: `${(sourceHeight / cropHeight) * 100}%`,
+        left: `${-(cropX / cropWidth) * 100}%`,
+        top: `${-(cropY / cropHeight) * 100}%`
+      };
   const label =
     kind === "mechanical"
       ? "普通砲台 · 實戰部署預覽"
@@ -43,6 +50,7 @@ export function EngineerTurretPreviewMedia({
     >
       <video
         key={`${kind}:${preview.sha256}`}
+        className={isFullFrame ? "is-full-frame" : undefined}
         src={`${staticAssetUrl(preview.file)}?v=${preview.sha256.slice(0, 12)}`}
         style={videoStyle}
         aria-label={label}
