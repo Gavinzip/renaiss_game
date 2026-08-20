@@ -443,6 +443,10 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   const arenaAuthUser = resolveArenaSocketAuthUser(socket.request, socket.handshake.auth);
 
+  socket.on("arena_latency_probe", (acknowledge?: () => void) => {
+    if (arenaAuthUser && typeof acknowledge === "function") acknowledge();
+  });
+
   socket.on("prepare_match", (request: Partial<MatchPrepareRequest> = {}) => {
     if (!arenaAuthUser) {
       socket.emit("assets_ready_error", { message: "Arena authentication is required." });

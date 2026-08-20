@@ -59,6 +59,84 @@
   height: 16px;
 }
 
+.arena-combat-hud .network-ping-indicator {
+  position: absolute;
+  right: 166px;
+  top: 9px;
+  z-index: 6;
+  min-width: 64px;
+  height: 34px;
+  display: grid;
+  grid-template-columns: 14px auto;
+  grid-template-rows: 11px 14px;
+  align-content: center;
+  column-gap: 4px;
+  padding: 2px 6px 3px;
+  border: 4px solid transparent;
+  border-image: var(--arena-chrome-inset) 12 fill / 4px / 0 stretch;
+  color: var(--combat-hud-muted);
+  background: var(--combat-hud-panel-deep);
+  box-shadow: 2px 3px 0 var(--combat-hud-shadow);
+  transform: scale(var(--combat-hud-scale));
+  transform-origin: top right;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.arena-combat-hud .network-ping-bars {
+  grid-row: 1 / 3;
+  align-self: center;
+  height: 14px;
+  display: flex;
+  align-items: end;
+  gap: 1px;
+}
+
+.arena-combat-hud .network-ping-bars b {
+  width: 3px;
+  border: 1px solid #100714;
+  background: #4a3848;
+  box-shadow: 1px 1px 0 #09040b;
+}
+
+.arena-combat-hud .network-ping-bars b:nth-child(1) { height: 5px; }
+.arena-combat-hud .network-ping-bars b:nth-child(2) { height: 9px; }
+.arena-combat-hud .network-ping-bars b:nth-child(3) { height: 13px; }
+
+.arena-combat-hud .network-ping-indicator[data-quality="good"] .network-ping-bars b {
+  background: #76df58;
+}
+
+.arena-combat-hud .network-ping-indicator[data-quality="fair"] .network-ping-bars b:nth-child(-n + 2) {
+  background: #edb64e;
+}
+
+.arena-combat-hud .network-ping-indicator[data-quality="poor"] .network-ping-bars b:first-child {
+  background: #f2645c;
+}
+
+.arena-combat-hud .network-ping-indicator > span {
+  align-self: end;
+  font-size: 5px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+.arena-combat-hud .network-ping-indicator > strong {
+  align-self: start;
+  color: var(--combat-hud-copy);
+  font-size: 9px;
+  line-height: 1;
+  text-shadow: 1px 1px 0 #080409;
+  white-space: nowrap;
+}
+
+.arena-combat-hud .network-ping-indicator > strong small {
+  margin-left: 2px;
+  color: var(--combat-hud-muted);
+  font-size: 5px;
+}
+
 .arena-combat-hud .status-chip {
   top: 47px;
   right: 9px;
@@ -1830,6 +1908,14 @@
 
   .arena-combat-hud .top-actions {
     z-index: 21;
+  }
+
+  .arena-combat-hud .network-ping-indicator {
+    right: max(132px, calc(env(safe-area-inset-right) + 132px));
+    top: max(8px, env(safe-area-inset-top));
+    z-index: 21;
+    transform: scale(calc(0.78 * var(--combat-hud-scale)));
+    transform-origin: top right;
   }
 
   .arena-combat-hud .mobile-arena-controls.is-layout-editing {

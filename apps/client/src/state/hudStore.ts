@@ -65,6 +65,7 @@ const emptyMobileAim = (): MobileAimInput => ({
 interface HudStore {
   joined: boolean;
   connection: ConnectionState;
+  networkLatencyMs: number | null;
   arenaAssets: {
     status: ArenaAssetPreparationStatus;
     loaded: number;
@@ -116,6 +117,7 @@ interface HudStore {
   requestJoin: (request: JoinRequest) => void;
   requestClassSwitch: (classId: ClassId) => void;
   setConnection: (connection: ConnectionState) => void;
+  setNetworkLatency: (latencyMs: number | null) => void;
   beginArenaAssetPreparation: (total: number) => void;
   setArenaAssetProgress: (loaded: number, total: number) => void;
   finishArenaAssetPreparation: () => void;
@@ -143,6 +145,7 @@ interface HudStore {
 export const useHudStore = create<HudStore>((set, get) => ({
   joined: false,
   connection: "idle",
+  networkLatencyMs: null,
   arenaAssets: { status: "idle", loaded: 0, total: 0 },
   arenaAssetRetryRequestId: 0,
   selectedClass: "warrior",
@@ -318,7 +321,12 @@ export const useHudStore = create<HudStore>((set, get) => ({
       );
     }
   },
-  requestJoin: (request) => set({ joinRequest: request, selectedClass: request.classId, connection: "connecting" }),
+  requestJoin: (request) => set({
+    joinRequest: request,
+    selectedClass: request.classId,
+    connection: "connecting",
+    networkLatencyMs: null
+  }),
   requestClassSwitch: (classId) =>
     set((state) => isArenaCatalogLoadoutComplete(state.arenaCatalogLoadouts[classId]) &&
       isArenaCatalogLoadoutCompatibleWithTurretKind(
@@ -335,7 +343,15 @@ export const useHudStore = create<HudStore>((set, get) => ({
       },
       selectedClass: classId
     }) : state),
-  setConnection: (connection) => set({ connection }),
+  setConnection: (connection) => set({
+    connection,
+    ...(connection === "connected" ? {} : { networkLatencyMs: null })
+  }),
+  setNetworkLatency: (latencyMs) => set({
+    networkLatencyMs: latencyMs === null
+      ? null
+      : Math.max(0, Math.min(9_999, Math.round(latencyMs)))
+  }),
   beginArenaAssetPreparation: (total) => set({
     arenaAssets: {
       status: "loading",
@@ -417,6 +433,7 @@ export const useHudStore = create<HudStore>((set, get) => ({
   leaveArena: () => set({
     joined: false,
     connection: "idle",
+    networkLatencyMs: null,
     arenaAssets: { status: "idle", loaded: 0, total: 0 },
     selfId: null,
     joinRequest: null,

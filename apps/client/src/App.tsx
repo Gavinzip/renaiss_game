@@ -47,6 +47,7 @@ import { MapEditor } from "./components/MapEditor";
 import { Minimap } from "./components/Minimap";
 import { MobileControlLayoutEditor } from "./components/MobileControlLayoutEditor";
 import { MobileJoystick } from "./components/MobileJoystick";
+import { NetworkPingIndicator } from "./components/NetworkPingIndicator";
 import { RoundHud } from "./components/RoundHud";
 import { RoundRewards } from "./components/RoundRewards";
 import { RoundResultOverlay } from "./components/RoundResultOverlay";
@@ -960,6 +961,7 @@ function HudOverlay() {
       aria-label={t.ui.gameHud}
     >
       <GameAudio snapshot={snapshot} selfId={selfId} enabled={displayPrefs.audio} volume={effectiveAudioVolume} />
+      <NetworkPingIndicator />
       <nav className="top-actions" aria-label={t.ui.gameActions}>
         {devToolsMode ? (
           <a href="/?editor=1&dev=1" title={t.ui.sceneEditor} aria-label={t.ui.sceneEditor}>

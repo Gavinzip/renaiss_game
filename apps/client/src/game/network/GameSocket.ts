@@ -23,6 +23,7 @@ export type ArenaConnectionStatus =
 interface GameSocketCallbacks {
   prepareAssets: (manifest: MatchAssetManifest) => Promise<AssetsReadyRequest>;
   onStatus: (status: ArenaConnectionStatus) => void;
+  onLatency: (latencyMs: number | null) => void;
   onJoined: (accepted: JoinAccepted) => void;
   onError?: (message: string) => void;
 }
@@ -30,6 +31,9 @@ interface GameSocketCallbacks {
 const INITIAL_JOIN_TIMEOUT_MS = 20_000;
 const SNAPSHOT_STALE_MS = 1_500;
 const SNAPSHOT_RECOVERY_MS = 2_500;
+const LATENCY_PROBE_INTERVAL_MS = 2_000;
+const LATENCY_PROBE_TIMEOUT_MS = 1_500;
+const LATENCY_SAMPLE_LIMIT = 5;
 
 export class GameSocket {
   private socket: Socket | null = null;
@@ -41,6 +45,9 @@ export class GameSocket {
   private lastSnapshotAt = 0;
   private inputSequence = 0;
   private watchdog: ReturnType<typeof setInterval> | null = null;
+  private latencyProbe: ReturnType<typeof setInterval> | null = null;
+  private latencySamples: number[] = [];
+  private latencyProbeVersion = 0;
   private staleRecoveryStarted = false;
 
   async connect(
@@ -77,11 +84,13 @@ export class GameSocket {
     });
     this.socket.on("connect", () => {
       this.joined = false;
+      this.stopLatencyProbe();
       callbacks.onStatus(this.sessionToken ? "reconnecting" : "connecting");
       this.prepareMatch();
     });
     this.socket.on("disconnect", () => {
       this.joined = false;
+      this.stopLatencyProbe();
       if (!this.manualDisconnect) callbacks.onStatus("reconnecting");
     });
     this.socket.on("match_assets", (manifest: MatchAssetManifest) => {
@@ -100,6 +109,7 @@ export class GameSocket {
         this.sessionToken = accepted.sessionToken;
         this.joined = true;
         this.lastSnapshotAt = performance.now();
+        this.startLatencyProbe();
         callbacks.onJoined(accepted);
         callbacks.onStatus("connected");
         if (!resolved) {
@@ -157,6 +167,7 @@ export class GameSocket {
     this.joined = false;
     if (this.watchdog) clearInterval(this.watchdog);
     this.watchdog = null;
+    this.stopLatencyProbe();
     this.socket?.disconnect();
     this.socket = null;
   }
@@ -208,4 +219,45 @@ export class GameSocket {
       }
     }, 250);
   }
+
+  private startLatencyProbe() {
+    this.stopLatencyProbe();
+    const version = this.latencyProbeVersion;
+    const probe = () => {
+      if (!this.socket?.connected || !this.joined) return;
+      const startedAt = performance.now();
+      this.socket.timeout(LATENCY_PROBE_TIMEOUT_MS).emit(
+        "arena_latency_probe",
+        (error: Error | null) => {
+          if (version !== this.latencyProbeVersion) return;
+          if (error) {
+            this.callbacks?.onLatency(null);
+            return;
+          }
+          const latencyMs = Math.max(0, Math.round(performance.now() - startedAt));
+          this.latencySamples = [
+            ...this.latencySamples.slice(-(LATENCY_SAMPLE_LIMIT - 1)),
+            latencyMs
+          ];
+          this.callbacks?.onLatency(median(this.latencySamples));
+        }
+      );
+    };
+    probe();
+    this.latencyProbe = setInterval(probe, LATENCY_PROBE_INTERVAL_MS);
+  }
+
+  private stopLatencyProbe() {
+    this.latencyProbeVersion += 1;
+    if (this.latencyProbe) clearInterval(this.latencyProbe);
+    this.latencyProbe = null;
+    this.latencySamples = [];
+    this.callbacks?.onLatency(null);
+  }
+}
+
+function median(values: readonly number[]) {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((left, right) => left - right);
+  return sorted[Math.floor(sorted.length / 2)] ?? 0;
 }

@@ -613,6 +613,7 @@ export class VillageArenaScene extends Phaser.Scene {
         {
           prepareAssets: (manifest) => prepareWebArenaAssets(this, manifest),
           onStatus: (status) => useHudStore.getState().setConnection(status),
+          onLatency: (latencyMs) => useHudStore.getState().setNetworkLatency(latencyMs),
           onJoined: (accepted) => useHudStore.getState().setJoined(accepted.playerId),
           onError: (message) => console.error(`Arena connection: ${message}`)
         }
