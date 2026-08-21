@@ -9,6 +9,7 @@ import {
   getArenaSkillActionProfile,
   getArcherThrowAnchor,
   getMageStaffAnchor,
+  isArenaImmediateCastSkill,
   project,
   type ClassId,
   type CombatEvent,
@@ -908,10 +909,24 @@ export class VillageArenaScene extends Phaser.Scene {
       }
       return;
     }
+    if (this.isImmediateCastSlot(slot, self)) {
+      this.armedSkillSlot = slot;
+      this.queuedMouseAttack = false;
+      this.mouseAttackDragging = false;
+      this.confirmArmedSkill(this.getSelfForwardAimPoint(self));
+      return;
+    }
     this.armedSkillSlot = slot;
     this.queuedMouseAttack = false;
     this.mouseAttackDragging = false;
     useHudStore.getState().setArmedSkillAction(slot);
+  }
+
+  private isImmediateCastSlot(slot: SkillKey, self: PublicPlayer) {
+    if (slot === "skillF") {
+      return self.classId === "warrior" || self.classId === "mage";
+    }
+    return isArenaImmediateCastSkill(self.catalogLoadout[slot]);
   }
 
   private confirmArmedSkill(aimPoint: { x: number; y: number }) {

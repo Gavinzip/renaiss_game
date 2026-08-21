@@ -246,3 +246,33 @@ export function isArenaSelfMovementSkill(
 ) {
   return getArenaSkillTelegraph(skillId)?.kind === "dash";
 }
+
+/**
+ * True when a skill has no player-selected direction, ground point, turret,
+ * or opponent. These skills can resolve on the initial button press instead
+ * of entering the aim-and-confirm state.
+ */
+export function isArenaImmediateCastSkill(
+  skillId: ArenaCatalogSkillId | null | undefined
+) {
+  // Focus Lens intentionally previews the straight line of the next enhanced
+  // Q, but activating the stored self-buff itself never asks for an aim point.
+  if (skillId === "mage_09") {
+    return true;
+  }
+  const telegraph = getArenaSkillTelegraph(skillId);
+  if (!telegraph) {
+    return false;
+  }
+
+  if (telegraph.kind === "self-area" || telegraph.kind === "self-status") {
+    return true;
+  }
+  if (telegraph.kind === "turret-link" || telegraph.kind === "turret-network") {
+    return true;
+  }
+  return (
+    (telegraph.kind === "turret-status" || telegraph.kind === "turret-burst") &&
+    telegraph.scope === "all"
+  );
+}
