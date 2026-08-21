@@ -23,11 +23,13 @@ COPY ops ./ops
 COPY tools/audit_static_assets.mjs tools/manage_static_asset_release.mjs ./tools/
 
 ARG VITE_GAME_SERVER_URL
-ARG VITE_STATIC_ASSET_BASE_URL
 ENV VITE_GAME_SERVER_URL=${VITE_GAME_SERVER_URL}
-ENV VITE_STATIC_ASSET_BASE_URL=${VITE_STATIC_ASSET_BASE_URL}
 
-RUN pnpm --filter @renaiss-game/client build
+# The checked-in release manifest is the single source of truth. Deriving the
+# build-time CDN base here prevents a stale provider variable from pinning a
+# deployment to an older immutable asset release.
+RUN VITE_STATIC_ASSET_BASE_URL="$(node -p "require('./apps/client/src/game/assets/staticAssetReleaseManifest.json').publicBaseUrl")" \
+    pnpm --filter @renaiss-game/client build
 RUN pnpm --filter @renaiss-game/server typecheck
 RUN node tools/audit_static_assets.mjs
 RUN node tools/manage_static_asset_release.mjs --assert-build
