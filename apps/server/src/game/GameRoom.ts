@@ -5277,13 +5277,6 @@ export class GameRoom {
     }
     if (onHit.pull) {
       this.moveTargetToward(target, owner, onHit.pull);
-      if (projectile.skillId === "archer_07") {
-        this.scheduleArcherHookExecution(
-          owner,
-          { x: target.x, y: target.y },
-          now
-        );
-      }
     }
     if (onHit.vulnerabilityDurationMs) {
       target.vulnerabilityEndsAt = Math.max(
@@ -5342,60 +5335,6 @@ export class GameRoom {
         }
       );
     }
-  }
-
-  private scheduleArcherHookExecution(
-    owner: PlayerEntity,
-    executionPoint: { x: number; y: number },
-    now: number
-  ) {
-    const skillId = "archer_14" as const;
-    const slot = "skillR" as const;
-    if (
-      owner.classId !== "archer" ||
-      owner.catalogLoadout[slot] !== skillId
-    ) {
-      return;
-    }
-    const executeAt = Math.max(now + 315, owner.actionPoseEndsAt + 1);
-    this.scheduleCatalogAction(owner.id, executeAt, (triggeredAt) => {
-      const currentOwner = this.players.get(owner.id);
-      const spec = getArenaSkillSpec(skillId);
-      if (
-        !currentOwner?.alive ||
-        currentOwner.catalogLoadout[slot] !== skillId ||
-        !spec ||
-        !this.canUse(currentOwner, slot, triggeredAt) ||
-        currentOwner.stunEndsAt > triggeredAt ||
-        (currentOwner.silenceStartsAt <= triggeredAt &&
-          currentOwner.silenceEndsAt > triggeredAt) ||
-        !this.useArcherHawkExecutionAt(
-          currentOwner,
-          executionPoint,
-          triggeredAt
-        )
-      ) {
-        return;
-      }
-      currentOwner.actionSkillId = skillId;
-      this.releaseSpawnGuardForAction(currentOwner, triggeredAt);
-      this.startCooldown(currentOwner, slot, triggeredAt, spec.cooldownMs);
-      this.setActionPose(
-        currentOwner,
-        triggeredAt,
-        920,
-        slot,
-        skillId
-      );
-      const catalogSkill = getArenaCatalogSkill(skillId);
-      this.pushEvent(
-        "ultimate",
-        `${currentOwner.name} cast ${catalogSkill?.name ?? skillId}`,
-        currentOwner,
-        undefined,
-        triggeredAt
-      );
-    });
   }
 
   private projectileHitsPlayer(projectile: ProjectileEntity, previous: { x: number; y: number }, target: PlayerEntity) {

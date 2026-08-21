@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "releaseId": "c8244efe1f6429182d60",
-  "publicBaseUrl": "https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/releases/c8244efe1f6429182d60",
+  "releaseId": "1c50b1de7787258adc4e",
+  "publicBaseUrl": "https://pub-043b57dfe27c4f7e9a469bbc5d7f33dc.r2.dev/renaiss-game/releases/1c50b1de7787258adc4e",
   "bucket": "renaiss-game-media",
   "rootPrefix": "renaiss-game",
   "cacheControl": "public, max-age=31536000, immutable",
   "assetCount": 320,
-  "totalBytes": 112436025,
+  "totalBytes": 111848028,
   "fallbackUsed": false,
   "assets": [
     {
@@ -197,8 +197,8 @@
     },
     {
       "urlPath": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",
-      "bytes": 1106898,
-      "sha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
+      "bytes": 606055,
+      "sha256": "cae8f3bf9247695165c7837d4ce38503b135f3161df30e3c2a8832dd9f9b51d3",
       "contentType": "video/webm"
     },
     {
@@ -347,8 +347,8 @@
     },
     {
       "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
-      "bytes": 892908,
-      "sha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
+      "bytes": 799175,
+      "sha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
       "contentType": "video/webm"
     },
     {
@@ -359,8 +359,8 @@
     },
     {
       "urlPath": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/primary.png",
-      "bytes": 18416,
-      "sha256": "22fc6663a1e42f2b26349f15f6d4f92c71998509d236c0254d542a4df682101b",
+      "bytes": 24995,
+      "sha256": "a03009d29de8de36f994d4a75d0fc36e6352f97c43124d3404e2bfce5987d226",
       "contentType": "image/png"
     },
     {

@@ -74,6 +74,8 @@ function main() {
     } else if (scope === "skill-readability") {
       checks.push(checkMageBeamMovementLockRuntime());
       checks.push(checkArcherStarSnipeMovementLockRuntime());
+    } else if (scope === "archer-hook") {
+      checks.push(checkArcherHookManualFollowupRuntime());
     } else if (scope === "control-locks") {
       checks.push(checkControlLocksMobilityRuntime());
     } else if (scope !== "all") {
@@ -85,6 +87,7 @@ function main() {
     checks.push(checkMouseAimOverridesStaleAngleRuntime());
     checks.push(checkArcherProjectileBodyHurtboxRuntime());
     checks.push(checkArcherCrescentReturnRuntime());
+    checks.push(checkArcherHookManualFollowupRuntime());
     checks.push(checkMageBeamMovementLockRuntime());
     checks.push(checkArcherStarSnipeMovementLockRuntime());
     checks.push(checkArcherCursorTargetedAreaRuntime());
@@ -545,6 +548,89 @@ function checkArcherCursorTargetedAreaRuntime(): GameplayCheck {
       "Root Bind misses near-caster targets when aimed elsewhere and only shows compact root VFX under rooted targets.",
       `Seed Rain emits Archer ultimate radius ${ultimate?.radius} at the cursor for ${ultimate?.duration}ms.`,
       `Seed Rain lands three ${seedRainTickDamage}-damage ticks at 0.5s, 1.5s and 2.5s; target Mage stays alive at ${thirdTickTarget.health}/${thirdTickTarget.maxHealth}.`
+    ]
+  };
+}
+
+function checkArcherHookManualFollowupRuntime(): GameplayCheck {
+  const catalogLoadout = {
+    ...getDefaultArenaCatalogLoadout("archer"),
+    skillE: "archer_07" as const,
+    skillR: "archer_14" as const
+  };
+  const duel = createDuel(
+    "archer",
+    "mage",
+    "archer_hook_manual",
+    "target_hook_manual",
+    { attackerCatalogLoadout: catalogLoadout }
+  );
+  const targetStart = {
+    x: OPEN_FIELD_TEST_POINT.x + 360,
+    y: OPEN_FIELD_TEST_POINT.y
+  };
+  placeDuel(duel, OPEN_FIELD_TEST_POINT, targetStart);
+  castSkillAt(
+    duel,
+    "skillE",
+    { x: targetStart.x, y: targetStart.y - 48 },
+    0
+  );
+  const castSnapshot = duel.room.snapshotFor(duel.attackerSocket);
+  const castingArcher = getPlayer(castSnapshot, duel.attackerId);
+  assert(
+    castingArcher.actionSkillId === "archer_07" &&
+      castingArcher.cooldowns.skillE > castSnapshot.serverTime,
+    `Dark Hook should begin from the manual E input: ${JSON.stringify({
+      actionSkillId: castingArcher.actionSkillId,
+      cooldown: castingArcher.cooldowns.skillE,
+      serverTime: castSnapshot.serverTime
+    })}`
+  );
+  advanceFrames(duel.room, 1200);
+
+  const afterHook = duel.room.snapshotFor(duel.attackerSocket);
+  const archer = getPlayer(afterHook, duel.attackerId);
+  const target = getPlayer(afterHook, duel.targetId);
+  const pullDistance = targetStart.x - target.x;
+  const automaticExecution = afterHook.effects.find(
+    (effect) =>
+      effect.ownerId === duel.attackerId && effect.skillId === "archer_14"
+  );
+
+  assert(
+    Math.abs(pullDistance - 200) <= 1,
+    `Dark Hook should pull 200 without changing its core mechanic: ${JSON.stringify({
+      observedPull: pullDistance,
+      target: { x: target.x, y: target.y, health: target.health },
+      projectiles: afterHook.projectiles
+    })}`
+  );
+  assert(target.rooted, "Dark Hook should keep its two-second root after contact.");
+  assert(
+    archer.cooldowns.skillR === 0,
+    `Dark Hook must not spend Hawk Execution automatically; R cooldown is ${archer.cooldowns.skillR}.`
+  );
+  assert(
+    archer.actionSkillId !== "archer_14" && !automaticExecution,
+    "Dark Hook contact automatically cast Hawk Execution instead of leaving the follow-up to the player."
+  );
+
+  castSkillAt(duel, "skillR", { x: target.x, y: target.y }, 0);
+  const afterManualExecution = duel.room.snapshotFor(duel.attackerSocket);
+  const manualArcher = getPlayer(afterManualExecution, duel.attackerId);
+  assert(
+    manualArcher.actionSkillId === "archer_14" &&
+      manualArcher.cooldowns.skillR > afterManualExecution.serverTime,
+    "Hawk Execution should still cast normally when the player presses R after the hook."
+  );
+
+  return {
+    name: "Archer Dark Hook manual follow-up",
+    details: [
+      "Dark Hook keeps its 200 pull and two-second root.",
+      "Hook contact does not cast or spend Hawk Execution.",
+      "The player can still press R manually after the pull."
     ]
   };
 }

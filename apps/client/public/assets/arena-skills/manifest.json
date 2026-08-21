@@ -776,44 +776,44 @@
       "packagePath": "archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
       "packageUrl": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07",
       "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "92838e7fcbd1c62dfac19ec71c4a6c72f7df0c4f323495965c7face8a40dfe87",
+      "contractSha256": "543fba1bca3948a7274a17dbe70478435eb8cfa03830a7347d3c72f7f68dd3a1",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/2_E_中階/08_暗鉤牽引_archer_07/preview/gameplay-preview-v1.webm",
-        "sha256": "a7c99e80d47fba12b7a014c7703197e54b4a800008e3ba46c963dfdb7f55426b",
+        "sha256": "cae8f3bf9247695165c7837d4ce38503b135f3161df30e3c2a8832dd9f9b51d3",
         "kind": "actual-5173-gameplay-video-optimized",
         "mediaType": "video/webm",
-        "sourceVersion": "configuration-hq-runtime-20260813",
-        "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_07:source-2b6822b9140afe25:output-a7c99e80d47fba12",
-        "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+        "sourceVersion": "configuration-hq-runtime-20260820-archer-hook-manual",
+        "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_07:source-445c28830271b428:output-cae8f3bf92476951",
+        "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260820-archer-hook-manual/report.json",
         "sourceScenario": "random-archer_07",
         "sourceCapture": "canvas-capture-stream",
         "sourceCaptureEvidence": {
           "source": "canvas-capture-stream",
           "transport": "html-canvas-media-recorder-vp9",
-          "captureStartSec": 4.093,
+          "captureStartSec": 15.588,
           "sourceSize": [
             1920,
             1080
           ],
           "requestedFrameRate": 60,
-          "requestedBitrate": 20000000,
-          "actualBitrateSetting": 20000000,
+          "requestedBitrate": 16000000,
+          "actualBitrateSetting": 16000000,
           "mimeType": "video/webm;codecs=vp9",
           "interpolatedFrames": false,
           "fallbackUsed": false,
-          "captureEndSec": 9.055,
-          "durationSec": 4.962,
+          "captureEndSec": 19.848,
+          "durationSec": 4.26,
           "file": "random-archer_07-hq.webm",
-          "bytes": 16294536,
-          "sha256": "2b6822b9140afe25e251693169c3c3c6ac80355068596c8a9d5ffcaa016ca616"
+          "bytes": 7487694,
+          "sha256": "445c28830271b4280a758edddca7818a2d8882b1a7f1e60f2bb6ffeb4bcd21c2"
         },
-        "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_07-hq.webm",
-        "sourceVideoSha256": "2b6822b9140afe25e251693169c3c3c6ac80355068596c8a9d5ffcaa016ca616",
+        "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260820-archer-hook-manual/random-archer_07-hq.webm",
+        "sourceVideoSha256": "445c28830271b4280a758edddca7818a2d8882b1a7f1e60f2bb6ffeb4bcd21c2",
         "sourceSize": [
           1920,
           1080
         ],
-        "sourceFrameRate": 60.163,
+        "sourceFrameRate": 60.095,
         "previewSize": [
           896,
           504
@@ -841,9 +841,9 @@
           196
         ],
         "zoomFactor": 2.1429,
-        "frameRate": 30.02,
-        "frameCount": 148,
-        "totalDurationMs": 4930,
+        "frameRate": 30.0,
+        "frameCount": 126,
+        "totalDurationMs": 4200,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
         "encodingSettings": {
           "codec": "vp9",
@@ -857,9 +857,9 @@
         "runtimeViewportCrop": false,
         "resampling": "ffmpeg-approved-crop-no-spatial-scale",
         "optimizationVersion": "arena-config-cdn-preview-v1",
-        "sourceBytes": 16294536,
-        "outputBytes": 1106898,
-        "reductionRatio": 0.932069,
+        "sourceBytes": 7487694,
+        "outputBytes": 606055,
+        "reductionRatio": 0.91906,
         "interpolatedFrames": false,
         "sourceSubstitutionForReview": false,
         "fallbackUsed": false
@@ -1399,22 +1399,22 @@
       "tier": 3,
       "packagePath": "archer_射手/3_R_高階/14_種子雨_archer_13",
       "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13",
-      "sourceSelection": "actual-5173-canvas-cdn-preview-v1",
-      "contractSha256": "7663a0ff9b94f7a8561a4365d64ebb5e78a0d0a35943441f92cd84ba697bd99f",
+      "sourceSelection": "user-accepted-seed-rain-candidate-10-20260821",
+      "contractSha256": "13232843f21e5d1233a9ca8bafea99d7a9e5a953824b5654dd3c79aa8a0a7b17",
       "preview": {
         "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
-        "sha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
-        "kind": "actual-5173-gameplay-video-optimized",
+        "sha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
+        "kind": "actual-formal-gameplay-video-optimized",
         "mediaType": "video/webm",
-        "sourceVersion": "configuration-hq-runtime-20260813",
-        "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_13:source-06c6776136b72402:output-70fd22d72421e868",
-        "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+        "sourceVersion": "seed-rain-candidate-10-accepted-gameplay-v1",
+        "acceptedAnimationId": "accepted:archer-seed-rain-candidate-10:a03009d29de8de36",
+        "sourceReport": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920/report.json",
         "sourceScenario": "random-archer_13",
         "sourceCapture": "canvas-capture-stream",
         "sourceCaptureEvidence": {
           "source": "canvas-capture-stream",
           "transport": "html-canvas-media-recorder-vp9",
-          "captureStartSec": 4.403,
+          "captureStartSec": 3.956,
           "sourceSize": [
             1920,
             1080
@@ -1425,19 +1425,19 @@
           "mimeType": "video/webm;codecs=vp9",
           "interpolatedFrames": false,
           "fallbackUsed": false,
-          "captureEndSec": 9.351,
-          "durationSec": 4.948,
+          "captureEndSec": 9.305,
+          "durationSec": 5.349,
           "file": "random-archer_13-hq.webm",
-          "bytes": 10666860,
-          "sha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be"
+          "bytes": 14329231,
+          "sha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24"
         },
-        "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_13-hq.webm",
-        "sourceVideoSha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be",
+        "sourceVideo": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920/random-archer_13-hq.webm",
+        "sourceVideoSha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24",
         "sourceSize": [
           1920,
           1080
         ],
-        "sourceFrameRate": 59.959,
+        "sourceFrameRate": 59.81,
         "previewSize": [
           896,
           504
@@ -1453,21 +1453,21 @@
           504
         ],
         "visibleContentBounds": [
-          1065,
-          475,
-          1771,
-          805
+          1240,
+          470,
+          1775,
+          850
         ],
         "contentMargins": [
-          95,
-          87,
-          95,
-          87
+          270,
+          82,
+          91,
+          42
         ],
         "zoomFactor": 2.1429,
         "frameRate": 30,
-        "frameCount": 147,
-        "totalDurationMs": 4900,
+        "frameCount": 157,
+        "totalDurationMs": 5230,
         "encoding": "vp9-webm-crf34-30fps-physical-crop",
         "encodingSettings": {
           "codec": "vp9",
@@ -1481,9 +1481,9 @@
         "runtimeViewportCrop": false,
         "resampling": "ffmpeg-approved-crop-no-spatial-scale",
         "optimizationVersion": "arena-config-cdn-preview-v1",
-        "sourceBytes": 10666860,
-        "outputBytes": 892908,
-        "reductionRatio": 0.916291,
+        "sourceBytes": 14329231,
+        "outputBytes": 799175,
+        "reductionRatio": 0.944228,
         "interpolatedFrames": false,
         "sourceSubstitutionForReview": false,
         "fallbackUsed": false

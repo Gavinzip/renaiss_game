@@ -5,14 +5,14 @@
   "name": "種子雨",
   "key": "R",
   "tier": 3,
-  "sourceSelection": "5173-configuration-preview",
+  "sourceSelection": "user-accepted-seed-rain-candidate-10-20260821",
   "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13",
   "runtime": {
     "skillId": "archer_13",
     "classId": "archer",
     "name": "種子雨",
     "persistent": true,
-    "previewSha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
+    "previewSha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
     "visualContract": {
       "anchor": "effect",
       "layer": "ground",
@@ -28,8 +28,8 @@
         0
       ],
       "blendMode": "normal",
-      "radiusAspect": 0.4666666666666667,
-      "radiusWidthMultiplier": 2,
+      "radiusAspect": 1,
+      "radiusWidthMultiplier": 2.077922,
       "sourceAngleDegrees": 0,
       "projectileSize": null,
       "pathCore": null,
@@ -37,175 +37,176 @@
       "fixedDisplay": false
     },
     "contractSource": "tools/arena_skill_config_vfx_contracts.py#CONFIGURATION_CONTRACTS",
-    "acceptedAnimationId": "configuration:archer-seed-rain-three-cycle-v1:51b721c131cb260b",
-    "configPreviewSourcePath": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_13-hq.webm",
-    "configPreviewSourceSha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be",
-    "configPreviewOutputSha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
+    "acceptedAnimationId": "accepted:archer-seed-rain-candidate-10:a03009d29de8de36",
+    "configPreviewSourcePath": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920/random-archer_13-hq.webm",
+    "configPreviewSourceSha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24",
+    "configPreviewOutputSha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
     "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/primary.png",
-    "frameWidth": 120,
-    "frameHeight": 120,
+    "frameWidth": 240,
+    "frameHeight": 240,
     "frameCount": 18,
     "unionBounds": [
-      10,
-      30,
-      109,
-      89
+      5,
+      5,
+      236,
+      236
     ],
-    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/source/primary-source-9915915d0a0183a5.png",
-    "sourceSha256": "9915915d0a0183a5adb93483b4564ad54d19b9425e0d4a4ed4bba9a3740d158b",
-    "outputSha256": "22fc6663a1e42f2b26349f15f6d4f92c71998509d236c0254d542a4df682101b",
+    "sourcePath": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/source/primary-source-accepted-seed-rain-candidate-10-a03009d29de8de36.png",
+    "sourceSha256": "a03009d29de8de36f994d4a75d0fc36e6352f97c43124d3404e2bfce5987d226",
+    "outputSha256": "a03009d29de8de36f994d4a75d0fc36e6352f97c43124d3404e2bfce5987d226",
     "frameDurationsMs": [
-      170,
-      170,
-      160,
-      170,
-      170,
-      160,
-      170,
-      170,
-      160,
-      170,
-      170,
-      160,
-      170,
-      170,
-      160,
-      170,
-      170,
-      160
+      145,
+      125,
+      110,
+      120,
+      130,
+      145,
+      145,
+      125,
+      110,
+      120,
+      130,
+      145,
+      145,
+      125,
+      110,
+      120,
+      130,
+      145
     ],
     "blankFrameIndices": [],
     "pixelSafetyNormalization": {
       "applied": false,
       "beforeEdgeMargins": [
         [
-          43,
-          32,
-          44,
-          33
+          39,
+          11,
+          40,
+          100
         ],
         [
-          12,
-          36,
-          13,
-          36
+          21,
+          16,
+          16,
+          69
         ],
         [
-          12,
-          36,
+          20,
+          56,
+          14,
+          41
+        ],
+        [
           13,
+          56,
+          7,
           37
         ],
         [
-          12,
-          37,
-          13,
-          37
-        ],
-        [
-          12,
-          33,
-          13,
-          34
-        ],
-        [
-          12,
-          35,
-          13,
+          11,
+          59,
+          5,
           35
         ],
         [
-          43,
-          32,
-          44,
-          33
+          10,
+          56,
+          4,
+          32
         ],
         [
-          12,
-          36,
-          13,
-          36
+          20,
+          5,
+          18,
+          89
         ],
         [
-          12,
-          36,
-          13,
-          37
+          17,
+          22,
+          18,
+          55
         ],
         [
-          12,
-          37,
-          13,
-          37
+          16,
+          56,
+          16,
+          27
         ],
         [
-          12,
+          9,
+          56,
+          9,
+          23
+        ],
+        [
+          7,
+          60,
+          7,
+          21
+        ],
+        [
+          5,
+          57,
+          6,
+          18
+        ],
+        [
           33,
-          13,
-          34
+          8,
+          16,
+          62
         ],
         [
-          12,
-          35,
-          13,
-          35
+          25,
+          26,
+          16,
+          32
         ],
         [
-          43,
-          32,
-          44,
-          33
+          24,
+          66,
+          14,
+          6
         ],
         [
-          12,
-          36,
-          13,
-          36
+          17,
+          66,
+          9,
+          4
         ],
         [
-          12,
-          36,
-          13,
-          37
+          15,
+          69,
+          8,
+          7
         ],
         [
-          12,
-          37,
           13,
-          37
-        ],
-        [
-          12,
-          33,
+          66,
           13,
-          34
-        ],
-        [
-          12,
-          35,
-          13,
-          35
+          7
         ]
       ]
     },
-    "frameDurationMs": 170,
-    "candidateOrigin": "configuration-preview-transparent-logical-timeline",
+    "frameDurationMs": 145,
+    "candidateOrigin": "user-accepted-candidate-10",
     "sourceLineage": [
       {
         "role": "vfx",
-        "path": "docs/design/arena-skill-vfx-sources/archer-seed-rain.png",
-        "sha256": "9915915d0a0183a5adb93483b4564ad54d19b9425e0d4a4ed4bba9a3740d158b"
+        "path": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/source/primary-source-accepted-seed-rain-candidate-10-a03009d29de8de36.png",
+        "sha256": "a03009d29de8de36f994d4a75d0fc36e6352f97c43124d3404e2bfce5987d226",
+        "originalReviewPath": "work/generated-images/20260820-archer-seed-rain-v6/candidate-10-circular-normal-scale-arrow-rain.png"
       }
     ],
     "packagePath": "archer_射手/3_R_高階/14_種子雨_archer_13",
     "packageUrl": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13",
-    "sourceSelection": "5173-configuration-preview",
+    "sourceSelection": "user-accepted-seed-rain-candidate-10-20260821",
     "previewFile": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
-    "previewFileSha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
+    "previewFileSha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
     "iconFile": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/icon.png",
     "iconFileSha256": "383b13d4fc57f80eb8a0a555f71510cb5b7c7bbdd4c4bc4dc2bfe1c110bb0594",
-    "originalSourcePath": "docs/design/arena-skill-vfx-sources/archer-seed-rain.png",
-    "sourceFile": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/source/primary-source-9915915d0a0183a5.png",
+    "originalSourcePath": "work/generated-images/20260820-archer-seed-rain-v6/candidate-10-circular-normal-scale-arrow-rain.png",
+    "sourceFile": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/source/primary-source-accepted-seed-rain-candidate-10-a03009d29de8de36.png",
     "actionBody": {
       "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/body.png",
       "frameWidth": 256,
@@ -254,10 +255,10 @@
       "fallbackUsed": false
     },
     "fallbackUsed": false,
-    "previewAcceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_13:source-06c6776136b72402:output-70fd22d72421e868",
-    "previewSourceRecording": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813",
+    "previewAcceptedAnimationId": "accepted:archer-seed-rain-candidate-10:a03009d29de8de36",
+    "previewSourceRecording": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920",
     "previewSourceScenario": "random-archer_13",
-    "previewSourceSequenceSha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be",
+    "previewSourceSequenceSha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24",
     "previewFallbackUsed": false,
     "previewMediaType": "video/webm",
     "previewFrameRate": 30,
@@ -281,18 +282,18 @@
   },
   "preview": {
     "file": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
-    "sha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
-    "kind": "actual-5173-gameplay-video-optimized",
+    "sha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
+    "kind": "actual-formal-gameplay-video-optimized",
     "mediaType": "video/webm",
-    "sourceVersion": "configuration-hq-runtime-20260813",
-    "acceptedAnimationId": "actual-5173-gameplay-cdn-v1:random-archer_13:source-06c6776136b72402:output-70fd22d72421e868",
-    "sourceReport": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/report.json",
+    "sourceVersion": "seed-rain-candidate-10-accepted-gameplay-v1",
+    "acceptedAnimationId": "accepted:archer-seed-rain-candidate-10:a03009d29de8de36",
+    "sourceReport": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920/report.json",
     "sourceScenario": "random-archer_13",
     "sourceCapture": "canvas-capture-stream",
     "sourceCaptureEvidence": {
       "source": "canvas-capture-stream",
       "transport": "html-canvas-media-recorder-vp9",
-      "captureStartSec": 4.403,
+      "captureStartSec": 3.956,
       "sourceSize": [
         1920,
         1080
@@ -303,19 +304,19 @@
       "mimeType": "video/webm;codecs=vp9",
       "interpolatedFrames": false,
       "fallbackUsed": false,
-      "captureEndSec": 9.351,
-      "durationSec": 4.948,
+      "captureEndSec": 9.305,
+      "durationSec": 5.349,
       "file": "random-archer_13-hq.webm",
-      "bytes": 10666860,
-      "sha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be"
+      "bytes": 14329231,
+      "sha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24"
     },
-    "sourceVideo": "docs/design/arena-dynamic-gameplay-review/configuration-hq-runtime-20260813/random-archer_13-hq.webm",
-    "sourceVideoSha256": "06c6776136b724026dd55789ea9a7bfb96e5505855c9a0e44a2ccc70701dc3be",
+    "sourceVideo": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920/random-archer_13-hq.webm",
+    "sourceVideoSha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24",
     "sourceSize": [
       1920,
       1080
     ],
-    "sourceFrameRate": 59.959,
+    "sourceFrameRate": 59.81,
     "previewSize": [
       896,
       504
@@ -331,21 +332,21 @@
       504
     ],
     "visibleContentBounds": [
-      1065,
-      475,
-      1771,
-      805
+      1240,
+      470,
+      1775,
+      850
     ],
     "contentMargins": [
-      95,
-      87,
-      95,
-      87
+      270,
+      82,
+      91,
+      42
     ],
     "zoomFactor": 2.1429,
     "frameRate": 30,
-    "frameCount": 147,
-    "totalDurationMs": 4900,
+    "frameCount": 157,
+    "totalDurationMs": 5230,
     "encoding": "vp9-webm-crf34-30fps-physical-crop",
     "encodingSettings": {
       "codec": "vp9",
@@ -359,9 +360,9 @@
     "runtimeViewportCrop": false,
     "resampling": "ffmpeg-approved-crop-no-spatial-scale",
     "optimizationVersion": "arena-config-cdn-preview-v1",
-    "sourceBytes": 10666860,
-    "outputBytes": 892908,
-    "reductionRatio": 0.916291,
+    "sourceBytes": 14329231,
+    "outputBytes": 799175,
+    "reductionRatio": 0.944228,
     "interpolatedFrames": false,
     "sourceSubstitutionForReview": false,
     "fallbackUsed": false
@@ -393,6 +394,33 @@
       "packageRuntimeFile": "/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/runtime/body.png",
       "packageRuntimeSha256": "80c9fa8f2a6d185e9bc5420bb5a7b2fe73fc352108565f80a2e8e276358a1d1a",
       "fallbackUsed": false
+    },
+    "seedRainCandidate10": {
+      "acceptedAt": "2026-08-21",
+      "acceptedReviewAsset": "work/generated-images/20260820-archer-seed-rain-v6/candidate-10-circular-normal-scale-arrow-rain.png",
+      "acceptedReviewSha256": "a03009d29de8de36f994d4a75d0fc36e6352f97c43124d3404e2bfce5987d226",
+      "sourcePixelDebugReport": "work/generated-images/20260820-archer-seed-rain-v6/pixel-audit-candidate-10/pixel-debug-report.json",
+      "readabilityReport": "work/generated-images/20260820-archer-seed-rain-v6/readability-candidate-10-green.json",
+      "geometryReport": "work/generated-images/20260820-archer-seed-rain-v6/geometry-candidate-10-green.json",
+      "beforeState": "work/generated-images/20260820-archer-seed-rain-v6/formal-promotion-candidate-10/before",
+      "beforeStateSha256": {
+        "runtime-primary.png": "22fc6663a1e42f2b26349f15f6d4f92c71998509d236c0254d542a4df682101b",
+        "animation.webp": "2f0557e613cb1b7da3a4cbcc3fe1654161cb1d888c455778c6998bfa1265de4e",
+        "vfx.json": "6249652bc08e68a32f51a91872d5fb3b6e5a8b423bbfec3ecbcbe34daa74a70b",
+        "runtime-entry.json": "c47fd635f52c0e5bb182be2f1f5354b267e3b1133dc52549fdb3d6f696156539",
+        "package-entry.json": "bb249e481e8c0ab4ff64b894466397d79211cafaed0a31bd0e1b4a6e9f9a3ab3"
+      },
+      "oldFilesRetainedPendingExplicitDeletion": true,
+      "fallbackUsed": false,
+      "formalGameplayPreview": {
+        "source": "work/generated-images/20260820-archer-seed-rain-v6/runtime-review-candidate-10-promoted-local-1920/random-archer_13-hq.webm",
+        "sourceSha256": "c75e4da6e849089c7720ceaf25929531c6cb6514c0dad76ffcdb9a02ad90cf24",
+        "output": "apps/client/public/assets/arena-skills/archer_射手/3_R_高階/14_種子雨_archer_13/preview/gameplay-preview-v1.webm",
+        "outputSha256": "b00e259f594e27cc53187f791c350eb6f7894ef34b1baa5db1a6302556a2f642",
+        "beforePreview": "work/generated-images/20260820-archer-seed-rain-v6/formal-promotion-candidate-10/before/gameplay-preview-v1.webm",
+        "beforePreviewSha256": "70fd22d72421e868e85d64b5e15acb35fd740bc6b76b48e706f7ce1895add1dd",
+        "fallbackUsed": false
+      }
     }
   },
   "fallbackUsed": false

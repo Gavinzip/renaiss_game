@@ -240,10 +240,10 @@ export const ARENA_SKILL_SPECS: Record<ArenaCatalogSkillId, ArenaSkillSpec> = {
     { movement: 210, durationMs: 560 }
   ),
   archer_07: skill(
-    "投出暗鉤，命中後以完整鉤索將目標拉近 200 並定身 2 秒；定身期間不能移動，但仍可原地普攻。若已裝備且可施放隼影處刑，會在拉回點自動接招。",
+    "向瞄準方向投出暗鉤，命中後以完整鉤索將目標拉近 200 並定身 2 秒；定身期間不能移動，但仍可原地普攻。後續是否接招由玩家自行決定。",
     "14",
     13000,
-    "牽引 200；定身 2 秒；自動接隼影處刑",
+    "手動瞄準；牽引 200；定身 2 秒",
     "travel",
     { damage: [14], range: 500, pull: 200, statusDurationMs: 2000 }
   ),
