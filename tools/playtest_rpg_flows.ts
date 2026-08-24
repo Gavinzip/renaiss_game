@@ -15,10 +15,7 @@ const PROVIDED_SERVER_URL = process.env.RPG_PLAYTEST_SERVER_URL;
 const CLIENT_URL = PROVIDED_CLIENT_URL ?? `http://127.0.0.1:${CLIENT_PORT}`;
 const SERVER_URL = PROVIDED_SERVER_URL ?? `http://127.0.0.1:${SERVER_PORT}`;
 const STARTER_MOVE_NAMES = ["潮刃拍擊", "火爪快擊", "藤鞭拍擊"] as const;
-const STARTER_ELEMENTS = ["water", "fire", "grass", "dark", "light"] as const;
-const RPG_DIRECTION_TEXTURE_KEYS = ["rpgPetDirections", "rpgPetDirectionWalk"] as const;
-const VILLAGE_INITIAL_FOLLOWER_DISTANCE_MAX = 500;
-const VILLAGE_MOVING_FOLLOWER_DISTANCE_MAX = 520;
+const VILLAGE_PET_TEXTURE_KEYS = ["rpgPetSprites", "rpgPetDirections", "rpgPetDirectionWalk"] as const;
 const STATUS_IDS = ["burn", "poison", "stun", "guard", "regen"] as const;
 const RAW_STATUS_LOG_PATTERN = /\b(burn|poison|stun|guard|regen)\b/;
 const LOCALIZED_STATUS_LOG_PATTERN = /燃燒|中毒|暈眩|防護|再生/;
@@ -39,22 +36,6 @@ const PLAYTEST_AUTH_SESSION = {
 interface TestPage {
   page: Page;
   errors: string[];
-}
-
-interface VillageFollowerDebugState {
-  count: number;
-  elements: string[];
-  textureKeys: string[];
-  animationKeys: string[];
-  directions: string[];
-  positions: { x: number; y: number }[];
-  player: { x: number; y: number };
-  facing: string;
-  moving: boolean;
-  playerMoving: boolean;
-  followersMoving: boolean;
-  minDistanceFromPlayer: number;
-  maxDistanceFromPlayer: number;
 }
 
 async function main() {
@@ -86,7 +67,7 @@ async function main() {
     await verifyArenaEntryReusesXSession(browser);
     await verifyReleaseReview(browser);
     await verifyPetPreview(browser);
-    await verifyVillageFollowers(browser);
+    await verifyVillageHasNoFollowers(browser);
     await verifyStatusPreview(browser);
     await verifySkillPreview(browser);
     await verifyWalletCardDrawAndEquip(browser);
@@ -398,97 +379,29 @@ async function verifyPetPreview(browser: Browser) {
   await test.page.context().close();
 }
 
-async function verifyVillageFollowers(browser: Browser) {
-  const test = await newTestPage(browser, "village-followers");
+async function verifyVillageHasNoFollowers(browser: Browser) {
+  const test = await newTestPage(browser, "village-without-followers");
   await gotoAuthenticated(test.page, `${CLIENT_URL}/`);
   await test.page.waitForSelector(".rpg-layer");
-  await test.page.waitForFunction((directionTextureKeys) => {
-    const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-    const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; textureKeys?: string[]; directions?: string[] } | undefined;
-    return state?.count === 5 && state.textureKeys?.every((key) => directionTextureKeys.includes(key)) && state.directions?.every((direction) => direction === "down");
-  }, RPG_DIRECTION_TEXTURE_KEYS);
-
-  const initial = await readVillageFollowerState(test.page);
-  assert(initial?.count === 5, `Village should expose 5 starter followers, got ${JSON.stringify(initial)}`);
-  assert(JSON.stringify(initial.elements) === JSON.stringify(STARTER_ELEMENTS), `Village followers should keep five-element order, got ${initial.elements.join(", ")}`);
-  assert(initial.textureKeys.every((key) => (RPG_DIRECTION_TEXTURE_KEYS as readonly string[]).includes(key)), `Village followers should use direction sheets after login entry: ${initial.textureKeys.join(", ")}`);
-  assert(initial.directions.every((direction) => direction === "down"), `Village followers should start front-facing, got ${initial.directions.join(", ")}`);
-  assert(
-    initial.minDistanceFromPlayer >= 48 && initial.maxDistanceFromPlayer <= VILLAGE_INITIAL_FOLLOWER_DISTANCE_MAX,
-    `Initial follower spacing is wrong: ${JSON.stringify(initial)}`
-  );
-
-  const movementDirections = [
-    { key: "ArrowDown", direction: "down", facing: "right" },
-    { key: "ArrowUp", direction: "up", facing: "right" },
-    { key: "ArrowRight", direction: "side", facing: "right" },
-    { key: "ArrowLeft", direction: "side", facing: "left" }
-  ] as const;
-  let moving: VillageFollowerDebugState | null = null;
-  for (const direction of movementDirections) {
-    await test.page.keyboard.down(direction.key);
-    try {
-      await test.page.waitForFunction(
-        ({ direction, facing }) => {
-          const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-          const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; playerMoving?: boolean; facing?: string; textureKeys?: string[]; animationKeys?: string[]; directions?: string[] } | undefined;
-          if (state?.count !== 5 || state.playerMoving !== true || state.facing !== facing || !state.directions?.every((value) => value === direction)) return false;
-          return direction === "side"
-            ? state.animationKeys?.every((key) => key.endsWith("_walk"))
-            : state.textureKeys?.every((key) => key === "rpgPetDirectionWalk") && state.animationKeys?.every((key) => key.endsWith(`_${direction}_walk`));
-        },
-        { direction: direction.direction, facing: direction.facing },
-        { timeout: 1500 }
-      );
-      await test.page.waitForFunction(
-        ({ start }) => {
-          const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-          const state = game?.registry?.get("rpgVillageFollowers") as { player?: { x: number; y: number } } | undefined;
-          if (!state?.player) return false;
-          const dx = state.player.x - start.x;
-          const dy = state.player.y - start.y;
-          return Math.hypot(dx, dy) > 70;
-        },
-        { start: initial.player },
-        { timeout: 2600 }
-      );
-      moving = await readVillageFollowerState(test.page);
-      break;
-    } catch {
-      await test.page.keyboard.up(direction.key);
-    }
-  }
-  assert(moving?.count === 5, `Moving village follower state missing: ${JSON.stringify(moving)}`);
-  assert(moving.playerMoving, `Village player should report movement: ${JSON.stringify(moving)}`);
-  if (moving.directions.every((direction) => direction === "side")) {
-    assert(moving.animationKeys.every((key) => key.endsWith("_walk")), `Side followers should play walk animations while moving: ${moving.animationKeys.join(", ")}`);
-  } else {
-    const direction = moving.directions[0];
-    assert(moving.textureKeys.every((key) => key === "rpgPetDirectionWalk"), `Vertical followers should use direction walk sheet while moving: ${moving.textureKeys.join(", ")}`);
-    assert(moving.animationKeys.every((key) => key.endsWith(`_${direction}_walk`)), `Vertical followers should play ${direction} walk animations while moving: ${moving.animationKeys.join(", ")}`);
-  }
-  assert(pointDistance(initial.player, moving.player) > 70, `Player did not move far enough for follower validation: ${JSON.stringify({ initial: initial.player, moving: moving.player })}`);
-  const movedFollowerCount = moving.positions.filter((position, index) => pointDistance(position, initial.positions[index]) > 4).length;
-  assert(movedFollowerCount >= 3, `Expected at least 3 followers to advance along the trail, got ${movedFollowerCount}: ${JSON.stringify({ initial, moving })}`);
-  assert(
-    moving.minDistanceFromPlayer >= 48 && moving.maxDistanceFromPlayer <= VILLAGE_MOVING_FOLLOWER_DISTANCE_MAX,
-    `Moving follower spacing is wrong: ${JSON.stringify(moving)}`
-  );
-
-  for (const direction of movementDirections) {
-    await test.page.keyboard.up(direction.key);
-  }
-  await test.page.waitForFunction((directionTextureKeys) => {
-    const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-    const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; playerMoving?: boolean; textureKeys?: string[]; directions?: string[] } | undefined;
-    return state?.count === 5
-      && state.playerMoving === false
-      && state.textureKeys?.every((key) => directionTextureKeys.includes(key))
-      && state.directions?.length === 5;
-  }, RPG_DIRECTION_TEXTURE_KEYS);
-  const stopped = await readVillageFollowerState(test.page);
-  assert(stopped?.playerMoving === false, `Village player should report stopped after key release: ${JSON.stringify(stopped)}`);
-  assert(stopped?.directions.length === 5, `Followers should expose stopped directions: ${JSON.stringify(stopped)}`);
+  await test.page.waitForFunction(() => Boolean((window as unknown as { __renaissRpgGame?: unknown }).__renaissRpgGame));
+  const info = await test.page.evaluate((petTextureKeys) => {
+    const game = (window as unknown as {
+      __renaissRpgGame?: {
+        registry?: { get(key: string): unknown };
+        scene?: { getScene(key: string): { children?: { list?: Array<{ texture?: { key?: string } }> } } };
+        textures?: { exists(key: string): boolean };
+      };
+    }).__renaissRpgGame;
+    const sceneObjects = game?.scene?.getScene("RpgVillageScene")?.children?.list ?? [];
+    return {
+      renderedPetCount: sceneObjects.filter((object) => petTextureKeys.includes(object.texture?.key ?? "")).length,
+      loadedPetTextures: petTextureKeys.filter((key) => game?.textures?.exists(key)),
+      legacyFollowerState: game?.registry?.get("rpgVillageFollowers") ?? null
+    };
+  }, VILLAGE_PET_TEXTURE_KEYS);
+  assert(info.renderedPetCount === 0, `Village should render no following pets, got ${JSON.stringify(info)}`);
+  assert(info.loadedPetTextures.length === 0, `Village should not preload follower-only pet textures, got ${JSON.stringify(info)}`);
+  assert(info.legacyFollowerState === null, `Village should not publish follower state, got ${JSON.stringify(info.legacyFollowerState)}`);
   assertNoErrors(test);
   await test.page.context().close();
 }
@@ -1940,17 +1853,6 @@ async function fieldStatusInfo(page: Page) {
     guardPetCount: Array.from(document.querySelectorAll(".rpg-field-pet.has-statuses")).filter((pet) => pet.getAttribute("data-statuses")?.includes("guard")).length,
     statusVfxBackground: window.getComputedStyle(document.querySelector<HTMLElement>(".rpg-field-pet.has-statuses .rpg-status-effect") ?? document.body).backgroundImage
   }));
-}
-
-async function readVillageFollowerState(page: Page) {
-  return page.evaluate(() => {
-    const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-    return game?.registry?.get("rpgVillageFollowers") ?? null;
-  }) as Promise<VillageFollowerDebugState | null>;
-}
-
-function pointDistance(a: { x: number; y: number }, b: { x: number; y: number }) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
 async function assertNoHorizontalOverflow(page: Page, label: string) {

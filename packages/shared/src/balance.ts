@@ -137,7 +137,7 @@ export const ARENA_SKILL_DAMAGE_MULTIPLIER_OVERRIDES: Partial<
   engineer_06: 1.875 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
   engineer_07: 1.5 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
   engineer_10: 1.5 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
-  engineer_11: 1.875 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
+  engineer_11: 1,
   engineer_12: 1.875 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
   engineer_13: 1.5 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
   engineer_14: 1.875 * ENGINEER_TURRET_DAMAGE_RETUNE.activeSkill,
@@ -185,7 +185,7 @@ export const CLASS_SKILL_COOLDOWNS: Partial<Record<ClassId, Partial<Record<Skill
     skillF: 8000,
     skillQ: 7000,
     skillE: 14000,
-    skillR: 30000
+    skillR: 25000
   },
   mage: {
     skillF: 12000,

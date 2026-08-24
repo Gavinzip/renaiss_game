@@ -19,7 +19,6 @@ const STATUS_MOVE_NAMES = ["水鏡護膜", "餘燼咬痕", "樹皮硬化"] as co
 const EXPECTED_VISUAL_OUTPUT_LABELS = [
   "rpg-release-review",
   "rpg-village",
-  "rpg-village-followers",
   "rpg-shop-draw",
   "rpg-shop-ten-draw",
   "rpg-gym",
@@ -227,7 +226,6 @@ async function captureRpgFlowReview(browser: Browser, clientUrl: string, outputD
     await page.waitForSelector(".rpg-layer");
     await page.waitForTimeout(350);
     await screenshotPage(page, "rpg-village", resolve(outputDir, "rpg-visual-review-village.png"), outputs);
-    await captureVillageFollowerMotion(page, outputDir, outputs);
 
     await page.getByRole("button", { name: "商城" }).click();
     await page.waitForSelector(".rpg-shop-panel");
@@ -295,23 +293,6 @@ async function captureRpgFlowReview(browser: Browser, clientUrl: string, outputD
   } finally {
     await contextA.close();
     await contextB.close();
-  }
-}
-
-async function captureVillageFollowerMotion(page: Page, outputDir: string, outputs: CaptureResult[]) {
-  await page.locator("canvas").first().click({ position: { x: 800, y: 520 } });
-  await page.keyboard.down("ArrowRight");
-  try {
-    await page.waitForFunction(() => {
-      const game = (window as unknown as { __renaissRpgGame?: { registry?: { get(key: string): unknown } } }).__renaissRpgGame;
-      const state = game?.registry?.get("rpgVillageFollowers") as { count?: number; moving?: boolean; animationKeys?: string[] } | undefined;
-      return state?.count === 5 && state.moving === true && state.animationKeys?.every((key) => key.endsWith("_walk"));
-    });
-    await page.waitForTimeout(600);
-    await screenshotPage(page, "rpg-village-followers", resolve(outputDir, "rpg-visual-review-village-followers.png"), outputs);
-  } finally {
-    await page.keyboard.up("ArrowRight");
-    await page.waitForTimeout(120);
   }
 }
 

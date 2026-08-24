@@ -401,7 +401,7 @@ export const ARENA_SKILL_SPECS: Record<ArenaCatalogSkillId, ArenaSkillSpec> = {
   engineer_11: skill(
     "0.5 秒後同時引爆所有普通與魔導砲台；每座獨立計算完整範圍傷害，重疊不衰減。",
     "每座 60；最高 180",
-    29000,
+    15000,
     "半徑 180／預警 0.5 秒",
     "turret",
     { damage: [60], radius: 180, durationMs: 500 }
@@ -433,7 +433,7 @@ export const ARENA_SKILL_SPECS: Record<ArenaCatalogSkillId, ArenaSkillSpec> = {
   engineer_15: skill(
     "每座魔導砲台掃描射程內所有敵人，對每人發射 2 枚必中彈並獲得臨時護盾。",
     "每座每人 2 × 12；最高 72／人",
-    30000,
+    25000,
     "護盾 25／4 秒／第二枚延遲 0.35 秒",
     "turret",
     { damage: [12, 12], range: 460, durationMs: 4000 }
